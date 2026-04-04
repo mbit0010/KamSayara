@@ -798,6 +798,8 @@ function setYN(key,val,btn){
 function setStep(n){document.querySelectorAll('.loader-step').forEach((el,i)=>{el.classList.toggle('active',i===n);el.classList.toggle('done',i<n);});}
 
 async function evaluate(){
+  alert('🔍 DEBUG: Button clicked! Function started');
+  
   const brand=document.getElementById('brand').value;
   const model=document.getElementById('model').value;
   const year=document.getElementById('year').value;
@@ -810,7 +812,16 @@ async function evaluate(){
   const seller=document.getElementById('seller').value;
   const service=document.getElementById('service').value;
   const asking=document.getElementById('asking').value;
-  if(!brand||!year){alert('Please select at least a Brand and Year, habibi.');return;}
+  
+  alert(`🔍 DEBUG: Form data collected - Brand: ${brand}, Year: ${year}`);
+  
+  if(!brand||!year){
+    alert('Please select at least a Brand and Year, habibi.');
+    return;
+  }
+  
+  alert('🔍 DEBUG: Validation passed, starting API call...');
+  
   const carDesc=[year,brand,model,trim].filter(Boolean).join(' ');
   const ov=document.getElementById('loaderOverlay'),btn=document.getElementById('evaluateBtn');
   ov.classList.add('active');btn.disabled=true;setStep(0);
@@ -823,7 +834,10 @@ Search: dubizzle.com/motors, yallamotor.com, sellanyCar.com, carswitch.com, open
 RULES: 1)Base=median comparable listings 2)Dealer+8-12% 3)GCC spec+10-15% vs non-GCC 4)Mileage:<50k=+5%,50-100k=base,100-150k=-5%,150k+=-15% 5)Warranty yes=+4% 6)Single owner=+3% 7)FSH yes=+4% 8)Accident yes=-15% 9)No listings→expert estimate,confidence<50,dataSource=ai_estimate
 Reply ONLY raw JSON no markdown:
 {"estimatedValue":<AED int>,"low":<AED int>,"high":<AED int>,"confidence":<0-100>,"sourcesFound":[...],"listingsFound":<int>,"dataSource":"<live_search|ai_estimate>","summary":"<2-3 sentences UAE market>","factors":"<key pricing factors applied>","verdict":${asking?`"<AED ${asking} vs market>"`:'null'},"verdictClass":${asking?`"<good|warn|bad>"`:'null'}}`;
+  
   try{
+    alert('🔍 DEBUG: About to call API...');
+    
     const resp=await fetch('https://kamsayara-api.mbit0010.workers.dev/api/evaluate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -849,13 +863,21 @@ Reply ONLY raw JSON no markdown:
         accident: ynState.accident
       })
     });
+    
+    alert(`🔍 DEBUG: API response status: ${resp.status}`);
+    
     if(!resp.ok){throw new Error(`Server error ${resp.status}`);}
     const result=await resp.json();
+    
+    alert('🔍 DEBUG: Got API response! Processing result...');
+    
     timers.forEach(clearTimeout);setStep(4);
     await new Promise(r=>setTimeout(r,300));
     ov.classList.remove('active');btn.disabled=false;
     renderResult(result,{brand,model,trim,year,mileage,asking,condition,spec,colour,seller,service,body});
+    
   }catch(err){
+    alert(`🔍 DEBUG: ERROR occurred: ${err.message}`);
     timers.forEach(clearTimeout);ov.classList.remove('active');btn.disabled=false;
     const rb=document.getElementById('resultBox');
     document.getElementById('resultInner').innerHTML=`<div class="res-label">Result </div><div class="verdict bad"><strong>⚠️ Error:</strong> ${err.message}</div>`;
