@@ -824,7 +824,7 @@ RULES: 1)Base=median comparable listings 2)Dealer+8-12% 3)GCC spec+10-15% vs non
 Reply ONLY raw JSON no markdown:
 {"estimatedValue":<AED int>,"low":<AED int>,"high":<AED int>,"confidence":<0-100>,"sourcesFound":[...],"listingsFound":<int>,"dataSource":"<live_search|ai_estimate>","summary":"<2-3 sentences UAE market>","factors":"<key pricing factors applied>","verdict":${asking?`"<AED ${asking} vs market>"`:'null'},"verdictClass":${asking?`"<good|warn|bad>"`:'null'}}`;
   try{
-    const resp=await fetch('https://api.kamsayara.uone.uk/api/evaluate',{
+    const resp=await fetch('https://kamsayara-api.mbit0010.workers.dev/api/evaluate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
