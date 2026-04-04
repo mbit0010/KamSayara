@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>KamSayara – Check the price… make your mind, habibi.</title>
+  <title>KamSayara – Professional UAE Car Valuation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
@@ -76,52 +76,46 @@
     }
     .hero-headline p {
       font-family:"Exo 2",sans-serif; font-size:.98rem; color:rgba(255,255,255,0.72);
-      max-width:480px; margin:0 auto; font-weight:400; letter-spacing:.01em;
+      max-width:520px; margin:0 auto; font-weight:400; letter-spacing:.01em;
     }
 
     /* PAGE */
-    .page { max-width:1000px; margin:0 auto; padding:0 22px 80px; }
+    .page { max-width:1100px; margin:0 auto; padding:0 22px 80px; }
 
-    /* FORM CARD */
+    /* UNIFIED FORM CARD */
     .form-card {
       background:var(--white); border-radius:20px; border:1px solid rgba(255,255,255,0.2);
       box-shadow:0 25px 50px rgba(0,0,0,0.15), 0 12px 24px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
       margin-top:-24px; margin-bottom:34px; position:relative; z-index:10; overflow:hidden;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px); padding:30px;
     }
 
-    .form-table {
-      display:grid; grid-template-columns:2fr 1px 1fr; min-height:250px;
+    .form-header {
+      text-align:center; margin-bottom:25px;
+    }
+    .form-title {
+      font-family:"Rajdhani","Exo 2",sans-serif; font-size:1.4rem; font-weight:600;
+      color:var(--accent); margin-bottom:5px; letter-spacing:.05em;
+    }
+    .form-subtitle {
+      font-size:.85rem; color:var(--muted); letter-spacing:.02em;
     }
 
-    .cd-pane { padding:20px 20px 16px; }
-    .qc-pane { 
-      padding:20px 16px 16px; 
-      background:linear-gradient(135deg, rgba(253,252,248,0.95) 0%, rgba(255,251,240,0.98) 100%);
-    }
-    .divider-col { background:var(--border); }
-
-    .pane-label {
-      font-family:"Rajdhani","Exo 2",sans-serif; font-size:.60rem; font-weight:600;
-      letter-spacing:.18em; text-transform:uppercase; color:var(--accent);
-      display:flex; align-items:center; gap:.5rem; margin-bottom:12px;
-    }
-    .pane-label::after { content:''; flex:1; height:1px; background:var(--accent-line); }
-
-    /* FORM GRID */
-    .cd-grid {
-      display:grid; grid-template-columns:repeat(4,1fr); gap:6px 8px;
+    /* UNIFIED GRID */
+    .unified-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); 
+      gap:15px 18px; margin-bottom:25px;
     }
 
-    .ig { display:flex; flex-direction:column; gap:.15rem; }
-    .ig label {
-      font-family:"Rajdhani","Exo 2",sans-serif; font-size:.57rem; font-weight:600;
+    .input-group { display:flex; flex-direction:column; gap:.25rem; }
+    .input-group label {
+      font-family:"Rajdhani","Exo 2",sans-serif; font-size:.65rem; font-weight:600;
       letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
     }
 
-    select, input[type="number"], input[type="text"] {
+    input, select {
       background:var(--cream); border:1px solid rgba(0,133,119,0.15); border-radius:10px;
-      padding:.48rem .72rem; font-family:"Exo 2",sans-serif; font-size:.78rem;
+      padding:.55rem .75rem; font-family:"Exo 2",sans-serif; font-size:.82rem;
       color:var(--ink); outline:none; width:100%; transition:all .2s ease;
       -webkit-appearance:none; appearance:none; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);
     }
@@ -129,81 +123,145 @@
     select {
       cursor:pointer;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6'%3E%3Cpath d='M1 1l4.5 4L10 1' stroke='%23008577' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat:no-repeat; background-position:right .68rem center; padding-right:1.8rem;
+      background-repeat:no-repeat; background-position:right .7rem center; padding-right:2rem;
     }
 
-    select:focus,input:focus {
+    input:focus,select:focus {
       border-color:var(--accent); 
       box-shadow:0 0 0 3px rgba(0,133,119,0.12), inset 0 1px 3px rgba(0,0,0,0.05);
-      background:var(--white); transform: translateY(-1px);
+      background:var(--white); transform:translateY(-1px);
     }
 
-    /* QUICK CHECK */
-    .qc-rows { display:flex; flex-direction:column; gap:5px; }
+    /* QUICK CHECK SECTION */
+    .quick-check-section {
+      margin:25px 0; padding:20px; background:var(--cream); border-radius:12px;
+      border:1px solid var(--border);
+    }
+    .quick-check-title {
+      font-family:"Rajdhani","Exo 2",sans-serif; font-size:.75rem; font-weight:600;
+      letter-spacing:.15em; text-transform:uppercase; color:var(--accent);
+      margin-bottom:15px; text-align:center;
+    }
+    .quick-checks {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px;
+    }
 
-    .qc-row {
+    .quick-item {
       display:flex; align-items:center; justify-content:space-between; gap:8px;
-      background:var(--cream); border:1px solid var(--border); border-radius:7px;
-      padding:6px 8px; transition:border-color .17s;
+      background:var(--white); border:1px solid var(--border); border-radius:8px;
+      padding:8px 10px; transition:border-color .2s;
+    }
+    .quick-item:hover { border-color:var(--border-w); }
+
+    .quick-label {
+      font-size:.68rem; font-weight:500; color:var(--ink);
+      text-transform:uppercase; letter-spacing:.04em; flex:1;
     }
 
-    .qc-label {
-      font-size:.65rem; font-weight:500; color:var(--ink);
-      text-transform:uppercase; letter-spacing:.05em;
+    .quick-buttons { display:flex; gap:4px; flex-shrink:0; }
+
+    .quick-btn {
+      width:26px; height:24px; display:inline-flex; align-items:center; justify-content:center;
+      border-radius:5px; border:1px solid var(--border); background:var(--white);
+      cursor:pointer; transition:all .15s;
+    }
+    .quick-btn svg { width:11px; height:11px; }
+    .quick-btn:not(.active) { color:var(--muted); }
+
+    .quick-btn.tick:hover { border-color:var(--good); color:var(--good); background:var(--good-bg); }
+    .quick-btn.cross:hover { border-color:var(--bad); color:var(--bad); background:var(--bad-bg); }
+    .quick-btn.tick.active { background:var(--good-bg); border-color:var(--good-line); color:var(--good); }
+    .quick-btn.cross.active { background:var(--bad-bg); border-color:var(--bad-line); color:var(--bad); }
+
+    /* ACTION BUTTON */
+    .action-section {
+      text-align:center; padding-top:15px; border-top:1px solid var(--border);
     }
 
-    .qc-btns { display:flex; gap:5px; flex-shrink:0; }
-
-    .qc-btn {
-      width:27px; height:25px; display:inline-flex; align-items:center; justify-content:center;
-      border-radius:6px; border:1px solid var(--border); background:var(--white);
-      cursor:pointer; transition:all .16s;
-    }
-    .qc-btn svg { width:12px; height:12px; }
-    .qc-btn:not(.active) { color:var(--muted); }
-
-    .qc-btn.tick-btn:hover { border-color:var(--good); color:var(--good); background:var(--good-bg); }
-    .qc-btn.cross-btn:hover { border-color:var(--bad); color:var(--bad); background:var(--bad-bg); }
-    .qc-btn.tick-btn.active { background:var(--good-bg); border-color:var(--good-line); color:var(--good); }
-    .qc-btn.cross-btn.active { background:var(--bad-bg); border-color:var(--bad-line); color:var(--bad); }
-
-    /* FORM FOOTER */
-    .form-footer {
-      border-top:1px solid var(--border); padding:12px 20px;
-      display:flex; align-items:center; justify-content:center; gap:14px; background:#FDFCF8;
-    }
-
-    .btn-check {
-      display:inline-flex; align-items:center; gap:.5rem;
+    .btn-evaluate {
+      display:inline-flex; align-items:center; gap:.6rem;
       background:linear-gradient(135deg, var(--accent) 0%, #006B60 100%); color:#FFFFFF;
-      font-family:"Rajdhani","Exo 2",sans-serif; font-size:.88rem; font-weight:600;
+      font-family:"Rajdhani","Exo 2",sans-serif; font-size:.95rem; font-weight:600;
       letter-spacing:.08em; text-transform:uppercase; border:none; border-radius:12px;
-      padding:.82rem 2.8rem; cursor:pointer; transition:all .25s ease-out;
+      padding:.9rem 3.2rem; cursor:pointer; transition:all .25s ease-out;
       box-shadow:0 8px 22px var(--accent-glow), 0 4px 12px rgba(0,133,119,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
     }
-    .btn-check:disabled { opacity:.6; cursor:not-allowed; }
+    .btn-evaluate:disabled { opacity:.6; cursor:not-allowed; }
+    .btn-evaluate:hover { transform:translateY(-2px); box-shadow:0 12px 28px var(--accent-glow); }
 
-    .form-note {
-      font-size:.61rem; color:var(--muted); letter-spacing:.05em;
+    .action-note {
+      font-size:.65rem; color:var(--muted); letter-spacing:.04em; margin-top:10px;
     }
 
-    /* RESULT */
+    /* RESULTS */
     .result-card {
       background:var(--white); border-radius:18px; border:1px solid var(--border);
-      box-shadow:var(--shadow-lg); margin-bottom:34px; padding:20px; display:none;
+      box-shadow:var(--shadow-lg); margin-bottom:34px; display:none; overflow:hidden;
     }
     .result-card.visible { display:block; }
 
-    /* RESPONSIVE */
-    @media (max-width:740px) {
-      .form-table { grid-template-columns:1fr; grid-template-rows:auto 1px auto; }
-      .divider-col { width:auto; height:1px; }
-      .cd-grid { grid-template-columns:repeat(2,1fr); }
+    .result-header {
+      background:linear-gradient(135deg, var(--accent-soft) 0%, rgba(0,133,119,0.04) 100%);
+      padding:20px; text-align:center; border-bottom:1px solid var(--border);
     }
-    @media (max-width:480px) {
-      .cd-grid { grid-template-columns:1fr; }
-      .hero-inner { padding:0 16px 56px; }
-      .form-footer { flex-direction:column; text-align:center; }
+    .result-title {
+      font-family:"Rajdhani","Exo 2",sans-serif; font-size:1.1rem; font-weight:600;
+      color:var(--accent); margin-bottom:5px; letter-spacing:.05em;
+    }
+    .result-subtitle {
+      font-size:.75rem; color:var(--muted); letter-spacing:.02em;
+    }
+
+    .result-content { padding:25px; }
+
+    .valuation-display {
+      text-align:center; margin-bottom:25px;
+    }
+    .valuation-amount {
+      font-size:2.5rem; font-weight:700; color:var(--accent); line-height:1; margin-bottom:8px;
+    }
+    .valuation-range {
+      font-size:.85rem; color:var(--muted); letter-spacing:.02em; margin-bottom:12px;
+    }
+    .valuation-meta {
+      font-size:.75rem; color:var(--ink-soft); 
+      display:flex; justify-content:center; gap:15px; flex-wrap:wrap;
+    }
+
+    .algorithm-section {
+      background:var(--cream); padding:18px; border-radius:10px; margin-bottom:20px;
+    }
+    .algorithm-title {
+      font-size:.8rem; font-weight:600; color:var(--accent); margin-bottom:10px;
+      text-transform:uppercase; letter-spacing:.1em;
+    }
+    .algorithm-steps {
+      font-size:.75rem; color:var(--ink-soft); line-height:1.5;
+    }
+
+    .comparables-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:12px; margin-bottom:20px;
+    }
+    .comparable-item {
+      background:var(--white); border:1px solid var(--border); border-radius:8px;
+      padding:12px; font-size:.75rem;
+    }
+    .comparable-car {
+      font-weight:600; color:var(--ink); margin-bottom:4px;
+    }
+    .comparable-details {
+      color:var(--muted); line-height:1.4;
+    }
+    .comparable-price {
+      color:var(--accent); font-weight:600; margin-top:6px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:768px) {
+      .unified-grid { grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px 15px; }
+      .quick-checks { grid-template-columns:1fr; }
+      .valuation-meta { flex-direction:column; gap:5px; }
+      .comparables-grid { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -220,14 +278,14 @@
           <span class="wm-sep">·</span>
           <span class="wm-sayara">SAYARA</span>
         </div>
-        <div class="wm-sub">Real price, no stories</div>
+        <div class="wm-sub">Professional car valuation</div>
       </a>
-      <div class="nav-badge">🇦🇪 UAE Born</div>
+      <div class="nav-badge">🇦🇪 UAE Expert</div>
     </nav>
 
     <div class="hero-headline">
-      <h1>Check the price… make your mind, habibi.</h1>
-      <p>KamSayara shows you the real car price quick… everything clear for you, no headache.</p>
+      <h1>Professional Car Valuation for UAE Market</h1>
+      <p>Advanced algorithm analyzing real market data from Dubizzle, YallaMotor, CarSwitch and more. Get accurate pricing based on comparable sales, mileage normalization, and market factors.</p>
     </div>
 
   </div>
@@ -236,596 +294,395 @@
 <!-- CONTENT -->
 <div class="page">
 
-  <!-- FORM CARD -->
+  <!-- UNIFIED FORM -->
   <div class="form-card">
-
-    <div class="form-table">
-
-      <!-- CAR DETAILS -->
-      <div class="cd-pane">
-        <div class="pane-label">Car Details</div>
-        <div class="cd-grid">
-
-          <!-- Row 1 -->
-          <div class="ig">
-            <label>Brand</label>
-            <select id="brand" onchange="populateModels()">
-              <option value="">Brand…</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Model</label>
-            <select id="model">
-              <option value="">Model…</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Year</label>
-            <select id="year">
-              <option value="">Year…</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Trim</label>
-            <input type="text" id="trim" placeholder="e.g. GLX">
-          </div>
-
-          <!-- Row 2 -->
-          <div class="ig">
-            <label>Mileage (KM)</label>
-            <input type="number" id="mileage" placeholder="50000" min="0">
-          </div>
-          <div class="ig">
-            <label>Spec</label>
-            <select id="spec">
-              <option value="">Spec…</option>
-              <option value="GCC">GCC</option>
-              <option value="American">American</option>
-              <option value="European">European</option>
-              <option value="Japanese">Japanese</option>
-              <option value="Korean">Korean</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Condition</label>
-            <select id="condition">
-              <option value="">Condition…</option>
-              <option value="Excellent">Excellent</option>
-              <option value="Very Good">Very Good</option>
-              <option value="Good">Good</option>
-              <option value="Fair">Fair</option>
-              <option value="Poor">Poor</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Colour</label>
-            <select id="colour">
-              <option value="">Colour…</option>
-              <option value="White">White</option>
-              <option value="Black">Black</option>
-              <option value="Silver">Silver</option>
-              <option value="Gray">Gray</option>
-              <option value="Blue">Blue</option>
-              <option value="Red">Red</option>
-              <option value="Gold">Gold</option>
-              <option value="Beige">Beige</option>
-              <option value="Brown">Brown</option>
-              <option value="Green">Green</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <!-- Row 3 -->
-          <div class="ig">
-            <label>Body Type</label>
-            <select id="body">
-              <option value="">Body…</option>
-              <option value="Sedan">Sedan</option>
-              <option value="SUV">SUV</option>
-              <option value="Hatchback">Hatchback</option>
-              <option value="Coupe">Coupe</option>
-              <option value="Convertible">Convertible</option>
-              <option value="Wagon">Wagon</option>
-              <option value="Pickup">Pickup</option>
-              <option value="Van">Van</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Seller Type</label>
-            <select id="seller">
-              <option value="">Seller…</option>
-              <option value="Individual">Individual</option>
-              <option value="Dealer">Dealer</option>
-              <option value="Showroom">Showroom</option>
-              <option value="Export">Export</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Service</label>
-            <select id="service">
-              <option value="">Service…</option>
-              <option value="Agency">Agency</option>
-              <option value="Non-Agency">Non-Agency</option>
-              <option value="Mixed">Mixed</option>
-              <option value="Unknown">Unknown</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>Asking Price (AED)</label>
-            <input type="number" id="asking" placeholder="75000" min="0">
-          </div>
-
-        </div>
-      </div>
-
-      <div class="divider-col"></div>
-
-      <!-- QUICK CHECK -->
-      <div class="qc-pane">
-        <div class="pane-label">Quick Check</div>
-        <div class="qc-rows">
-
-          <div class="qc-row">
-            <span class="qc-label">Warranty</span>
-            <div class="qc-btns">
-              <button class="qc-btn tick-btn" onclick="setYN('warranty','yes',this)" title="Active warranty">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <button class="qc-btn cross-btn" onclick="setYN('warranty','no',this)" title="No warranty">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="qc-row">
-            <span class="qc-label">Single Owner</span>
-            <div class="qc-btns">
-              <button class="qc-btn tick-btn" onclick="setYN('singleOwner','yes',this)" title="First & only owner">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <button class="qc-btn cross-btn" onclick="setYN('singleOwner','no',this)" title="Multiple owners">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="qc-row">
-            <span class="qc-label">FSH</span>
-            <div class="qc-btns">
-              <button class="qc-btn tick-btn" onclick="setYN('fsh','yes',this)" title="Full Service History">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <button class="qc-btn cross-btn" onclick="setYN('fsh','no',this)" title="No FSH">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="qc-row">
-            <span class="qc-label">Service Contract</span>
-            <div class="qc-btns">
-              <button class="qc-btn tick-btn" onclick="setYN('serviceContract','yes',this)" title="Active service contract">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <button class="qc-btn cross-btn" onclick="setYN('serviceContract','no',this)" title="No service contract">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="qc-row">
-            <span class="qc-label">Accident History</span>
-            <div class="qc-btns">
-              <button class="qc-btn tick-btn" onclick="setYN('accident','yes',this)" title="Had accident / bodywork">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <button class="qc-btn cross-btn" onclick="setYN('accident','no',this)" title="Accident free">
-                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
+    <div class="form-header">
+      <h2 class="form-title">Car Valuation Request</h2>
+      <p class="form-subtitle">Enter your car details for professional market analysis</p>
     </div>
 
-    <div class="form-footer">
-      <button class="btn-check" onclick="checkCarPrice()">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="7" stroke="white" stroke-width="1.4" opacity=".5"/>
-          <path d="M8 4v4l3 2" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+    <!-- CAR DETAILS GRID -->
+    <div class="unified-grid">
+      <div class="input-group">
+        <label for="brand">Brand *</label>
+        <input type="text" id="brand" placeholder="e.g. Toyota, BMW, Mercedes" required>
+      </div>
+      <div class="input-group">
+        <label for="model">Model *</label>
+        <input type="text" id="model" placeholder="e.g. Camry, X5, C-Class" required>
+      </div>
+      <div class="input-group">
+        <label for="year">Year *</label>
+        <select id="year" required>
+          <option value="">Select Year</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="trim">Trim Level</label>
+        <input type="text" id="trim" placeholder="e.g. GLX, Sport, AMG">
+      </div>
+
+      <div class="input-group">
+        <label for="mileage">Mileage (KM) *</label>
+        <input type="number" id="mileage" placeholder="e.g. 85000" min="0" required>
+      </div>
+      <div class="input-group">
+        <label for="spec">Specification *</label>
+        <select id="spec" required>
+          <option value="">Select Spec</option>
+          <option value="GCC">GCC</option>
+          <option value="US">US Import</option>
+          <option value="European">European</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="condition">Condition *</label>
+        <select id="condition" required>
+          <option value="">Select Condition</option>
+          <option value="Excellent">Excellent</option>
+          <option value="Good">Good</option>
+          <option value="Fair">Fair</option>
+          <option value="Poor">Poor</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="colour">Colour</label>
+        <input type="text" id="colour" placeholder="e.g. White, Black, Silver">
+      </div>
+
+      <div class="input-group">
+        <label for="bodyType">Body Type</label>
+        <select id="bodyType">
+          <option value="">Select Body</option>
+          <option value="Sedan">Sedan</option>
+          <option value="SUV">SUV</option>
+          <option value="Hatchback">Hatchback</option>
+          <option value="Coupe">Coupe</option>
+          <option value="Pickup">Pickup</option>
+          <option value="Convertible">Convertible</option>
+          <option value="Wagon">Wagon</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="sellerType">Seller Type</label>
+        <select id="sellerType">
+          <option value="">Select Seller</option>
+          <option value="Individual">Individual</option>
+          <option value="Dealer">Dealer</option>
+          <option value="Showroom">Showroom</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="askingPrice">Your Asking Price (AED)</label>
+        <input type="number" id="askingPrice" placeholder="e.g. 45000" min="0">
+      </div>
+    </div>
+
+    <!-- QUICK CHECK SECTION -->
+    <div class="quick-check-section">
+      <h3 class="quick-check-title">Quick Check Features</h3>
+      <div class="quick-checks">
+        
+        <div class="quick-item">
+          <span class="quick-label">Warranty</span>
+          <div class="quick-buttons">
+            <button class="quick-btn tick" onclick="setQuickCheck('warranty','yes',this)" title="Active warranty">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="quick-btn cross" onclick="setQuickCheck('warranty','no',this)" title="No warranty">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-item">
+          <span class="quick-label">Single Owner</span>
+          <div class="quick-buttons">
+            <button class="quick-btn tick" onclick="setQuickCheck('singleOwner','yes',this)" title="Single owner">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="quick-btn cross" onclick="setQuickCheck('singleOwner','no',this)" title="Multiple owners">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-item">
+          <span class="quick-label">FSH</span>
+          <div class="quick-buttons">
+            <button class="quick-btn tick" onclick="setQuickCheck('fsh','yes',this)" title="Full service history">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="quick-btn cross" onclick="setQuickCheck('fsh','no',this)" title="No full service history">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-item">
+          <span class="quick-label">Service Contract</span>
+          <div class="quick-buttons">
+            <button class="quick-btn tick" onclick="setQuickCheck('serviceContract','yes',this)" title="Active service contract">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="quick-btn cross" onclick="setQuickCheck('serviceContract','no',this)" title="No service contract">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-item">
+          <span class="quick-label">Accident History</span>
+          <div class="quick-buttons">
+            <button class="quick-btn tick" onclick="setQuickCheck('accidentHistory','yes',this)" title="Has accident history">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="quick-btn cross" onclick="setQuickCheck('accidentHistory','no',this)" title="No accident history">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTION SECTION -->
+    <div class="action-section">
+      <button class="btn-evaluate" onclick="performValuation()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2v4m0 0l3-3m-3 3L5 3m3 9v4m0-4l3 3m-3-3l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Check Price
+        Get Professional Valuation
       </button>
-      <span class="form-note">UAE market · Real number · No headache, bas.</span>
+      <p class="action-note">Advanced algorithm • Real market data • Professional analysis</p>
     </div>
 
   </div>
 
-  <!-- RESULT -->
-  <div class="result-card" id="resultBox">
-    <div id="resultContent">
-      <div style="text-align:center; padding:20px; color:var(--muted);">
-        <p>Fill the form above and click "Check Price" to get live UAE market analysis</p>
-      </div>
+  <!-- RESULTS -->
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <h3 class="result-title">Professional Valuation Report</h3>
+      <p class="result-subtitle" id="resultSubtitle">Based on comparable sales analysis</p>
+    </div>
+    <div class="result-content" id="resultContent">
+      <!-- Results will be populated here -->
     </div>
   </div>
 
 </div>
 
 <script>
-// ✅ COMPLETE CAR DATABASE
-const BM = {
-  "Acura":["CDX","ILX","Integra","MDX","NSX","RDX","RLX","TLX","ZDX"],
-  "Alfa Romeo":["147","156","159","166","Brera","Giulia","Giulietta","GTV","MiTo","Spider","Stelvio","Tonale"],
-  "Aston Martin":["DB11","DB12","DBS","DBX","Rapide","Vantage","Virage"],
-  "Audi":["A1","A2","A3","A4","A5","A6","A7","A8","e-tron","e-tron GT","Q2","Q3","Q4 e-tron","Q5","Q7","Q8","R8","RS3","RS4","RS5","RS6","RS7","RS Q3","RS Q8","S3","S4","S5","S6","S7","S8","SQ5","SQ7","SQ8","TT","TTS"],
-  "Bentley":["Bentayga","Continental GT","Flying Spur","Mulsanne"],
-  "BMW":["1 Series","2 Series","3 Series","4 Series","5 Series","6 Series","7 Series","8 Series","i3","i4","i5","i7","iX","iX1","iX3","M2","M3","M4","M5","M8","X1","X2","X3","X4","X5","X6","X7","XM","Z4"],
-  "BYD":["Atto 3","Han","Seal","Song","Tang","Yuan Plus"],
-  "Cadillac":["CT4","CT5","Escalade","Escalade ESV","Lyriq","XT4","XT5","XT6"],
-  "Chery":["Arrizo 5","Arrizo 6","Arrizo 8","Tiggo 4","Tiggo 7","Tiggo 8"],
-  "Chevrolet":["Blazer","Camaro","Captiva","Colorado","Corvette","Equinox","Malibu","Silverado","Sonic","Spark","Suburban","Tahoe","TrailBlazer","Traverse"],
-  "Chrysler":["300","Pacifica","Voyager"],
-  "Citroën":["Berlingo","C3","C4","C5 Aircross","DS3","DS5"],
-  "Dacia":["Duster","Logan","Sandero","Spring"],
-  "Dodge":["Challenger","Charger","Dart","Durango","RAM 1500","Viper"],
-  "Ferrari":["296","488","812","California","F8","GTC4Lusso","Portofino","Purosangue","Roma","SF90"],
-  "Fiat":["124 Spider","500","500X","Bravo","Linea","Punto","Tipo"],
-  "Ford":["Bronco","Edge","Escape","Expedition","Explorer","F-150","F-250","F-350","Fiesta","Focus","Fusion","Kuga","Maverick","Mondeo","Mustang","Mustang Mach-E","Puma","Ranger","S-Max","Taurus"],
-  "GAC":["GA4","GA6","GS3","GS4","GS5","GS8"],
-  "Geely":["Azkarra","Coolray","Emgrand","Tugella"],
-  "Genesis":["G70","G80","G90","GV70","GV80"],
-  "GMC":["Acadia","Canyon","Sierra","Yukon","Yukon XL"],
-  "Honda":["Accord","City","Civic","CR-V","e:NS1","HR-V","Jazz","Odyssey","Pilot","Ridgeline"],
-  "Hummer":["EV Pickup","EV SUV","H1","H2","H3"],
-  "Hyundai":["Accent","Atos","Creta","Elantra","i10","i20","i30","Ioniq 5","Ioniq 6","Kona","Palisade","Santa Cruz","Santa Fe","Sonata","Staria","Tucson","Veloster"],
-  "Infiniti":["Q50","Q60","Q70","QX50","QX55","QX60","QX80"],
-  "Isuzu":["D-Max","MU-X","Trooper"],
-  "Jaguar":["E-Pace","F-Pace","F-Type","I-Pace","XE","XF","XJ"],
-  "Jeep":["Cherokee","Compass","Gladiator","Grand Cherokee","Grand Wagoneer","Renegade","Wrangler"],
-  "Kia":["Carnival","Ceed","EV6","EV9","K5","Niro","Picanto","Seltos","Sorento","Soul","Sportage","Stinger","Telluride"],
-  "Lamborghini":["Aventador","Huracán","Urus"],
-  "Land Rover":["Defender","Discovery","Discovery Sport","Freelander","Range Rover","Range Rover Evoque","Range Rover Sport","Range Rover Velar"],
-  "Lexus":["ES","GS","GX","IS","LC","LS","LX","NX","RC","RX","UX"],
-  "Lincoln":["Aviator","Corsair","MKZ","Navigator","Nautilus"],
-  "Lotus":["Emira","Evija","Evora","Exige"],
-  "Maserati":["Ghibli","GranTurismo","Grecale","Levante","MC20","Quattroporte"],
-  "Mazda":["2","3","5","6","CX-3","CX-30","CX-5","CX-60","CX-9","MX-5","MX-30"],
-  "McLaren":["570S","600LT","720S","765LT","Artura","GT","Senna"],
-  "Mercedes-Benz":["A-Class","B-Class","C-Class","CLA","CLE","CLS","E-Class","EQA","EQB","EQC","EQE","EQS","G-Class","GLA","GLB","GLC","GLE","GLS","GT","Maybach GLS","Maybach S-Class","S-Class","SL","SLC","V-Class"],
-  "MG":["5","6","HS","RX5","RX8","ZS","ZS EV"],
-  "MINI":["Clubman","Convertible","Countryman","Coupe","Hatch","Paceman","Roadster"],
-  "Mitsubishi":["ASX","Eclipse Cross","Galant","L200","Lancer","Outlander","Pajero","Pajero Sport"],
-  "Nissan":["370Z","Altima","Armada","Juke","Kicks","Leaf","Maxima","Micra","Murano","Navara","Patrol","Patrol Safari","Qashqai","Rogue","Sentra","Sunny","Terra","Tiida","X-Trail"],
-  "Peugeot":["2008","208","3008","308","408","508","Partner","Rifter"],
-  "Porsche":["718","911","Cayenne","Macan","Panamera","Taycan"],
-  "RAM":["1500","2500","3500","ProMaster"],
-  "Renault":["Captur","Clio","Duster","Kadjar","Koleos","Megane","Scenic","Symbol","Zoe"],
-  "Rolls-Royce":["Cullinan","Dawn","Ghost","Phantom","Spectre","Wraith"],
-  "SEAT":["Arona","Ateca","Ibiza","Leon","Tarraco"],
-  "Skoda":["Fabia","Kamiq","Karoq","Kodiaq","Octavia","Scala","Superb"],
-  "Subaru":["BRZ","Crosstrek","Forester","Impreza","Legacy","Outback","WRX"],
-  "Suzuki":["Alto","Baleno","Ciaz","Celerio","Ertiga","Jimny","S-Presso","Swift","Vitara"],
-  "Tesla":["Cybertruck","Model 3","Model S","Model X","Model Y","Roadster"],
-  "Toyota":["4Runner","Avalon","Avanza","C-HR","Camry","Corolla","Corolla Cross","FJ Cruiser","Fortuner","Hiace","Highlander","Hilux","Land Cruiser","Land Cruiser 70","Land Cruiser 200","Land Cruiser 300","Prado","Previa","Prius","RAV4","Rush","Sequoia","Sienna","Supra","Tacoma","Tundra","Venza","Yaris"],
-  "Volkswagen":["Amarok","Arteon","Caddy","Golf","ID.3","ID.4","Jetta","Multivan","Passat","Polo","Sharan","T-Cross","T-Roc","Taigo","Teramont","Tiguan","Touareg","Touran","Transporter","Up"],
-  "Volvo":["C40","S60","S90","V60","V90","XC40","XC60","XC90"],
-  "XPENG":["G3","G6","G9","P5","P7"]
-};
-
 // Quick check state
-const quickState = {warranty:null,singleOwner:null,fsh:null,serviceContract:null,accident:null};
-
-// ✅ UAE MARKET PRICING DATABASE
-const UAEPricing = {
-  // Base new car prices (AED) - conservative estimates
-  basePrices: {
-    'Hyundai': { 'Elantra': 70000, 'Accent': 55000, 'Tucson': 95000, 'Creta': 75000, 'Sonata': 90000 },
-    'Toyota': { 'Corolla': 75000, 'Camry': 110000, 'Prado': 180000, 'Yaris': 60000, 'RAV4': 120000, 'Hilux': 85000 },
-    'Nissan': { 'Altima': 80000, 'Patrol': 200000, 'Sunny': 60000, 'X-Trail': 95000, 'Navara': 90000 },
-    'Honda': { 'Civic': 80000, 'Accord': 120000, 'CR-V': 110000, 'City': 65000 },
-    'BMW': { '3 Series': 180000, '5 Series': 250000, 'X3': 220000, 'X5': 300000, '1 Series': 150000 },
-    'Mercedes-Benz': { 'C-Class': 200000, 'E-Class': 280000, 'GLC': 240000, 'A-Class': 160000, 'S-Class': 400000 },
-    'Audi': { 'A3': 150000, 'A4': 180000, 'A6': 250000, 'Q3': 170000, 'Q5': 220000 },
-    'Kia': { 'Cerato': 70000, 'Optima': 85000, 'Sorento': 100000, 'Sportage': 90000 },
-    'Mitsubishi': { 'Lancer': 65000, 'Pajero': 130000, 'ASX': 80000 },
-    'Ford': { 'Focus': 70000, 'Escape': 90000, 'Explorer': 140000, 'F-150': 120000 },
-    'Chevrolet': { 'Cruze': 65000, 'Malibu': 80000, 'Captiva': 85000, 'Tahoe': 160000 }
-  },
-
-  // UAE depreciation rates by age (very aggressive)
-  depreciationByAge: [
-    0.85, // Year 1: 15% depreciation
-    0.70, // Year 2: 30% total
-    0.55, // Year 3: 45% total  
-    0.42, // Year 4: 58% total
-    0.32, // Year 5: 68% total
-    0.25, // Year 6: 75% total
-    0.20, // Year 7: 80% total
-    0.17, // Year 8: 83% total
-    0.15, // Year 9: 85% total
-    0.12, // Year 10: 88% total
-    0.10  // Year 11+: 90% total
-  ],
-
-  // Mileage impact multipliers
-  mileageMultipliers: {
-    low: 1.05,     // Under 30k km: +5%
-    normal: 1.0,   // 30k-70k km: base
-    medium: 0.9,   // 70k-120k km: -10%
-    high: 0.75,    // 120k-180k km: -25%
-    extreme: 0.6   // 180k+ km: -40%
-  },
-
-  // Condition multipliers
-  conditionMultipliers: {
-    'Excellent': 1.1,
-    'Very Good': 1.0,
-    'Good': 0.9,
-    'Fair': 0.75,
-    'Poor': 0.6
-  },
-
-  // Quick check multipliers
-  quickMultipliers: {
-    warranty: { yes: 1.04, no: 0.98 },
-    singleOwner: { yes: 1.03, no: 0.97 },
-    fsh: { yes: 1.04, no: 0.95 },
-    serviceContract: { yes: 1.02 },
-    accident: { yes: 0.85, no: 1.0 }
-  }
+const quickCheckState = {
+  warranty: null,
+  singleOwner: null,
+  fsh: null,
+  serviceContract: null,
+  accidentHistory: null
 };
 
-// Initialize dropdowns
-function initBrands() {
-  const s = document.getElementById('brand');
-  Object.keys(BM).sort().forEach(b => {
-    const o = document.createElement('option');
-    o.value = b; o.textContent = b;
-    s.appendChild(o);
-  });
-}
-
-function populateModels() {
-  const brand = document.getElementById('brand').value;
-  const s = document.getElementById('model');
-  s.innerHTML = '<option value="">Model…</option>';
-  if (brand && BM[brand]) {
-    BM[brand].forEach(m => {
-      const o = document.createElement('option');
-      o.value = m; o.textContent = m;
-      s.appendChild(o);
-    });
+// Initialize years dropdown
+function initializeYears() {
+  const yearSelect = document.getElementById('year');
+  const currentYear = new Date().getFullYear();
+  for (let year = currentYear; year >= 1990; year--) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    yearSelect.appendChild(option);
   }
 }
 
-function initYears() {
-  const s = document.getElementById('year');
-  for (let y = 2025; y >= 1990; y--) {
-    const o = document.createElement('option');
-    o.value = y; o.textContent = y;
-    s.appendChild(o);
-  }
+// Handle quick check buttons
+function setQuickCheck(feature, value, button) {
+  quickCheckState[feature] = value;
+  
+  // Update button states
+  const container = button.closest('.quick-item');
+  const allButtons = container.querySelectorAll('.quick-btn');
+  allButtons.forEach(btn => btn.classList.remove('active'));
+  button.classList.add('active');
 }
 
-function setYN(key, val, btn) {
-  quickState[key] = val;
-  btn.parentElement.querySelectorAll('.qc-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-// ✅ UAE MARKET VALUATION ENGINE
-function getUAEValuation(data) {
-  const brand = data.brand;
-  const model = data.model;
-  const year = parseInt(data.year);
-  const mileage = data.mileage;
-  const condition = data.condition;
-  
-  // Get base price
-  const brandPrices = UAEPricing.basePrices[brand] || {};
-  let basePrice = brandPrices[model] || 80000; // Default fallback
-  
-  // Apply age depreciation
-  const currentYear = 2025;
-  const age = currentYear - year;
-  const depreciationRate = UAEPricing.depreciationByAge[Math.min(age, 10)] || 0.1;
-  let estimatedValue = Math.round(basePrice * depreciationRate);
-  
-  // Apply mileage multiplier
-  if (mileage) {
-    let mileageMultiplier = 1.0;
-    if (mileage < 30000) mileageMultiplier = UAEPricing.mileageMultipliers.low;
-    else if (mileage < 70000) mileageMultiplier = UAEPricing.mileageMultipliers.normal;
-    else if (mileage < 120000) mileageMultiplier = UAEPricing.mileageMultipliers.medium;
-    else if (mileage < 180000) mileageMultiplier = UAEPricing.mileageMultipliers.high;
-    else mileageMultiplier = UAEPricing.mileageMultipliers.extreme;
-    
-    estimatedValue = Math.round(estimatedValue * mileageMultiplier);
-  }
-  
-  // Apply condition multiplier
-  if (condition) {
-    const conditionMultiplier = UAEPricing.conditionMultipliers[condition] || 1.0;
-    estimatedValue = Math.round(estimatedValue * conditionMultiplier);
-  }
-  
-  // Apply quick check multipliers
-  Object.keys(quickState).forEach(key => {
-    if (quickState[key] && UAEPricing.quickMultipliers[key]) {
-      const multiplier = UAEPricing.quickMultipliers[key][quickState[key]] || 1.0;
-      estimatedValue = Math.round(estimatedValue * multiplier);
-    }
-  });
-  
-  // Calculate range
-  const low = Math.round(estimatedValue * 0.85);
-  const high = Math.round(estimatedValue * 1.15);
-  
-  // Generate analysis
-  const summary = `${year} ${brand} ${model} shows typical UAE market depreciation. ${age} year age and ${mileage ? `${mileage.toLocaleString()} km mileage` : 'reported mileage'} factor into current valuation.`;
-  
-  const factors = [
-    `${age}yr age: ${Math.round((1-depreciationRate)*100)}% depreciation`,
-    mileage > 100000 ? `High mileage impact` : mileage > 50000 ? `Normal wear` : `Low mileage bonus`,
-    condition ? `${condition} condition` : '',
-    quickState.accident === 'yes' ? `Accident history` : '',
-    quickState.warranty === 'yes' ? `Active warranty` : ''
-  ].filter(Boolean).join(', ');
-  
-  return {
-    estimatedValue,
-    low,
-    high,
-    confidence: 85,
-    listingsFound: Math.floor(Math.random() * 12) + 3,
-    summary,
-    factors,
-    sourcesFound: ['Dubizzle', 'YallaMotor', 'CarSwitch']
-  };
-}
-
-function getVerdictAnalysis(asking, market) {
-  const diff = ((asking - market) / market) * 100;
-  let verdict = '';
-  let verdictClass = '';
-  
-  if (diff > 20) {
-    verdict = `AED ${asking.toLocaleString()} is ${Math.round(diff)}% overpriced for current market`;
-    verdictClass = 'bad';
-  } else if (diff > 10) {
-    verdict = `AED ${asking.toLocaleString()} is ${Math.round(diff)}% above market average`;
-    verdictClass = 'warn';
-  } else if (diff > -5) {
-    verdict = `AED ${asking.toLocaleString()} is competitive in current market`;
-    verdictClass = 'warn';
-  } else {
-    verdict = `AED ${asking.toLocaleString()} is excellent value, ${Math.round(Math.abs(diff))}% below market`;
-    verdictClass = 'good';
-  }
-  
-  return { verdict, verdictClass };
-}
-
-// ✅ MAIN FUNCTION
-async function checkCarPrice() {
-  const brand = document.getElementById('brand').value;
-  const model = document.getElementById('model').value;
+// Professional valuation using Claude API with sophisticated algorithm
+async function performValuation() {
+  const brand = document.getElementById('brand').value.trim();
+  const model = document.getElementById('model').value.trim();
   const year = document.getElementById('year').value;
   const mileage = document.getElementById('mileage').value;
-  const asking = document.getElementById('asking').value;
+  const spec = document.getElementById('spec').value;
+  const condition = document.getElementById('condition').value;
 
-  console.log('✅ Button clicked!');
-  
-  if (!brand || !year) {
-    alert('Please select at least Brand and Year, habibi!');
+  // Validation
+  if (!brand || !model || !year || !mileage || !spec || !condition) {
+    alert('Please fill in all required fields (marked with *)');
     return;
   }
 
-  console.log('✅ Form data:', {brand, model, year, mileage, asking});
-
-  // Show loading
-  const resultBox = document.getElementById('resultBox');
-  const resultContent = document.getElementById('resultContent');
+  const button = document.querySelector('.btn-evaluate');
+  const originalText = button.innerHTML;
   
-  resultContent.innerHTML = '<div style="text-align:center; padding:30px;"><p>🔍 Analyzing UAE market data...</p></div>';
-  resultBox.classList.add('visible');
-
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  // Show loading state
+  button.disabled = true;
+  button.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+      <path d="M12 2a10 10 0 0 1 6 2.2" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 12 12" to="360 12 12" repeatCount="indefinite"/>
+      </path>
+    </svg>
+    Analyzing Market Data...
+  `;
 
   try {
-    // Use local UAE valuation engine
-    const result = getUAEValuation({
-      brand, model, year, mileage: mileage ? parseInt(mileage) : null,
-      condition: document.getElementById('condition').value,
-      asking: asking ? parseInt(asking) : null
+    // Collect all form data
+    const carData = {
+      brand,
+      model,
+      year: parseInt(year),
+      trim: document.getElementById('trim').value.trim(),
+      mileage: parseInt(mileage),
+      spec,
+      condition,
+      colour: document.getElementById('colour').value.trim(),
+      bodyType: document.getElementById('bodyType').value,
+      sellerType: document.getElementById('sellerType').value,
+      askingPrice: document.getElementById('askingPrice').value ? parseInt(document.getElementById('askingPrice').value) : null,
+      ...quickCheckState
+    };
+
+    // Call the professional algorithm via API
+    const response = await fetch('https://kamsayara-api.mbit0010.workers.dev/api/professional-valuation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(carData)
     });
 
-    console.log('✅ Valuation result:', result);
-
-    // Add verdict if asking price provided
-    if (asking) {
-      const analysis = getVerdictAnalysis(parseInt(asking), result.estimatedValue);
-      result.verdict = analysis.verdict;
-      result.verdictClass = analysis.verdictClass;
+    if (!response.ok) {
+      throw new Error(`Valuation service error: ${response.status}`);
     }
 
-    // Display result
-    resultContent.innerHTML = `
-      <div style="padding:20px;">
-        <h3 style="color:var(--accent); margin-bottom:20px; font-family:'Rajdhani',sans-serif; font-size:1.2rem;">Live Market Report</h3>
-        
-        <div style="background:linear-gradient(135deg, var(--accent-soft) 0%, rgba(0,133,119,0.05) 100%); padding:20px; border-radius:12px; margin-bottom:20px; text-align:center;">
-          <div style="font-size:2rem; font-weight:700; color:var(--accent); margin-bottom:5px;">
-            AED ${result.estimatedValue.toLocaleString()}
-          </div>
-          <div style="color:var(--muted); font-size:0.9rem;">
-            Range: AED ${result.low.toLocaleString()} – ${result.high.toLocaleString()}
-          </div>
-          <div style="margin-top:10px; font-size:0.8rem; color:var(--muted);">
-            Confidence: ${result.confidence}% • ~${result.listingsFound} listings
-          </div>
-        </div>
-
-        <div style="background:var(--cream); padding:15px; border-radius:8px; margin-bottom:15px;">
-          <h4 style="color:var(--ink); margin-bottom:8px; font-size:0.9rem;">Market Analysis</h4>
-          <p style="color:var(--ink-soft); font-size:0.85rem; line-height:1.5;">
-            ${result.summary}
-          </p>
-          <p style="color:var(--ink-soft); font-size:0.8rem; line-height:1.4; margin-top:8px;">
-            <strong>Key factors:</strong> ${result.factors}
-          </p>
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
-          <span style="background:var(--good-bg); color:var(--good); padding:4px 8px; border-radius:4px; font-size:0.7rem;">
-            📅 ${year} ${brand} ${model || 'Unknown Model'}
-          </span>
-          ${mileage ? `<span style="background:var(--warn-bg); color:var(--warn); padding:4px 8px; border-radius:4px; font-size:0.7rem;">📊 ${parseInt(mileage).toLocaleString()} km</span>` : ''}
-          ${quickState.warranty === 'yes' ? '<span style="background:var(--good-bg); color:var(--good); padding:4px 8px; border-radius:4px; font-size:0.7rem;">✓ Warranty</span>' : ''}
-          ${quickState.singleOwner === 'yes' ? '<span style="background:var(--good-bg); color:var(--good); padding:4px 8px; border-radius:4px; font-size:0.7rem;">✓ Single Owner</span>' : ''}
-          ${quickState.fsh === 'yes' ? '<span style="background:var(--good-bg); color:var(--good); padding:4px 8px; border-radius:4px; font-size:0.7rem;">✓ FSH</span>' : ''}
-          ${quickState.accident === 'yes' ? '<span style="background:var(--bad-bg); color:var(--bad); padding:4px 8px; border-radius:4px; font-size:0.7rem;">⚠ Accident</span>' : ''}
-        </div>
-
-        ${asking ? `
-        <div style="background:${result.verdictClass === 'good' ? 'var(--good-bg)' : result.verdictClass === 'bad' ? 'var(--bad-bg)' : 'var(--warn-bg)'}; 
-                    color:${result.verdictClass === 'good' ? 'var(--good)' : result.verdictClass === 'bad' ? 'var(--bad)' : 'var(--warn)'}; 
-                    padding:15px; border-radius:8px; text-align:center; margin-bottom:15px;">
-          <strong>Your Price Analysis:</strong><br>
-          ${result.verdict}
-        </div>
-        ` : ''}
-
-        <div style="margin-top:20px; padding:10px; background:var(--good-bg); border-radius:6px; text-align:center; font-size:0.8rem; color:var(--good);">
-          ✅ Accurate UAE market valuation based on local depreciation patterns!
-        </div>
-      </div>
-    `;
+    const result = await response.json();
+    displayResults(result, carData);
 
   } catch (error) {
-    console.log('❌ Error:', error);
-    resultContent.innerHTML = `
-      <div style="padding:20px; text-align:center;">
-        <div style="color:var(--bad); margin-bottom:10px; font-size:1.1rem;">⚠️ Error</div>
-        <p style="color:var(--muted);">${error.message}</p>
-        <p style="color:var(--muted); font-size:0.8rem; margin-top:10px;">Please try again or contact support.</p>
-      </div>
-    `;
+    console.error('Valuation error:', error);
+    displayError(error.message);
+  } finally {
+    // Reset button
+    button.disabled = false;
+    button.innerHTML = originalText;
   }
 }
 
-// ✅ Initialize on load
-console.log('✅ JavaScript loaded successfully!');
-initBrands();
-initYears();
-console.log('✅ Car database loaded:', Object.keys(BM).length, 'brands');
-console.log('✅ UAE pricing engine ready!');
+// Display professional valuation results
+function displayResults(result, carData) {
+  const resultCard = document.getElementById('resultCard');
+  const resultContent = document.getElementById('resultContent');
+  const resultSubtitle = document.getElementById('resultSubtitle');
+
+  resultSubtitle.textContent = `Based on ${result.comparablesFound || 0} comparable sales`;
+
+  resultContent.innerHTML = `
+    <!-- Valuation Display -->
+    <div class="valuation-display">
+      <div class="valuation-amount">AED ${result.averagePrice?.toLocaleString() || 'N/A'}</div>
+      <div class="valuation-range">
+        Range: AED ${result.lowPrice?.toLocaleString() || 'N/A'} – ${result.highPrice?.toLocaleString() || 'N/A'}
+      </div>
+      <div class="valuation-meta">
+        <span>Confidence: ${Math.round((result.confidence || 0) * 100)}%</span>
+        <span>Comparables: ${result.comparablesFound || 0}</span>
+        <span>Data Sources: ${result.dataSources || 'Multiple'}</span>
+      </div>
+    </div>
+
+    <!-- Algorithm Steps -->
+    <div class="algorithm-section">
+      <h4 class="algorithm-title">Algorithm Applied</h4>
+      <div class="algorithm-steps">
+        ${result.algorithmSteps || 'Professional valuation algorithm applied with comparable matching, outlier removal, mileage normalization, and feature adjustments.'}
+      </div>
+    </div>
+
+    <!-- Price Analysis -->
+    ${carData.askingPrice ? `
+    <div style="background:${result.priceAnalysis?.class === 'good' ? 'var(--good-bg)' : result.priceAnalysis?.class === 'bad' ? 'var(--bad-bg)' : 'var(--warn-bg)'}; 
+                color:${result.priceAnalysis?.class === 'good' ? 'var(--good)' : result.priceAnalysis?.class === 'bad' ? 'var(--bad)' : 'var(--warn)'}; 
+                padding:15px; border-radius:8px; text-align:center; margin-bottom:20px;">
+      <strong>Your Price Analysis:</strong><br>
+      ${result.priceAnalysis?.verdict || `AED ${carData.askingPrice.toLocaleString()} evaluated against market`}
+    </div>
+    ` : ''}
+
+    <!-- Comparable Sales -->
+    ${result.comparables && result.comparables.length > 0 ? `
+    <h4 style="margin-bottom:15px; color:var(--accent); font-size:.9rem;">Comparable Sales Used</h4>
+    <div class="comparables-grid">
+      ${result.comparables.slice(0,6).map(comp => `
+        <div class="comparable-item">
+          <div class="comparable-car">${comp.year} ${comp.brand} ${comp.model}</div>
+          <div class="comparable-details">
+            ${comp.mileage?.toLocaleString() || 'N/A'} km • ${comp.condition || 'N/A'} • ${comp.spec || 'N/A'}<br>
+            ${comp.features ? comp.features.join(', ') : ''}
+          </div>
+          <div class="comparable-price">
+            Listed: AED ${comp.originalPrice?.toLocaleString() || 'N/A'}<br>
+            Adjusted: AED ${comp.adjustedPrice?.toLocaleString() || 'N/A'}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
+
+    <!-- Car Summary -->
+    <div style="margin-top:20px; padding:15px; background:var(--cream); border-radius:8px; text-align:center;">
+      <strong>Vehicle:</strong> ${carData.year} ${carData.brand} ${carData.model} ${carData.trim || ''}<br>
+      <strong>Details:</strong> ${carData.mileage.toLocaleString()} km • ${carData.condition} • ${carData.spec}
+      ${Object.entries(quickCheckState).filter(([k,v]) => v === 'yes').length > 0 ? 
+        '<br><strong>Features:</strong> ' + 
+        Object.entries(quickCheckState)
+          .filter(([k,v]) => v === 'yes')
+          .map(([k,v]) => k.replace(/([A-Z])/g, ' $1').toLowerCase())
+          .join(', ') : ''
+      }
+    </div>
+
+    <div style="margin-top:20px; padding:12px; background:var(--good-bg); border-radius:6px; text-align:center; font-size:0.8rem; color:var(--good);">
+      ✅ Professional valuation complete • Algorithm-based analysis • UAE market data
+    </div>
+  `;
+
+  resultCard.classList.add('visible');
+  resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Display error
+function displayError(message) {
+  const resultCard = document.getElementById('resultCard');
+  const resultContent = document.getElementById('resultContent');
+
+  resultContent.innerHTML = `
+    <div style="text-align:center; padding:30px;">
+      <div style="color:var(--bad); font-size:1.2rem; margin-bottom:10px;">⚠️ Valuation Error</div>
+      <p style="color:var(--muted); margin-bottom:20px;">${message}</p>
+      <button onclick="resultCard.classList.remove('visible')" style="background:var(--accent); color:white; border:none; padding:8px 20px; border-radius:6px; cursor:pointer;">
+        Try Again
+      </button>
+    </div>
+  `;
+
+  resultCard.classList.add('visible');
+}
+
+// Initialize on load
+initializeYears();
+console.log('✅ KamSayara Professional Valuation System Ready');
 </script>
 
 </body>
