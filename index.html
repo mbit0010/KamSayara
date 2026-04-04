@@ -1,17 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>KamSayara Button Test</title>
+  <meta charset="UTF-8" />
+  <title>KamSayara – Check the price, habibi!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+    .form-group { margin: 15px 0; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+    button { background: #008577; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    button:hover { background: #006B60; }
+    .result { margin-top: 20px; padding: 20px; background: #f0f9ff; border-radius: 5px; display: none; }
+    .loader { display: none; text-align: center; margin: 20px 0; }
+  </style>
 </head>
 <body>
-    <h1>KamSayara Button Test</h1>
+
+<div class="container">
+  <h1>🚗 KamSayara - UAE Car Price Checker</h1>
+  <p>Check the price… make your mind, habibi.</p>
+  
+  <form onsubmit="return false;">
+    <div class="form-group">
+      <label>Brand *</label>
+      <select id="brand" onchange="populateModels()">
+        <option value="">Select Brand...</option>
+        <option value="Toyota">Toyota</option>
+        <option value="BMW">BMW</option>
+        <option value="Mercedes-Benz">Mercedes-Benz</option>
+        <option value="Nissan">Nissan</option>
+        <option value="Honda">Honda</option>
+      </select>
+    </div>
     
-    <button onclick="testFunction()">TEST BUTTON</button>
+    <div class="form-group">
+      <label>Model</label>
+      <select id="model">
+        <option value="">Model...</option>
+      </select>
+    </div>
     
-    <script>
-    function testFunction() {
-        alert('🎉 BUTTON WORKS!');
+    <div class="form-group">
+      <label>Year *</label>
+      <select id="year">
+        <option value="">Year...</option>
+        <option value="2024">2024</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+        <option value="2021">2021</option>
+        <option value="2020">2020</option>
+        <option value="2019">2019</option>
+        <option value="2018">2018</option>
+        <option value="2017">2017</option>
+        <option value="2016">2016</option>
+        <option value="2015">2015</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Mileage (km)</label>
+      <input type="number" id="mileage" placeholder="50000">
+    </div>
+    
+    <div class="form-group">
+      <label>Asking Price (AED)</label>
+      <input type="number" id="asking" placeholder="75000">
+    </div>
+    
+    <button onclick="checkPrice()">Check Price</button>
+  </form>
+  
+  <div class="loader" id="loader">
+    <p>🔍 Analyzing UAE market data...</p>
+  </div>
+  
+  <div class="result" id="result">
+    <h3>Market Analysis Result</h3>
+    <div id="resultContent"></div>
+  </div>
+</div>
+
+<script>
+// Car models data
+const carModels = {
+  "Toyota": ["Camry", "Corolla", "Land Cruiser", "Prado", "RAV4", "Hilux"],
+  "BMW": ["X3", "X5", "3 Series", "5 Series", "7 Series"],
+  "Mercedes-Benz": ["C-Class", "E-Class", "S-Class", "GLE", "GLS"],
+  "Nissan": ["Altima", "Patrol", "X-Trail", "Kicks"],
+  "Honda": ["Accord", "Civic", "CR-V", "Pilot"]
+};
+
+function populateModels() {
+  const brand = document.getElementById('brand').value;
+  const modelSelect = document.getElementById('model');
+  
+  modelSelect.innerHTML = '<option value="">Model...</option>';
+  
+  if (brand && carModels[brand]) {
+    carModels[brand].forEach(model => {
+      const option = document.createElement('option');
+      option.value = model;
+      option.textContent = model;
+      modelSelect.appendChild(option);
+    });
+  }
+}
+
+async function checkPrice() {
+  // Get form values
+  const brand = document.getElementById('brand').value;
+  const model = document.getElementById('model').value;
+  const year = document.getElementById('year').value;
+  const mileage = document.getElementById('mileage').value;
+  const asking = document.getElementById('asking').value;
+  
+  // Validate required fields
+  if (!brand || !year) {
+    alert('Please select at least Brand and Year, habibi!');
+    return;
+  }
+  
+  // Show loader
+  document.getElementById('loader').style.display = 'block';
+  document.getElementById('result').style.display = 'none';
+  
+  try {
+    // Call API
+    const response = await fetch('https://kamsayara-api.mbit0010.workers.dev/api/evaluate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        brand: brand,
+        model: model,
+        year: parseInt(year),
+        mileage: mileage ? parseInt(mileage) : null,
+        asking: asking ? parseInt(asking) : null
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
     }
-    </script>
+    
+    const result = await response.json();
+    
+    // Show result
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    
+    document.getElementById('resultContent').innerHTML = `
+      <p><strong>Car:</strong> ${year} ${brand} ${model}</p>
+      <p><strong>Estimated Value:</strong> AED ${result.estimatedValue?.toLocaleString() || 'N/A'}</p>
+      <p><strong>Price Range:</strong> AED ${result.low?.toLocaleString() || 'N/A'} - ${result.high?.toLocaleString() || 'N/A'}</p>
+      <p><strong>Confidence:</strong> ${result.confidence || 0}%</p>
+      <p><strong>Market Summary:</strong> ${result.summary || 'Analysis completed'}</p>
+      ${asking ? `<p><strong>Your Price Analysis:</strong> ${result.verdict || 'Price noted'}</p>` : ''}
+    `;
+    
+  } catch (error) {
+    // Show error
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('resultContent').innerHTML = `
+      <p style="color: red;"><strong>Error:</strong> ${error.message}</p>
+      <p>Please try again or contact support.</p>
+    `;
+  }
+}
+</script>
+
 </body>
 </html>
