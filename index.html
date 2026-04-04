@@ -51,13 +51,13 @@
       content: '';
       position: fixed;
       inset: 0;
-      background: url('./Kamsayara_1.png') center center/cover;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23C49A2A" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)" /></svg>') center center/cover;
       opacity: 0.08;
       pointer-events: none;
       z-index: -1;
     }
 
-    /* ── LOADER ─────────────────────────────────────── */
+    /* LOADER */
     .loader-overlay {
       display:none; position:fixed; inset:0; z-index:200;
       background:rgba(255,251,240,0.93); backdrop-filter:blur(8px);
@@ -75,12 +75,10 @@
     .loader-step.active { color:var(--accent); opacity:1; font-weight:700; }
     .loader-step.done   { color:var(--good);   opacity:.7; }
 
-    /* ── HERO BAND ──────────────────────────────────── */
+    /* HERO BAND */
     .hero-band {
       width:100%; position:relative; overflow:hidden;
-      background:
-        linear-gradient(138deg, rgba(0,48,40,0.75) 0%, rgba(0,92,78,0.85) 30%, rgba(160,120,16,0.80) 72%, rgba(212,168,32,0.85) 100%),
-        url('./Car_Photo.png') center center/cover;
+      background:linear-gradient(138deg, rgba(0,48,40,0.75) 0%, rgba(0,92,78,0.85) 30%, rgba(160,120,16,0.80) 72%, rgba(212,168,32,0.85) 100%);
     }
     .hero-band::before {
       content:''; position:absolute; inset:0; pointer-events:none;
@@ -88,7 +86,6 @@
         radial-gradient(ellipse 55% 80% at 78% 50%,rgba(220,185,50,0.12) 0%,transparent 58%),
         radial-gradient(ellipse 38% 55% at 12% 20%,rgba(0,70,58,0.20) 0%,transparent 52%);
     }
-    /* bottom wave cutout into cream */
     .hero-band::after {
       content:''; position:absolute; bottom:-1px; left:0; right:0; height:52px;
       background:linear-gradient(155deg,#FFFDF5 0%,#FFF8E4 50%,#FFFBEE 100%);
@@ -100,13 +97,13 @@
       max-width:1040px; margin:0 auto; padding:0 28px 60px;
     }
 
-    /* ── NAV BAR ────────────────────────────────────── */
+    /* NAV BAR */
     .nav-bar {
       display:flex; align-items:center; justify-content:space-between;
       padding:20px 0 16px;
     }
 
-    /* ── WORDMARK ────────────────────────────────────── */
+    /* WORDMARK */
     .wordmark { display:inline-flex; flex-direction:column; gap:2px; text-decoration:none; }
     .wm-name  { display:flex; align-items:baseline; gap:0; line-height:1; }
     .wm-kam   {
@@ -132,7 +129,7 @@
       border-radius:99px; padding:.28rem .85rem;
     }
 
-    /* ── HERO HEADLINE ───────────────────────────────── */
+    /* HERO HEADLINE */
     .hero-headline { text-align:center; padding:14px 0 4px; }
     .hero-headline h1 {
       font-family:"Rajdhani","Exo 2",sans-serif;
@@ -147,10 +144,10 @@
       font-weight:400; letter-spacing:.01em;
     }
 
-    /* ── PAGE WRAPPER ────────────────────────────────── */
+    /* PAGE WRAPPER */
     .page { max-width:1000px; margin:0 auto; padding:0 22px 80px; }
 
-    /* ── FORM CARD (overlaps hero) ────────────────────── */
+    /* FORM CARD */
     .form-card {
       background:var(--white); border-radius:20px;
       border:1px solid rgba(255,255,255,0.2); 
@@ -163,7 +160,6 @@
       backdrop-filter: blur(10px);
     }
 
-    /* ── FORM TABLE 2/3 + 1/3 ────────────────────────── */
     .form-table {
       display:grid;
       grid-template-columns:2fr 1px 1fr;
@@ -173,23 +169,8 @@
     .cd-pane { padding:20px 20px 16px; }
     .qc-pane { 
       padding:20px 16px 16px; 
-      background:
-        linear-gradient(135deg, rgba(253,252,248,0.95) 0%, rgba(255,251,240,0.98) 100%),
-        url('./Kamsayara_2.png') right center/cover;
-      background-size: cover;
-      background-position: right center;
+      background:linear-gradient(135deg, rgba(253,252,248,0.95) 0%, rgba(255,251,240,0.98) 100%);
       position: relative;
-    }
-    .qc-pane::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(253,252,248,0.85);
-      pointer-events: none;
-    }
-    .qc-pane > * {
-      position: relative;
-      z-index: 1;
     }
     .divider-col { background:var(--border); }
 
@@ -201,7 +182,7 @@
     }
     .pane-label::after { content:''; flex:1; height:1px; background:var(--accent-line); }
 
-    /* ── CAR DETAILS GRID 4×3 ────────────────────────── */
+    /* CAR DETAILS GRID */
     .cd-grid {
       display:grid;
       grid-template-columns:repeat(4,1fr);
@@ -226,6 +207,7 @@
       -webkit-appearance:none; appearance:none;
       box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);
     }
+
     select {
       cursor:pointer;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6'%3E%3Cpath d='M1 1l4.5 4L10 1' stroke='%23008577' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -233,6 +215,7 @@
     }
     select option { background:#FFFDF5; color:var(--ink); }
     input::placeholder { color:var(--muted); opacity:.52; }
+
     select:focus,input:focus {
       border-color:var(--accent); 
       box-shadow:
@@ -246,7 +229,7 @@
       transform: translateY(-0.5px);
     }
 
-    /* ── QUICK CHECK ─────────────────────────────────── */
+    /* QUICK CHECK */
     .qc-rows { display:flex; flex-direction:column; gap:5px; }
 
     .qc-row {
@@ -257,8 +240,8 @@
     .qc-row:hover { border-color:var(--border-w); }
 
     .qc-label {
-      font-size:.78rem; font-weight:500; color:var(--ink-soft);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      font-size:.65rem; font-weight:500; color:var(--ink);
+      text-transform:uppercase; letter-spacing:.05em;
     }
 
     .qc-btns { display:flex; gap:5px; flex-shrink:0; }
@@ -277,7 +260,7 @@
     .qc-btn.tick-btn.active  { background:var(--good-bg); border-color:var(--good-line); color:var(--good); }
     .qc-btn.cross-btn.active { background:var(--bad-bg);  border-color:var(--bad-line);  color:var(--bad); }
 
-    /* ── FORM FOOTER ─────────────────────────────────── */
+    /* FORM FOOTER */
     .form-footer {
       border-top:1px solid var(--border); padding:12px 20px;
       display:flex; align-items:center; justify-content:center; gap:14px;
@@ -301,99 +284,144 @@
     }
     .btn-check::after {
       content:''; position:absolute; inset:0;
-      background:linear-gradient(90deg,transparent 20%,rgba(255,255,255,.16) 50%,transparent 80%);
-      transform:translateX(-100%); transition:transform .5s;
+      background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent 50%);
+      opacity:0; transition:opacity .25s;
     }
-    .btn-check:hover { background:var(--accent-h); transform:translateY(-1px); box-shadow:0 14px 30px var(--accent-glow); }
-    .btn-check:hover::after { transform:translateX(100%); }
-    .btn-check:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .btn-check:hover::after { opacity:1; }
+    .btn-check:active { transform:scale(.97); }
+    .btn-check:disabled { 
+      opacity:.6; cursor:not-allowed; transform:none;
+      box-shadow:0 4px 12px rgba(0,133,119,0.15);
+    }
 
-    .form-note { font-size:.73rem; color:var(--muted); }
+    .form-note {
+      font-size:.61rem; color:var(--muted); letter-spacing:.05em;
+    }
 
-    /* ── RESULT CARD ─────────────────────────────────── */
+    /* RESULT CARD */
     .result-card {
-      display:none; background:var(--white); border-radius:16px;
-      border:1px solid var(--border); box-shadow:var(--shadow-sm);
-      padding:20px 20px; margin-bottom:32px;
+      background:var(--white); border-radius:18px;
+      border:1px solid var(--border); box-shadow:var(--shadow-lg);
+      margin-bottom:34px; position:relative; z-index:1;
+      opacity:0; transform:translateY(20px); transition:all .4s ease-out;
+      display:none;
     }
-    .result-card.visible { display:block; }
+    .result-card.visible { 
+      display:block; opacity:1; transform:translateY(0);
+    }
 
     .res-label {
-      font-size:.58rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
-      color:var(--accent); display:flex; align-items:center; gap:.5rem; margin-bottom:.9rem;
+      font-size:.58rem; font-weight:700; letter-spacing:.2em;
+      text-transform:uppercase; color:var(--accent);
+      padding:20px 20px 12px;
     }
-    .res-label::after { content:''; flex:1; height:1px; background:var(--accent-line); }
 
-    .val-display { text-align:center; padding:.4rem 0 1rem; }
-    .val-display .vlabel { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:.28rem; }
-    .val-display .vamount { font-size:2.9rem; font-weight:700; color:var(--accent); line-height:1; }
-    .val-display .vcur { font-size:1.1rem; opacity:.5; margin-right:.1rem; }
-    .val-display .vrange { font-size:.73rem; color:var(--muted); margin-top:.45rem; }
-
-    .verdict { border-radius:8px; padding:.72rem 1rem; font-weight:600; font-size:.83rem; text-align:center; margin:.6rem 0; }
-    .verdict.good { background:var(--good-bg); color:var(--good); border:1px solid var(--good-line); }
-    .verdict.warn { background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn-line); }
-    .verdict.bad  { background:var(--bad-bg);  color:var(--bad);  border:1px solid var(--bad-line); }
-
-    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-top:.65rem; }
-    .stat-box { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:.75rem .95rem; }
-    .stat-box .sl { font-size:.59rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
-    .stat-box .sv { font-size:1.02rem; font-weight:700; color:var(--ink); margin-top:.18rem; }
-
-    hr.thin { border:none; border-top:1px solid var(--border); margin:.85rem 0; }
-
-    .conf-wrap { margin-top:.75rem; }
-    .conf-head { display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); margin-bottom:.38rem; }
-    .bar-track { height:5px; background:var(--cream-warm); border-radius:99px; overflow:hidden; }
-    .bar-fill   { height:100%; background:linear-gradient(90deg,#004D40,var(--accent)); border-radius:99px; transition:width 1s cubic-bezier(.22,1,.36,1); }
-
-    .ai-box { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:.85rem 1.05rem; margin-top:.85rem; }
-    .ai-head { font-size:.63rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
-    .ai-box p { font-size:.82rem; line-height:1.76; color:var(--ink-soft); margin-bottom:.32rem; }
-
-    .sources-box { margin-top:.85rem; }
-    .sources-head { font-size:.59rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:.45rem; }
-    .source-list  { display:flex; flex-wrap:wrap; gap:.32rem; }
-    .source-tag   { font-size:.68rem; padding:.24rem .68rem; border-radius:99px; background:var(--cream-warm); border:1px solid var(--border); color:var(--muted); }
-    .source-tag.active { background:var(--good-bg); border-color:var(--good-line); color:var(--good); font-weight:600; }
-
-    .chips     { display:flex; flex-wrap:wrap; gap:.32rem; margin-top:.75rem; }
-    .chip      { font-size:.69rem; padding:.24rem .7rem; border-radius:99px; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent); }
-    .chip.bad-chip { background:var(--bad-bg); border-color:var(--bad-line); color:var(--bad); }
-
-    .note-box { margin-top:.85rem; font-size:.69rem; color:var(--muted); background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:.58rem .85rem; line-height:1.62; }
-
-    /* ── CONTENT SECTIONS ────────────────────────────── */
-    .cs {
-      margin-bottom:26px; padding:22px 20px;
-      border-radius:16px; background:var(--white);
-      border:1px solid var(--border); box-shadow:var(--shadow-sm);
+    .val-display {
+      text-align:center; padding:0 20px 20px;
+      background:linear-gradient(135deg,var(--accent-soft) 0%,rgba(0,133,119,0.03) 100%);
+      border-radius:12px; margin:0 20px 20px;
     }
-    .cs h2 { font-size:1.12rem; font-weight:700; color:var(--ink); margin-bottom:9px; }
-    .cs h3 { font-size:.93rem; font-weight:700; color:var(--accent); margin-top:13px; margin-bottom:4px; }
-    .cs p  { font-size:.91rem; color:var(--ink-soft); margin-bottom:5px; }
-
-    .how-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:11px; margin-top:10px; }
-    .step-card { border-radius:11px; border:1px solid var(--border); background:var(--cream); padding:13px 13px 11px; }
-    .step-label { font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:3px; }
-    .step-title { font-size:.91rem; font-weight:700; margin-bottom:3px; color:var(--ink); }
-    .step-text  { font-size:.84rem; color:var(--ink-soft); }
-
-    .final-cta { text-align:center; padding:6px 0 2px; }
-    .final-cta h2 { margin-bottom:7px; }
-    .final-cta p  { margin-bottom:14px; }
-
-    .btn-cta {
-      display:inline-flex; align-items:center; gap:.45rem;
-      background:var(--accent); color:#FFFFFF;
-      font-family:inherit; font-size:.9rem; font-weight:700;
-      border:none; border-radius:999px; padding:.76rem 2.2rem;
-      cursor:pointer; text-decoration:none; transition:all .2s;
-      box-shadow:0 8px 22px var(--accent-glow);
+    .vlabel { 
+      font-size:.72rem; color:var(--muted); text-transform:uppercase; 
+      letter-spacing:.1em; margin-bottom:8px; padding-top:20px;
     }
-    .btn-cta:hover { background:var(--accent-h); transform:translateY(-1px); }
+    .vamount { 
+      font-size:2.2rem; font-weight:700; color:var(--accent); 
+      line-height:1; margin-bottom:8px;
+    }
+    .vcur { font-size:1.4rem; opacity:.7; }
+    .vrange { 
+      font-size:.75rem; color:var(--muted); letter-spacing:.02em; 
+      margin-bottom:15px;
+    }
 
-    /* ── RESPONSIVE ──────────────────────────────────── */
+    .two-col { 
+      display:grid; grid-template-columns:1fr 1fr; gap:15px; 
+      padding:0 20px 15px;
+    }
+    .stat-box { 
+      text-align:center; padding:15px; background:var(--cream); 
+      border-radius:8px; border:1px solid var(--border-w);
+    }
+    .sl { 
+      font-size:.65rem; text-transform:uppercase; letter-spacing:.1em; 
+      color:var(--muted); margin-bottom:5px;
+    }
+    .sv { 
+      font-size:1.3rem; font-weight:700; color:var(--ink); 
+      line-height:1.1;
+    }
+
+    .verdict {
+      margin:0 20px 20px; padding:15px; border-radius:8px; text-align:center;
+      font-size:.85rem; font-weight:500; letter-spacing:.02em;
+    }
+    .verdict.good { background:var(--good-bg); border:1px solid var(--good-line); color:var(--good); }
+    .verdict.warn { background:var(--warn-bg); border:1px solid var(--warn-line); color:var(--warn); }
+    .verdict.bad  { background:var(--bad-bg);  border:1px solid var(--bad-line);  color:var(--bad); }
+
+    .conf-wrap { padding:0 20px 20px; }
+    .conf-head { 
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:.75rem; color:var(--muted); margin-bottom:8px;
+    }
+    .bar-track { 
+      background:var(--border); height:6px; border-radius:3px; overflow:hidden;
+    }
+    .bar-fill { 
+      background:linear-gradient(90deg,var(--accent),var(--gold)); 
+      height:100%; border-radius:3px; transition:width 1s ease-out;
+    }
+
+    .ai-box {
+      background:var(--cream); border:1px solid var(--border-w);
+      margin:0 20px 20px; padding:15px; border-radius:8px;
+    }
+    .ai-head {
+      font-size:.7rem; font-weight:700; color:var(--accent);
+      text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;
+    }
+    .ai-box p { font-size:.8rem; color:var(--ink-soft); line-height:1.5; margin-bottom:8px; }
+    .ai-box p:last-child { margin-bottom:0; }
+
+    .sources-box { padding:0 20px 20px; }
+    .sources-head { 
+      font-size:.65rem; color:var(--muted); text-transform:uppercase;
+      letter-spacing:.1em; margin-bottom:8px;
+    }
+    .source-list { display:flex; gap:6px; flex-wrap:wrap; }
+    .source-tag {
+      font-size:.65rem; padding:3px 8px; border-radius:4px;
+      border:1px solid var(--border); background:var(--cream);
+      color:var(--muted);
+    }
+    .source-tag.active { 
+      border-color:var(--good-line); background:var(--good-bg); 
+      color:var(--good);
+    }
+
+    .chips { 
+      display:flex; gap:6px; flex-wrap:wrap; padding:0 20px 20px;
+    }
+    .chip {
+      font-size:.65rem; padding:4px 8px; border-radius:5px;
+      background:var(--accent-soft); border:1px solid var(--accent-line);
+      color:var(--accent);
+    }
+    .chip.bad-chip { 
+      background:var(--bad-bg); border-color:var(--bad-line); 
+      color:var(--bad);
+    }
+
+    .note-box {
+      margin:0 20px 20px; padding:12px; border-radius:6px;
+      background:var(--good-bg); border:1px solid var(--good-line);
+      font-size:.72rem; color:var(--good);
+    }
+
+    .thin { border:none; height:1px; background:var(--border); margin:20px; }
+
+    /* RESPONSIVE */
     @media (max-width:740px) {
       .form-table { grid-template-columns:1fr; grid-template-rows:auto 1px auto; }
       .divider-col { width:auto; height:1px; }
@@ -414,18 +442,18 @@
 <div id="loaderOverlay" class="loader-overlay">
   <div class="loader-spinner"></div>
   <div class="loader-steps">
-    <div class="loader-step" id="ls0">Searching UAE classifieds…</div>
-    <div class="loader-step" id="ls1">Matching brand · model · trim…</div>
-    <div class="loader-step" id="ls2">Analysing mileage &amp; depreciation…</div>
-    <div class="loader-step" id="ls3">Calculating fair market price…</div>
-    <div class="loader-step" id="ls4">Done. Khalas.</div>
+    <div class="loader-step">Collecting car details</div>
+    <div class="loader-step">Searching UAE market</div>
+    <div class="loader-step">Analyzing comparable listings</div>
+    <div class="loader-step">Calculating market value</div>
+    <div class="loader-step">Preparing your report</div>
   </div>
 </div>
 
-<!-- ═══════════════ HERO BAND ════════════════════════ -->
+<!-- HERO -->
 <div class="hero-band">
   <div class="hero-inner">
-
+    
     <nav class="nav-bar">
       <a href="#" class="wordmark">
         <div class="wm-name">
@@ -433,7 +461,7 @@
           <span class="wm-sep">·</span>
           <span class="wm-sayara">SAYARA</span>
         </div>
-        <span class="wm-sub">Real price, no stories.</span>
+        <div class="wm-sub">Real price, no stories</div>
       </a>
       <div class="nav-badge">🇦🇪 UAE Born</div>
     </nav>
@@ -446,7 +474,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ CONTENT ═════════════════════════ -->
+<!-- CONTENT -->
 <div class="page">
 
   <!-- FORM CARD -->
@@ -454,7 +482,7 @@
 
     <div class="form-table">
 
-      <!-- 2/3 — CAR DETAILS -->
+      <!-- CAR DETAILS -->
       <div class="cd-pane">
         <div class="pane-label">Car Details</div>
         <div class="cd-grid">
@@ -462,36 +490,41 @@
           <!-- Row 1 -->
           <div class="ig">
             <label>Brand</label>
-            <select id="brand" onchange="populateModels()"><option value="">Brand…</option></select>
+            <select id="brand" onchange="populateModels()">
+              <option value="">Brand…</option>
+            </select>
           </div>
           <div class="ig">
             <label>Model</label>
-            <select id="model"><option value="">Model…</option></select>
+            <select id="model">
+              <option value="">Model…</option>
+            </select>
           </div>
           <div class="ig">
             <label>Year</label>
-            <select id="year"><option value="">Year…</option></select>
+            <select id="year">
+              <option value="">Year…</option>
+            </select>
           </div>
           <div class="ig">
-            <label>Trim / Variant</label>
-            <input type="text" id="trim" placeholder="SE, Sport, Full Option…" />
+            <label>Trim</label>
+            <input type="text" id="trim" placeholder="e.g. GLX">
           </div>
 
           <!-- Row 2 -->
           <div class="ig">
-            <label>Mileage (km)</label>
-            <input type="number" id="mileage" placeholder="e.g. 75000" min="0" max="999999" />
+            <label>Mileage (KM)</label>
+            <input type="number" id="mileage" placeholder="50000" min="0">
           </div>
           <div class="ig">
-            <label>Specification</label>
+            <label>Spec</label>
             <select id="spec">
               <option value="">Spec…</option>
-              <option value="GCC">GCC Spec</option>
-              <option value="American">American Spec</option>
-              <option value="European">European Spec</option>
-              <option value="Japanese">Japanese Spec</option>
-              <option value="Korean">Korean Spec</option>
-              <option value="Chinese">Chinese Spec</option>
+              <option value="GCC">GCC</option>
+              <option value="American">American</option>
+              <option value="European">European</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Korean">Korean</option>
               <option value="Other">Other</option>
             </select>
           </div>
@@ -499,22 +532,28 @@
             <label>Condition</label>
             <select id="condition">
               <option value="">Condition…</option>
-              <option value="Excellent">Excellent — Like New</option>
+              <option value="Excellent">Excellent</option>
               <option value="Very Good">Very Good</option>
               <option value="Good">Good</option>
-              <option value="Fair">Fair — Minor Issues</option>
-              <option value="Poor">Poor — Needs Work</option>
+              <option value="Fair">Fair</option>
+              <option value="Poor">Poor</option>
             </select>
           </div>
           <div class="ig">
             <label>Colour</label>
             <select id="colour">
               <option value="">Colour…</option>
-              <option>White</option><option>Silver</option><option>Black</option>
-              <option>Grey</option><option>Blue</option><option>Red</option>
-              <option>Brown / Beige</option><option>Green</option>
-              <option>Gold / Champagne</option><option>Orange</option>
-              <option>Yellow</option><option>Pearl</option><option>Other</option>
+              <option value="White">White</option>
+              <option value="Black">Black</option>
+              <option value="Silver">Silver</option>
+              <option value="Gray">Gray</option>
+              <option value="Blue">Blue</option>
+              <option value="Red">Red</option>
+              <option value="Gold">Gold</option>
+              <option value="Beige">Beige</option>
+              <option value="Brown">Brown</option>
+              <option value="Green">Green</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
@@ -523,45 +562,48 @@
             <label>Body Type</label>
             <select id="body">
               <option value="">Body…</option>
-              <option>Sedan</option><option>SUV</option><option>Pickup Truck</option>
-              <option>Hatchback</option><option>Coupe</option><option>Convertible</option>
-              <option>Van / Minivan</option><option>Wagon / Estate</option>
-              <option>Crossover</option><option>Limousine</option>
+              <option value="Sedan">Sedan</option>
+              <option value="SUV">SUV</option>
+              <option value="Hatchback">Hatchback</option>
+              <option value="Coupe">Coupe</option>
+              <option value="Convertible">Convertible</option>
+              <option value="Wagon">Wagon</option>
+              <option value="Pickup">Pickup</option>
+              <option value="Van">Van</option>
+              <option value="Other">Other</option>
             </select>
           </div>
           <div class="ig">
             <label>Seller Type</label>
             <select id="seller">
               <option value="">Seller…</option>
-              <option value="Private">Private Owner</option>
-              <option value="Dealer">Dealer / Showroom</option>
-              <option value="Auction">Auction House</option>
+              <option value="Individual">Individual</option>
+              <option value="Dealer">Dealer</option>
+              <option value="Showroom">Showroom</option>
+              <option value="Export">Export</option>
             </select>
           </div>
           <div class="ig">
-            <label>Service Provider</label>
+            <label>Service</label>
             <select id="service">
-              <option value="">Provider…</option>
-              <option value="Agency">Agency (Auth. Dealer)</option>
-              <option value="Brand Workshop">Brand Workshop</option>
-              <option value="Specialist Garage">Specialist Garage</option>
-              <option value="General Garage">General Garage</option>
-              <option value="Self Maintained">Self Maintained</option>
+              <option value="">Service…</option>
+              <option value="Agency">Agency</option>
+              <option value="Non-Agency">Non-Agency</option>
+              <option value="Mixed">Mixed</option>
               <option value="Unknown">Unknown</option>
             </select>
           </div>
           <div class="ig">
             <label>Asking Price (AED)</label>
-            <input type="number" id="asking" placeholder="Good deal check…" min="0" />
+            <input type="number" id="asking" placeholder="75000" min="0">
           </div>
 
         </div>
-      </div><!-- /cd-pane -->
+      </div>
 
-      <!-- DIVIDER -->
       <div class="divider-col"></div>
 
-      <!-- 1/3 — QUICK CHECK -->
+      <!-- QUICK CHECK -->
       <div class="qc-pane">
         <div class="pane-label">Quick Check</div>
         <div class="qc-rows">
@@ -627,9 +669,9 @@
           </div>
 
         </div>
-      </div><!-- /qc-pane -->
+      </div>
 
-    </div><!-- /form-table -->
+    </div>
 
     <div class="form-footer">
       <button class="btn-check" id="evaluateBtn" onclick="evaluate()">
@@ -642,79 +684,18 @@
       <span class="form-note">UAE market · Real number · No headache, bas.</span>
     </div>
 
-  </div><!-- /form-card -->
+  </div>
 
   <!-- RESULT -->
   <div class="result-card" id="resultBox">
     <div id="resultInner"></div>
   </div>
 
-  <!-- WHY KAMSAYARA -->
-  <div class="cs">
-    <h2>Why KamSayara?</h2>
-    <h3>Real price, no stories</h3>
-    <p>Here in the UAE, everyone knows this moment: you ask about a car, and the guy starts giving you one long story — "bro, full option, lady‑driven, only home to office." Habibi… we just want the price.</p>
-    <p>KamSayara cuts all this. We show you the real market value straight, based on what's happening here in the UAE.</p>
-    <h3>Fast and simple</h3>
-    <p>No forms, no headache. Just type the car details and the price comes out. Khalas.</p>
-    <h3>Made for UAE market</h3>
-    <p>Our numbers match the UAE reality — not random online prices from other countries. You get the value that actually makes sense here.</p>
-  </div>
-
-  <!-- HOW IT WORKS -->
-  <div class="cs" id="check">
-    <h2>How it works</h2>
-    <div class="how-steps">
-      <div class="step-card">
-        <div class="step-label">Step 1</div>
-        <div class="step-title">Enter the car details</div>
-        <p class="step-text">Model, year, mileage… the basics. Nothing complicated.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-label">Step 2</div>
-        <div class="step-title">We check the market</div>
-        <p class="step-text">We look at real UAE data — what people are buying, selling, and listing.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-label">Step 3</div>
-        <div class="step-title">You get the real number</div>
-        <p class="step-text">Clear, quick, and without any stories. You see the price and make your mind.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- WHO IT'S FOR -->
-  <div class="cs">
-    <h2>Who is KamSayara for?</h2>
-    <h3>For buyers</h3>
-    <p>So nobody tells you "bro this one last price" when the price is not last at all.</p>
-    <h3>For sellers</h3>
-    <p>So you don't list your car too high or too low. You know the real number from the start.</p>
-    <h3>For curious people</h3>
-    <p>Even if you're not buying or selling… sometimes you just want to check the price for fun. We got you.</p>
-  </div>
-
-  <!-- STORY -->
-  <div class="cs">
-    <h2>Our story</h2>
-    <p>In the UAE, cars are part of our life. Every day someone is buying, selling, or checking a car. But the prices? Wallah sometimes confusing. One person says high, one says low, one gives you a full movie.</p>
-    <p>So we made KamSayara — a simple tool that gives you the real price straight, no drama, no stories. You put the details, we show you the number. Fast, clear, and made for our market here.</p>
-    <p>Whether you're buying, selling, or just checking… KamSayara helps you make your mind, habibi.</p>
-  </div>
-
-  <!-- FINAL CTA -->
-  <div class="cs">
-    <div class="final-cta">
-      <h2>Ready to check the real price?</h2>
-      <p>Try KamSayara now — simple, quick, and made for the UAE.</p>
-      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>document.getElementById('brand').focus(),400);return false;" class="btn-cta">Check Car Price</a>
-    </div>
-  </div>
-
-</div><!-- /page -->
+</div>
 
 <script>
-const BM={
+// Complete car brands and models database
+const BM = {
   "Acura":["CDX","ILX","Integra","MDX","NSX","RDX","RLX","TLX","ZDX"],
   "Alfa Romeo":["147","156","159","166","Brera","Giulia","Giulietta","GTV","MiTo","Spider","Stelvio","Tonale"],
   "Aston Martin":["DB11","DB12","DBS","DBX","Rapide","Vantage","Virage"],
@@ -770,63 +751,101 @@ const BM={
   "Toyota":["4Runner","Avalon","Avanza","C-HR","Camry","Corolla","Corolla Cross","FJ Cruiser","Fortuner","Hiace","Highlander","Hilux","Land Cruiser","Land Cruiser 70","Land Cruiser 200","Land Cruiser 300","Prado","Previa","Prius","RAV4","Rush","Sequoia","Sienna","Supra","Tacoma","Tundra","Venza","Yaris"],
   "Volkswagen":["Amarok","Arteon","Caddy","Golf","ID.3","ID.4","Jetta","Multivan","Passat","Polo","Sharan","T-Cross","T-Roc","Taigo","Teramont","Tiguan","Touareg","Touran","Transporter","Up"],
   "Volvo":["C40","S60","S90","V60","V90","XC40","XC60","XC90"],
-  "XPENG":["G3","G6","G9","P5","P7"],
+  "XPENG":["G3","G6","G9","P5","P7"]
 };
 
-function initBrands(){
-  const s=document.getElementById('brand');
-  Object.keys(BM).sort().forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;s.appendChild(o);});
-}
-function populateModels(){
-  const b=document.getElementById('brand').value,s=document.getElementById('model');
-  s.innerHTML='<option value="">Model…</option>';
-  if(b&&BM[b])BM[b].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;s.appendChild(o);});
-}
-function initYears(){
-  const s=document.getElementById('year');
-  for(let y=2025;y>=1990;y--){const o=document.createElement('option');o.value=y;o.textContent=y;s.appendChild(o);}
-}
-initBrands();initYears();
+// Quick check state
+const ynState = {warranty:null,singleOwner:null,fsh:null,serviceContract:null,accident:null};
 
-const ynState={warranty:null,singleOwner:null,fsh:null,serviceContract:null,accident:null};
-function setYN(key,val,btn){
-  ynState[key]=val;
-  btn.closest('.qc-btns').querySelectorAll('.qc-btn').forEach(b=>b.classList.remove('active'));
+// Initialize dropdowns
+function initBrands() {
+  const s = document.getElementById('brand');
+  Object.keys(BM).sort().forEach(b => {
+    const o = document.createElement('option');
+    o.value = b;
+    o.textContent = b;
+    s.appendChild(o);
+  });
+}
+
+function populateModels() {
+  const b = document.getElementById('brand').value;
+  const s = document.getElementById('model');
+  s.innerHTML = '<option value="">Model…</option>';
+  if (b && BM[b]) {
+    BM[b].forEach(m => {
+      const o = document.createElement('option');
+      o.value = m;
+      o.textContent = m;
+      s.appendChild(o);
+    });
+  }
+}
+
+function initYears() {
+  const s = document.getElementById('year');
+  for (let y = 2025; y >= 1990; y--) {
+    const o = document.createElement('option');
+    o.value = y;
+    o.textContent = y;
+    s.appendChild(o);
+  }
+}
+
+function setYN(key, val, btn) {
+  ynState[key] = val;
+  btn.closest('.qc-btns').querySelectorAll('.qc-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-function setStep(n){document.querySelectorAll('.loader-step').forEach((el,i)=>{el.classList.toggle('active',i===n);el.classList.toggle('done',i<n);});}
+function setStep(n) {
+  document.querySelectorAll('.loader-step').forEach((el, i) => {
+    el.classList.toggle('active', i === n);
+    el.classList.toggle('done', i < n);
+  });
+}
 
-async function evaluate(){
-  const brand=document.getElementById('brand').value;
-  const model=document.getElementById('model').value;
-  const year=document.getElementById('year').value;
-  const trim=document.getElementById('trim').value.trim();
-  const mileage=document.getElementById('mileage').value;
-  const spec=document.getElementById('spec').value;
-  const condition=document.getElementById('condition').value;
-  const colour=document.getElementById('colour').value;
-  const body=document.getElementById('body').value;
-  const seller=document.getElementById('seller').value;
-  const service=document.getElementById('service').value;
-  const asking=document.getElementById('asking').value;
+// Main evaluation function
+async function evaluate() {
+  const brand = document.getElementById('brand').value;
+  const model = document.getElementById('model').value;
+  const year = document.getElementById('year').value;
+  const trim = document.getElementById('trim').value.trim();
+  const mileage = document.getElementById('mileage').value;
+  const spec = document.getElementById('spec').value;
+  const condition = document.getElementById('condition').value;
+  const colour = document.getElementById('colour').value;
+  const body = document.getElementById('body').value;
+  const seller = document.getElementById('seller').value;
+  const service = document.getElementById('service').value;
+  const asking = document.getElementById('asking').value;
   
-  if(!brand||!year){alert('Please select at least a Brand and Year, habibi.');return;}
+  if (!brand || !year) {
+    alert('Please select at least a Brand and Year, habibi.');
+    return;
+  }
   
-  const ov=document.getElementById('loaderOverlay'),btn=document.getElementById('evaluateBtn');
-  ov.classList.add('active');btn.disabled=true;
+  const ov = document.getElementById('loaderOverlay');
+  const btn = document.getElementById('evaluateBtn');
   
-  // Simple loading animation
+  // Show loader
+  ov.classList.add('active');
+  btn.disabled = true;
+  
+  // Loading animation
   setStep(0);
-  setTimeout(()=>setStep(1), 600);
-  setTimeout(()=>setStep(2), 1200);
-  setTimeout(()=>setStep(3), 1800);
+  setTimeout(() => setStep(1), 600);
+  setTimeout(() => setStep(2), 1200);
+  setTimeout(() => setStep(3), 1800);
+  setTimeout(() => setStep(4), 2400);
 
-  try{
-    const resp=await fetch('https://kamsayara-api.mbit0010.workers.dev/api/evaluate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
+  try {
+    const response = await fetch('https://kamsayara-api.mbit0010.workers.dev/api/evaluate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         brand,
         model,
         year: parseInt(year),
@@ -847,60 +866,86 @@ async function evaluate(){
       })
     });
     
-    if(!resp.ok){throw new Error(`Server error ${resp.status}`);}
-    const result=await resp.json();
+    if (!response.ok) {
+      throw new Error(`Server error ${response.status}`);
+    }
     
-    setStep(4);
-    await new Promise(r=>setTimeout(r,300));
-    ov.classList.remove('active');btn.disabled=false;
-    renderResult(result,{brand,model,trim,year,mileage,asking,condition,spec,colour,seller,service,body});
+    const result = await response.json();
     
-  }catch(err){
-    ov.classList.remove('active');btn.disabled=false;
-    const rb=document.getElementById('resultBox');
-    document.getElementById('resultInner').innerHTML=`<div class="res-label">Result </div><div class="verdict bad"><strong>⚠️ Error:</strong> ${err.message}</div>`;
-    rb.classList.add('visible');rb.scrollIntoView({behavior:'smooth',block:'start'});
+    // Hide loader
+    ov.classList.remove('active');
+    btn.disabled = false;
+    
+    // Show results
+    renderResult(result, {brand,model,trim,year,mileage,asking,condition,spec,colour,seller,service,body});
+    
+  } catch (err) {
+    ov.classList.remove('active');
+    btn.disabled = false;
+    
+    const rb = document.getElementById('resultBox');
+    document.getElementById('resultInner').innerHTML = `<div class="res-label">Result</div><div class="verdict bad"><strong>⚠️ Error:</strong> ${err.message}</div>`;
+    rb.classList.add('visible');
+    rb.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 
-function renderResult(r,d){
-  const est=r.estimatedValue||0,low=r.low||Math.round(est*.87),high=r.high||Math.round(est*1.13),conf=r.confidence||70;
-  let askHtml='';
-  if(d.asking>0){
-    const vc=r.verdictClass||'warn';
-    askHtml=`<div class="two-col"><div class="stat-box"><div class="sl">Asking Price</div><div class="sv">${parseInt(d.asking).toLocaleString()} <span style="font-size:.7rem;opacity:.5">AED</span></div></div><div class="stat-box"><div class="sl">Market Value</div><div class="sv">${est.toLocaleString()} <span style="font-size:.7rem;opacity:.5">AED</span></div></div></div><div class="verdict ${vc}">${r.verdict||'—'}</div>`;
+function renderResult(r, d) {
+  const est = r.estimatedValue || 0;
+  const low = r.low || Math.round(est * 0.87);
+  const high = r.high || Math.round(est * 1.13);
+  const conf = r.confidence || 70;
+  
+  let askHtml = '';
+  if (d.asking > 0) {
+    const vc = r.verdictClass || 'warn';
+    askHtml = `<div class="two-col"><div class="stat-box"><div class="sl">Asking Price</div><div class="sv">${parseInt(d.asking).toLocaleString()} <span style="font-size:.7rem;opacity:.5">AED</span></div></div><div class="stat-box"><div class="sl">Market Value</div><div class="sv">${est.toLocaleString()} <span style="font-size:.7rem;opacity:.5">AED</span></div></div></div><div class="verdict ${vc}">${r.verdict || '—'}</div>`;
   }
-  const ynChips=[
-    ynState.warranty==='yes'?'✓ Warranty':ynState.warranty==='no'?'✗ No Warranty':null,
-    ynState.singleOwner==='yes'?'✓ Single Owner':ynState.singleOwner==='no'?'✗ Multi-Owner':null,
-    ynState.fsh==='yes'?'✓ FSH':ynState.fsh==='no'?'✗ No FSH':null,
-    ynState.serviceContract==='yes'?'✓ Service Contract':null,
-    ynState.accident==='yes'?'⚠ Accident History':ynState.accident==='no'?'✓ Accident Free':null,
-  ].filter(Boolean).map(c=>`<span class="chip${c.startsWith('⚠')||c.startsWith('✗')?' bad-chip':''}">${c}</span>`).join('');
-  const carChips=[d.brand,d.model,d.trim,d.year?`📅 ${d.year}`:'',d.mileage?`📊 ${parseInt(d.mileage).toLocaleString()} km`:'',d.spec,d.condition,d.colour,d.seller].filter(Boolean).map(c=>`<span class="chip">${c}</span>`).join('');
-  const sites=['Dubizzle','YallaMotor','SellAnyCar','CarSwitch','OpenSooq'];
-  const found=r.sourcesFound||[];
-  const srcHtml=sites.map(s=>`<span class="source-tag ${found.some(x=>x.toLowerCase().includes(s.toLowerCase().slice(0,5)))?'active':''}">${s}</span>`).join('');
-  document.getElementById('resultInner').innerHTML=`
-    <div class="res-label">Live Market Report </div>
+  
+  const ynChips = [
+    ynState.warranty === 'yes' ? '✓ Warranty' : ynState.warranty === 'no' ? '✗ No Warranty' : null,
+    ynState.singleOwner === 'yes' ? '✓ Single Owner' : ynState.singleOwner === 'no' ? '✗ Multi-Owner' : null,
+    ynState.fsh === 'yes' ? '✓ FSH' : ynState.fsh === 'no' ? '✗ No FSH' : null,
+    ynState.serviceContract === 'yes' ? '✓ Service Contract' : null,
+    ynState.accident === 'yes' ? '⚠ Accident History' : ynState.accident === 'no' ? '✓ Accident Free' : null,
+  ].filter(Boolean).map(c => `<span class="chip${c.startsWith('⚠') || c.startsWith('✗') ? ' bad-chip' : ''}">${c}</span>`).join('');
+  
+  const carChips = [d.brand, d.model, d.trim, d.year ? `📅 ${d.year}` : '', d.mileage ? `📊 ${parseInt(d.mileage).toLocaleString()} km` : '', d.spec, d.condition, d.colour, d.seller].filter(Boolean).map(c => `<span class="chip">${c}</span>`).join('');
+  
+  const sites = ['Dubizzle', 'YallaMotor', 'SellAnyCar', 'CarSwitch', 'OpenSooq'];
+  const found = r.sourcesFound || [];
+  const srcHtml = sites.map(s => `<span class="source-tag ${found.some(x => x.toLowerCase().includes(s.toLowerCase().slice(0, 5))) ? 'active' : ''}">${s}</span>`).join('');
+  
+  document.getElementById('resultInner').innerHTML = `
+    <div class="res-label">Live Market Report</div>
     <div class="val-display">
-      <div class="vlabel">${d.asking>0?'Market Value':'Estimated Market Value'}</div>
+      <div class="vlabel">${d.asking > 0 ? 'Market Value' : 'Estimated Market Value'}</div>
       <div class="vamount"><span class="vcur">AED </span>${est.toLocaleString()}</div>
-      <div class="vrange">Range: AED ${low.toLocaleString()} – ${high.toLocaleString()} &nbsp;·&nbsp; ~${r.listingsFound||'0'} listings</div>
+      <div class="vrange">Range: AED ${low.toLocaleString()} – ${high.toLocaleString()} &nbsp;·&nbsp; ~${r.listingsFound || '0'} listings</div>
     </div>
     ${askHtml}<hr class="thin"/>
     <div class="conf-wrap">
       <div class="conf-head"><span>Data Confidence</span><span>${conf}%</span></div>
       <div class="bar-track"><div class="bar-fill" style="width:0%" id="cBar"></div></div>
     </div>
-    ${r.summary?`<div class="ai-box"><div class="ai-head">🧠 AI Market Analysis</div><p>${r.summary}</p>${r.factors?`<p><strong>Key factors:</strong> ${r.factors}</p>`:''}</div>`:''}
+    ${r.summary ? `<div class="ai-box"><div class="ai-head">🧠 AI Market Analysis</div><p>${r.summary}</p>${r.factors ? `<p><strong>Key factors:</strong> ${r.factors}</p>` : ''}</div>` : ''}
     <div class="sources-box"><div class="sources-head">Sources searched</div><div class="source-list">${srcHtml}</div></div>
     <div class="chips">${carChips}${ynChips}</div>
     <div class="note-box">✅ Valuation based on real-time web search of UAE car marketplaces. Bas.</div>`;
-  const rb=document.getElementById('resultBox');
-  rb.classList.add('visible');rb.scrollIntoView({behavior:'smooth',block:'start'});
-  setTimeout(()=>{const b=document.getElementById('cBar');if(b)b.style.width=conf+'%';},200);
+  
+  const rb = document.getElementById('resultBox');
+  rb.classList.add('visible');
+  rb.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(() => {
+    const b = document.getElementById('cBar');
+    if (b) b.style.width = conf + '%';
+  }, 200);
 }
+
+// Initialize on page load
+initBrands();
+initYears();
 </script>
+
 </body>
 </html>
