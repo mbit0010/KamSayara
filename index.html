@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>KamSayara – Check the price… make your mind, habibi.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream:       #FFFBF0;
+      --cream-warm:  #FFF5D9;
+      --white:       #FFFFFF;
+      --accent:      #008577;
+      --accent-h:    #006B60;
+      --accent-soft: rgba(0,133,119,0.09);
+      --accent-line: rgba(0,133,119,0.22);
+      --accent-glow: rgba(0,133,119,0.28);
+      --gold:        #C49A2A;
+      --ink:         #1A1610;
+      --ink-soft:    #4A4030;
+      --muted:       #8C7D68;
+      --border:      #E4D9C6;
+      --border-w:    #D4C5A8;
+      --shadow-sm:   0 2px 16px rgba(80,55,10,0.07),0 1px 3px rgba(0,0,0,0.04);
+      --shadow-lg:   0 10px 40px rgba(80,55,10,0.13),0 2px 8px rgba(0,0,0,0.06);
+      --good:        #1A8C6B;
+      --good-bg:     rgba(26,140,107,0.09);
+      --good-line:   rgba(26,140,107,0.22);
+      --bad:         #C0392B;
+      --bad-bg:      rgba(192,57,43,0.09);
+      --bad-line:    rgba(192,57,43,0.22);
+      --warn:        #B8780A;
+      --warn-bg:     rgba(184,120,10,0.09);
+      --warn-line:   rgba(184,120,10,0.22);
+    }
+
+    *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:"Exo 2","Rajdhani",system-ui,-apple-system,sans-serif;
+      background:linear-gradient(155deg,#FFFDF5 0%,#FFF8E4 50%,#FFFBEE 100%);
+      color:var(--ink);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      min-height:100vh;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('./Kamsayara_1.png') center center/cover;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── LOADER ─────────────────────────────────────── */
+    .loader-overlay {
+      display:none; position:fixed; inset:0; z-index:200;
+      background:rgba(255,251,240,0.93); backdrop-filter:blur(8px);
+      flex-direction:column; align-items:center; justify-content:center; gap:1.4rem;
+    }
+    .loader-overlay.active { display:flex; }
+    .loader-spinner {
+      width:44px; height:44px; border:2.5px solid var(--border);
+      border-top-color:var(--accent); border-radius:50%;
+      animation:spin .85s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .loader-steps { display:flex; flex-direction:column; gap:.38rem; text-align:center; }
+    .loader-step  { font-size:.79rem; color:var(--muted); opacity:.38; transition:all .3s; }
+    .loader-step.active { color:var(--accent); opacity:1; font-weight:700; }
+    .loader-step.done   { color:var(--good);   opacity:.7; }
+
+    /* ── HERO BAND ──────────────────────────────────── */
+    .hero-band {
+      width:100%; position:relative; overflow:hidden;
+      background:
+        linear-gradient(138deg, rgba(0,48,40,0.75) 0%, rgba(0,92,78,0.85) 30%, rgba(160,120,16,0.80) 72%, rgba(212,168,32,0.85) 100%),
+        url('./Car_Photo.png') center center/cover;
+    }
+    .hero-band::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 55% 80% at 78% 50%,rgba(220,185,50,0.12) 0%,transparent 58%),
+        radial-gradient(ellipse 38% 55% at 12% 20%,rgba(0,70,58,0.20) 0%,transparent 52%);
+    }
+    /* bottom wave cutout into cream */
+    .hero-band::after {
+      content:''; position:absolute; bottom:-1px; left:0; right:0; height:52px;
+      background:linear-gradient(155deg,#FFFDF5 0%,#FFF8E4 50%,#FFFBEE 100%);
+      clip-path:ellipse(58% 100% at 50% 100%);
+    }
+
+    .hero-inner {
+      position:relative; z-index:1;
+      max-width:1040px; margin:0 auto; padding:0 28px 60px;
+    }
+
+    /* ── NAV BAR ────────────────────────────────────── */
+    .nav-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:20px 0 16px;
+    }
+
+    /* ── WORDMARK ────────────────────────────────────── */
+    .wordmark { display:inline-flex; flex-direction:column; gap:2px; text-decoration:none; }
+    .wm-name  { display:flex; align-items:baseline; gap:0; line-height:1; }
+    .wm-kam   {
+      font-family:"Orbitron","Exo 2",sans-serif;
+      font-size:1.95rem; font-weight:900; color:#E8D060;
+      letter-spacing:-.01em; text-shadow:0 2px 14px rgba(0,0,0,0.25);
+    }
+    .wm-sep   { font-size:1.3rem; color:rgba(232,208,96,0.40); margin:0 3px; line-height:1; }
+    .wm-sayara {
+      font-family:"Orbitron","Exo 2",sans-serif;
+      font-size:1.05rem; font-weight:500; color:rgba(255,255,255,0.82);
+      letter-spacing:.18em; text-transform:uppercase; line-height:1;
+    }
+    .wm-sub {
+      font-size:.58rem; font-weight:400; color:rgba(255,255,255,0.40);
+      letter-spacing:.16em; text-transform:uppercase;
+    }
+
+    .nav-badge {
+      font-size:.78rem; color:rgba(255,255,255,0.55);
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:99px; padding:.28rem .85rem;
+    }
+
+    /* ── HERO HEADLINE ───────────────────────────────── */
+    .hero-headline { text-align:center; padding:14px 0 4px; }
+    .hero-headline h1 {
+      font-family:"Rajdhani","Exo 2",sans-serif;
+      font-size:clamp(1.75rem,3.4vw,2.6rem); font-weight:600; color:#FFFFFF;
+      line-height:1.28; margin-bottom:12px;
+      text-shadow:0 2px 18px rgba(0,0,0,0.24);
+      letter-spacing:.02em;
+    }
+    .hero-headline p {
+      font-family:"Exo 2",sans-serif;
+      font-size:.98rem; color:rgba(255,255,255,0.72); max-width:480px; margin:0 auto;
+      font-weight:400; letter-spacing:.01em;
+    }
+
+    /* ── PAGE WRAPPER ────────────────────────────────── */
+    .page { max-width:1000px; margin:0 auto; padding:0 22px 80px; }
+
+    /* ── FORM CARD (overlaps hero) ────────────────────── */
+    .form-card {
+      background:var(--white); border-radius:20px;
+      border:1px solid rgba(255,255,255,0.2); 
+      box-shadow:
+        0 25px 50px rgba(0,0,0,0.15),
+        0 12px 24px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+      margin-top:-24px; margin-bottom:34px;
+      position:relative; z-index:10; overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ── FORM TABLE 2/3 + 1/3 ────────────────────────── */
+    .form-table {
+      display:grid;
+      grid-template-columns:2fr 1px 1fr;
+      min-height:250px;
+    }
+
+    .cd-pane { padding:20px 20px 16px; }
+    .qc-pane { 
+      padding:20px 16px 16px; 
+      background:
+        linear-gradient(135deg, rgba(253,252,248,0.95) 0%, rgba(255,251,240,0.98) 100%),
+        url('./Kamsayara_2.png') right center/cover;
+      background-size: cover;
+      background-position: right center;
+      position: relative;
+    }
+    .qc-pane::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(253,252,248,0.85);
+      pointer-events: none;
+    }
+    .qc-pane > * {
+      position: relative;
+      z-index: 1;
+    }
+    .divider-col { background:var(--border); }
+
+    .pane-label {
+      font-family:"Rajdhani","Exo 2",sans-serif;
+      font-size:.60rem; font-weight:600; letter-spacing:.18em;
+      text-transform:uppercase; color:var(--accent);
+      display:flex; align-items:center; gap:.5rem; margin-bottom:12px;
+    }
+    .pane-label::after { content:''; flex:1; height:1px; background:var(--accent-line); }
+
+    /* ── CAR DETAILS GRID 4×3 ────────────────────────── */
+    .cd-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:6px 8px;
+    }
+
+    .ig { display:flex; flex-direction:column; gap:.15rem; }
+    .ig label {
+      font-family:"Rajdhani","Exo 2",sans-serif;
+      font-size:.57rem; font-weight:600; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--muted);
+    }
+
+    select, input[type="number"], input[type="text"] {
+      background:var(--cream); 
+      border:1px solid rgba(0,133,119,0.15);
+      border-radius:10px; padding:.48rem .72rem;
+      font-family:"Exo 2",sans-serif;
+      font-size:.78rem; color:var(--ink);
+      outline:none; width:100%; 
+      transition:all .2s ease;
+      -webkit-appearance:none; appearance:none;
+      box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);
+    }
+    select {
+      cursor:pointer;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6'%3E%3Cpath d='M1 1l4.5 4L10 1' stroke='%23008577' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right .68rem center; padding-right:1.8rem;
+    }
+    select option { background:#FFFDF5; color:var(--ink); }
+    input::placeholder { color:var(--muted); opacity:.52; }
+    select:focus,input:focus {
+      border-color:var(--accent); 
+      box-shadow:
+        0 0 0 3px rgba(0,133,119,0.12),
+        inset 0 1px 3px rgba(0,0,0,0.05);
+      background:var(--white);
+      transform: translateY(-1px);
+    }
+    select:hover,input:hover { 
+      border-color:rgba(0,133,119,0.25); 
+      transform: translateY(-0.5px);
+    }
+
+    /* ── QUICK CHECK ─────────────────────────────────── */
+    .qc-rows { display:flex; flex-direction:column; gap:5px; }
+
+    .qc-row {
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      background:var(--cream); border:1px solid var(--border);
+      border-radius:7px; padding:6px 8px; transition:border-color .17s;
+    }
+    .qc-row:hover { border-color:var(--border-w); }
+
+    .qc-label {
+      font-size:.78rem; font-weight:500; color:var(--ink-soft);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .qc-btns { display:flex; gap:5px; flex-shrink:0; }
+
+    .qc-btn {
+      width:27px; height:25px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:6px; border:1px solid var(--border);
+      background:var(--white); cursor:pointer; transition:all .16s;
+    }
+    .qc-btn svg { width:12px; height:12px; }
+    .qc-btn:not(.active) { color:var(--muted); }
+
+    .qc-btn.tick-btn:hover  { border-color:var(--good); color:var(--good); background:var(--good-bg); }
+    .qc-btn.cross-btn:hover { border-color:var(--bad);  color:var(--bad);  background:var(--bad-bg); }
+    .qc-btn.tick-btn.active  { background:var(--good-bg); border-color:var(--good-line); color:var(--good); }
+    .qc-btn.cross-btn.active { background:var(--bad-bg);  border-color:var(--bad-line);  color:var(--bad); }
+
+    /* ── FORM FOOTER ─────────────────────────────────── */
+    .form-footer {
+      border-top:1px solid var(--border); padding:12px 20px;
+      display:flex; align-items:center; justify-content:center; gap:14px;
+      background:#FDFCF8;
+    }
+
+    .btn-check {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:linear-gradient(135deg, var(--accent) 0%, #006B60 100%);
+      color:#FFFFFF;
+      font-family:"Rajdhani","Exo 2",sans-serif; 
+      font-size:.88rem; font-weight:600;
+      letter-spacing:.08em; text-transform:uppercase;
+      border:none; border-radius:12px; padding:.82rem 2.8rem;
+      cursor:pointer; transition:all .25s ease-out;
+      box-shadow:
+        0 8px 22px var(--accent-glow),
+        0 4px 12px rgba(0,133,119,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      position:relative; overflow:hidden;
+    }
+    .btn-check::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(90deg,transparent 20%,rgba(255,255,255,.16) 50%,transparent 80%);
+      transform:translateX(-100%); transition:transform .5s;
+    }
+    .btn-check:hover { background:var(--accent-h); transform:translateY(-1px); box-shadow:0 14px 30px var(--accent-glow); }
+    .btn-check:hover::after { transform:translateX(100%); }
+    .btn-check:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+
+    .form-note { font-size:.73rem; color:var(--muted); }
+
+    /* ── RESULT CARD ─────────────────────────────────── */
+    .result-card {
+      display:none; background:var(--white); border-radius:16px;
+      border:1px solid var(--border); box-shadow:var(--shadow-sm);
+      padding:20px 20px; margin-bottom:32px;
+    }
+    .result-card.visible { display:block; }
+
+    .res-label {
+      font-size:.58rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+      color:var(--accent); display:flex; align-items:center; gap:.5rem; margin-bottom:.9rem;
+    }
+    .res-label::after { content:''; flex:1; height:1px; background:var(--accent-line); }
+
+    .val-display { text-align:center; padding:.4rem 0 1rem; }
+    .val-display .vlabel { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:.28rem; }
+    .val-display .vamount { font-size:2.9rem; font-weight:700; color:var(--accent); line-height:1; }
+    .val-display .vcur { font-size:1.1rem; opacity:.5; margin-right:.1rem; }
+    .val-display .vrange { font-size:.73rem; color:var(--muted); margin-top:.45rem; }
+
+    .verdict { border-radius:8px; padding:.72rem 1rem; font-weight:600; font-size:.83rem; text-align:center; margin:.6rem 0; }
+    .verdict.good { background:var(--good-bg); color:var(--good); border:1px solid var(--good-line); }
+    .verdict.warn { background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn-line); }
+    .verdict.bad  { background:var(--bad-bg);  color:var(--bad);  border:1px solid var(--bad-line); }
+
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-top:.65rem; }
+    .stat-box { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:.75rem .95rem; }
+    .stat-box .sl { font-size:.59rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+    .stat-box .sv { font-size:1.02rem; font-weight:700; color:var(--ink); margin-top:.18rem; }
+
+    hr.thin { border:none; border-top:1px solid var(--border); margin:.85rem 0; }
+
+    .conf-wrap { margin-top:.75rem; }
+    .conf-head { display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); margin-bottom:.38rem; }
+    .bar-track { height:5px; background:var(--cream-warm); border-radius:99px; overflow:hidden; }
+    .bar-fill   { height:100%; background:linear-gradient(90deg,#004D40,var(--accent)); border-radius:99px; transition:width 1s cubic-bezier(.22,1,.36,1); }
+
+    .ai-box { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:.85rem 1.05rem; margin-top:.85rem; }
+    .ai-head { font-size:.63rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
+    .ai-box p { font-size:.82rem; line-height:1.76; color:var(--ink-soft); margin-bottom:.32rem; }
+
+    .sources-box { margin-top:.85rem; }
+    .sources-head { font-size:.59rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:.45rem; }
+    .source-list  { display:flex; flex-wrap:wrap; gap:.32rem; }
+    .source-tag   { font-size:.68rem; padding:.24rem .68rem; border-radius:99px; background:var(--cream-warm); border:1px solid var(--border); color:var(--muted); }
+    .source-tag.active { background:var(--good-bg); border-color:var(--good-line); color:var(--good); font-weight:600; }
+
+    .chips     { display:flex; flex-wrap:wrap; gap:.32rem; margin-top:.75rem; }
+    .chip      { font-size:.69rem; padding:.24rem .7rem; border-radius:99px; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent); }
+    .chip.bad-chip { background:var(--bad-bg); border-color:var(--bad-line); color:var(--bad); }
+
+    .note-box { margin-top:.85rem; font-size:.69rem; color:var(--muted); background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:.58rem .85rem; line-height:1.62; }
+
+    /* ── CONTENT SECTIONS ────────────────────────────── */
+    .cs {
+      margin-bottom:26px; padding:22px 20px;
+      border-radius:16px; background:var(--white);
+      border:1px solid var(--border); box-shadow:var(--shadow-sm);
+    }
+    .cs h2 { font-size:1.12rem; font-weight:700; color:var(--ink); margin-bottom:9px; }
+    .cs h3 { font-size:.93rem; font-weight:700; color:var(--accent); margin-top:13px; margin-bottom:4px; }
+    .cs p  { font-size:.91rem; color:var(--ink-soft); margin-bottom:5px; }
+
+    .how-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:11px; margin-top:10px; }
+    .step-card { border-radius:11px; border:1px solid var(--border); background:var(--cream); padding:13px 13px 11px; }
+    .step-label { font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:3px; }
+    .step-title { font-size:.91rem; font-weight:700; margin-bottom:3px; color:var(--ink); }
+    .step-text  { font-size:.84rem; color:var(--ink-soft); }
+
+    .final-cta { text-align:center; padding:6px 0 2px; }
+    .final-cta h2 { margin-bottom:7px; }
+    .final-cta p  { margin-bottom:14px; }
+
+    .btn-cta {
+      display:inline-flex; align-items:center; gap:.45rem;
+      background:var(--accent); color:#FFFFFF;
+      font-family:inherit; font-size:.9rem; font-weight:700;
+      border:none; border-radius:999px; padding:.76rem 2.2rem;
+      cursor:pointer; text-decoration:none; transition:all .2s;
+      box-shadow:0 8px 22px var(--accent-glow);
+    }
+    .btn-cta:hover { background:var(--accent-h); transform:translateY(-1px); }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width:740px) {
+      .form-table { grid-template-columns:1fr; grid-template-rows:auto 1px auto; }
+      .divider-col { width:auto; height:1px; }
+      .cd-grid { grid-template-columns:repeat(2,1fr); }
+      .hero-headline h1 { font-size:1.45rem; }
+      .two-col { grid-template-columns:1fr; }
+    }
+    @media (max-width:480px) {
+      .cd-grid { grid-template-columns:1fr; }
+      .hero-inner { padding:0 16px 56px; }
+      .form-footer { flex-direction:column; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loaderOverlay" class="loader-overlay">
+  <div class="loader-spinner"></div>
+  <div class="loader-steps">
+    <div class="loader-step" id="ls0">Searching UAE classifieds…</div>
+    <div class="loader-step" id="ls1">Matching brand · model · trim…</div>
+    <div class="loader-step" id="ls2">Analysing mileage &amp; depreciation…</div>
+    <div class="loader-step" id="ls3">Calculating fair market price…</div>
+    <div class="loader-step" id="ls4">Done. Khalas.</div>
+  </div>
+</div>
+
+<!-- ═══════════════ HERO BAND ════════════════════════ -->
+<div class="hero-band">
+  <div class="hero-inner">
+
+    <nav class="nav-bar">
+      <a href="#" class="wordmark">
+        <div class="wm-name">
+          <span class="wm-kam">KAM</span>
+          <span class="wm-sep">·</span>
+          <span class="wm-sayara">SAYARA</span>
+        </div>
+        <span class="wm-sub">Real price, no stories.</span>
+      </a>
+      <div class="nav-badge">🇦🇪 UAE Born</div>
+    </nav>
+
+    <div class="hero-headline">
+      <h1>Check the price… make your mind, habibi.</h1>
+      <p>KamSayara shows you the real car price quick… everything clear for you, no headache.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ CONTENT ═════════════════════════ -->
+<div class="page">
+
+  <!-- FORM CARD -->
+  <div class="form-card">
+
+    <div class="form-table">
+
+      <!-- 2/3 — CAR DETAILS -->
+      <div class="cd-pane">
+        <div class="pane-label">Car Details</div>
+        <div class="cd-grid">
+
+          <!-- Row 1 -->
+          <div class="ig">
+            <label>Brand</label>
+            <select id="brand" onchange="populateModels()"><option value="">Brand…</option></select>
+          </div>
+          <div class="ig">
+            <label>Model</label>
+            <select id="model"><option value="">Model…</option></select>
+          </div>
+          <div class="ig">
+            <label>Year</label>
+            <select id="year"><option value="">Year…</option></select>
+          </div>
+          <div class="ig">
+            <label>Trim / Variant</label>
+            <input type="text" id="trim" placeholder="SE, Sport, Full Option…" />
+          </div>
+
+          <!-- Row 2 -->
+          <div class="ig">
+            <label>Mileage (km)</label>
+            <input type="number" id="mileage" placeholder="e.g. 75000" min="0" max="999999" />
+          </div>
+          <div class="ig">
+            <label>Specification</label>
+            <select id="spec">
+              <option value="">Spec…</option>
+              <option value="GCC">GCC Spec</option>
+              <option value="American">American Spec</option>
+              <option value="European">European Spec</option>
+              <option value="Japanese">Japanese Spec</option>
+              <option value="Korean">Korean Spec</option>
+              <option value="Chinese">Chinese Spec</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="ig">
+            <label>Condition</label>
+            <select id="condition">
+              <option value="">Condition…</option>
+              <option value="Excellent">Excellent — Like New</option>
+              <option value="Very Good">Very Good</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair — Minor Issues</option>
+              <option value="Poor">Poor — Needs Work</option>
+            </select>
+          </div>
+          <div class="ig">
+            <label>Colour</label>
+            <select id="colour">
+              <option value="">Colour…</option>
+              <option>White</option><option>Silver</option><option>Black</option>
+              <option>Grey</option><option>Blue</option><option>Red</option>
+              <option>Brown / Beige</option><option>Green</option>
+              <option>Gold / Champagne</option><option>Orange</option>
+              <option>Yellow</option><option>Pearl</option><option>Other</option>
+            </select>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="ig">
+            <label>Body Type</label>
+            <select id="body">
+              <option value="">Body…</option>
+              <option>Sedan</option><option>SUV</option><option>Pickup Truck</option>
+              <option>Hatchback</option><option>Coupe</option><option>Convertible</option>
+              <option>Van / Minivan</option><option>Wagon / Estate</option>
+              <option>Crossover</option><option>Limousine</option>
+            </select>
+          </div>
+          <div class="ig">
+            <label>Seller Type</label>
+            <select id="seller">
+              <option value="">Seller…</option>
+              <option value="Private">Private Owner</option>
+              <option value="Dealer">Dealer / Showroom</option>
+              <option value="Auction">Auction House</option>
+            </select>
+          </div>
+          <div class="ig">
+            <label>Service Provider</label>
+            <select id="service">
+              <option value="">Provider…</option>
+              <option value="Agency">Agency (Auth. Dealer)</option>
+              <option value="Brand Workshop">Brand Workshop</option>
+              <option value="Specialist Garage">Specialist Garage</option>
+              <option value="General Garage">General Garage</option>
+              <option value="Self Maintained">Self Maintained</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+          <div class="ig">
+            <label>Asking Price (AED)</label>
+            <input type="number" id="asking" placeholder="Good deal check…" min="0" />
+          </div>
+
+        </div>
+      </div><!-- /cd-pane -->
+
+      <!-- DIVIDER -->
+      <div class="divider-col"></div>
+
+      <!-- 1/3 — QUICK CHECK -->
+      <div class="qc-pane">
+        <div class="pane-label">Quick Check</div>
+        <div class="qc-rows">
+
+          <div class="qc-row">
+            <span class="qc-label">Warranty</span>
+            <div class="qc-btns">
+              <button class="qc-btn tick-btn" onclick="setYN('warranty','yes',this)" title="Active warranty">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="qc-btn cross-btn" onclick="setYN('warranty','no',this)" title="No warranty">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="qc-row">
+            <span class="qc-label">Single Owner</span>
+            <div class="qc-btns">
+              <button class="qc-btn tick-btn" onclick="setYN('singleOwner','yes',this)" title="First & only owner">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="qc-btn cross-btn" onclick="setYN('singleOwner','no',this)" title="Multiple owners">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="qc-row">
+            <span class="qc-label">FSH</span>
+            <div class="qc-btns">
+              <button class="qc-btn tick-btn" onclick="setYN('fsh','yes',this)" title="Full Service History">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="qc-btn cross-btn" onclick="setYN('fsh','no',this)" title="No FSH">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="qc-row">
+            <span class="qc-label">Service Contract</span>
+            <div class="qc-btns">
+              <button class="qc-btn tick-btn" onclick="setYN('serviceContract','yes',this)" title="Active service contract">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="qc-btn cross-btn" onclick="setYN('serviceContract','no',this)" title="No service contract">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="qc-row">
+            <span class="qc-label">Accident History</span>
+            <div class="qc-btns">
+              <button class="qc-btn tick-btn" onclick="setYN('accident','yes',this)" title="Had accident / bodywork">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3.5 3.5 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="qc-btn cross-btn" onclick="setYN('accident','no',this)" title="Accident free">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /qc-pane -->
+
+    </div><!-- /form-table -->
+
+    <div class="form-footer">
+      <button class="btn-check" id="evaluateBtn" onclick="evaluate()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7" stroke="white" stroke-width="1.4" opacity=".5"/>
+          <path d="M8 4v4l3 2" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        Check Price
+      </button>
+      <span class="form-note">UAE market · Real number · No headache, bas.</span>
+    </div>
+
+  </div><!-- /form-card -->
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultBox">
+    <div id="resultInner"></div>
+  </div>
+
+  <!-- WHY KAMSAYARA -->
+  <div class="cs">
+    <h2>Why KamSayara?</h2>
+    <h3>Real price, no stories</h3>
+    <p>Here in the UAE, everyone knows this moment: you ask about a car, and the guy starts giving you one long story — "bro, full option, lady‑driven, only home to office." Habibi… we just want the price.</p>
+    <p>KamSayara cuts all this. We show you the real market value straight, based on what's happening here in the UAE.</p>
+    <h3>Fast and simple</h3>
+    <p>No forms, no headache. Just type the car details and the price comes out. Khalas.</p>
+    <h3>Made for UAE market</h3>
+    <p>Our numbers match the UAE reality — not random online prices from other countries. You get the value that actually makes sense here.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="cs" id="check">
+    <h2>How it works</h2>
+    <div class="how-steps">
+      <div class="step-card">
+        <div class="step-label">Step 1</div>
+        <div class="step-title">Enter the car details</div>
+        <p class="step-text">Model, year, mileage… the basics. Nothing complicated.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-label">Step 2</div>
+        <div class="step-title">We check the market</div>
+        <p class="step-text">We look at real UAE data — what people are buying, selling, and listing.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-label">Step 3</div>
+        <div class="step-title">You get the real number</div>
+        <p class="step-text">Clear, quick, and without any stories. You see the price and make your mind.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHO IT'S FOR -->
+  <div class="cs">
+    <h2>Who is KamSayara for?</h2>
+    <h3>For buyers</h3>
+    <p>So nobody tells you "bro this one last price" when the price is not last at all.</p>
+    <h3>For sellers</h3>
+    <p>So you don't list your car too high or too low. You know the real number from the start.</p>
+    <h3>For curious people</h3>
+    <p>Even if you're not buying or selling… sometimes you just want to check the price for fun. We got you.</p>
+  </div>
+
+  <!-- STORY -->
+  <div class="cs">
+    <h2>Our story</h2>
+    <p>In the UAE, cars are part of our life. Every day someone is buying, selling, or checking a car. But the prices? Wallah sometimes confusing. One person says high, one says low, one gives you a full movie.</p>
+    <p>So we made KamSayara — a simple tool that gives you the real price straight, no drama, no stories. You put the details, we show you the number. Fast, clear, and made for our market here.</p>
+    <p>Whether you're buying, selling, or just checking… KamSayara helps you make your mind, habibi.</p>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div class="cs">
+    <div class="final-cta">
+      <h2>Ready to check the real price?</h2>
+      <p>Try KamSayara now — simple, quick, and made for the UAE.</p>
+      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>document.getElementById('brand').focus(),400);return false;" class="btn-cta">Check Car Price</a>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+const BM={
+  "Acura":["CDX","ILX","Integra","MDX","NSX","RDX","RLX","TLX","ZDX"],
+  "Alfa Romeo":["147","156","159","166","Brera","Giulia","Giulietta","GTV","MiTo","Spider","Stelvio","Tonale"],
+  "Aston Martin":["DB11","DB12","DBS","DBX","Rapide","Vantage","Virage"],
+  "Audi":["A1","A2","A3","A4","A5","A6","A7","A8","e-tron","e-tron GT","Q2","Q3","Q4 e-tron","Q5","Q7","Q8","R8","RS3","RS4","RS5","RS6","RS7","RS Q3","RS Q8","S3","S4","S5","S6","S7","S8","SQ5","SQ7","SQ8","TT","TTS"],
+  "Bentley":["Bentayga","Continental GT","Flying Spur","Mulsanne"],
+  "BMW":["1 Series","2 Series","3 Series","4 Series","5 Series","6 Series","7 Series","8 Series","i3","i4","i5","i7","iX","iX1","iX3","M2","M3","M4","M5","M8","X1","X2","X3","X4","X5","X6","X7","XM","Z4"],
+  "BYD":["Atto 3","Han","Seal","Song","Tang","Yuan Plus"],
+  "Cadillac":["CT4","CT5","Escalade","Escalade ESV","Lyriq","XT4","XT5","XT6"],
+  "Chery":["Arrizo 5","Arrizo 6","Arrizo 8","Tiggo 4","Tiggo 7","Tiggo 8"],
+  "Chevrolet":["Blazer","Camaro","Captiva","Colorado","Corvette","Equinox","Malibu","Silverado","Sonic","Spark","Suburban","Tahoe","TrailBlazer","Traverse"],
+  "Chrysler":["300","Pacifica","Voyager"],
+  "Citroën":["Berlingo","C3","C4","C5 Aircross","DS3","DS5"],
+  "Dacia":["Duster","Logan","Sandero","Spring"],
+  "Dodge":["Challenger","Charger","Dart","Durango","RAM 1500","Viper"],
+  "Ferrari":["296","488","812","California","F8","GTC4Lusso","Portofino","Purosangue","Roma","SF90"],
+  "Fiat":["124 Spider","500","500X","Bravo","Linea","Punto","Tipo"],
+  "Ford":["Bronco","Edge","Escape","Expedition","Explorer","F-150","F-250","F-350","Fiesta","Focus","Fusion","Kuga","Maverick","Mondeo","Mustang","Mustang Mach-E","Puma","Ranger","S-Max","Taurus"],
+  "GAC":["GA4","GA6","GS3","GS4","GS5","GS8"],
+  "Geely":["Azkarra","Coolray","Emgrand","Tugella"],
+  "Genesis":["G70","G80","G90","GV70","GV80"],
+  "GMC":["Acadia","Canyon","Sierra","Yukon","Yukon XL"],
+  "Honda":["Accord","City","Civic","CR-V","e:NS1","HR-V","Jazz","Odyssey","Pilot","Ridgeline"],
+  "Hummer":["EV Pickup","EV SUV","H1","H2","H3"],
+  "Hyundai":["Accent","Atos","Creta","Elantra","i10","i20","i30","Ioniq 5","Ioniq 6","Kona","Palisade","Santa Cruz","Santa Fe","Sonata","Staria","Tucson","Veloster"],
+  "Infiniti":["Q50","Q60","Q70","QX50","QX55","QX60","QX80"],
+  "Isuzu":["D-Max","MU-X","Trooper"],
+  "Jaguar":["E-Pace","F-Pace","F-Type","I-Pace","XE","XF","XJ"],
+  "Jeep":["Cherokee","Compass","Gladiator","Grand Cherokee","Grand Wagoneer","Renegade","Wrangler"],
+  "Kia":["Carnival","Ceed","EV6","EV9","K5","Niro","Picanto","Seltos","Sorento","Soul","Sportage","Stinger","Telluride"],
+  "Lamborghini":["Aventador","Huracán","Urus"],
+  "Land Rover":["Defender","Discovery","Discovery Sport","Freelander","Range Rover","Range Rover Evoque","Range Rover Sport","Range Rover Velar"],
+  "Lexus":["ES","GS","GX","IS","LC","LS","LX","NX","RC","RX","UX"],
+  "Lincoln":["Aviator","Corsair","MKZ","Navigator","Nautilus"],
+  "Lotus":["Emira","Evija","Evora","Exige"],
+  "Maserati":["Ghibli","GranTurismo","Grecale","Levante","MC20","Quattroporte"],
+  "Mazda":["2","3","5","6","CX-3","CX-30","CX-5","CX-60","CX-9","MX-5","MX-30"],
+  "McLaren":["570S","600LT","720S","765LT","Artura","GT","Senna"],
+  "Mercedes-Benz":["A-Class","B-Class","C-Class","CLA","CLE","CLS","E-Class","EQA","EQB","EQC","EQE","EQS","G-Class","GLA","GLB","GLC","GLE","GLS","GT","Maybach GLS","Maybach S-Class","S-Class","SL","SLC","V-Class"],
+  "MG":["5","6","HS","RX5","RX8","ZS","ZS EV"],
+  "MINI":["Clubman","Convertible","Countryman","Coupe","Hatch","Paceman","Roadster"],
+  "Mitsubishi":["ASX","Eclipse Cross","Galant","L200","Lancer","Outlander","Pajero","Pajero Sport"],
+  "Nissan":["370Z","Altima","Armada","Juke","Kicks","Leaf","Maxima","Micra","Murano","Navara","Patrol","Patrol Safari","Qashqai","Rogue","Sentra","Sunny","Terra","Tiida","X-Trail"],
+  "Peugeot":["2008","208","3008","308","408","508","Partner","Rifter"],
+  "Porsche":["718","911","Cayenne","Macan","Panamera","Taycan"],
+  "RAM":["1500","2500","3500","ProMaster"],
+  "Renault":["Captur","Clio","Duster","Kadjar","Koleos","Megane","Scenic","Symbol","Zoe"],
+  "Rolls-Royce":["Cullinan","Dawn","Ghost","Phantom","Spectre","Wraith"],
+  "SEAT":["Arona","Ateca","Ibiza","Leon","Tarraco"],
+  "Skoda":["Fabia","Kamiq","Karoq","Kodiaq","Octavia","Scala","Superb"],
+  "Subaru":["BRZ","Crosstrek","Forester","Impreza","Legacy","Outback","WRX"],
+  "Suzuki":["Alto","Baleno","Ciaz","Celerio","Ertiga","Jimny","S-Presso","Swift","Vitara"],
+  "Tesla":["Cybertruck","Model 3","Model S","Model X","Model Y","Roadster"],
+  "Toyota":["4Runner","Avalon","Avanza","C-HR","Camry","Corolla","Corolla Cross","FJ Cruiser","Fortuner","Hiace","Highlander","Hilux","Land Cruiser","Land Cruiser 70","Land Cruiser 200","Land Cruiser 300","Prado","Previa","Prius","RAV4","Rush","Sequoia","Sienna","Supra","Tacoma","Tundra","Venza","Yaris"],
+  "Volkswagen":["Amarok","Arteon","Caddy","Golf","ID.3","ID.4","Jetta","Multivan","Passat","Polo","Sharan","T-Cross","T-Roc","Taigo","Teramont","Tiguan","Touareg","Touran","Transporter","Up"],
+  "Volvo":["C40","S60","S90","V60","V90","XC40","XC60","XC90"],
+  "XPENG":["G3","G6","G9","P5","P7"],
+};
+
+function initBrands(){
+  const s=document.getElementById('brand');
+  Object.keys(BM).sort().forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;s.appendChild(o);});
+}
+function populateModels(){
+  const b=document.getElementById('brand').value,s=document.getElementById('model');
+  s.innerHTML='<option value="">Model…</option>';
+  if(b&&BM[b])BM[b].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;s.appendChild(o);});
+}
+function initYears(){
+  const s=document.getElementById('year');
+  for(let y=2025;y>=1990;y--){const o=document.createElement('option');o.value=y;o.textContent=y;s.appendChild(o);}
+}
+initBrands();initYears();
+
+const ynState={warranty:null,singleOwner:null,fsh:null,serviceContract:null,accident:null};
+function setYN(key,val,btn){
+  ynState[key]=val;
+  btn.closest('.qc-btns').querySelectorAll('.qc-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setStep(n){document.querySelectorAll('.loader-step').forEach((el,i)=>{el.classList.toggle('active',i===n);el.classList.toggle('done',i<n);});}
+
+async function evaluate(){
+  const brand=document.getElementById('brand').value;
+  const model=document.getElementById('model').value;
+  const year=document.getElementById('year').value;
+  const trim=document.getElementById('trim').value.trim();
+  const mileage=document.getElementById('mileage').value;
+  const spec=document.getElementById('spec').value;
+  const condition=document.getElementById('condition').value;
+  const colour=document.getElementById('colour').value;
+  const body=document.getElementById('body').value;
+  const seller=document.getElementById('seller').value;
+  const service=document.getElementById('service').value;
+  const asking=document.getElementById('asking').value;
+  if(!brand||!year){alert('Please select at least a Brand and Year, habibi.');return;}
+  const carDesc=[year,brand,model,trim].filter(Boolean).join(' ');
+  const ov=document.getElementById('loaderOverlay'),btn=document.getElementById('evaluateBtn');
+  ov.classList.add('active');btn.disabled=true;setStep(0);
+  const timers=[setTimeout(()=>setStep(1),1800),setTimeout(()=>setStep(2),3600),setTimeout(()=>setStep(3),5400),setTimeout(()=>setStep(4),7200)];
+  const prompt=`You are a UAE used car market expert. Search NOW for real current listings:
+Car: ${carDesc}
+${mileage?`Mileage: ${parseInt(mileage).toLocaleString()} km`:''}${condition?`\nCondition: ${condition}`:''}${colour?`\nColour: ${colour}`:''}${spec?`\nSpec: ${spec}`:''}${seller?`\nSeller: ${seller}`:''}${service?`\nService Provider: ${service}`:''}${body?`\nBody: ${body}`:''}${asking?`\nAsking: AED ${parseInt(asking).toLocaleString()}`:''}
+Warranty: ${ynState.warranty||'not stated'} | Single Owner: ${ynState.singleOwner||'not stated'} | FSH: ${ynState.fsh||'not stated'} | Service Contract: ${ynState.serviceContract||'not stated'} | Accident: ${ynState.accident||'not stated'}
+Search: dubizzle.com/motors, yallamotor.com, sellanyCar.com, carswitch.com, opensooq.com UAE
+RULES: 1)Base=median comparable listings 2)Dealer+8-12% 3)GCC spec+10-15% vs non-GCC 4)Mileage:<50k=+5%,50-100k=base,100-150k=-5%,150k+=-15% 5)Warranty yes=+4% 6)Single owner=+3% 7)FSH yes=+4% 8)Accident yes=-15% 9)No listings→expert estimate,confidence<50,dataSource=ai_estimate
+Reply ONLY raw JSON no markdown:
+{"estimatedValue":<AED int>,"low":<AED int>,"high":<AED int>,"confidence":<0-100>,"sourcesFound":[...],"listingsFound":<int>,"dataSource":"<live_search|ai_estimate>","summary":"<2-3 sentences UAE market>","factors":"<key pricing factors applied>","verdict":${asking?`"<AED ${asking} vs market>"`:'null'},"verdictClass":${asking?`"<good|warn|bad>"`:'null'}}`;
+  try{
+    const resp=await fetch('https://api.kamsayara.uone.uk/api/evaluate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        prompt,
+        carDesc,
+        brand,
+        model,
+        year: parseInt(year),
+        trim,
+        mileage: mileage ? parseInt(mileage) : null,
+        asking: asking ? parseInt(asking) : null,
+        condition,
+        spec,
+        colour,
+        seller,
+        service,
+        body,
+        warranty: ynState.warranty,
+        singleOwner: ynState.singleOwner,
+        fsh: ynState.fsh,
+        serviceContract: ynState.serviceContract,
+        accident: ynState.accident
+      })
+    });
+    if(!resp.ok){throw new Error(`Server error ${resp.status}`);}
+    const result=await resp.json();
+    timers.forEach(clearTimeout);setStep(4);
+    await new Promise(r=>setTimeout(r,300));
+    ov.classList.remove('active');btn.disabled=false;
+    renderResult(result,{brand,model,trim,year,mileage,asking,condition,spec,colour,seller,service,body});
+  }catch(err){
+    timers.forEach(clearTimeout);ov.classList.remove('active');btn.disabled=false;
+    const rb=document.getElementById('resultBox');
+    document.getElementById('resultInner').innerHTML=`<div class="res-label">Result </div><div class="verdict bad"><strong>⚠️ Error:</strong> ${err.message}</div>`;
+    rb.classList.add('visible');rb.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function renderResult(r,d){
+  const est=r.estimatedValue||0,low=r.low||Math.round(est*.87),high=r.high||Math.round(est*1.13),conf=r.confidence||70;
+  let askHtml='';
+  if(d.asking>0){
+    const vc=r.verdictClass||'warn';
+    askHtml=`<div class="two-col"><div class="stat-box"><div class="sl">Asking Price</div><div class="sv">${parseInt(d.asking).toLocaleString()} <span style="font-size:.7rem;opacity:.5">AED</span></div></div><div class="stat-box"><div class="sl">Market Value</div><div class="sv">${est.toLocaleString()} <span style="font-size:.7rem;opacity:.5">AED</span></div></div></div><div class="verdict ${vc}">${r.verdict||'—'}</div>`;
+  }
+  const ynChips=[
+    ynState.warranty==='yes'?'✓ Warranty':ynState.warranty==='no'?'✗ No Warranty':null,
+    ynState.singleOwner==='yes'?'✓ Single Owner':ynState.singleOwner==='no'?'✗ Multi-Owner':null,
+    ynState.fsh==='yes'?'✓ FSH':ynState.fsh==='no'?'✗ No FSH':null,
+    ynState.serviceContract==='yes'?'✓ Service Contract':null,
+    ynState.accident==='yes'?'⚠ Accident History':ynState.accident==='no'?'✓ Accident Free':null,
+  ].filter(Boolean).map(c=>`<span class="chip${c.startsWith('⚠')||c.startsWith('✗')?' bad-chip':''}">${c}</span>`).join('');
+  const carChips=[d.brand,d.model,d.trim,d.year?`📅 ${d.year}`:'',d.mileage?`📊 ${parseInt(d.mileage).toLocaleString()} km`:'',d.spec,d.condition,d.colour,d.seller].filter(Boolean).map(c=>`<span class="chip">${c}</span>`).join('');
+  const sites=['Dubizzle','YallaMotor','SellAnyCar','CarSwitch','OpenSooq'];
+  const found=r.sourcesFound||[];
+  const srcHtml=sites.map(s=>`<span class="source-tag ${found.some(x=>x.toLowerCase().includes(s.toLowerCase().slice(0,5)))?'active':''}">${s}</span>`).join('');
+  document.getElementById('resultInner').innerHTML=`
+    <div class="res-label">Live Market Report </div>
+    <div class="val-display">
+      <div class="vlabel">${d.asking>0?'Market Value':'Estimated Market Value'}</div>
+      <div class="vamount"><span class="vcur">AED </span>${est.toLocaleString()}</div>
+      <div class="vrange">Range: AED ${low.toLocaleString()} – ${high.toLocaleString()} &nbsp;·&nbsp; ~${r.listingsFound||'0'} listings</div>
+    </div>
+    ${askHtml}<hr class="thin"/>
+    <div class="conf-wrap">
+      <div class="conf-head"><span>Data Confidence</span><span>${conf}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%" id="cBar"></div></div>
+    </div>
+    ${r.summary?`<div class="ai-box"><div class="ai-head">🧠 AI Market Analysis</div><p>${r.summary}</p>${r.factors?`<p><strong>Key factors:</strong> ${r.factors}</p>`:''}</div>`:''}
+    <div class="sources-box"><div class="sources-head">Sources searched</div><div class="source-list">${srcHtml}</div></div>
+    <div class="chips">${carChips}${ynChips}</div>
+    <div class="note-box">✅ Valuation based on real-time web search of UAE car marketplaces. Bas.</div>`;
+  const rb=document.getElementById('resultBox');
+  rb.classList.add('visible');rb.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(()=>{const b=document.getElementById('cBar');if(b)b.style.width=conf+'%';},200);
+}
+</script>
+</body>
+</html>
