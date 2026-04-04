@@ -798,8 +798,6 @@ function setYN(key,val,btn){
 function setStep(n){document.querySelectorAll('.loader-step').forEach((el,i)=>{el.classList.toggle('active',i===n);el.classList.toggle('done',i<n);});}
 
 async function evaluate(){
-  console.log('🔍 DEBUG: Evaluate function started');
-  
   const brand=document.getElementById('brand').value;
   const model=document.getElementById('model').value;
   const year=document.getElementById('year').value;
@@ -813,26 +811,18 @@ async function evaluate(){
   const service=document.getElementById('service').value;
   const asking=document.getElementById('asking').value;
   
-  console.log('🔍 DEBUG: Form data collected', {brand, year});
-  
   if(!brand||!year){alert('Please select at least a Brand and Year, habibi.');return;}
   
-  const carDesc=[year,brand,model,trim].filter(Boolean).join(' ');
   const ov=document.getElementById('loaderOverlay'),btn=document.getElementById('evaluateBtn');
+  ov.classList.add('active');btn.disabled=true;
   
-  // Show loader and disable button
-  ov.classList.add('active');
-  btn.disabled=true;
-  
-  // Simple loading steps without complex timers
+  // Simple loading animation
   setStep(0);
-  setTimeout(()=>setStep(1), 500);
-  setTimeout(()=>setStep(2), 1000);
-  setTimeout(()=>setStep(3), 1500);
-  
+  setTimeout(()=>setStep(1), 600);
+  setTimeout(()=>setStep(2), 1200);
+  setTimeout(()=>setStep(3), 1800);
+
   try{
-    console.log('🔍 DEBUG: Making API call');
-    
     const resp=await fetch('https://kamsayara-api.mbit0010.workers.dev/api/evaluate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -857,36 +847,19 @@ async function evaluate(){
       })
     });
     
-    console.log('🔍 DEBUG: API response status:', resp.status);
-    
     if(!resp.ok){throw new Error(`Server error ${resp.status}`);}
     const result=await resp.json();
     
-    console.log('🔍 DEBUG: Got result:', result);
-    
-    // Complete loading animation
     setStep(4);
     await new Promise(r=>setTimeout(r,300));
-    
-    // Hide loader and enable button
-    ov.classList.remove('active');
-    btn.disabled=false;
-    
-    // Show results using existing beautiful UI
+    ov.classList.remove('active');btn.disabled=false;
     renderResult(result,{brand,model,trim,year,mileage,asking,condition,spec,colour,seller,service,body});
     
   }catch(err){
-    console.error('🔍 DEBUG: Error occurred:', err);
-    
-    // Hide loader and enable button
-    ov.classList.remove('active');
-    btn.disabled=false;
-    
-    // Show error
+    ov.classList.remove('active');btn.disabled=false;
     const rb=document.getElementById('resultBox');
     document.getElementById('resultInner').innerHTML=`<div class="res-label">Result </div><div class="verdict bad"><strong>⚠️ Error:</strong> ${err.message}</div>`;
-    rb.classList.add('visible');
-    rb.scrollIntoView({behavior:'smooth',block:'start'});
+    rb.classList.add('visible');rb.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 
