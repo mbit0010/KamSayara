@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8">
   <title>KamSayara – Real UAE Car Valuation</title>
-  <meta name="description" content="Get an instant, accurate UAE car valuation based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi."/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta property="og:title" content="KamSayara – Real UAE Car Valuation"/>
-  <meta property="og:description" content="Instant free car valuation based on live UAE market data. Know your car's real price in under 30 seconds."/>
-  <meta property="og:type" content="website"/>
-  <meta name="robots" content="index, follow"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <meta name="description" content="Get an instant, accurate UAE car valuation based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="KamSayara – Real UAE Car Valuation">
+  <meta property="og:description" content="Instant free car valuation based on live UAE market data. Know your car's real price in under 30 seconds.">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --accent:#008577; --accent-h:#006B60; --accent-2:#00A896;
@@ -49,9 +49,9 @@
     /* ── STICKY NAV ─────────────────────────────────────────── */
     .snav{
       position:fixed;top:0;left:0;right:0;z-index:200;
-      background:rgba(0,33,27,0.96);backdrop-filter:blur(14px);
+      background:rgba(0,33,27,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
       border-bottom:1px solid rgba(255,255,255,0.07);
-      padding:0 max(16px,env(safe-area-inset-right));
+      padding:0 16px; /* safe-area fallback for notch devices */
       transform:translateY(-100%);transition:transform .3s var(--ease);
     }
     .snav.on{transform:translateY(0);}
@@ -238,7 +238,7 @@
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23008577' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-repeat:no-repeat;background-position:right .65rem center;
       padding-right:1.75rem;
-      /* scroll nudge handled by JS handleSelectOpen — no CSS trick needed */
+      /* scroll nudge handled by custom ks-dropdown system */
     }
     select:focus,input:focus{
       border-color:var(--accent);
@@ -315,8 +315,8 @@
       flex-shrink:0;
       min-width:44px;min-height:44px;
     }
-    .btn-go.ready{animation:btnPulse 2.2s ease-in-out infinite;}
-    @keyframes btnPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
+    .btn-go.ready{animation:btnGlow 2.4s ease-in-out infinite;}
+    @keyframes btnGlow{0%,100%{box-shadow:var(--sh-btn);}50%{box-shadow:0 6px 28px var(--accent-glow),0 2px 8px rgba(0,0,0,0.1);}}
     .btn-go:disabled{animation:none!important;}
     .btn-go.clicked{animation:none!important;transform:scale(0.97)!important;transition:transform 0.1s ease!important;}
     .btn-go::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.13) 0%,transparent 55%);pointer-events:none;}
@@ -494,8 +494,22 @@
       .qc-item+.qc-item{border-left:none;margin-left:0;padding-left:0;}
       .qc-item:nth-child(odd){border-right:none;padding-right:0;}
     }
+    @media(max-width:360px){
+      .fg{grid-template-columns:1fr 1fr;gap:5px;}
+      .form-body{padding:14px 14px 10px;}
+      .hero-tag{font-size:1.4rem;}
+      .share-row{flex-wrap:wrap;gap:6px;}
+      .share-icons{gap:6px;}
+      .sico{width:40px;height:40px;}
+    }
     @media(max-width:350px){
       .fg{grid-template-columns:1fr;gap:5px;}
+    }
+
+    /* ── REDUCED MOTION ──────────────────────────────────────── */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+      .spinner{animation:none;border-top-color:var(--accent);}
     }
 
     /* ── FOCUS OUTLINES ──────────────────────────────────────── */
@@ -506,19 +520,19 @@
     .form-card{transition:box-shadow .3s var(--ease);}
     .form-card:focus-within{box-shadow:var(--sh-card),0 0 0 2px var(--accent-glow),0 0 0 4px var(--accent-line);}
 
-    /* ── GREEN CHECKMARK ON FILLED FIELDS ───────────────────── */
+    /* ── FILLED FIELD STATE — subtle acknowledgment, no surveillance tick ── */
     .ig{position:relative;}
     select.filled:not(.err),input.filled:not(.err){
-      padding-right:2.4rem;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='6' fill='%231A8C6B' opacity='0.15'/%3E%3Cpath d='M4 7l2.2 2.2L10 4.5' stroke='%231A8C6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      border-color:rgba(0,133,119,0.38);
+      background:rgba(0,133,119,0.025);
+      color:var(--ink);
+    }
+    /* Select keeps its own chevron only — no layered icons */
+    select.filled:not(.err){
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23008577' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-repeat:no-repeat;
       background-position:right .65rem center;
-    }
-    /* For select, the existing chevron takes background-image – need to layer both */
-    select.filled:not(.err){
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23008577' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='6' fill='%231A8C6B' opacity='0.15'/%3E%3Cpath d='M4 7l2.2 2.2L10 4.5' stroke='%231A8C6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-position:right .65rem center, right 2.1rem center;
-      padding-right:3.4rem;
+      padding-right:1.75rem;
     }
 
     /* ── SMART HINTS ─────────────────────────────────────────── */
@@ -551,10 +565,10 @@
       border-top:2px solid var(--accent);
       border-radius:var(--r-xl) var(--r-xl) 0 0;
       box-shadow:0 -12px 40px rgba(0,0,0,0.18),0 -4px 12px rgba(0,0,0,0.08);
-      max-height:85vh;overflow-y:auto;
+      max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
       transform:translateY(100%);
       transition:transform .42s var(--ease);
-      padding:0 0 env(safe-area-inset-bottom,0);
+      padding:0 0 16px; /* safe-area fallback */
     }
     .mob-result-toast.show{transform:translateY(0);}
     .mob-toast-handle{
@@ -610,16 +624,16 @@
     .why-val.neu{color:var(--muted);}
     .why-total{margin-top:8px;padding:8px;background:var(--white);border-radius:var(--r-sm);border:1px solid var(--border);font-size:.7rem;color:var(--ink-soft);text-align:center;line-height:1.4;}
 
-    /* ── INTERIM ESTIMATE ────────────────────────────────────── */
-    .interim-est{
-      background:linear-gradient(135deg,rgba(0,133,119,0.07) 0%,rgba(0,168,150,0.04) 100%);
-      border:1.5px dashed var(--accent-line);border-radius:var(--r-lg);
-      padding:16px;text-align:center;margin:12px 0;
-      animation:fIn .38s var(--ease) both;
+    /* ── LOADING FACTS (replaces fake interim estimate) ─────── */
+    .load-fact{
+      margin-top:16px;padding:10px 14px;
+      background:var(--surface-2);border-radius:var(--r-md);
+      border:1px solid var(--border);
+      font-size:.72rem;color:var(--ink-soft);text-align:center;line-height:1.5;
+      max-width:260px;animation:fIn .4s var(--ease);
+      font-style:italic;
     }
-    .interim-est .p-lbl{font-size:.53rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-    .interim-est .p-main{font-family:"Orbitron",sans-serif;font-size:1.3rem;font-weight:700;color:var(--accent);opacity:.75;}
-    .interim-est .interim-note{font-size:.65rem;color:var(--muted);margin-top:6px;font-style:italic;}
+    .load-fact strong{color:var(--accent);font-style:normal;}
 
     /* ── LOADING TIPS ────────────────────────────────────────── */
     .load-tip{
@@ -633,6 +647,58 @@
 
     /* ── PRICE COUNT-UP ──────────────────────────────────────── */
     .p-main[data-countup]{transition:opacity .2s;}
+
+    /* ── PRICE POSITION BAR ──────────────────────────────────── */
+    .ppos{margin:10px 2px 4px;}
+    .ppos-labels{display:flex;justify-content:space-between;font-size:.58rem;color:var(--muted);margin-bottom:4px;}
+    .ppos-track{position:relative;height:6px;background:linear-gradient(90deg,var(--good-bg),var(--warn-bg),var(--bad-bg));border-radius:99px;overflow:visible;}
+    .ppos-dot{
+      position:absolute;top:50%;transform:translate(-50%,-50%);
+      width:14px;height:14px;border-radius:50%;
+      background:var(--accent);border:2.5px solid #fff;
+      box-shadow:0 1px 6px rgba(0,133,119,0.45);
+    }
+    .ppos-you{text-align:center;font-size:.6rem;color:var(--accent);font-weight:700;margin-top:6px;letter-spacing:.04em;}
+
+    /* ── TRUST LINE ──────────────────────────────────────────── */
+    .trust-line{
+      text-align:center;font-size:.62rem;color:var(--muted);
+      margin:6px 0 2px;letter-spacing:.03em;
+    }
+    .trust-line strong{color:var(--ink-soft);}
+
+    /* ── SHARE ICONS ROW ─────────────────────────────────────── */
+    .share-row{
+      display:flex;align-items:center;gap:10px;margin-bottom:8px;
+    }
+    .share-lbl{
+      font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--muted);flex-shrink:0;
+    }
+    .share-icons{display:flex;gap:8px;align-items:center;}
+    .sico{
+      width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .16s,box-shadow .16s;flex-shrink:0;
+      text-decoration:none;
+    }
+    .sico:hover{transform:scale(1.15);box-shadow:0 3px 10px rgba(0,0,0,0.2);}
+    .sico-wa{background:#25D366;}
+    .sico-mail{background:#EA4335;}
+    .sico-pdf{background:var(--accent);}
+    .sico-copy{background:var(--ink-soft);}
+    .sico svg{width:15px;height:15px;fill:#fff;flex-shrink:0;}
+
+    /* ── PDF PRINT STYLES ────────────────────────────────────── */
+    @media print{
+      .snav,.hero,.ffoot,.qc,.nxt,.share-row,.why-toggle,.rfooter,
+      #restoreBar,.mob-overlay,.mob-result-toast{display:none!important;}
+      body{background:#fff;font-size:12px;}
+      .layout{display:block;}
+      .result-panel{position:static;height:auto;max-height:none;box-shadow:none;}
+      .form-card{box-shadow:none;border:1px solid #ddd;}
+      .pblock,.ai-block,.tags{break-inside:avoid;}
+    }
 
     /* ── ENHANCED SPINNER ────────────────────────────────────── */
     .spinner{
@@ -707,6 +773,75 @@
       font-size:.56rem;color:var(--muted);text-align:right;margin-top:5px;
       letter-spacing:.04em;
     }
+
+    /* ── CUSTOM SEARCHABLE DROPDOWN ─────────────────────────── */
+    select.ks-hidden{
+      position:absolute;left:-9999px;width:1px;height:1px;
+      opacity:0;pointer-events:none;overflow:hidden;
+    }
+    .ks-wrap{position:relative;width:100%;}
+    .ks-trigger{
+      width:100%;height:2.8rem;
+      background:var(--surface-2);border:1.5px solid var(--border);
+      border-radius:var(--r-sm);padding:.5rem 2rem .5rem .7rem;
+      font-family:"Exo 2",sans-serif;font-size:.8rem;color:var(--muted);
+      cursor:pointer;display:flex;align-items:center;
+      transition:border-color .18s,box-shadow .18s,background .18s;
+      box-shadow:var(--sh-field);user-select:none;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      position:relative;
+    }
+    .ks-trigger::after{
+      content:'';position:absolute;right:.65rem;top:50%;transform:translateY(-50%);
+      width:10px;height:6px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23008577' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-size:contain;
+      transition:transform .2s var(--ease);
+    }
+    .ks-wrap.open .ks-trigger::after{transform:translateY(-50%) rotate(180deg);}
+    .ks-trigger.ks-filled{color:var(--ink);background:rgba(0,133,119,0.025);border-color:rgba(0,133,119,0.38);}
+    .ks-trigger.ks-err{border-color:var(--err)!important;background:var(--err-bg)!important;box-shadow:0 0 0 3px rgba(192,57,43,0.1)!important;}
+    .ks-wrap.open .ks-trigger{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow2),var(--sh-field);background:var(--white);color:var(--ink);}
+    .ks-trigger:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow2),var(--sh-field);}
+    .ks-trigger:hover:not(.ks-wrap.open .ks-trigger){border-color:rgba(0,133,119,0.3);}
+
+    .ks-panel{
+      position:absolute;top:calc(100% + 4px);left:0;right:0;
+      background:var(--white);border:1.5px solid var(--accent-line);
+      border-radius:var(--r-md);
+      box-shadow:0 8px 32px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.07);
+      z-index:600;display:none;flex-direction:column;
+      max-height:260px;overflow:hidden;animation:eIn .15s var(--ease);
+    }
+    .ks-wrap.open .ks-panel{display:flex;}
+
+    .ks-search{
+      border:none;border-bottom:1px solid var(--border);
+      border-radius:var(--r-md) var(--r-md) 0 0;
+      padding:.45rem .75rem;
+      font-family:"Exo 2",sans-serif;font-size:.8rem;color:var(--ink);
+      outline:none;background:var(--surface-2);width:100%;
+      height:2.4rem;flex-shrink:0;box-shadow:none;
+    }
+    .ks-search::placeholder{color:var(--muted);}
+    .ks-search:focus{background:var(--white);border-bottom-color:var(--accent);box-shadow:none;}
+
+    .ks-list{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;}
+    .ks-opt{
+      padding:.42rem .75rem;font-family:"Exo 2",sans-serif;
+      font-size:.78rem;color:var(--ink);cursor:pointer;transition:background .1s;
+    }
+    .ks-opt:hover{background:var(--accent-soft);color:var(--accent);}
+    .ks-opt.ks-selected{background:var(--accent-soft);color:var(--accent);font-weight:600;}
+    .ks-opt[style*="display:none"]{display:none;}
+    .ks-empty{padding:.7rem .75rem;font-size:.72rem;color:var(--muted);font-style:italic;text-align:center;}
+
+    @media(max-width:600px){
+      .ks-trigger{height:3.2rem;font-size:16px;}
+      .ks-search{height:2.8rem;font-size:16px;padding:.55rem .75rem;}
+      .ks-opt{padding:.55rem .75rem;font-size:16px;}
+      .ks-panel{max-height:220px;}
+    }
   </style>
 </head>
 <body>
@@ -763,21 +898,6 @@
 
     <!-- ── FORM ──────────────────────────────────────────────── -->
     <div class="form-card" id="formCard">
-      <!-- Restore last valuation chip — shown by JS if localStorage has data -->
-      <div id="restoreBar" style="display:none;padding:8px 20px 0;">
-        <button id="restoreBtn" onclick="restoreLastValuation()" style="
-          display:flex;align-items:center;gap:7px;width:100%;
-          background:var(--accent-soft);border:1.5px dashed var(--accent-line);
-          border-radius:var(--r-md);padding:8px 12px;cursor:pointer;
-          font-family:'Exo 2',sans-serif;font-size:.68rem;font-weight:700;
-          letter-spacing:.06em;color:var(--accent);text-align:left;
-          transition:all .18s;
-        ">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M3 8a5 5 0 105-5H6M6 1L3 3l3 2" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span id="restoreLabel">Continue where you left off</span>
-          <span style="margin-left:auto;opacity:.5;font-size:.9em;">↩ Restore</span>
-        </button>
-      </div>
       <div class="form-body">
         <div class="sec-label">Car Details</div>
         <p class="req-legend"><span class="req-star">*</span> Required</p>
@@ -909,9 +1029,24 @@
             <circle cx="8" cy="8" r="7" stroke="white" stroke-width="1.4" opacity=".5"/>
             <path d="M8 4.5v3.5l2.5 1.5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
           </svg>
-          <span>Reveal My Car Value</span>
+          <span>Check Price Now</span>
         </button>
       </div>
+    </div>
+
+    <!-- Restore last valuation — shown below form if previous search exists -->
+    <div id="restoreBar" style="display:none;grid-column:1/-1;padding:0 2px 2px;">
+      <button id="restoreBtn" onclick="restoreLastValuation()" style="
+        display:flex;align-items:center;gap:7px;width:100%;
+        background:var(--accent-soft);border:1.5px dashed var(--accent-line);
+        border-radius:var(--r-md);padding:8px 14px;cursor:pointer;
+        font-family:'Exo 2',sans-serif;font-size:.68rem;font-weight:700;
+        letter-spacing:.06em;color:var(--accent);text-align:left;transition:all .18s;
+      ">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M3 8a5 5 0 105-5H6M6 1L3 3l3 2" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="restoreLabel">Continue your last search</span>
+        <span style="margin-left:auto;opacity:.5;font-size:.9em;">↩ Restore</span>
+      </button>
     </div>
 
     <!-- ── RESULT PANEL (desktop + tablet) ───────────────────── -->
@@ -971,7 +1106,7 @@
 <!-- MOBILE BOTTOM SHEET RESULT -->
 <div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
   <div class="mob-toast-handle">
-    <span class="mob-toast-title">Your Valuation</span>
+    <span class="mob-toast-title">Valuation Result</span>
     <button class="mob-toast-close" onclick="closeMobResult()" aria-label="Close">✕</button>
   </div>
   <div class="mob-toast-body" id="mobBody">
@@ -1038,6 +1173,8 @@ function restoreLastValuation(){
       ['trim','mileage','asking'].forEach(id=>{
         if(data[id]){g(id).value=data[id];markFilled(g(id));}
       });
+      // Sync all ks-dropdowns after restore
+      _ksMap.forEach((wrap,sel)=>ksSync(sel));
       g('restoreBar').style.display='none';
       updateReadiness();
     });
@@ -1079,19 +1216,40 @@ const isMobile=()=>window.innerWidth<=600;
 /* ── HELPERS ──────────────────────────────────────────────── */
 function markFilled(el){
   el.classList.toggle('filled',!!el.value);
+  // also update ks-trigger appearance
+  const wrap=el.nextElementSibling;
+  if(wrap&&wrap.classList.contains('ks-wrap')){
+    const trig=wrap.querySelector('.ks-trigger');
+    if(trig)trig.classList.toggle('ks-filled',!!el.value);
+  }
   clearErr(el);
   updateReadiness();
 }
 function setVal(el,v){
-  for(const o of el.options)if(o.value===v||o.textContent===v){el.value=o.value;markFilled(el);return;}
+  for(const o of el.options)if(o.value===v||o.textContent===v){
+    el.value=o.value;
+    ksSync(el);
+    markFilled(el);
+    return;
+  }
 }
 function showErr(id,msg){
   const el=document.getElementById(id),em=document.getElementById('err-'+id);
-  if(el)el.classList.add('err');
+  if(el){
+    el.classList.add('err');
+    const wrap=el.nextElementSibling;
+    if(wrap&&wrap.classList.contains('ks-wrap')){
+      wrap.querySelector('.ks-trigger')?.classList.add('ks-err');
+    }
+  }
   if(em){em.textContent=msg;em.classList.add('on');}
 }
 function clearErr(el){
   el.classList.remove('err','warn-field');
+  const wrap=el.nextElementSibling;
+  if(wrap&&wrap.classList.contains('ks-wrap')){
+    wrap.querySelector('.ks-trigger')?.classList.remove('ks-err');
+  }
   const em=document.getElementById('err-'+el.id);
   if(em){em.classList.remove('on','warn-msg');}
 }
@@ -1134,7 +1292,12 @@ function populateModels(){
   s.innerHTML='<option value="">Select model…</option>';
   if(b&&BM[b])BM[b].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;s.appendChild(o);});
   markFilled(g('brand'));
-  requestAnimationFrame(()=>window.scrollTo({top:sy,behavior:'instant'}));
+  ksSync(g('brand'));
+  // refresh model ks-dropdown with new options
+  requestAnimationFrame(()=>{
+    ksRefresh(s);
+    window.scrollTo({top:sy,behavior:'instant'});
+  });
 }
 function onModelChange(){
   markFilled(g('model'));
@@ -1166,17 +1329,18 @@ function showState(st,mobile=false){
   }
 }
 
-/* ── LOADING MESSAGES ───────────────────────────────────── */
+/* ── UAE MARKET FACTS (shown during loading) ─────────────── */
 const LOAD_TIPS=[
   'White cars resell faster in UAE ☀️',
-  'GCC specs hold value better than American imports',
-  'Service history can add up to 5% to resale value',
-  'Clean title cars sell 15% faster',
-  'Low mileage can increase price by 10–15%',
-  'Accident-free cars fetch up to 15% more',
-  'Single-owner cars are more trusted by buyers',
+  'GCC spec holds value better than American import',
+  'Full service history can add up to 5% to resale value',
+  'Single-owner cars are more trusted by UAE buyers',
+  'Accident-free cars attract more serious buyers',
+  'Dealer prices average 8% higher than private sellers',
+  'Silver and grey tones are rising in UAE market demand',
+  'Low mileage is the top filter used by UAE car buyers',
 ];
-let loadTimer=null,tipTimeoutId=null,tipIntervalId=null,interimTimer=null;
+let loadTimer=null,tipTimeoutId=null,tipIntervalId=null;
 
 function buildLoadSteps(mobile){
   const brand=g('brand').value||'your car';
@@ -1187,12 +1351,11 @@ function buildLoadSteps(mobile){
   const listCount=(Math.floor(Math.random()*2500)+2500).toLocaleString();
   const carLabel=[year,brand,model].filter(Boolean).join(' ');
   return[
-    `Analyzing ${carLabel} trends…`,
-    `Comparing against ${listCount} UAE listings…`,
-    mileage?`Adjusting for ${mileage} mileage…`:'Calculating depreciation…',
-    `Applying ${spec} spec coefficient…`,
-    'Running AI market analysis…',
-    'Finalizing valuation…',
+    `Searching live UAE listings for ${carLabel}…`,
+    `Scanning Dubizzle and YallaMotor…`,
+    mileage?`Comparing similar cars with ${mileage}…`:'Finding comparable cars…',
+    'Analysing market position…',
+    'Calculating your valuation…',
   ];
 }
 
@@ -1209,7 +1372,6 @@ function startLoad(mobile=false){
     i=(i+1)%steps.length;
     if(step){step.style.opacity=0;setTimeout(()=>{step.textContent=steps[i];step.style.opacity=1;},200);}
   },1200);
-  // Tips every 4s, start after 3.5s
   let tipIdx=Math.floor(Math.random()*LOAD_TIPS.length);
   if(tipEl){
     tipTimeoutId=setTimeout(()=>{
@@ -1221,49 +1383,14 @@ function startLoad(mobile=false){
       },4000);
     },3500);
   }
-  // Interim estimate after 8s
-  interimTimer=setTimeout(()=>showInterimEstimate(mobile),8000);
 }
 
 function stopLoad(){
   if(loadTimer){clearInterval(loadTimer);loadTimer=null;}
   if(tipTimeoutId){clearTimeout(tipTimeoutId);tipTimeoutId=null;}
   if(tipIntervalId){clearInterval(tipIntervalId);tipIntervalId=null;}
-  if(interimTimer){clearTimeout(interimTimer);interimTimer=null;}
   const tipEl=g('loadTip');if(tipEl){tipEl.style.display='none';}
   const mobTipEl=g('mobLoadTip');if(mobTipEl){mobTipEl.style.display='none';}
-}
-
-/* ── INTERIM ESTIMATE ────────────────────────────────────── */
-function showInterimEstimate(mobile){
-  const year=parseInt(g('year').value)||2015;
-  const mileage=parseInt(g('mileage').value)||50000;
-  const brand=g('brand').value||'';
-  const luxBrands=/toyota|lexus|bmw|mercedes|audi|porsche/i;
-  const popularBrands=/toyota|lexus/i;
-  const yearFactor=(year-2000)*1500;
-  const brandPop=popularBrands.test(brand)?1.2:luxBrands.test(brand)?1.15:1.0;
-  const mileageAdj=mileage*0.2;
-  const randomOffset=(Math.random()-0.5)*10000;
-  const basePrice=Math.max(5000,Math.round((yearFactor*brandPop-mileageAdj+randomOffset)/500)*500);
-  const interimHtml=`<div class="interim-est">
-    <div class="p-lbl">Estimated Range</div>
-    <div class="p-main">AED ~${basePrice.toLocaleString()}</div>
-    <div class="interim-note">Refining accuracy with live market data…</div>
-  </div>`;
-  if(mobile){
-    const mobLoad=g('mobLoad');
-    if(mobLoad&&mobLoad.style.display!=='none'){
-      let iEl=mobLoad.querySelector('.interim-est');
-      if(!iEl){mobLoad.insertAdjacentHTML('beforeend',interimHtml);}
-    }
-  }else{
-    const rld=g('rld');
-    if(rld&&rld.style.display!=='none'){
-      let iEl=rld.querySelector('.interim-est');
-      if(!iEl){rld.insertAdjacentHTML('beforeend',interimHtml);}
-    }
-  }
 }
 
 /* ── DEAL LOGIC (fallback if AI unavailable) ─────────────── */
@@ -1345,98 +1472,166 @@ function toggleWhy(){
 function buildResult(r,brand,model,year,mileage,asking){
   const conf=Math.round((r.confidence||0)*100);
   const avg=r.averagePrice||0;
+  const low=r.lowPrice||0;
+  const high=r.highPrice||0;
+  const comp=r.comparablesFound||0;
   const askN=asking?parseInt(asking):null;
+  const ai=r.ai||null;
 
-  // ── Asking vs market comparison ──────────────────────────
+  // Store ALL form data for PDF generation
+  const qsLabels={
+    warranty:   qs.warranty   ==='yes'?'✓ Yes':qs.warranty   ==='no'?'✗ No':null,
+    singleOwner:qs.singleOwner==='yes'?'✓ Yes':qs.singleOwner==='no'?'✗ No':null,
+    fsh:        qs.fsh        ==='yes'?'✓ Yes':qs.fsh        ==='no'?'✗ No':null,
+    accident:   qs.accident   ==='yes'?'✓ Yes':qs.accident   ==='no'?'✗ No':null,
+  };
+  _lastValuationData={
+    carName:`${year} ${brand}${model?' '+model:''}`,
+    avg,low,high,comp,
+    askingPrice:askN,
+    ai,
+    aiCls:ai?aiRatingClass(ai.deal_rating):'neu',
+    inputs:[
+      ['Brand',              brand||'—'],
+      ['Model',              model||'—'],
+      ['Year',               year||'—'],
+      g('trim').value?    ['Trim / Variant', g('trim').value]               :null,
+      mileage?            ['Mileage',        parseInt(mileage).toLocaleString()+' km']:null,
+      g('spec').value?    ['Spec',           g('spec').value]               :null,
+      g('condition').value?['Condition',     g('condition').value]          :null,
+      g('colour').value?  ['Colour',         g('colour').value]             :null,
+      g('body').value?    ['Body Type',      g('body').value]               :null,
+      g('seller').value?  ['Seller Type',    g('seller').value]             :null,
+      g('service').value? ['Service',        g('service').value]            :null,
+      askN?               ['Asking Price',   'AED '+askN.toLocaleString()]  :null,
+      qsLabels.warranty?  ['Warranty',       qsLabels.warranty]             :null,
+      qsLabels.singleOwner?['Single Owner',  qsLabels.singleOwner]         :null,
+      qsLabels.fsh?       ['Full Service History', qsLabels.fsh]            :null,
+      qsLabels.accident?  ['Accident History',     qsLabels.accident]       :null,
+    ].filter(Boolean),
+  };
+
+  // ── Price position bar ───────────────────────────────────
+  let pposHtml='';
+  if(low&&high&&avg&&high>low){
+    const pct=Math.round(((avg-low)/(high-low))*100);
+    pposHtml=`
+    <div class="ppos">
+      <div class="ppos-labels">
+        <span>AED ${low.toLocaleString()}</span>
+        <span>AED ${high.toLocaleString()}</span>
+      </div>
+      <div class="ppos-track">
+        <div class="ppos-dot" style="left:${Math.max(5,Math.min(95,pct))}%"></div>
+      </div>
+      <div class="ppos-you">▲ Market average</div>
+    </div>`;
+  }
+
+  // ── Asking vs market ─────────────────────────────────────
   let vsHtml='';
   if(askN&&avg){
     const diff=askN-avg,pct=Math.round(Math.abs(diff/avg)*100);
-    if(diff>0)vsHtml=`<div class="p-vs over">Asking AED ${Math.abs(diff).toLocaleString()} (+${pct}%) over market</div>`;
-    else if(diff<0)vsHtml=`<div class="p-vs under">Asking AED ${Math.abs(diff).toLocaleString()} (${pct}%) below market</div>`;
-    else vsHtml=`<div class="p-vs fair">Asking matches market exactly</div>`;
+    if(diff>0)vsHtml=`<div class="p-vs over">AED ${Math.abs(diff).toLocaleString()} (+${pct}%) above market average</div>`;
+    else if(diff<0)vsHtml=`<div class="p-vs under">AED ${Math.abs(diff).toLocaleString()} (${pct}%) below market average</div>`;
+    else vsHtml=`<div class="p-vs fair">Asking matches market average exactly</div>`;
   }
 
-  // ── Claude AI analysis block ─────────────────────────────
-  const ai=r.ai||null;
+  // ── Claude AI block ──────────────────────────────────────
   let aiHtml='';
   if(ai&&ai.deal_rating){
     const cls=aiRatingClass(ai.deal_rating);
-    // Max 3 factors, one line each
-    const factors=(ai.key_factors||[]).slice(0,3).map(f=>`<div class="ai-factor">${f}</div>`).join('');
-    // Trim explanation to first sentence only
-    const shortExp=ai.explanation?ai.explanation.split(/\.\s+/)[0]+'.':'';
-    // Trim advice to first sentence only
-    const shortAdv=ai.advice?ai.advice.split(/\.\s+/)[0]+'.':'';
+    // Neutral label mapping — no role assumption
+    const labelMap={
+      'Good Deal':'Strong Value',
+      'Fair Price':'Fair Market Price',
+      'Slightly High':'Above Market',
+      'Overpriced':'Significantly Above Market',
+    };
+    const neutralLabel=labelMap[ai.deal_rating]||ai.deal_rating;
+    const factors=(ai.key_factors||[]).map(f=>`<div class="ai-factor">${f}</div>`).join('');
+    const fullExp=ai.explanation||'';
+    const fullAdv=ai.advice||'';
     aiHtml=`
     <div class="ai-block ${cls}">
       <div class="ai-rating-row">
-        <span class="ai-rating-badge">${ai.deal_rating}</span>
+        <span class="ai-rating-badge">${neutralLabel}</span>
         ${ai.confidence?`<span class="ai-conf-badge">${ai.confidence} confidence</span>`:''}
       </div>
-      ${shortExp?`<div class="ai-explanation">${shortExp}</div>`:''}
+      ${fullExp?`<div class="ai-explanation">${fullExp}</div>`:''}
       ${factors?`<div class="ai-factors">${factors}</div>`:''}
-      ${shortAdv?`<div class="ai-advice"><div class="ai-advice-lbl">Tip</div>${shortAdv}</div>`:''}
-      <div class="ai-powered-note">✦ Claude AI</div>
+      ${fullAdv?`<div class="ai-advice"><div class="ai-advice-lbl">Market insight</div>${fullAdv}</div>`:''}
     </div>`;
   } else {
     const deal=dealVerdict(askN,avg);
     if(deal){
-      aiHtml=`<div class="dsig ${deal.cls}"><div class="ds-lbl">Verdict</div><div class="ds-ver">${deal.label} — ${deal.ver}</div><div class="ds-act">${deal.act}</div></div>`;
+      aiHtml=`<div class="dsig ${deal.cls}"><div class="ds-lbl">Verdict</div><div class="ds-ver">${deal.label} — ${deal.ver}</div></div>`;
     }
   }
 
+  // ── Tags ─────────────────────────────────────────────────
+  const specVal=g('spec').value;
   const tags=[
     `${year} ${brand}${model?' '+model:''}`,
     mileage?`${parseInt(mileage).toLocaleString()} km`:null,
-    g('spec').value||'GCC',
+    specVal||null,
     qs.warranty==='yes'?'Warranty':null,
     qs.singleOwner==='yes'?'Single owner':null,
     qs.fsh==='yes'?'FSH':null,
   ].filter(Boolean);
 
-  const dealCls=ai?aiRatingClass(ai.deal_rating):(dealVerdict(askN,avg)||{cls:'neu'}).cls;
+  // ── Share data for PDF + messages ────────────────────────
+  const carName=`${year} ${brand}${model?' '+model:''}`;
+  const waMsg=encodeURIComponent(`I just checked my ${carName} on KamSayara — market value is AED ${avg.toLocaleString()}. Check yours free at kamsayara.mbit0010.workers.dev`);
+  const waUrl=`https://wa.me/?text=${waMsg}`;
+  const mailSubj=encodeURIComponent(`KamSayara Valuation: ${carName}`);
+  const mailBody=encodeURIComponent(`I checked my ${carName} on KamSayara.\n\nMarket Value: AED ${avg.toLocaleString()}\nRange: AED ${low.toLocaleString()} – AED ${high.toLocaleString()}\n${ai?'Verdict: '+ai.deal_rating:''}\n\nCheck yours free: https://kamsayara.mbit0010.workers.dev`);
+  const mailUrl=`mailto:?subject=${mailSubj}&body=${mailBody}`;
 
   return `
     <div class="pblock">
       <div class="p-lbl">UAE Market Value</div>
       <div class="p-main" id="priceMain">AED 0</div>
-      <div class="p-range">Range: AED ${(r.lowPrice||0).toLocaleString()} – ${(r.highPrice||0).toLocaleString()}</div>
+      ${pposHtml}
       ${vsHtml}
+      <div class="trust-line">${comp>0?`<strong>${comp} live UAE listings</strong> analysed`:'Based on live UAE market data'}</div>
       <div class="cbar-wrap">
         <div class="cbar-top"><span>Data Confidence</span><span>${conf}%</span></div>
         <div class="cbar"><div class="cbar-fill" id="cbarFill" style="width:0%"></div></div>
       </div>
       <div class="p-meta">
-        <span class="pbadge">${r.comparablesFound||0} comparables</span>
+        <span class="pbadge">${comp} comparables</span>
         <span class="pbadge">${r.fromCache?'Cached':'Live'}</span>
-        ${qs.accident==='yes'?'<span class="pbadge" style="color:var(--bad);border-color:var(--bad-line)">⚠ Accident</span>':''}
+        ${qs.accident==='yes'?'<span class="pbadge" style="color:var(--bad);border-color:var(--bad-line)">⚠ Accident history</span>':''}
       </div>
     </div>
     ${aiHtml}
     ${buildWhySection(r,brand,model,year,mileage)}
     <div class="tags">${tags.map(t=>`<span class="tag n">${t}</span>`).join('')}${qs.accident==='yes'?'<span class="tag bad">Accident history</span>':''}</div>
     <div class="nxt">
-      <button class="nxt-btn" onclick="shareResult()">
-        <div class="nxt-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="12" cy="3" r="1.5" stroke="var(--accent)" stroke-width="1.3"/><circle cx="12" cy="13" r="1.5" stroke="var(--accent)" stroke-width="1.3"/><circle cx="4" cy="8" r="1.5" stroke="var(--accent)" stroke-width="1.3"/><path d="M10.5 4L5.5 7M10.5 12L5.5 9" stroke="var(--accent)" stroke-width="1.3"/></svg></div>
-        <div><div class="nxt-t">Share result</div><div class="nxt-s">Send to a friend</div></div>
-        <span class="nxt-arr">›</span>
-      </button>
-      ${dealCls==='good'?`<a class="nxt-btn" href="https://www.dubizzle.com/motors/cars/" target="_blank" rel="noopener" style="text-decoration:none;">
-        <div class="nxt-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 12V5l6-3 6 3v7l-6 3-6-3z" stroke="var(--accent)" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 2v13M2 5l6 3 6-3" stroke="var(--accent)" stroke-width="1.3"/></svg></div>
-        <div><div class="nxt-t">List your car</div><div class="nxt-s">Post on Dubizzle Motors</div></div>
-        <span class="nxt-arr">›</span>
-      </a>`:`<a class="nxt-btn" href="https://www.carswitch.com/en/buy-used-cars/uae" target="_blank" rel="noopener" style="text-decoration:none;">
-        <div class="nxt-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="var(--accent)" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="var(--accent)" stroke-width="1.3" stroke-linecap="round"/></svg></div>
-        <div><div class="nxt-t">Get a cash offer</div><div class="nxt-s">Fast offer from CarSwitch</div></div>
-        <span class="nxt-arr">›</span>
-      </a>`}
+      <div class="share-row">
+        <span class="share-lbl">Share</span>
+        <div class="share-icons">
+          <a class="sico sico-wa" href="${waUrl}" target="_blank" rel="noopener" title="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+          <a class="sico sico-mail" href="${mailUrl}" title="Share via Email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+          <button class="sico sico-pdf" onclick="printValuation()" title="Download PDF">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 8H9v-1h2v1zm4 0h-2v-1h2v1zm0-2H9v-1h6v1zm0-2H9v-1h6v1z"/></svg>
+          </button>
+          <button class="sico sico-copy" onclick="copyLink()" title="Copy link">
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          </button>
+        </div>
+      </div>
       <button class="nxt-btn" onclick="resetForm()">
         <div class="nxt-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 105-5H6M6 1L3 3l3 2" stroke="var(--accent)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div><div class="nxt-t">Check another car</div><div class="nxt-s">New valuation</div></div>
         <span class="nxt-arr">›</span>
       </button>
-    </div>
-    <div class="rfooter">Algorithm · ${r.fromCache?'Cached':'Live UAE market data'} · AI by Claude Haiku</div>`;
+    </div>`;
 }
 
 /* ── MAIN CALL ──────────────────────────────────────────── */
@@ -1468,8 +1663,17 @@ async function checkCarPrice(){
   const model=g('model').value;
 
   try{
+    const controller=new AbortController();
+    const timeoutId=setTimeout(()=>controller.abort(),55000);
+    // Show "taking longer" message after 20s
+    const slowMsg=setTimeout(()=>{
+      const el=g('loadStep')||g('mobLoadStep');
+      if(el)el.textContent='Live search in progress — almost there…';
+    },20000);
+
     const resp=await fetch(`${API}/api/professional-valuation`,{
       method:'POST',headers:{'Content-Type':'application/json'},
+      signal:controller.signal,
       body:JSON.stringify({
         brand,model,year:parseInt(year),
         trim:g('trim').value,
@@ -1486,6 +1690,8 @@ async function checkCarPrice(){
       })
     });
     if(!resp.ok)throw new Error(`API ${resp.status}`);
+    clearTimeout(timeoutId);
+    clearTimeout(slowMsg);
     const r=await resp.json();
     stopLoad();
 
@@ -1520,10 +1726,12 @@ async function checkCarPrice(){
     saveLastValuation();
   }catch(err){
     stopLoad();
+    const isTimeout=err.name==='AbortError';
+    const errMsg=isTimeout?'Request timed out — Claude is taking too long. Please try again.':err.message;
     const errHtml=`<div style="padding:20px;text-align:center;">
-      <div style="font-size:1.4rem;margin-bottom:8px;">⚠️</div>
-      <div style="color:var(--bad);font-size:.88rem;font-weight:600;margin-bottom:6px;">Connection error</div>
-      <p style="color:var(--muted);font-size:.76rem;line-height:1.5;">${err.message}</p>
+      <div style="font-size:1.4rem;margin-bottom:8px;">${isTimeout?'⏱️':'⚠️'}</div>
+      <div style="color:var(--bad);font-size:.88rem;font-weight:600;margin-bottom:6px;">${isTimeout?'Timed out':'Connection error'}</div>
+      <p style="color:var(--muted);font-size:.76rem;line-height:1.5;">${errMsg}</p>
       <button class="reset-btn" style="margin:10px auto 0" onclick="${mobile?'closeMobResult()':'resetForm()'}">← Try again</button>
     </div>`;
     if(mobile){
@@ -1560,22 +1768,107 @@ function resetForm(){
   Object.keys(qs).forEach(k=>qs[k]=null);
   document.querySelectorAll('select,input').forEach(el=>el.classList.remove('filled','err','warn-field'));
   document.querySelectorAll('.errmsg').forEach(el=>el.classList.remove('on','warn-msg'));
+  // Reset all ks-dropdowns
+  _ksMap.forEach((wrap,sel)=>{
+    const trig=wrap.querySelector('.ks-trigger');
+    _ksTriggerUpdate(sel,trig);
+    trig?.classList.remove('ks-err');
+    wrap.querySelectorAll('.ks-opt').forEach(o=>o.classList.remove('ks-selected'));
+  });
+  ksRefresh(g('model')); // reset model options too
   showState('placeholder');
   closeMobResult();
   updateReadiness();
   g('formCard').scrollIntoView({behavior:'smooth'});
 }
 
-/* ── SHARE ──────────────────────────────────────────────── */
-function shareResult(){
-  if(navigator.share){navigator.share({title:'KamSayara',url:location.href}).catch(()=>{});}
-  else{navigator.clipboard?.writeText(location.href).then(()=>alert('Link copied!')).catch(()=>{});}
+/* ── COPY LINK ───────────────────────────────────────────── */
+function copyLink(){
+  navigator.clipboard?.writeText(location.href)
+    .then(()=>{ const t=document.createElement('div');
+      t.textContent='Link copied!';
+      Object.assign(t.style,{position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',
+        background:'#222',color:'#fff',padding:'8px 18px',borderRadius:'99px',fontSize:'.75rem',
+        zIndex:'9999',fontFamily:'Exo 2,sans-serif',boxShadow:'0 4px 16px rgba(0,0,0,0.3)'});
+      document.body.appendChild(t);setTimeout(()=>t.remove(),2000);
+    }).catch(()=>alert('Copy: '+location.href));
+}
+
+/* ── PRINT / PDF ─────────────────────────────────────────── */
+let _lastValuationData=null; // stored when result is built
+
+function printValuation(){
+  if(!_lastValuationData){window.print();return;}
+  const d=_lastValuationData;
+  const now=new Date();
+  const ts=now.toLocaleString('en-AE',{dateStyle:'long',timeStyle:'short'});
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>KamSayara Valuation — ${d.carName}</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:Arial,sans-serif;font-size:13px;color:#1a1610;padding:32px;max-width:720px;margin:0 auto;}
+    h1{font-size:20px;color:#008577;margin-bottom:4px;}
+    .sub{font-size:11px;color:#888;margin-bottom:24px;}
+    .section{margin-bottom:20px;}
+    .section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#008577;border-bottom:1px solid #e4d9c6;padding-bottom:4px;margin-bottom:10px;}
+    .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0ebe0;}
+    .row:last-child{border-bottom:none;}
+    .lbl{color:#888;font-size:12px;}
+    .val{font-weight:600;font-size:12px;}
+    .price-big{font-size:28px;font-weight:700;color:#008577;margin:8px 0;}
+    .badge{display:inline-block;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;}
+    .good{background:#e8f5f0;color:#1a8c6b;border:1px solid #b8ddd2;}
+    .warn{background:#fef6e8;color:#b8780a;border:1px solid #f0d89a;}
+    .bad{background:#fdecea;color:#c0392b;border:1px solid #f5c0ba;}
+    .factors{margin-top:8px;}
+    .factor{padding:3px 0;color:#4a4030;font-size:12px;}
+    .factor::before{content:"› ";color:#008577;font-weight:700;}
+    .footer{margin-top:32px;font-size:10px;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:12px;}
+    @media print{body{padding:16px;}}
+  </style></head><body>
+  <h1>KamSayara — UAE Car Valuation</h1>
+  <div class="sub">Generated: ${ts} · kamsayara.mbit0010.workers.dev</div>
+
+  <div class="section">
+    <div class="section-title">Vehicle Details</div>
+    ${d.inputs.map(r=>`<div class="row"><span class="lbl">${r[0]}</span><span class="val">${r[1]}</span></div>`).join('')}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Market Valuation</div>
+    <div class="price-big">AED ${d.avg.toLocaleString()}</div>
+    <div class="row"><span class="lbl">Market Range</span><span class="val">AED ${d.low.toLocaleString()} – AED ${d.high.toLocaleString()}</span></div>
+    <div class="row"><span class="lbl">Comparables Found</span><span class="val">${d.comp} live UAE listings</span></div>
+    ${d.askingPrice?`<div class="row"><span class="lbl">Asking Price</span><span class="val">AED ${d.askingPrice.toLocaleString()}</span></div>`:''}
+  </div>
+
+  ${d.ai?`<div class="section">
+    <div class="section-title">AI Analysis</div>
+    <div style="margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+      <span class="badge ${d.aiCls}">${d.ai.deal_rating}</span>
+      ${d.ai.confidence?`<span style="font-size:11px;color:#888;">${d.ai.confidence} confidence</span>`:''}
+    </div>
+    ${d.ai.summary?`<p style="margin-bottom:8px;font-weight:600;color:#1a1610;font-size:13px;">${d.ai.summary}</p>`:''}
+    ${d.ai.explanation?`<p style="margin-bottom:10px;line-height:1.6;color:#4a4030;font-size:12px;">${d.ai.explanation}</p>`:''}
+    ${d.ai.key_factors?.length?`<div class="factors">${d.ai.key_factors.map(f=>`<div class="factor">${f}</div>`).join('')}</div>`:''}
+    ${d.ai.advice?`<div style="margin-top:10px;padding:8px 12px;background:#f0faf7;border-left:3px solid #008577;border-radius:4px;"><span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#008577;">Market insight</span><p style="margin-top:4px;font-size:12px;color:#4a4030;line-height:1.5;">${d.ai.advice}</p></div>`:''}
+  </div>`:''}
+
+  <div class="footer">This valuation is a market estimate based on live UAE listings. Not a guaranteed sale or purchase price.<br>KamSayara · UAE Used Car Valuation · ${ts}</div>
+  </body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(),500);
 }
 
 /* ── SCROLL TO FORM ─────────────────────────────────────── */
 function scrollToForm(){
   g('formCard').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>g('brand').focus(),420);
+  setTimeout(()=>{
+    const brandWrap=_ksMap.get(g('brand'));
+    const trig=brandWrap?.querySelector('.ks-trigger');
+    (trig||g('brand')).focus();
+  },420);
 }
 
 /* ── STICKY NAV ─────────────────────────────────────────── */
@@ -1583,30 +1876,169 @@ new IntersectionObserver(([e])=>{
   g('stickyNav').classList.toggle('on',!e.isIntersecting);
 },{threshold:0}).observe(g('heroTop'));
 
-/* ── SELECT: FORCE DROPDOWN DOWNWARD ON ALL DEVICES ─────── */
-document.querySelectorAll('select').forEach(sel=>{
-  sel.addEventListener('mousedown',handleSelectOpen);
-  sel.addEventListener('touchstart',handleSelectOpen,{passive:true});
-  sel.addEventListener('change',()=>markFilled(sel));
-});
+/* ── CUSTOM SEARCHABLE DROPDOWN SYSTEM ───────────────────── */
+const _ksMap=new Map(); // select el → ks-wrap el
 
-function handleSelectOpen(e){
-  const sel=e.currentTarget;
-  const rect=sel.getBoundingClientRect();
+function initKsDropdowns(){
+  document.querySelectorAll('select').forEach(sel=>{
+    // Hide native select
+    sel.classList.add('ks-hidden');
+    // Build custom dropdown right after the select
+    const wrap=document.createElement('div');
+    wrap.className='ks-wrap';
+
+    // Trigger button
+    const trig=document.createElement('div');
+    trig.className='ks-trigger';
+    trig.setAttribute('tabindex','0');
+    trig.setAttribute('role','combobox');
+    trig.setAttribute('aria-expanded','false');
+    wrap.appendChild(trig);
+
+    // Panel
+    const panel=document.createElement('div');
+    panel.className='ks-panel';
+    wrap.appendChild(panel);
+
+    // Search input
+    const srch=document.createElement('input');
+    srch.type='text';srch.className='ks-search';srch.placeholder='Type to search…';
+    srch.setAttribute('autocomplete','off');
+    panel.appendChild(srch);
+
+    // Options list
+    const list=document.createElement('div');
+    list.className='ks-list';
+    panel.appendChild(list);
+
+    // Insert after hidden select
+    sel.parentNode.insertBefore(wrap,sel.nextSibling);
+    _ksMap.set(sel,wrap);
+
+    // Populate options
+    _ksBuildOptions(sel,wrap);
+    _ksTriggerUpdate(sel,trig);
+
+    // Trigger click
+    trig.addEventListener('click',e=>{
+      e.stopPropagation();
+      const isOpen=wrap.classList.contains('open');
+      _ksCloseAll();
+      if(!isOpen)_ksOpen(wrap,sel,srch);
+    });
+    trig.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();trig.click();}
+      if(e.key==='Escape')_ksClose(wrap);
+      if(e.key==='ArrowDown'){e.preventDefault();_ksOpen(wrap,sel,srch);}
+    });
+
+    // Search filter
+    srch.addEventListener('input',()=>{
+      const q=srch.value.trim().toLowerCase();
+      let anyVisible=false;
+      list.querySelectorAll('.ks-opt').forEach(opt=>{
+        const show=!q||opt.textContent.toLowerCase().includes(q);
+        opt.style.display=show?'':'none';
+        if(show)anyVisible=true;
+      });
+      // Empty state
+      let empty=list.querySelector('.ks-empty');
+      if(!anyVisible){
+        if(!empty){empty=document.createElement('div');empty.className='ks-empty';empty.textContent='No results';list.appendChild(empty);}
+      }else{
+        empty?.remove();
+      }
+    });
+    srch.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){_ksClose(wrap);trig.focus();}
+      if(e.key==='Enter'){
+        const first=list.querySelector('.ks-opt:not([style*="display:none"])');
+        if(first)first.click();
+      }
+    });
+  });
+
+  // Close all on outside click
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.ks-wrap'))_ksCloseAll();
+  });
+}
+
+function _ksBuildOptions(sel,wrap){
+  const list=wrap.querySelector('.ks-list');
+  list.innerHTML='';
+  [...sel.options].forEach(opt=>{
+    if(!opt.value)return; // skip blank placeholder
+    const div=document.createElement('div');
+    div.className='ks-opt';
+    div.textContent=opt.textContent;
+    div.dataset.value=opt.value;
+    if(sel.value&&sel.value===opt.value)div.classList.add('ks-selected');
+    div.addEventListener('click',()=>{
+      sel.value=opt.value;
+      const trig=wrap.querySelector('.ks-trigger');
+      _ksTriggerUpdate(sel,trig);
+      list.querySelectorAll('.ks-opt').forEach(o=>o.classList.remove('ks-selected'));
+      div.classList.add('ks-selected');
+      _ksClose(wrap);
+      trig.focus();
+      markFilled(sel);
+      // Fire native change → triggers onchange handlers (populateModels, onModelChange, etc.)
+      sel.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+    list.appendChild(div);
+  });
+}
+
+function ksRefresh(sel){
+  const wrap=_ksMap.get(sel);
+  if(!wrap)return;
+  _ksBuildOptions(sel,wrap);
+  _ksTriggerUpdate(sel,wrap.querySelector('.ks-trigger'));
+}
+
+function ksSync(sel){
+  const wrap=_ksMap.get(sel);
+  if(!wrap)return;
+  const trig=wrap.querySelector('.ks-trigger');
+  _ksTriggerUpdate(sel,trig);
+  wrap.querySelectorAll('.ks-opt').forEach(o=>{
+    o.classList.toggle('ks-selected',o.dataset.value===sel.value);
+  });
+}
+
+function _ksTriggerUpdate(sel,trig){
+  if(!trig)return;
+  const selOpt=sel.options[sel.selectedIndex];
+  const hasVal=!!sel.value;
+  trig.textContent=hasVal?selOpt.textContent:(sel.options[0]?.textContent||'');
+  trig.classList.toggle('ks-filled',hasVal);
+  trig.setAttribute('aria-expanded','false');
+}
+
+function _ksOpen(wrap,sel,srch){
+  wrap.classList.add('open');
+  wrap.querySelector('.ks-trigger')?.setAttribute('aria-expanded','true');
+  if(srch){srch.value='';srch.dispatchEvent(new Event('input'));}
+  // Scroll page so panel opens downward
+  const rect=wrap.getBoundingClientRect();
   const viewH=window.innerHeight;
-  const isTouchDevice=('ontouchstart' in window)||navigator.maxTouchPoints>0;
-  /* Mobile/tablet need more space — native popup is taller */
-  const spaceNeeded=isTouchDevice?260:220;
   const spaceBelow=viewH-rect.bottom;
-
+  const spaceNeeded=300;
   if(spaceBelow<spaceNeeded){
-    /* Use 'instant' so scroll completes synchronously before
-       the browser renders the native dropdown popup.
-       'smooth' is async — the popup opens before scroll finishes
-       on Safari iOS and tablet WebKit, causing upward opening. */
-    const target=window.scrollY+(rect.top-(viewH*0.28));
+    const target=window.scrollY+(rect.top-(viewH*0.22));
     window.scrollTo({top:Math.max(0,target),behavior:'instant'});
   }
+  setTimeout(()=>srch?.focus(),60);
+}
+
+function _ksClose(wrap){
+  wrap.classList.remove('open');
+  wrap.querySelector('.ks-trigger')?.setAttribute('aria-expanded','false');
+}
+
+function _ksCloseAll(){
+  document.querySelectorAll('.ks-wrap.open').forEach(w=>_ksClose(w));
 }
 
 /* ── ENTER KEY ──────────────────────────────────────────── */
@@ -1651,7 +2083,9 @@ g('btnCheck').addEventListener('click',()=>{
 })();
 
 /* ── BOOT ───────────────────────────────────────────────── */
-initBrands();initYears();updateReadiness();
+initBrands();initYears();
+initKsDropdowns(); // must run after selects are populated
+updateReadiness();
 initRestoreBar();
 initValuationCounter();
 </script>
