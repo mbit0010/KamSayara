@@ -855,14 +855,15 @@
       border-radius:var(--r-md);
       box-shadow:0 10px 32px rgba(0,0,0,0.13),0 2px 8px rgba(0,0,0,0.06);
       z-index:600;display:flex;flex-direction:column;
-      max-height:260px;overflow:hidden;
+      max-height:300px;          /* panel is the ONLY height cap */
+      overflow:hidden;           /* clips the flex children to 300px */
       visibility:hidden;opacity:0;pointer-events:none;
       transform:translateY(-5px);
       transition:opacity .16s var(--ease),transform .16s var(--ease),visibility .16s;
     }
     .ks-wrap.open .ks-panel{visibility:visible;opacity:1;pointer-events:auto;transform:translateY(0);}
 
-    /* Inline search — no icon, no count, no box */
+    /* Inline search — flush at top, no wrapper box */
     .ks-search-row{flex-shrink:0;}
     .ks-search-icon{display:none;}
     .ks-count{display:none;}
@@ -877,9 +878,10 @@
     .ks-search::placeholder{color:var(--muted);}
     .ks-search:focus{background:var(--white);border-bottom-color:var(--accent);}
 
-    /* Options list — always-visible scrollbar */
+    /* Options list — fills panel space, scrolls within it */
     .ks-list{
-      overflow-y:scroll;flex:1;max-height:200px;
+      flex:1;                    /* fills remaining panel height */
+      overflow-y:scroll;         /* always-visible scrollbar */
       -webkit-overflow-scrolling:touch;
       scrollbar-width:thin;scrollbar-color:rgba(0,133,119,0.35) var(--surface-2);
     }
@@ -2168,9 +2170,12 @@ function _ksOpenPanel(wrap,sel,srch,list){
   wrap.querySelector('.ks-trigger').setAttribute('aria-expanded','true');
   srch.value='';
   _ksDrawList(sel,list,'');
+  /* Ensure panel opens downward — scroll page if not enough room below */
   const rect=wrap.getBoundingClientRect();
-  if(window.innerHeight-rect.bottom<300){
-    window.scrollTo({top:window.scrollY+(rect.top-(window.innerHeight*0.22)),behavior:'instant'});
+  const panelH=320; /* panel max-height + search + buffer */
+  if(window.innerHeight-rect.bottom<panelH){
+    const target=window.scrollY+(rect.top-(window.innerHeight*0.18));
+    window.scrollTo({top:Math.max(0,target),behavior:'instant'});
   }
   setTimeout(()=>srch.focus(),60);
 }
