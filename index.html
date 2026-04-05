@@ -454,6 +454,27 @@
     .nxt-arr{color:var(--muted);font-size:.8rem;margin-left:auto;}
 
     .rfooter{font-size:.58rem;color:var(--good);text-align:center;padding:7px 10px;background:var(--good-bg);border-radius:var(--r-sm);border:1px solid var(--good-line);margin-top:8px;margin-left:auto;margin-right:auto;width:100%;}
+
+    /* ── REFERENCE STAMP — outside scroll, always visible ────── */
+    .ref-stamp{
+      flex-shrink:0;
+      font-family:"Exo 2",sans-serif;font-size:.52rem;
+      color:var(--muted);letter-spacing:.06em;
+      text-align:right;padding:5px 14px;
+      border-top:1px solid var(--border);
+      background:var(--surface);
+      border-radius:0 0 var(--r-xl) var(--r-xl);
+      display:none;
+    }
+    .ref-stamp.on{display:block;}
+    /* Mobile sheet — ref sits in the handle bar */
+    .mob-ref{
+      font-family:"Exo 2",sans-serif;font-size:.5rem;
+      color:var(--muted);letter-spacing:.05em;
+      flex:1;text-align:center;padding:0 4px;
+      display:none;
+    }
+    .mob-ref.on{display:block;}
     .reset-btn{
       display:flex;align-items:center;justify-content:center;gap:4px;
       font-family:"Exo 2",sans-serif;font-size:.6rem;font-weight:700;
@@ -654,18 +675,23 @@
     .why-chevron{transition:transform .28s var(--ease);font-size:.8rem;}
     .why-toggle.open .why-chevron{transform:rotate(180deg);}
     .why-body{
-      display:none;padding:0 12px 12px;
+      display:none;padding:10px 12px 12px;
       animation:eIn .22s var(--ease);
     }
     .why-toggle.open .why-body{display:block;}
-    .why-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:.7rem;}
-    .why-row:last-child{border-bottom:none;}
-    .why-lbl{color:var(--ink-soft);}
-    .why-val{font-weight:700;font-family:"Exo 2",sans-serif;}
-    .why-val.pos{color:var(--good);}
-    .why-val.neg{color:var(--bad);}
-    .why-val.neu{color:var(--muted);}
-    .why-total{margin-top:8px;padding:8px;background:var(--white);border-radius:var(--r-sm);border:1px solid var(--border);font-size:.7rem;color:var(--ink-soft);text-align:center;line-height:1.4;}
+    .why-context{
+      font-size:.72rem;color:var(--ink-soft);line-height:1.6;
+      margin-bottom:8px;
+    }
+    .why-context strong{color:var(--ink);}
+    .why-factors{display:flex;flex-direction:column;gap:3px;}
+    .why-factor-item{
+      display:flex;align-items:flex-start;gap:6px;
+      font-size:.68rem;color:var(--ink-soft);line-height:1.4;
+    }
+    .why-factor-item::before{
+      content:'›';color:var(--accent);font-weight:700;flex-shrink:0;
+    }
 
     /* ── LOADING FACTS (replaces fake interim estimate) ─────── */
     .load-fact{
@@ -1249,6 +1275,8 @@
         </div>
         <div class="rcontent" id="rcontent" style="display:none"></div>
       </div>
+      <!-- Ref stamp — OUTSIDE scroll area, always visible at bottom of panel -->
+      <div class="ref-stamp" id="resultRef"></div>
     </div>
 
   </div>
@@ -1262,6 +1290,7 @@
 <div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
   <div class="mob-toast-handle">
     <span class="mob-toast-title">Valuation Result</span>
+    <span class="mob-ref" id="mobRef"></span>
     <button class="mob-toast-close" onclick="closeMobResult()" aria-label="Close">✕</button>
   </div>
   <div class="mob-toast-body" id="mobBody">
@@ -1611,31 +1640,34 @@ function animateCountUp(el,target,duration=800){
 
 /* ── WHY THIS PRICE BUILD ────────────────────────────────── */
 function buildWhySection(r,brand,model,year,mileage){
-  const spec=g('spec').value||'GCC';
-  const specMap={GCC:0,American:-12,European:-5,Japanese:2,Korean:2,Other:-8};
-  const specPct=specMap[spec]??0;
-  const mi=parseInt(mileage)||0;
-  let mileagePct=0;
-  if(mi>150000)mileagePct=-8;
-  else if(mi<30000)mileagePct=2;
-  const accidentPct=qs.accident==='yes'?-15:0;
-  const ownerPct=qs.singleOwner==='yes'?3:0;
-  const fshPct=qs.fsh==='yes'?4:0;
-  const warrantyPct=qs.warranty==='yes'?2:0;
-  const totalPct=specPct+mileagePct+accidentPct+ownerPct+fshPct+warrantyPct;
-  const fmtPct=v=>v===0?'<span class="why-val neu">±0%</span>':`<span class="why-val ${v>0?'pos':'neg'}">${v>0?'+':''}${v}%</span>`;
+  const low=r.lowPrice||0;
+  const high=r.highPrice||0;
+  const avg=r.averagePrice||0;
+  const comp=r.comparablesFound||0;
+  const ai=r.ai||null;
+
+  // Build context sentence from real data
+  const carName=`${year} ${brand}${model?' '+model:''}`;
+  const rangeText=low&&high
+    ?`Similar ${carName} listings in UAE ranged from <strong>AED ${low.toLocaleString()}</strong> to <strong>AED ${high.toLocaleString()}</strong>.`
+    :'';
+  const posText=avg
+    ?`This car is positioned at <strong>AED ${avg.toLocaleString()}</strong>${comp?` based on ${comp} comparable listings`:''}${ai?.explanation?' — '+ai.explanation:''}.`
+    :'';
+
+  // Key factors from Claude (real, not formula)
+  const factors=ai?.key_factors||[];
+  const factorsHtml=factors.length
+    ?`<div class="why-factors">${factors.map(f=>`<div class="why-factor-item">${f}</div>`).join('')}</div>`
+    :'';
+
   return`<div class="why-toggle" id="whyToggle">
     <button class="why-btn" onclick="toggleWhy()" aria-expanded="false">
-      <span>Why this price?</span><span class="why-chevron">▼</span>
+      <span>Market Context</span><span class="why-chevron">▼</span>
     </button>
     <div class="why-body">
-      <div class="why-row"><span class="why-lbl">Spec (${spec})</span>${fmtPct(specPct)}</div>
-      <div class="why-row"><span class="why-lbl">Mileage (${mi.toLocaleString()} km)</span>${fmtPct(mileagePct)}</div>
-      <div class="why-row"><span class="why-lbl">Accident history</span>${fmtPct(accidentPct)}</div>
-      <div class="why-row"><span class="why-lbl">Single owner</span>${fmtPct(ownerPct)}</div>
-      <div class="why-row"><span class="why-lbl">Full service history</span>${fmtPct(fshPct)}</div>
-      <div class="why-row"><span class="why-lbl">Warranty</span>${fmtPct(warrantyPct)}</div>
-      <div class="why-total">Net adjustment from base price: <strong>${totalPct>0?'+':''}${totalPct}%</strong></div>
+      ${rangeText||posText?`<div class="why-context">${rangeText} ${posText}</div>`:''}
+      ${factorsHtml}
     </div>
   </div>`;
 }
@@ -1645,6 +1677,27 @@ function toggleWhy(){
   const open=el.classList.toggle('open');
   const btn=el.querySelector('.why-btn');
   if(btn)btn.setAttribute('aria-expanded',open);
+}
+
+/* ── REFERENCE NUMBER ───────────────────────────────────── */
+function generateRef(){
+  // Sequential counter starting at 11
+  let n=11;
+  try{n=parseInt(localStorage.getItem('ks_ref_n')||'10')+1;}catch{}
+  try{localStorage.setItem('ks_ref_n',n);}catch{}
+
+  const now=new Date();
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dd=String(now.getDate()).padStart(2,'0');
+  const mon=months[now.getMonth()];
+  const yyyy=now.getFullYear();
+
+  return{
+    num:n,
+    label:`Ref. #${n} · ${hh}:${mm} · ${dd}-${mon}-${yyyy}`,
+  };
 }
 
 /* ── BUILD RESULT HTML ──────────────────────────────────── */
@@ -1657,6 +1710,15 @@ function buildResult(r,brand,model,year,mileage,asking){
   const askN=asking?parseInt(asking):null;
   const ai=r.ai||null;
 
+  // Generate unique reference for this valuation
+  const ref=generateRef();
+
+  // Set ref on permanent external elements (outside scroll area)
+  const refEl=g('resultRef');
+  if(refEl){refEl.textContent=ref.label;refEl.classList.add('on');}
+  const mobRefEl=g('mobRef');
+  if(mobRefEl){mobRefEl.textContent=ref.label;mobRefEl.classList.add('on');}
+
   // Store ALL form data for PDF generation
   const qsLabels={
     warranty:   qs.warranty   ==='yes'?'✓ Yes':qs.warranty   ==='no'?'✗ No':null,
@@ -1665,6 +1727,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     accident:   qs.accident   ==='yes'?'✓ Yes':qs.accident   ==='no'?'✗ No':null,
   };
   _lastValuationData={
+    ref:ref.label,
     carName:`${year} ${brand}${model?' '+model:''}`,
     avg,low,high,comp,
     askingPrice:askN,
@@ -1957,6 +2020,11 @@ function resetForm(){
   ksRefresh(g('model')); // reset model options too
   showState('placeholder');
   closeMobResult();
+  // Reset ref stamps
+  const refEl=g('resultRef');
+  if(refEl){refEl.textContent='';refEl.classList.remove('on');}
+  const mobRefEl=g('mobRef');
+  if(mobRefEl){mobRefEl.textContent='';mobRefEl.classList.remove('on');}
   updateReadiness();
   g('formCard').scrollIntoView({behavior:'smooth'});
 }
@@ -2034,7 +2102,7 @@ function printValuation(){
     ${d.ai.advice?`<div style="margin-top:10px;padding:8px 12px;background:#f0faf7;border-left:3px solid #008577;border-radius:4px;"><span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#008577;">Market insight</span><p style="margin-top:4px;font-size:12px;color:#4a4030;line-height:1.5;">${d.ai.advice}</p></div>`:''}
   </div>`:''}
 
-  <div class="footer">This valuation is a market estimate based on live UAE listings. Not a guaranteed sale or purchase price.<br>KamSayara · UAE Used Car Valuation · ${ts}</div>
+  <div class="footer">This valuation is a market estimate based on live UAE listings. Not a guaranteed sale or purchase price.<br>KamSayara · UAE Used Car Valuation · ${ts}<br><strong>${d.ref||''}</strong></div>
   </body></html>`);
   w.document.close();
   setTimeout(()=>w.print(),500);
