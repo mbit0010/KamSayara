@@ -806,31 +806,32 @@
             </datalist>
           </div>
           <div class="ig">
-            <label for="mileage">Mileage (KM) <span class="rq">*</span></label>
-            <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this);checkMileage(this);updateMileageHint(this)" onkeydown="blockNonNumeric(event)" aria-required="true">
+            <label for="mileage">Mileage <span class="rq">*</span></label>
+            <div style="position:relative;display:flex;align-items:center;">
+              <span style="position:absolute;left:.7rem;font-family:'Exo 2',sans-serif;font-size:.8rem;font-weight:700;color:var(--muted);pointer-events:none;z-index:1;line-height:1;">KM</span>
+              <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this)" onkeydown="blockNonNumeric(event)" aria-required="true" style="padding-left:2.8rem;">
+            </div>
             <span class="errmsg" id="err-mileage">Enter mileage</span>
-            <span class="smart-hint" id="hint-mileage"></span>
           </div>
           <div class="ig">
             <label for="spec">Spec</label>
-            <select id="spec" onchange="markFilled(this);updateSpecHint(this)">
-              <option value="GCC" selected>GCC</option>
+            <select id="spec" onchange="markFilled(this)">
+              <option value="">Spec…</option>
+              <option value="GCC">GCC</option>
               <option value="American">American</option>
               <option value="European">European</option>
               <option value="Japanese">Japanese</option>
               <option value="Korean">Korean</option>
               <option value="Other">Other</option>
             </select>
-            <span class="smart-hint" id="hint-spec"></span>
           </div>
           <div class="ig">
             <label for="condition">Condition</label>
-            <select id="condition" onchange="markFilled(this);updateConditionHint(this)">
+            <select id="condition" onchange="markFilled(this)">
               <option value="">Condition…</option>
               <option>Excellent</option><option>Very Good</option>
               <option>Good</option><option>Fair</option><option>Poor</option>
             </select>
-            <span class="smart-hint" id="hint-condition"></span>
           </div>
           <div class="ig">
             <label for="colour">Colour</label>
@@ -1005,25 +1006,6 @@ function guessBody(b,m){
   return'Sedan';
 }
 
-/* ── MILEAGE SANITY CHECK ──────────────────────────────── */
-function checkMileage(el){
-  const mi=parseInt(el.value);
-  const em=document.getElementById('err-mileage');
-  if(!el.value||isNaN(mi)){return;}
-  // Only flag genuinely extreme values as warnings on err-mileage
-  // Smart hints (>150k, <5k) handled separately by updateMileageHint()
-  if(mi<500){
-    el.classList.remove('err');el.classList.add('warn-field');
-    if(em&&!em.classList.contains('on')){em.textContent='Very low — check odometer';em.classList.add('on','warn-msg');}
-  }else if(mi>500000){
-    el.classList.remove('err');el.classList.add('warn-field');
-    if(em&&!em.classList.contains('on')){em.textContent='Exceptionally high mileage';em.classList.add('on','warn-msg');}
-  }else{
-    el.classList.remove('warn-field');
-    if(em&&em.classList.contains('warn-msg')){em.classList.remove('on','warn-msg');}
-  }
-}
-
 /* ── LOCALSTORAGE: SAVE LAST VALUATION ─────────────────── */
 function saveLastValuation(){
   try{
@@ -1134,28 +1116,6 @@ function updateReadiness(){
     hint.classList.remove('ready-hint');
     g('btnCheck').classList.remove('ready');
   }
-}
-
-/* ── SMART HINTS ─────────────────────────────────────────── */
-function updateSpecHint(sel){
-  const h=g('hint-spec');if(!h)return;
-  const v=sel.value;
-  if(v==='American'||v==='Other'){h.textContent='ℹ️ May affect resale value in UAE';h.className='smart-hint warn-hint on';}
-  else{h.className='smart-hint';}
-}
-function updateConditionHint(sel){
-  const h=g('hint-condition');if(!h)return;
-  const v=sel.value;
-  if(v==='Poor'||v==='Fair'){h.textContent='ℹ️ Expect lower market price';h.className='smart-hint warn-hint on';}
-  else{h.className='smart-hint';}
-}
-function updateMileageHint(el){
-  const h=g('hint-mileage');if(!h)return;
-  const mi=parseInt(el.value);
-  if(!el.value||isNaN(mi)){h.className='smart-hint';return;}
-  if(mi>150000){h.textContent='ℹ️ High mileage reduces value';h.className='smart-hint warn-hint on';}
-  else if(mi<5000){h.textContent='ℹ️ Very low — verify odometer';h.className='smart-hint warn-hint on';}
-  else{h.className='smart-hint';}
 }
 
 function g(id){return document.getElementById(id);}
@@ -1387,32 +1347,6 @@ function buildResult(r,brand,model,year,mileage,asking){
   const avg=r.averagePrice||0;
   const askN=asking?parseInt(asking):null;
 
-  // ── Claude AI analysis block ─────────────────────────────
-  const ai=r.ai||null;
-  let aiHtml='';
-  if(ai&&ai.deal_rating){
-    const cls=aiRatingClass(ai.deal_rating);
-    const factors=(ai.key_factors||[]).map(f=>`<div class="ai-factor">${f}</div>`).join('');
-    aiHtml=`
-    <div class="ai-block ${cls}">
-      <div class="ai-rating-row">
-        <span class="ai-rating-badge">${ai.deal_rating}</span>
-        ${ai.confidence?`<span class="ai-conf-badge">Confidence: ${ai.confidence}</span>`:''}
-      </div>
-      ${ai.summary?`<div class="ai-summary">${ai.summary}</div>`:''}
-      ${ai.explanation?`<div class="ai-explanation">${ai.explanation}</div>`:''}
-      ${factors?`<div class="ai-factors-lbl">Key Factors</div><div class="ai-factors">${factors}</div>`:''}
-      ${ai.advice?`<div class="ai-advice"><div class="ai-advice-lbl">Recommendation</div>${ai.advice}</div>`:''}
-      <div class="ai-powered-note">✦ Analysis by Claude AI</div>
-    </div>`;
-  } else {
-    // Fallback: local verdict if AI unavailable
-    const deal=dealVerdict(askN,avg);
-    if(deal){
-      aiHtml=`<div class="dsig ${deal.cls}"><div class="ds-lbl">Verdict</div><div class="ds-ver">${deal.label} — ${deal.ver}</div><div class="ds-act">${deal.act}</div></div>`;
-    }
-  }
-
   // ── Asking vs market comparison ──────────────────────────
   let vsHtml='';
   if(askN&&avg){
@@ -1420,6 +1354,35 @@ function buildResult(r,brand,model,year,mileage,asking){
     if(diff>0)vsHtml=`<div class="p-vs over">Asking AED ${Math.abs(diff).toLocaleString()} (+${pct}%) over market</div>`;
     else if(diff<0)vsHtml=`<div class="p-vs under">Asking AED ${Math.abs(diff).toLocaleString()} (${pct}%) below market</div>`;
     else vsHtml=`<div class="p-vs fair">Asking matches market exactly</div>`;
+  }
+
+  // ── Claude AI analysis block ─────────────────────────────
+  const ai=r.ai||null;
+  let aiHtml='';
+  if(ai&&ai.deal_rating){
+    const cls=aiRatingClass(ai.deal_rating);
+    // Max 3 factors, one line each
+    const factors=(ai.key_factors||[]).slice(0,3).map(f=>`<div class="ai-factor">${f}</div>`).join('');
+    // Trim explanation to first sentence only
+    const shortExp=ai.explanation?ai.explanation.split(/\.\s+/)[0]+'.':'';
+    // Trim advice to first sentence only
+    const shortAdv=ai.advice?ai.advice.split(/\.\s+/)[0]+'.':'';
+    aiHtml=`
+    <div class="ai-block ${cls}">
+      <div class="ai-rating-row">
+        <span class="ai-rating-badge">${ai.deal_rating}</span>
+        ${ai.confidence?`<span class="ai-conf-badge">${ai.confidence} confidence</span>`:''}
+      </div>
+      ${shortExp?`<div class="ai-explanation">${shortExp}</div>`:''}
+      ${factors?`<div class="ai-factors">${factors}</div>`:''}
+      ${shortAdv?`<div class="ai-advice"><div class="ai-advice-lbl">Tip</div>${shortAdv}</div>`:''}
+      <div class="ai-powered-note">✦ Claude AI</div>
+    </div>`;
+  } else {
+    const deal=dealVerdict(askN,avg);
+    if(deal){
+      aiHtml=`<div class="dsig ${deal.cls}"><div class="ds-lbl">Verdict</div><div class="ds-ver">${deal.label} — ${deal.ver}</div><div class="ds-act">${deal.act}</div></div>`;
+    }
   }
 
   const tags=[
@@ -1431,11 +1394,9 @@ function buildResult(r,brand,model,year,mileage,asking){
     qs.fsh==='yes'?'FSH':null,
   ].filter(Boolean);
 
-  // Use AI deal class for next-step links if available
   const dealCls=ai?aiRatingClass(ai.deal_rating):(dealVerdict(askN,avg)||{cls:'neu'}).cls;
 
   return `
-    ${aiHtml}
     <div class="pblock">
       <div class="p-lbl">UAE Market Value</div>
       <div class="p-main" id="priceMain">AED 0</div>
@@ -1451,6 +1412,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         ${qs.accident==='yes'?'<span class="pbadge" style="color:var(--bad);border-color:var(--bad-line)">⚠ Accident</span>':''}
       </div>
     </div>
+    ${aiHtml}
     ${buildWhySection(r,brand,model,year,mileage)}
     <div class="tags">${tags.map(t=>`<span class="tag n">${t}</span>`).join('')}${qs.accident==='yes'?'<span class="tag bad">Accident history</span>':''}</div>
     <div class="nxt">
@@ -1592,7 +1554,7 @@ function resetForm(){
     const el=g(id);if(el){el.value='';markFilled(el);}
   });
   g('model').innerHTML='<option value="">Select model…</option>';
-  g('spec').value='GCC';
+  g('spec').value='';
   g('condition').value='';
   document.querySelectorAll('.qb.on').forEach(b=>b.classList.remove('on'));
   Object.keys(qs).forEach(k=>qs[k]=null);
