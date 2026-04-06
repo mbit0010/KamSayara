@@ -2646,10 +2646,81 @@
     /* ── Btn-go — overridden by unified block below ── */
     .btn-go { white-space: nowrap; }
 
-    /* ── Ad placeholder — flex column centred ── */
-    .ad-placeholder {
-      display: none; /* hidden by default; JS shows it during loading */
+    /* ── Ad placeholder ── */
+    .ad-placeholder { display: none; }
+
+    /* ══════════════════════════════════════════════════════════
+       NEW ENRICHED OUTPUT SECTIONS
+    ══════════════════════════════════════════════════════════ */
+
+    /* Buddy verdict banner */
+    .rpt-verdict {
+      padding: 18px 18px 16px;
+      border-bottom: 1px solid #eef0f4;
     }
+    .rpt-verdict-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 99px;
+      font-size: 0.72rem; font-weight: 900; letter-spacing: 0.10em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .rpt-verdict-badge.strong-buy { background: #D1FAE5; color: #065F46; border: 1.5px solid #6EE7B7; }
+    .rpt-verdict-badge.buy        { background: #DBEAFE; color: #1E40AF; border: 1.5px solid #93C5FD; }
+    .rpt-verdict-badge.negotiate  { background: #FEF3C7; color: #92400E; border: 1.5px solid #FCD34D; }
+    .rpt-verdict-badge.caution    { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; }
+    .rpt-verdict-badge.pass       { background: #F3F4F6; color: #374151; border: 1.5px solid #D1D5DB; }
+    .rpt-buddy-para {
+      font-size: 0.78rem; color: #334155; line-height: 1.75;
+      background: #F8FAFC; border-left: 3px solid #D4AF37;
+      padding: 12px 14px; border-radius: 0 8px 8px 0;
+    }
+
+    /* Flags section */
+    .rpt-flags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    @media(max-width:480px){ .rpt-flags-grid { grid-template-columns: 1fr; } }
+    .rpt-flag {
+      display: flex; align-items: flex-start; gap: 7px;
+      font-size: 0.70rem; line-height: 1.5; color: #334155;
+      padding: 6px 8px; border-radius: 7px;
+    }
+    .rpt-flag.green { background: #F0FDF4; border: 1px solid #BBF7D0; }
+    .rpt-flag.red   { background: #FFF1F2; border: 1px solid #FECDD3; }
+    .rpt-flag-dot   { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .rpt-flag.green .rpt-flag-dot { background: #22C55E; }
+    .rpt-flag.red   .rpt-flag-dot { background: #EF4444; }
+
+    /* Negotiation section */
+    .rpt-nego-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    @media(max-width:480px){ .rpt-nego-grid { grid-template-columns: 1fr 1fr; } }
+    .rpt-nego-card {
+      background: #F8FAFC; border: 1px solid #E2E8F0;
+      border-radius: 10px; padding: 10px 12px; text-align: center;
+    }
+    .rpt-nego-card.highlight { background: #FFF8E1; border-color: #FCD34D; }
+    .rpt-nego-lbl { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748B; margin-bottom: 4px; }
+    .rpt-nego-val { font-family: "Orbitron", sans-serif; font-size: 0.92rem; font-weight: 700; color: #1A2B4C; }
+    .rpt-nego-val.good { color: #16A34A; }
+    .rpt-nego-val.warn { color: #D97706; }
+    .rpt-nego-tip { font-size: 0.68rem; color: #475569; line-height: 1.55; margin-top: 8px; padding-top: 8px; border-top: 1px solid #E2E8F0; }
+
+    /* Ownership cost section */
+    .rpt-cost-table { width: 100%; border-collapse: collapse; }
+    .rpt-cost-table tr { border-bottom: 1px solid #F1F5F9; }
+    .rpt-cost-table tr:last-child { border-bottom: 2px solid #1A2B4C; font-weight: 800; }
+    .rpt-cost-table td { padding: 6px 0; font-size: 0.72rem; }
+    .rpt-cost-table td:last-child { text-align: right; font-weight: 700; color: #1A2B4C; }
+    .rpt-cost-table tr.total td { font-size: 0.76rem; color: #1A2B4C; padding-top: 8px; }
+    .rpt-cost-note { font-size: 0.62rem; color: #94A3B8; margin-top: 6px; line-height: 1.5; }
+
+    /* Depreciation projection table */
+    .rpt-depr-table { width: 100%; border-collapse: collapse; }
+    .rpt-depr-table th { font-size: 0.58rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #64748B; padding: 0 0 7px; text-align: left; border-bottom: 1px solid #E2E8F0; }
+    .rpt-depr-table th:last-child { text-align: right; }
+    .rpt-depr-table td { padding: 7px 0; font-size: 0.72rem; border-bottom: 1px solid #F1F5F9; color: #334155; }
+    .rpt-depr-table td:last-child { text-align: right; font-weight: 700; color: #C0392B; }
+    .rpt-depr-table tr:last-child td { border-bottom: none; }
+    .rpt-depr-bar-wrap { height: 5px; background: #E2E8F0; border-radius: 99px; overflow: hidden; margin-top: 3px; }
+    .rpt-depr-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#1A2B4C,#D4AF37); }
 
     /* ══════════════════════════════════════════════════════════
        VALUATION REPORT V2 — KamSayara Premium Report Card
@@ -3115,15 +3186,15 @@
           </div>
 
           <div class="ig more-field">
-            <label for="service">Service</label>
+            <label for="service">Service History</label>
             <select id="service" onchange="markFilled(this)">
               <option value="">Service…</option>
-              <option>Agency</option><option>Non-Agency</option>
-              <option>Mixed</option><option>Unknown</option>
+              <option>Full Agency</option><option>Agency</option>
+              <option>Non-Agency</option><option>Mixed</option><option>Unknown</option>
             </select>
           </div>
 
-          <!-- Asking Price — same row as Service -->
+          <!-- Asking Price -->
           <div class="ig asking-field-wrap more-field">
             <label for="asking">Asking Price</label>
             <div class="prefix-wrap">
@@ -3131,6 +3202,75 @@
               <input type="number" id="asking" placeholder="e.g. 75000" min="0" inputmode="numeric" oninput="markFilled(this)" onkeydown="blockNonNumeric(event)">
             </div>
           </div>
+
+          <!-- NEW: Purpose -->
+          <div class="ig more-field">
+            <label for="purpose">I Am</label>
+            <select id="purpose" onchange="markFilled(this)">
+              <option value="">Purpose…</option>
+              <option value="buying">Buying</option>
+              <option value="selling">Selling</option>
+              <option value="researching">Researching</option>
+            </select>
+          </div>
+
+          <!-- NEW: Accident History -->
+          <div class="ig more-field">
+            <label for="accidentSel">Accident History</label>
+            <select id="accidentSel" onchange="markFilled(this)">
+              <option value="">Accident…</option>
+              <option value="none">None / Clean</option>
+              <option value="minor">Minor (repaired)</option>
+              <option value="major">Major damage</option>
+            </select>
+          </div>
+
+          <!-- NEW: Ownership -->
+          <div class="ig more-field">
+            <label for="owners">No. of Owners</label>
+            <select id="owners" onchange="markFilled(this)">
+              <option value="">Owners…</option>
+              <option value="1">1st Owner</option>
+              <option value="2">2nd Owner</option>
+              <option value="3">3rd Owner</option>
+              <option value="4+">4+ Owners</option>
+            </select>
+          </div>
+
+          <!-- NEW: Warranty -->
+          <div class="ig more-field">
+            <label for="warrantySel">Warranty</label>
+            <select id="warrantySel" onchange="markFilled(this)">
+              <option value="">Warranty…</option>
+              <option value="active">Active (manufacturer)</option>
+              <option value="extended">Extended warranty</option>
+              <option value="expired">Expired</option>
+              <option value="none">No Warranty</option>
+            </select>
+          </div>
+
+          <!-- NEW: Emirate -->
+          <div class="ig more-field">
+            <label for="emirate">Emirate</label>
+            <select id="emirate" onchange="markFilled(this)">
+              <option value="">Emirate…</option>
+              <option>Dubai</option><option>Abu Dhabi</option>
+              <option>Sharjah</option><option>Ajman</option>
+              <option>RAK</option><option>Fujairah</option><option>UAQ</option>
+            </select>
+          </div>
+
+          <!-- NEW: Finance/Cash -->
+          <div class="ig more-field">
+            <label for="finance">Payment</label>
+            <select id="finance" onchange="markFilled(this)">
+              <option value="">Payment…</option>
+              <option value="cash">Cash</option>
+              <option value="finance">Bank Finance</option>
+              <option value="loan-transfer">Loan Transfer</option>
+            </select>
+          </div>
+
         </div><!-- /fg -->
 
         <!-- Additional details: 4 items, single row, ✓ ✗ buttons -->
@@ -3796,64 +3936,175 @@ function generateRef(){
   };
 }
 
-/* ── CONDITION ADJUSTMENTS HELPER ───────────────────────── */
+/* ── HELPERS ─────────────────────────────────────────────── */
+function g(id){return document.getElementById(id);}
+
 function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPrice){
   const adj=[];
-  const currentYear=new Date().getFullYear();
-  const age=Math.max(1,currentYear-carYear);
-  const expectedKm=age*18000;
-
-  // Spec
-  if(specVal==='GCC'||specVal==='GCC Spec'){
-    adj.push({name:'GCC Specification',amount:Math.round(avgPrice*0.04/500)*500,positive:true});
-  } else if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec'){
-    adj.push({name:'Non-GCC Specification',amount:Math.round(avgPrice*0.06/500)*500,positive:false});
-  }
-
-  // Mileage
+  const cy=new Date().getFullYear();
+  const age=Math.max(1,cy-carYear);
+  const expected=age*18000;
+  const acc=g('accidentSel')?.value||'none';
+  const own=g('owners')?.value||'';
+  const war=g('warrantySel')?.value||'';
+  const svc=g('service')?.value||'';
+  const r=n=>Math.round(n/500)*500;
+  if(specVal==='GCC'||specVal==='GCC Spec') adj.push({name:'GCC Specification',amount:r(avgPrice*.04),positive:true});
+  else if(specVal&&specVal!=='GCC') adj.push({name:'Non-GCC Specification',amount:r(avgPrice*.06),positive:false});
   if(mileageNum>0){
-    if(mileageNum>expectedKm*1.6){
-      const excess=mileageNum-expectedKm;
-      const pen=Math.min(Math.round((excess/10000)*600/500)*500,Math.round(avgPrice*0.18));
-      if(pen>0)adj.push({name:'High Mileage',amount:pen,positive:false});
-    } else if(mileageNum<expectedKm*0.45){
-      adj.push({name:'Low Mileage',amount:Math.round(avgPrice*0.03/500)*500,positive:true});
-    }
+    if(mileageNum>expected*1.6){const p=Math.min(r(((mileageNum-expected)/10000)*600),r(avgPrice*.18));if(p>0)adj.push({name:'High Mileage',amount:p,positive:false});}
+    else if(mileageNum<expected*.5) adj.push({name:'Low Mileage',amount:r(avgPrice*.03),positive:true});
   }
-
-  // Physical condition
-  if(conditionVal==='Excellent'){
-    adj.push({name:'Excellent Condition',amount:Math.round(avgPrice*0.04/500)*500,positive:true});
-  } else if(conditionVal==='Good'){
-    adj.push({name:'Good Physical Condition',amount:Math.round(avgPrice*0.02/500)*500,positive:true});
-  } else if(conditionVal==='Fair'){
-    adj.push({name:'Fair Condition',amount:Math.round(avgPrice*0.03/500)*500,positive:false});
-  } else if(conditionVal==='Poor'){
-    adj.push({name:'Poor Condition',amount:Math.round(avgPrice*0.08/500)*500,positive:false});
-  }
-
-  // Quick-check flags
-  if(qs.fsh==='yes')adj.push({name:'Full Service History',amount:Math.round(avgPrice*0.035/500)*500,positive:true});
-  if(qs.fsh==='no')adj.push({name:'No Service Records',amount:Math.round(avgPrice*0.025/500)*500,positive:false});
-  if(qs.accident==='yes')adj.push({name:'Accident History',amount:Math.round(avgPrice*0.08/500)*500,positive:false});
-  if(qs.singleOwner==='yes')adj.push({name:'Single Owner',amount:Math.round(avgPrice*0.02/500)*500,positive:true});
-  if(qs.warranty==='yes')adj.push({name:'Under Warranty',amount:Math.round(avgPrice*0.025/500)*500,positive:true});
-
-  // Limit to 5 rows max, most impactful first
+  if(conditionVal==='Excellent')     adj.push({name:'Excellent Condition',amount:r(avgPrice*.04),positive:true});
+  else if(conditionVal==='Very Good') adj.push({name:'Very Good Condition',amount:r(avgPrice*.025),positive:true});
+  else if(conditionVal==='Good')      adj.push({name:'Good Condition',amount:r(avgPrice*.015),positive:true});
+  else if(conditionVal==='Fair')      adj.push({name:'Fair Condition',amount:r(avgPrice*.03),positive:false});
+  else if(conditionVal==='Poor')      adj.push({name:'Poor Condition',amount:r(avgPrice*.08),positive:false});
+  if(svc==='Full Agency'||svc==='Agency') adj.push({name:'Agency Service History',amount:r(avgPrice*.035),positive:true});
+  else if(svc==='Non-Agency') adj.push({name:'Non-Agency Service',amount:r(avgPrice*.02),positive:false});
+  if(acc==='minor') adj.push({name:'Minor Accident History',amount:r(avgPrice*.06),positive:false});
+  if(acc==='major') adj.push({name:'Major Accident History',amount:r(avgPrice*.14),positive:false});
+  if(own==='1')     adj.push({name:'Single Owner',amount:r(avgPrice*.025),positive:true});
+  if(own==='3'||own==='4+') adj.push({name:'Multiple Owners',amount:r(avgPrice*.03),positive:false});
+  if(war==='active')   adj.push({name:'Active Warranty',amount:r(avgPrice*.03),positive:true});
+  if(war==='extended') adj.push({name:'Extended Warranty',amount:r(avgPrice*.02),positive:true});
   adj.sort((a,b)=>b.amount-a.amount);
-  return adj.slice(0,5);
+  return adj.slice(0,6);
 }
 
-/* ── DEAL BADGE HELPER ───────────────────────────────────── */
 function getDealBadgeInfo(askN,avg){
   if(!avg)return null;
   if(!askN)return{cls:'neutral',label:'Market Rate'};
   const d=(askN-avg)/avg;
-  if(d<-0.05)return{cls:'good',label:'Good Deal'};
-  if(d<=0.05) return{cls:'good',label:'Fair Price'};
-  if(d<=0.10) return{cls:'warn',label:'Slightly High'};
+  if(d<-.05)return{cls:'good',label:'Good Deal'};
+  if(d<=.05) return{cls:'good',label:'Fair Price'};
+  if(d<=.10) return{cls:'warn',label:'Slightly High'};
   return{cls:'bad',label:'Overpriced'};
 }
+
+function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,carYear,brand,model,specVal,colourVal,serviceVal,ai){
+  const price=askN||avg;
+  const diff=avg>0?(price-avg)/avg:0;
+  const saving=avg>0?Math.round(avg-price):0;
+  const pct=Math.round(Math.abs(diff)*100);
+  const purpose=g('purpose')?.value||'buying';
+  const cy=new Date().getFullYear();
+  const age=Math.max(1,cy-carYear);
+  const expected=age*18000;
+  const mileageLow=mileageNum>0&&mileageNum<expected*.7;
+  const isGCC=specVal==='GCC'||specVal==='GCC Spec';
+  const hasAccident=accidentVal==='minor'||accidentVal==='major';
+  const agency=serviceVal==='Full Agency'||serviceVal==='Agency';
+  const goodColour=['White','Pearl White','Silver','Gray','Black','Midnight Black'].includes(colourVal);
+  let vk,vl;
+  if(purpose==='selling'){
+    if(diff>.06)      {vk='negotiate';vl='↕ Price Down';}
+    else if(diff<-.06){vk='caution';  vl='⚠ Priced Low';}
+    else              {vk='buy';      vl='✓ Well Priced';}
+  } else {
+    if(diff<-.08&&!hasAccident&&conditionVal!=='Poor'){vk='strong-buy';vl='⭐ Strong Buy';}
+    else if(diff<0&&!hasAccident)                     {vk='buy';       vl='✓ Good Buy';}
+    else if(diff<=.08&&!hasAccident)                  {vk='negotiate'; vl='↕ Negotiate';}
+    else if(hasAccident||(diff>.08&&diff<.20))         {vk='caution';   vl='⚠ Caution';}
+    else                                               {vk='pass';      vl='✗ Pass';}
+  }
+  const cn=`${carYear} ${brand}${model?' '+model:''}`;
+  let pc=askN
+    ?(saving>0?`At AED ${askN.toLocaleString()}, this ${cn} is AED ${saving.toLocaleString()} (${pct}%) below fair market value of AED ${avg.toLocaleString()} — a real saving.`
+      :diff>0?`At AED ${askN.toLocaleString()}, the seller is asking AED ${Math.abs(saving).toLocaleString()} (${pct}%) above the market average of AED ${avg.toLocaleString()}.`
+      :`At AED ${askN.toLocaleString()}, this is right at market average — fair for both sides.`)
+    :`The fair market value for this ${cn} in the UAE is AED ${avg.toLocaleString()}.`;
+  const pros=[],cons=[];
+  if(isGCC)       pros.push('GCC spec is the preferred choice in the UAE');
+  if(mileageLow)  pros.push(`${mileageNum.toLocaleString()} km is below average for a ${age}-year-old car`);
+  if(agency)      pros.push('agency service history adds trust and resale value');
+  if(goodColour)  pros.push(`${colourVal} resells fast in the UAE market`);
+  if(ownersVal==='1') pros.push('single ownership is a strong confidence signal');
+  if(conditionVal==='Excellent'||conditionVal==='Very Good') pros.push(`${conditionVal.toLowerCase()} condition supports the asking price`);
+  if(hasAccident) cons.push(`${accidentVal} accident history is a negotiation lever and a resale risk`);
+  if(ownersVal==='3'||ownersVal==='4+') cons.push('multiple previous owners can affect buyer confidence');
+  if(!isGCC)      cons.push('non-GCC spec limits your local resale audience');
+  if(mileageNum>expected*1.5) cons.push(`${mileageNum.toLocaleString()} km is high for this age`);
+  let para=pc+' ';
+  if(pros.length) para+=`The positives: ${pros.slice(0,3).join(', ')}. `;
+  if(cons.length) para+=`Watch out: ${cons.join('; ')}. `;
+  const aiA=ai?.advice||'';
+  if(aiA&&aiA.length>20) para+=aiA;
+  else if(purpose!=='selling'&&askN&&saving>0) para+=`My honest take: offer AED ${Math.round(askN*.96/500)*500} and close at AED ${Math.round(askN*.98/500)*500} — there's room.`;
+  else if(purpose==='selling'&&diff>.05) para+=`To sell faster, try AED ${Math.round(avg*1.02/500)*500} — you'll attract more serious buyers.`;
+  else para+=`A solid market deal — worth pursuing if the inspection checks out.`;
+  return{vk,vl,para};
+}
+
+function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal,accidentVal,ownersVal,warrantyVal){
+  const green=[],red=[];
+  const cy=new Date().getFullYear();
+  const age=Math.max(1,cy-carYear);
+  const exp=age*18000;
+  const isGCC=specVal==='GCC'||specVal==='GCC Spec';
+  if(isGCC) green.push('GCC specification — preferred in UAE market');
+  if(['White','Pearl White','Silver','Gray','Black','Midnight Black'].includes(colourVal)) green.push(`${colourVal} — high-demand resale colour`);
+  if(serviceVal==='Full Agency'||serviceVal==='Agency') green.push('Agency service history — highest trust level');
+  if(mileageNum>0&&mileageNum<exp*.65) green.push(`${mileageNum.toLocaleString()} km — below average for age`);
+  if(ownersVal==='1') green.push('Single owner — commands premium at resale');
+  if(conditionVal==='Excellent') green.push('Excellent condition — top bracket justified');
+  if(warrantyVal==='active')   green.push('Active warranty — reduces buyer risk');
+  if(warrantyVal==='extended') green.push('Extended warranty — added peace of mind');
+  if(!isGCC) red.push('Non-GCC spec — smaller UAE buyer pool');
+  if(mileageNum>exp*1.5) red.push(`${mileageNum.toLocaleString()} km — above expected mileage`);
+  if(accidentVal==='minor') red.push('Minor accident on record — disclose and negotiate');
+  if(accidentVal==='major') red.push('Major accident history — significant value impact');
+  if(ownersVal==='3'||ownersVal==='4+') red.push('Multiple owners — affects confidence and resale');
+  if(conditionVal==='Fair'||conditionVal==='Poor') red.push(`${conditionVal} condition — price must reflect repair costs`);
+  if(serviceVal==='Non-Agency'||serviceVal==='Unknown') red.push('No agency records — history harder to verify');
+  return{green:green.slice(0,5),red:red.slice(0,4)};
+}
+
+function buildDeprTable(avg,carYear){
+  const cy=new Date().getFullYear();
+  const age=Math.max(0,cy-carYear);
+  const base=age<=2?.15:age<=5?.12:age<=8?.08:.05;
+  const rows=[];
+  let val=avg;
+  for(let y=1;y<=3;y++){
+    const rate=base*Math.pow(.88,y-1);
+    const loss=Math.round(val*rate/500)*500;
+    val=val-loss;
+    rows.push({year:cy+y,rate:Math.round(rate*100),endVal:val,cumLoss:avg-val,pct:Math.round(((avg-val)/avg)*100)});
+  }
+  return rows;
+}
+
+function buildNegoGuide(askN,avg,conditionVal,accidentVal){
+  if(!askN||!avg)return null;
+  const diff=(askN-avg)/avg;
+  const cf=conditionVal==='Fair'?.03:conditionVal==='Poor'?.06:0;
+  const af=accidentVal==='major'?.10:accidentVal==='minor'?.05:0;
+  const disc=cf+af+(diff>0?diff*.5:0);
+  const offer=Math.round(askN*(1-Math.min(disc,.15))/500)*500;
+  const close=Math.round(askN*(1-Math.min(disc,.10)*.5)/500)*500;
+  const walk =Math.round(avg*1.08/500)*500;
+  const room =Math.max(0,Math.round((1-offer/askN)*100));
+  let tactic='';
+  if(accidentVal==='major') tactic='The accident history is your primary leverage — request a full inspection report and use it to justify a significant reduction.';
+  else if(accidentVal==='minor') tactic='Point to the minor accident record as justification for your counter-offer. Ask for the repair documentation.';
+  else if(diff>.10) tactic=`This is priced above market. Lead with the AED ${avg.toLocaleString()} market benchmark and work down from there.`;
+  else if(diff>.02) tactic='There is modest room to negotiate. Use mileage or condition as your reason for a counter-offer.';
+  else tactic='Already close to or below market — a token 2–3% counter-offer is reasonable without risking the deal.';
+  return{offer,close,walk,room,tactic};
+}
+
+function buildOwnershipCost(price,deprAmt,carYear){
+  const cy=new Date().getFullYear();
+  const age=cy-carYear;
+  const ins=Math.round(price*.035/100)*100;
+  const reg=age<=5?650:450;
+  const maint=Math.round(price*.015/500)*500;
+  const total=deprAmt+ins+reg+maint;
+  return{ins,reg,maint,total,fuelEst:900};
+}
+
+function confPctToPos(conf){return Math.max(5,Math.min(95,conf));}
 
 /* ── BUILD RESULT HTML ──────────────────────────────────── */
 function buildResult(r,brand,model,year,mileage,asking){
@@ -3866,283 +4117,192 @@ function buildResult(r,brand,model,year,mileage,asking){
   const ai=r.ai||null;
   const mkt=r.marketability||null;
 
-  // Generate unique reference
   const ref=generateRef();
-  const refEl=g('resultRef');
+  const refEl=document.getElementById('resultRef');
   if(refEl){refEl.textContent=ref.label;refEl.classList.add('on');}
-  const mobRefEl=g('mobRef');
+  const mobRefEl=document.getElementById('mobRef');
   if(mobRefEl){mobRefEl.textContent=ref.label;mobRefEl.classList.add('on');}
 
-  // Store valuation data for PDF/share
-  const qsLabels={
-    warranty:   qs.warranty   ==='yes'?'✓ Yes':qs.warranty   ==='no'?'✗ No':null,
-    singleOwner:qs.singleOwner==='yes'?'✓ Yes':qs.singleOwner==='no'?'✗ No':null,
-    fsh:        qs.fsh        ==='yes'?'✓ Yes':qs.fsh        ==='no'?'✗ No':null,
-    accident:   qs.accident   ==='yes'?'✓ Yes':qs.accident   ==='no'?'✗ No':null,
-  };
+  const specVal  =g('spec')?.value||'GCC';
+  const condVal  =g('condition')?.value||'';
+  const colourVal=g('colour')?.value||'';
+  const svcVal   =g('service')?.value||'';
+  const bodyVal  =g('body')?.value||'';
+  const sellerVal=g('seller')?.value||'';
+  const accVal   =g('accidentSel')?.value||'none';
+  const ownVal   =g('owners')?.value||'';
+  const warVal   =g('warrantySel')?.value||'';
+  const emirVal  =g('emirate')?.value||'';
+  const finVal   =g('finance')?.value||'';
+  const purpVal  =g('purpose')?.value||'buying';
+  const km       =mileage?parseInt(mileage):0;
+  const kmFmt    =km?km.toLocaleString():'—';
+  const carYear  =parseInt(year)||2020;
+  const cy       =new Date().getFullYear();
+  const carAge   =Math.max(1,cy-carYear);
+  const deprRate =carAge<=2?.15:carAge<=5?.12:carAge<=8?.08:.05;
+  const deprAmt  =Math.round(avg*deprRate/500)*500;
+  const confLabel=conf>=75?'High Confidence':conf>=50?'Medium Confidence':'Low Confidence';
+  const dealInfo =getDealBadgeInfo(askN,avg);
+  const sliderLow=low||Math.round(avg*.72);
+  const sldrHigh =high||Math.round(avg*1.30);
+  const offerPx  =askN||avg;
+  const rng      =sldrHigh-sliderLow;
+  const starPct  =rng>0?Math.max(4,Math.min(96,Math.round(((offerPx-sliderLow)/rng)*100))):50;
+  const rawPct   =low&&high&&high>low?Math.round(((offerPx-low)/(high-low))*100):null;
+  const posPct   =rawPct!==null?Math.max(1,Math.min(99,rawPct)):null;
+  const imgUrl   =`https://cdn.imagin.studio/getImage?customer=img&make=${encodeURIComponent(brand)}&modelFamily=${encodeURIComponent(model||brand)}&modelYear=${year}&angle=side&zoomType=fullscreen`;
+  const maxBarH  =Math.max(askN||0,avg)||1;
+  const askBarH  =askN?Math.max(20,Math.round((askN/maxBarH)*120)):0;
+  const avgBarH  =Math.max(20,Math.round((avg/maxBarH)*120));
+
   _lastValuationData={
-    ref:ref.label,
-    carName:`${year} ${brand}${model?' '+model:''}`,
-    avg,low,high,comp,
-    conf:r.confidence||0,
-    askingPrice:askN,
-    marketability:mkt,
-    ai,
+    ref:ref.label,carName:`${year} ${brand}${model?' '+model:''}`,
+    avg,low,high,comp,conf:r.confidence||0,askingPrice:askN,marketability:mkt,ai,
     aiCls:ai?aiRatingClass(ai.deal_rating):'neu',
     inputs:[
       ['Brand',brand||'—'],['Model',model||'—'],['Year',year||'—'],
-      g('trim').value?['Trim / Variant',g('trim').value]:null,
-      mileage?['Mileage',parseInt(mileage).toLocaleString()+' km']:null,
-      g('spec').value?['Spec',g('spec').value]:null,
-      g('condition').value?['Condition',g('condition').value]:null,
-      g('colour').value?['Colour',g('colour').value]:null,
-      g('body').value?['Body Type',g('body').value]:null,
-      g('seller').value?['Seller Type',g('seller').value]:null,
-      g('service').value?['Service',g('service').value]:null,
+      g('trim')?.value?['Trim',g('trim').value]:null,
+      mileage?['Mileage',km.toLocaleString()+' km']:null,
+      specVal?['Spec',specVal]:null,condVal?['Condition',condVal]:null,
+      colourVal?['Colour',colourVal]:null,bodyVal?['Body',bodyVal]:null,
+      sellerVal?['Seller',sellerVal]:null,svcVal?['Service',svcVal]:null,
+      accVal&&accVal!=='none'?['Accident',accVal]:null,
+      ownVal?['Owners',ownVal]:null,warVal?['Warranty',warVal]:null,
+      emirVal?['Emirate',emirVal]:null,finVal?['Payment',finVal]:null,
       askN?['Asking Price','AED '+askN.toLocaleString()]:null,
-      qsLabels.warranty?['Warranty',qsLabels.warranty]:null,
-      qsLabels.singleOwner?['Single Owner',qsLabels.singleOwner]:null,
-      qsLabels.fsh?['Full Service History',qsLabels.fsh]:null,
-      qsLabels.accident?['Accident History',qsLabels.accident]:null,
     ].filter(Boolean),
   };
 
-  // ── Computed values ────────────────────────────────────
-  const specVal=g('spec').value||'GCC';
-  const conditionVal=g('condition').value||'';
-  const colourVal=g('colour').value||'';
-  const mileageNum=mileage?parseInt(mileage):0;
-  const mileageFmt=mileageNum?mileageNum.toLocaleString():'—';
-  const carYear=parseInt(year)||2020;
-  const currentYear=new Date().getFullYear();
-  const carAge=Math.max(1,currentYear-carYear);
+  const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
+  const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,colourVal,svcVal,ai);
+  const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,colourVal,svcVal,accVal,ownVal,warVal);
+  const deprRows=buildDeprTable(avg,carYear);
+  const nego=buildNegoGuide(askN,avg,condVal,accVal);
+  const cost=buildOwnershipCost(askN||avg,deprAmt,carYear);
 
-  // Depreciation (annual, by age bracket)
-  const deprRate=carAge<=2?0.15:carAge<=5?0.12:carAge<=8?0.08:0.05;
-  const deprAmt=Math.round((avg*deprRate)/500)*500;
+  const analysisText=ai?.explanation||
+    `The ${year} ${brand}${model?' '+model:''} has been assessed against ${comp>0?comp+' comparable':'live UAE'} listings.`+
+    (specVal==='GCC'||specVal==='GCC Spec'?' GCC specification is the most sought-after locally.':'')+
+    (km>100000?` High mileage of ${km.toLocaleString()} km is a key factor.`:'');
 
-  // Confidence label
-  const confLabel=conf>=75?'High Confidence':conf>=50?'Medium Confidence':'Low Confidence';
-
-  // Deal badge
-  const dealInfo=getDealBadgeInfo(askN,avg);
-
-  // Slider range
-  const sliderLow=low||Math.round(avg*0.72);
-  const sliderHigh=high||Math.round(avg*1.30);
-  const offerPrice=askN||avg;
-  const range=sliderHigh-sliderLow;
-  const starPct=range>0?Math.max(4,Math.min(96,Math.round(((offerPrice-sliderLow)/range)*100))):50;
-
-  // Market position percentile
-  const rawPct=low&&high&&high>low?Math.round(((offerPrice-low)/(high-low))*100):null;
-  const posPercentile=rawPct!==null?Math.max(1,Math.min(99,rawPct)):null;
-
-  // Car image (imagin.studio demo key)
-  const carImgUrl=`https://cdn.imagin.studio/getImage?customer=img&make=${encodeURIComponent(brand)}&modelFamily=${encodeURIComponent(model||brand)}&modelYear=${year}&angle=side&zoomType=fullscreen`;
-
-  // Condition adjustments
-  const adjItems=buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avg);
-
-  // Analysis text — pull from AI or build from data
-  const analysisText=ai&&ai.explanation?ai.explanation:
-    `The ${year} ${brand}${model?' '+model:''} has been assessed against ${comp>0?comp+' comparable':'live UAE market'} listings. ${specVal==='GCC'||specVal==='GCC Spec'?'GCC specification adds value in the local market. ':''}`+
-    (mileageNum>100000?`High mileage of ${mileageNum.toLocaleString()} km is a significant value factor. `:'')+(conditionVal?`Vehicle reported in ${conditionVal.toLowerCase()} condition. `:'');
-
-  // Bar chart heights (max 120px proportional)
-  const maxVal=Math.max(askN||0,avg)||1;
-  const askBarH=askN?Math.max(20,Math.round((askN/maxVal)*120)):0;
-  const avgBarH=Math.max(20,Math.round((avg/maxVal)*120));
-
-  // ── Sell-time section (unique data — no price repeats) ──
-  const daysCls=d=>d<=14?'fast':d<=45?'medium':'slow';
-  const daysFmt=d=>d<=14?`~${d} days`:`~${d} days`;
-  let mktSection='';
+  // Time to sell
+  const dCls=d=>d<=14?'fast':d<=45?'medium':'slow';
+  let mktSec='';
   if(mkt){
     const rows=[];
-    if(mkt.days_at_market>0){
-      rows.push(`<div class="rpt-mkt-row">
-        <span class="rpt-mkt-rlbl">Time to sell at market value</span>
-        <span class="rpt-mkt-rval ${daysCls(mkt.days_at_market)}">${daysFmt(mkt.days_at_market)}</span>
-      </div>`);
-    }
-    if(askN&&mkt.days_at_asking>0&&mkt.days_at_asking!==mkt.days_at_market){
-      rows.push(`<div class="rpt-mkt-row">
-        <span class="rpt-mkt-rlbl">Time to sell at your price</span>
-        <span class="rpt-mkt-rval ${daysCls(mkt.days_at_asking)}">${daysFmt(mkt.days_at_asking)}</span>
-      </div>`);
-    }
-    if(mkt.recommended_price>0&&askN&&mkt.recommended_price<askN){
-      rows.push(`<div class="rpt-mkt-row highlight">
-        <span class="rpt-mkt-rlbl">⚡ Optimal price for 14-day sale</span>
-        <span class="rpt-mkt-rval">AED ${mkt.recommended_price.toLocaleString()}</span>
-      </div>`);
-    }
-    if(rows.length>0){
-      mktSection=`<div class="rpt-section r-metrics-section">
-        <div class="rpt-section-title">Time to Sell</div>
-        <div class="rpt-mkt-grid">${rows.join('')}</div>
-        ${mkt.insight?`<p class="rpt-mkt-insight">${mkt.insight}</p>`:''}
-      </div>`;
-    }
+    if(mkt.days_at_market>0) rows.push(`<div class="rpt-mkt-row"><span class="rpt-mkt-rlbl">At market value</span><span class="rpt-mkt-rval ${dCls(mkt.days_at_market)}">~${mkt.days_at_market} days</span></div>`);
+    if(askN&&mkt.days_at_asking>0&&mkt.days_at_asking!==mkt.days_at_market) rows.push(`<div class="rpt-mkt-row"><span class="rpt-mkt-rlbl">At your asking price</span><span class="rpt-mkt-rval ${dCls(mkt.days_at_asking)}">~${mkt.days_at_asking} days</span></div>`);
+    if(mkt.recommended_price>0&&askN&&mkt.recommended_price<askN) rows.push(`<div class="rpt-mkt-row highlight"><span class="rpt-mkt-rlbl">⚡ Optimal price (14-day sale)</span><span class="rpt-mkt-rval">AED ${mkt.recommended_price.toLocaleString()}</span></div>`);
+    if(rows.length) mktSec=`<div class="rpt-section r-metrics-section"><div class="rpt-section-title">Time to Sell</div><div class="rpt-mkt-grid">${rows.join('')}</div>${mkt.insight?`<p class="rpt-mkt-insight">${mkt.insight}</p>`:''}</div>`;
   }
 
-  // ── AI advice section (unique — no repeated numbers) ──
-  let aiSection='';
-  if(ai&&ai.advice){
-    const factorsHtml=(ai.key_factors||[]).length?
-      `<div class="rpt-ai-factors">${(ai.key_factors||[]).map(f=>`<div class="rpt-ai-factor">${f}</div>`).join('')}</div>`:'';
-    aiSection=`<div class="rpt-section r-ai-section">
-      <div class="rpt-section-title">Key Value Factors</div>
-      ${factorsHtml}
-      <p class="rpt-ai-text" style="margin-top:${factorsHtml?'10px':'0'}">${ai.advice}</p>
-    </div>`;
-  }
+  // AI factors
+  const aiSec=ai?.key_factors?.length?`<div class="rpt-section r-ai-section"><div class="rpt-section-title">Key Value Factors</div><div class="rpt-ai-factors">${ai.key_factors.map(f=>`<div class="rpt-ai-factor">${f}</div>`).join('')}</div>${ai.advice?`<p class="rpt-ai-text" style="margin-top:10px">${ai.advice}</p>`:''}</div>`:'';
 
-  // ── Accuracy section (unique) ──
-  const accSection=`<div class="rpt-section">
-    <div class="rpt-section-title">Data Accuracy</div>
+  // Flags
+  const allF=[...gF.map(f=>`<div class="rpt-flag green"><div class="rpt-flag-dot"></div>${f}</div>`),...rF.map(f=>`<div class="rpt-flag red"><div class="rpt-flag-dot"></div>${f}</div>`)];
+  const flagSec=allF.length?`<div class="rpt-section"><div class="rpt-section-title">Buyer's Checklist</div><div class="rpt-flags-grid">${allF.join('')}</div></div>`:'';
+
+  // Negotiation
+  const negoSec=nego?`<div class="rpt-section"><div class="rpt-section-title">Negotiation Guide</div>
+    <div class="rpt-nego-grid">
+      <div class="rpt-nego-card highlight"><div class="rpt-nego-lbl">Open With</div><div class="rpt-nego-val">AED ${nego.offer.toLocaleString()}</div></div>
+      <div class="rpt-nego-card"><div class="rpt-nego-lbl">Target Close</div><div class="rpt-nego-val">AED ${nego.close.toLocaleString()}</div></div>
+      <div class="rpt-nego-card"><div class="rpt-nego-lbl">Walk Away At</div><div class="rpt-nego-val warn">AED ${nego.walk.toLocaleString()}</div></div>
+    </div>
+    <p class="rpt-nego-tip">${nego.tactic}</p></div>`:'';
+
+  // Cost
+  const costSec=`<div class="rpt-section"><div class="rpt-section-title">First Year Cost Estimate</div>
+    <table class="rpt-cost-table">
+      <tr><td>Depreciation (12 months)</td><td>−AED ${cost.total-cost.ins-cost.reg-cost.maint<=0?deprAmt.toLocaleString():deprAmt.toLocaleString()}</td></tr>
+      <tr><td>Insurance (est. 3.5% of value)</td><td>−AED ${cost.ins.toLocaleString()}</td></tr>
+      <tr><td>RTA Registration</td><td>−AED ${cost.reg.toLocaleString()}</td></tr>
+      <tr><td>Maintenance (est.)</td><td>−AED ${cost.maint.toLocaleString()}</td></tr>
+      <tr class="total"><td><strong>Total non-fuel cost</strong></td><td><strong>−AED ${cost.total.toLocaleString()}</strong></td></tr>
+    </table>
+    <p class="rpt-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</p></div>`;
+
+  // 3-Year depreciation
+  const deprSec=`<div class="rpt-section"><div class="rpt-section-title">3-Year Value Projection</div>
+    <table class="rpt-depr-table">
+      <tr><th>Year End</th><th>Est. Rate</th><th>Est. Value</th><th>Total Loss</th></tr>
+      ${deprRows.map(row=>`<tr><td>${row.year}</td><td>${row.rate}%</td><td>AED ${row.endVal.toLocaleString()}</td><td>−AED ${row.cumLoss.toLocaleString()}</td></tr>`).join('')}
+    </table></div>`;
+
+  // Accuracy
+  const accSec=`<div class="rpt-section"><div class="rpt-section-title">Data Accuracy</div>
     <div class="rpt-acc-row">
       <span class="rpt-acc-lbl">Confidence</span>
-      <div class="rpt-acc-bar-wrap">
-        <div class="rpt-acc-bar" id="cbarFill" style="width:0%"></div>
-      </div>
+      <div class="rpt-acc-bar-wrap"><div class="rpt-acc-bar" id="cbarFill" style="width:0%"></div></div>
       <span class="rpt-acc-pct">${conf}%</span>
     </div>
-    ${comp>0?`<p class="rpt-acc-note">Derived from ${comp} comparable UAE listings${r.fromCache?' (cached)':' (live)'}</p>`:''}
-  </div>`;
+    ${comp>0?`<p class="rpt-acc-note">Based on ${comp} comparable UAE listings${r.fromCache?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</p>`:''}</div>`;
 
-  // ── FULL REPORT HTML ────────────────────────────────────
-  return `<div class="rpt-wrap r-card">
-
-  <!-- HEADER -->
+  return`<div class="rpt-wrap r-card">
   <div class="rpt-header">
     <div class="rpt-header-top">
-      <a class="rpt-hdr-logo" href="#">
-        <span class="rpt-hdr-icon"><svg viewBox="0 0 20 20"><path d="M10 2L2 18h7l1-4 1 4h7z"/></svg></span>
-        <span class="rpt-hdr-kam">Kam</span><span class="rpt-hdr-say">Sayara</span>
-      </a>
+      <a class="rpt-hdr-logo" href="#"><span class="rpt-hdr-icon"><svg viewBox="0 0 20 20"><path d="M10 2L2 18h7l1-4 1 4h7z"/></svg></span><span class="rpt-hdr-kam">Kam</span><span class="rpt-hdr-say">Sayara</span></a>
       <span class="rpt-hdr-ref">${ref.label}</span>
     </div>
     <div class="rpt-header-body">
       <div class="rpt-header-info">
         <h1 class="rpt-vehicle-title">${year} ${brand}${model?' '+model:''} – ${specVal} Spec</h1>
-        <p class="rpt-vehicle-sub">${colourVal?'Color: '+colourVal+' | ':''}Mileage: ${mileageFmt} km</p>
+        <p class="rpt-vehicle-sub">${colourVal?'Color: '+colourVal+' | ':''}Mileage: ${kmFmt} km${emirVal?' | '+emirVal:''}</p>
       </div>
       <div class="rpt-car-img-wrap">
-        <img class="rpt-car-img" src="${carImgUrl}"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-          alt="${year} ${brand} ${model||''}">
+        <img class="rpt-car-img" src="${imgUrl}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="${year} ${brand}">
         <div class="rpt-car-placeholder"><span class="rpt-car-ph-k">K</span></div>
       </div>
     </div>
   </div>
-
-  <!-- TWO-COLUMN BODY -->
+  <div class="rpt-verdict">
+    <span class="rpt-verdict-badge ${vk}">${vl}</span>
+    <div class="rpt-buddy-para">${para}</div>
+  </div>
   <div class="rpt-body">
-
-    <!-- LEFT: Market Dynamics + Condition -->
     <div class="rpt-left r-price-section">
       <div class="rpt-col-title">Market Dynamics</div>
-
-      <!-- Confidence Bar -->
       <div class="rpt-conf-area">
-        <div class="rpt-conf-top">
-          <span class="rpt-conf-lbl">Confidence</span>
-          <span class="rpt-conf-pct-badge">${conf}%</span>
-        </div>
-        <div class="rpt-conf-bar">
-          <div class="rpt-conf-needle" style="left:${confPctToPos(conf)}%"></div>
-        </div>
+        <div class="rpt-conf-top"><span class="rpt-conf-lbl">Confidence</span><span class="rpt-conf-pct-badge">${conf}%</span></div>
+        <div class="rpt-conf-bar"><div class="rpt-conf-needle" style="left:${confPctToPos(conf)}%"></div></div>
         <div class="rpt-conf-ends"><span>Low</span><span class="rpt-conf-mid">${confLabel}</span><span>High</span></div>
       </div>
-
-      <!-- Price Slider -->
       <div class="rpt-slider-wrapper">
         <div class="rpt-slider-area">
-          <div class="rpt-slider-bubble" style="left:${starPct}%">AED ${offerPrice.toLocaleString()}</div>
+          <div class="rpt-slider-bubble" style="left:${starPct}%">AED ${offerPx.toLocaleString()}</div>
           <div class="rpt-slider-star" style="left:${starPct}%">★</div>
           <div class="rpt-slider-track"></div>
-          <div class="rpt-slider-ends">
-            <span>AED ${sliderLow.toLocaleString()}</span>
-            <span>AED ${sliderHigh.toLocaleString()}</span>
-          </div>
-          <div class="rpt-slider-offer-lbl" style="left:${starPct}%">Current Offer<br>AED ${offerPrice.toLocaleString()}</div>
+          <div class="rpt-slider-ends"><span>AED ${sliderLow.toLocaleString()}</span><span>AED ${sldrHigh.toLocaleString()}</span></div>
+          <div class="rpt-slider-offer-lbl" style="left:${starPct}%">Current Offer<br>AED ${offerPx.toLocaleString()}</div>
         </div>
       </div>
-
-      <!-- Analysis text -->
-      <div class="rpt-analysis">
-        ${analysisText}${posPercentile!==null?' Placing this vehicle in the top '+(100-posPercentile)+'% of priced entries.':''}
-      </div>
-
-      <!-- Condition Snapshot -->
-      ${adjItems.length?`<div class="r-bar-section" style="margin-top:0">
-        <div class="rpt-cond-title">Condition Snapshot</div>
-        <table class="rpt-cond-table">
-          ${adjItems.map(a=>`<tr>
-            <td class="rpt-cond-name">${a.name}</td>
-            <td class="rpt-cond-amt ${a.positive?'pos':'neg'}">${a.positive?'+':'−'}AED ${a.amount.toLocaleString()}</td>
-          </tr>`).join('')}
-        </table>
-      </div>`:''}
+      <div class="rpt-analysis">${analysisText}${posPct!==null?' Placing this vehicle in the top '+(100-posPct)+'% of priced entries.':''}</div>
+      ${adjItems.length?`<div class="r-bar-section" style="margin-top:0"><div class="rpt-cond-title">Condition Snapshot</div><table class="rpt-cond-table">${adjItems.map(a=>`<tr><td class="rpt-cond-name">${a.name}</td><td class="rpt-cond-amt ${a.positive?'pos':'neg'}">${a.positive?'+':'−'}AED ${a.amount.toLocaleString()}</td></tr>`).join('')}</table></div>`:''}
     </div>
-
-    <!-- RIGHT: Valuation + Chart + Depreciation -->
     <div class="rpt-right r-vs-section">
-      <!-- Fair Market Value -->
       <div>
         <div class="rpt-fmv-lbl">Fair Market Value</div>
         <div class="rpt-fmv-price" id="priceMain">AED 0</div>
         ${dealInfo?`<span class="rpt-deal-badge ${dealInfo.cls}">${dealInfo.label}</span>`:''}
       </div>
-
-      <!-- Bar Chart (only when asking price provided) -->
-      ${askN?`<div>
-        <div class="rpt-chart-wrap">
-          <div class="rpt-bar-group">
-            <span class="rpt-bar-price">AED ${askN.toLocaleString()}</span>
-            <div class="rpt-bar navy" style="height:${askBarH}px"></div>
-            <span class="rpt-bar-name">Asking Price</span>
-          </div>
-          <div class="rpt-bar-group">
-            <span class="rpt-bar-price">AED ${avg.toLocaleString()}</span>
-            <div class="rpt-bar gold" style="height:${avgBarH}px"></div>
-            <span class="rpt-bar-name">Fair Market Value</span>
-          </div>
-        </div>
-        <div class="rpt-chart-baseline"></div>
-      </div>`:''}
-
-      <!-- Depreciation -->
+      ${askN?`<div><div class="rpt-chart-wrap">
+        <div class="rpt-bar-group"><span class="rpt-bar-price">AED ${askN.toLocaleString()}</span><div class="rpt-bar navy" style="height:${askBarH}px"></div><span class="rpt-bar-name">Asking Price</span></div>
+        <div class="rpt-bar-group"><span class="rpt-bar-price">AED ${avg.toLocaleString()}</span><div class="rpt-bar gold" style="height:${avgBarH}px"></div><span class="rpt-bar-name">Fair Market Value</span></div>
+      </div><div class="rpt-chart-baseline"></div></div>`:''}
       <div class="rpt-depr">
         <div class="rpt-depr-lbl">Depreciation after 12 months</div>
         <div class="rpt-depr-val">
-          <div class="rpt-depr-arrow">
-            <svg viewBox="0 0 12 12" fill="none"><path d="M2 3l4 6 4-6" stroke="#1A2B4C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+          <div class="rpt-depr-arrow"><svg viewBox="0 0 12 12" fill="none"><path d="M2 3l4 6 4-6" stroke="#1A2B4C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <span class="rpt-depr-num">−AED ${deprAmt.toLocaleString()}</span>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ADDITIONAL SECTIONS (each with unique data only) -->
-  ${mktSection}
-  ${aiSection}
-  ${accSection}
-
+  ${flagSec}${negoSec}${mktSec}${costSec}${deprSec}${aiSec}${accSec}
 </div>`;
 }
-
-/* ── CONFIDENCE % → BAR POSITION ────────────────────────── */
-function confPctToPos(conf){
-  // conf is 0-100; bar goes red(left)→green(right)
-  // clamp between 5 and 95 for visual clearance
-  return Math.max(5,Math.min(95,conf));
-}
-
-/* ── MAIN CALL ──────────────────────────────────────────── */
 async function checkCarPrice(){
   const brand=g('brand').value,year=g('year').value,mileage=g('mileage').value;
   let bad=false;
@@ -4192,7 +4352,12 @@ async function checkCarPrice(){
             service:g('service').value,
             askingPrice:asking?parseInt(asking):null,
             warranty:qs.warranty,singleOwner:qs.singleOwner,
-            fsh:qs.fsh,accidentHistory:qs.accident
+            fsh:qs.fsh,accidentHistory:g('accidentSel').value||qs.accident,
+            purpose:g('purpose').value,
+            owners:g('owners').value,
+            warrantyStatus:g('warrantySel').value,
+            emirate:g('emirate').value,
+            finance:g('finance').value
           })
         });
         clearTimeout(timeoutId);
@@ -4311,7 +4476,8 @@ function closeMobResult(){
 
 /* ── RESET ──────────────────────────────────────────────── */
 function resetForm(){
-  ['brand','year','trim','mileage','colour','body','seller','service','asking'].forEach(id=>{
+  ['brand','year','trim','mileage','colour','body','seller','service','asking',
+   'purpose','accidentSel','owners','warrantySel','emirate','finance'].forEach(id=>{
     const el=g(id);if(el){el.value='';markFilled(el);}
   });
   g('model').innerHTML='<option value="">Select model…</option>';
