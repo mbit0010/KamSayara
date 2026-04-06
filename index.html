@@ -1298,100 +1298,340 @@
     .rph-s-price { font-family: "Orbitron", sans-serif; font-size: 1.2rem; font-weight: 700; color: rgba(0,133,119,0.28); letter-spacing: -0.02em; }
 
     /* ── RESULT CONTENT UPGRADE ──────────────────────────── */
-    .rcontent { padding: 18px 20px; overflow-y: auto; flex: 1; animation: fIn 0.38s var(--ease) both; }
+    .rcontent { padding: 0; overflow-y: auto; flex: 1; animation: fIn 0.38s var(--ease) both; }
 
-    /* Price block — compact horizontal */
-    .pblock {
-      background: linear-gradient(135deg, rgba(0,133,119,0.06) 0%, rgba(0,168,150,0.03) 100%);
-      border: 1.5px solid rgba(0,133,119,0.18);
-      border-radius: 16px;
-      padding: 12px 14px 10px;
-      margin-bottom: 12px;
-      position: relative;
-      overflow: hidden;
+    /* ── RESULT CARD — single clean wrapper, no nested borders ── */
+    .r-card {
+      background: #fff;
+      border-radius: 0;
     }
-    .pblock::before {
-      content: '';
-      position: absolute;
-      top: -20px; right: -20px;
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,168,150,0.18) 0%, transparent 70%);
+
+    /* Thin divider between sections */
+    .r-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
     }
-    /* Top row: label+price LEFT, range+badge RIGHT */
-    .pblock-top {
+
+    /* ── SECTION: PRICE ─────────────────────────────────── */
+    .r-price-section {
+      padding: 18px 18px 14px;
+      background: linear-gradient(135deg, rgba(0,133,119,0.05) 0%, rgba(255,255,255,0) 55%);
+    }
+    .r-price-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
-    .pblock-left { display: flex; flex-direction: column; gap: 1px; }
-    .pblock-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
-    .p-lbl {
-      font-size: 0.5rem;
-      letter-spacing: 0.18em;
+    .r-price-lbl {
+      font-size: 0.54rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 2px;
+      font-family: "Exo 2", sans-serif;
+      font-weight: 700;
     }
-    .p-main {
+    .r-price-badges {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .r-badge {
+      font-size: 0.54rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--ink-soft);
+      font-family: "Exo 2", sans-serif;
+      letter-spacing: 0.04em;
+    }
+    .r-badge.live { background: rgba(26,140,107,0.08); border-color: rgba(26,140,107,0.2); color: var(--good); }
+    .r-badge.warn { background: var(--bad-bg); border-color: var(--bad-line); color: var(--bad); }
+    .r-price-main {
       font-family: "Orbitron", sans-serif;
-      font-size: 1.55rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--accent);
       letter-spacing: -0.02em;
-      line-height: 1.1;
+      line-height: 1.05;
+      margin-bottom: 3px;
     }
-    .p-range { font-size: 0.58rem; color: var(--muted); white-space: nowrap; }
-    .p-vs { font-size: 0.58rem; font-weight: 600; white-space: nowrap; }
-
-    /* Confidence bar */
-    .cbar-wrap { margin-top: 6px; padding: 0 1px; }
-    .cbar-top { display: flex; justify-content: space-between; font-size: 0.5rem; color: var(--muted); margin-bottom: 3px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-    .cbar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .cbar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #e67e22, #f1c40f, #2ecc71); transition: width 0.8s var(--ease); }
-
-    /* Trust block inside result */
-    .trust-line { text-align: center; font-size: 0.64rem; color: var(--muted); margin: 8px 0 4px; letter-spacing: 0.03em; }
-    .trust-line strong { color: var(--ink-soft); }
-
-    /* AI block */
-    .ai-block { border-radius: 12px; padding: 14px 15px; margin-bottom: 12px; border: 1.5px solid; animation: fIn 0.4s var(--ease) both; }
-    .ai-rating-badge {
+    .r-price-range {
+      font-size: 0.64rem;
+      color: var(--muted);
       font-family: "Exo 2", sans-serif;
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 99px;
-      border: 1.5px solid;
     }
 
-    /* Why toggle hidden */
-
-    /* Tags */
-    .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-    .tag { font-size: 0.62rem; padding: 3px 9px; border-radius: 6px; font-weight: 600; }
-
-    /* Next steps */
-    .nxt { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
-    .nxt-btn {
+    /* ── SECTION: ASKING VS MARKET ──────────────────────── */
+    .r-vs-section {
+      padding: 10px 18px;
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 12px;
-      border-radius: 10px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      text-align: left;
-      font-family: "Exo 2", sans-serif;
-      transition: all 0.16s;
-      width: 100%;
     }
-    .nxt-btn:hover { border-color: rgba(0,133,119,0.3); background: var(--accent-soft); }
+    .r-vs-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      font-family: "Exo 2", sans-serif;
+      padding: 4px 11px;
+      border-radius: 99px;
+    }
+    .r-vs-pill.under { background: var(--good-bg); color: var(--good); }
+    .r-vs-pill.over  { background: var(--bad-bg);  color: var(--bad); }
+    .r-vs-pill.fair  { background: var(--warn-bg); color: var(--warn); }
+    .r-vs-icon { font-size: 0.8rem; }
+
+    /* ── SECTION: POSITION BAR ──────────────────────────── */
+    .r-bar-section { padding: 12px 18px 10px; }
+    .r-ppos-track {
+      position: relative;
+      height: 8px;
+      background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
+      border-radius: 99px;
+      overflow: visible;
+      margin-bottom: 8px;
+    }
+    .r-ppos-dot-avg {
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); border: 2.5px solid #fff;
+      box-shadow: 0 1px 6px rgba(0,133,119,0.5); z-index: 2;
+    }
+    .r-ppos-dot-ask {
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--gold); border: 2.5px solid #fff;
+      box-shadow: 0 1px 6px rgba(196,154,42,0.5); z-index: 3;
+    }
+    .r-ppos-legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .r-ppos-entry {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.6rem;
+      font-family: "Exo 2", sans-serif;
+      font-weight: 700;
+    }
+    .r-ppos-entry.avg { color: var(--accent); }
+    .r-ppos-entry.ask { color: var(--gold); }
+    .r-ppos-dot-sm {
+      width: 7px; height: 7px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .r-ppos-dot-sm.avg { background: var(--accent); }
+    .r-ppos-dot-sm.ask { background: var(--gold); }
+    .r-ppos-ends {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.56rem;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    /* ── SECTION: ACCURACY + MARKETABILITY ─────────────── */
+    .r-metrics-section {
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .r-metric-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .r-metric-lbl {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+      white-space: nowrap;
+      width: 88px;
+      flex-shrink: 0;
+    }
+    .r-metric-bar-wrap {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .r-metric-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.9s var(--ease);
+    }
+    .r-metric-bar.accuracy { background: linear-gradient(90deg, #e67e22, #f1c40f, #2ecc71); }
+    .r-metric-bar.mkt      { background: linear-gradient(90deg, #e74c3c, #f1c40f, #1a8c6b); }
+    .r-metric-val {
+      font-size: 0.65rem;
+      font-weight: 800;
+      font-family: "Exo 2", sans-serif;
+      color: var(--ink);
+      white-space: nowrap;
+      min-width: 36px;
+      text-align: right;
+    }
+    .r-mkt-badge {
+      font-size: 0.54rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-family: "Exo 2", sans-serif;
+      flex-shrink: 0;
+    }
+    .r-mkt-badge.hot      { background: var(--good-bg); color: var(--good); }
+    .r-mkt-badge.good     { background: var(--accent-soft); color: var(--accent); }
+    .r-mkt-badge.moderate { background: var(--warn-bg); color: var(--warn); }
+    .r-mkt-badge.slow     { background: var(--bad-bg); color: var(--bad); }
+
+    /* Days rows under marketability */
+    .r-days-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .r-days-lbl {
+      font-size: 0.6rem;
+      color: var(--ink-soft);
+      font-family: "Exo 2", sans-serif;
+      font-weight: 600;
+    }
+    .r-days-val {
+      font-size: 0.64rem;
+      font-weight: 800;
+      font-family: "Exo 2", sans-serif;
+    }
+    .r-days-val.fast   { color: var(--good); }
+    .r-days-val.medium { color: var(--warn); }
+    .r-days-val.slow   { color: var(--bad); }
+    .r-rec-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(26,140,107,0.07);
+      margin-top: 6px;
+    }
+    .r-rec-lbl { font-size: 0.6rem; color: var(--good); font-family: "Exo 2", sans-serif; font-weight: 700; }
+    .r-rec-price { font-family: "Orbitron", sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--good); }
+
+    /* ── SECTION: AI VERDICT ────────────────────────────── */
+    .r-ai-section { padding: 14px 18px; }
+    .r-verdict-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .r-verdict-label {
+      font-family: "Exo 2", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+    }
+    .r-verdict-label.good     { background: var(--good-bg); color: var(--good); }
+    .r-verdict-label.warn     { background: var(--warn-bg); color: var(--warn); }
+    .r-verdict-label.bad      { background: var(--bad-bg);  color: var(--bad); }
+    .r-verdict-label.neu      { background: var(--surface-2); color: var(--ink-soft); }
+    .r-conf-txt {
+      font-size: 0.58rem;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .r-explanation {
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin-bottom: 10px;
+      font-family: "Exo 2", sans-serif;
+    }
+    .r-factors {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .r-factor {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      font-size: 0.66rem;
+      color: var(--ink-soft);
+      font-family: "Exo 2", sans-serif;
+      line-height: 1.4;
+    }
+    .r-factor::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      line-height: 1.3;
+    }
+    .r-insight-box {
+      background: var(--surface-2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 8px 12px;
+      font-size: 0.66rem;
+      color: var(--ink-soft);
+      font-family: "Exo 2", sans-serif;
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .r-insight-lbl {
+      font-size: 0.52rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 3px;
+      font-style: normal;
+    }
+
+    /* ── MKTINSIGHT BELOW METRICS ─────────────────────── */
+    .r-mkt-insight {
+      font-size: 0.6rem;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+      font-style: italic;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    /* Old pblock kept for compatibility but hidden */
+    .pblock { display: none; }
+    .ai-block { display: none; }
 
     /* Ref stamp */
     .ref-stamp {
@@ -3163,195 +3403,164 @@ function buildResult(r,brand,model,year,mileage,asking){
     ].filter(Boolean),
   };
 
-  // ── Price position bar ───────────────────────────────────
-  let pposHtml='';
-  if(low&&high&&avg&&high>low){
-    const avgPct=Math.round(((avg-low)/(high-low))*100);
-    const clampedAvg=Math.max(5,Math.min(95,avgPct));
-
-    // Build asking price dot if asking price provided and in a sensible range
-    let askDot='';
-    let legendEntries='';
-    if(askN&&askN>0){
-      const askPct=Math.round(((askN-low)/(high-low))*100);
-      const clampedAsk=Math.max(4,Math.min(96,askPct));
-      // Avoid dots sitting exactly on top of each other
-      const offset=Math.abs(clampedAsk-clampedAvg)<4?2:0;
-      askDot=`<div class="ppos-ask" style="left:${clampedAsk}%;${offset?'top:calc(50% + 5px)':''}"></div>`;
-      legendEntries=`
-        <div class="ppos-leg-entry avg"><span class="ppos-leg-dot avg"></span>Market Avg · AED ${avg.toLocaleString()}</div>
-        <div class="ppos-leg-entry ask"><span class="ppos-leg-dot ask"></span>Asking · AED ${askN.toLocaleString()}</div>`;
-    } else {
-      legendEntries=`<div class="ppos-leg-entry avg"><span class="ppos-leg-dot avg"></span>Market Avg · AED ${avg.toLocaleString()}</div>`;
-    }
-
-    pposHtml=`
-    <div class="ppos">
-      <div class="ppos-labels">
-        <span style="color:#2ecc71;font-weight:700;">Low · AED ${low.toLocaleString()}</span>
-        <span style="color:#e74c3c;font-weight:700;">High · AED ${high.toLocaleString()}</span>
-      </div>
-      <div class="ppos-track">
-        <div class="ppos-dot" style="left:${clampedAvg}%"></div>
-        ${askDot}
-      </div>
-      <div class="ppos-legend-wrap">${legendEntries}</div>
-    </div>`;
-  }
-
-  // ── Asking vs market ─────────────────────────────────────
-  let vsHtml='';
-  if(askN&&avg){
-    const diff=askN-avg,pct=Math.round(Math.abs(diff/avg)*100);
-    if(diff>0)vsHtml=`<div class="p-vs over">AED ${Math.abs(diff).toLocaleString()} (+${pct}%) above market average</div>`;
-    else if(diff<0)vsHtml=`<div class="p-vs under">AED ${Math.abs(diff).toLocaleString()} (${pct}%) below market average</div>`;
-    else vsHtml=`<div class="p-vs fair">Asking matches market average exactly</div>`;
-  }
-
-  // ── Claude AI block ──────────────────────────────────────
-  let aiHtml='';
-  if(ai&&ai.deal_rating){
-    const cls=aiRatingClass(ai.deal_rating);
-    // Neutral label mapping — no role assumption
-    const labelMap={
-      'Good Deal':'Strong Value',
-      'Fair Price':'Fair Market Price',
-      'Slightly High':'Above Market',
-      'Overpriced':'Significantly Above Market',
-    };
-    const neutralLabel=labelMap[ai.deal_rating]||ai.deal_rating;
-    const factors=(ai.key_factors||[]).map(f=>`<div class="ai-factor">${f}</div>`).join('');
-    const fullExp=ai.explanation||'';
-    const fullAdv=ai.advice||'';
-    aiHtml=`
-    <div class="ai-block ${cls}">
-      <div class="ai-rating-row">
-        <span class="ai-rating-badge">${neutralLabel}</span>
-        ${ai.confidence?`<span class="ai-conf-badge">${ai.confidence} confidence</span>`:''}
-      </div>
-      ${fullExp?`<div class="ai-explanation">${fullExp}</div>`:''}
-      ${factors?`<div class="ai-factors">${factors}</div>`:''}
-      ${fullAdv?`<div class="ai-advice"><div class="ai-advice-lbl">Market insight</div>${fullAdv}</div>`:''}
-    </div>`;
-  } else {
-    const deal=dealVerdict(askN,avg);
-    if(deal){
-      aiHtml=`<div class="dsig ${deal.cls}"><div class="ds-lbl">Verdict</div><div class="ds-ver">${deal.label} — ${deal.ver}</div></div>`;
-    }
-  }
-
-  // ── Tags ─────────────────────────────────────────────────
-  const specVal=g('spec').value;
-  const tags=[
-    `${year} ${brand}${model?' '+model:''}`,
-    mileage?`${parseInt(mileage).toLocaleString()} km`:null,
-    specVal||null,
-    qs.warranty==='yes'?'Warranty':null,
-    qs.singleOwner==='yes'?'Single owner':null,
-    qs.fsh==='yes'?'FSH':null,
-  ].filter(Boolean);
-
   // ── Share data for PDF + messages ────────────────────────
   const carName=`${year} ${brand}${model?' '+model:''}`;
-  const waMsg=encodeURIComponent(`I just checked my ${carName} on KamSayara — market value is AED ${avg.toLocaleString()}. Check yours free at kamsayara.mbit0010.workers.dev`);
-  const waUrl=`https://wa.me/?text=${waMsg}`;
-  const mailSubj=encodeURIComponent(`KamSayara Valuation: ${carName}`);
-  const mailBody=encodeURIComponent(`I checked my ${carName} on KamSayara.\n\nMarket Value: AED ${avg.toLocaleString()}\nRange: AED ${low.toLocaleString()} – AED ${high.toLocaleString()}\n${ai?'Verdict: '+ai.deal_rating:''}\n\nCheck yours free: https://kamsayara.mbit0010.workers.dev`);
-  const mailUrl=`mailto:?subject=${mailSubj}&body=${mailBody}`;
 
-  // ── Marketability block ──────────────────────────────────
-  let mktHtml='';
-  const mkt=r.marketability||null;
-  if(mkt&&mkt.score!=null){
-    const score=Math.round(mkt.score)||0;
-    const label=mkt.label||'';
-    const cls=label==='Hot Market'?'hot':label==='Good Demand'?'good':label==='Moderate'?'moderate':'slow';
-    const fillPct=Math.max(4,Math.min(100,score));
+  // ── New flat result layout ───────────────────────────────
+  const mkt = r.marketability || null;
+  const mktCls = mkt ? (mkt.label==='Hot Market'?'hot':mkt.label==='Good Demand'?'good':mkt.label==='Moderate'?'moderate':'slow') : 'good';
 
-    // Days speed class helper
-    function daysCls(d){return d<=14?'fast':d<=45?'medium':'slow';}
-
-    // Days at market price (always shown)
-    const daysMarket=mkt.days_at_market||0;
-    const daysMarketRow=daysMarket>0
-      ?`<div class="mkt-day-row">
-          <span class="mkt-day-lbl">At market price (AED ${avg.toLocaleString()})</span>
-          <span class="mkt-day-val ${daysCls(daysMarket)}">~${daysMarket} days</span>
-        </div>`:'';
-
-    // Days at asking price (only if asking price provided)
-    const daysAsking=mkt.days_at_asking||0;
-    const daysAskingRow=askN&&daysAsking>0
-      ?`<div class="mkt-day-row">
-          <span class="mkt-day-lbl">At your price (AED ${askN.toLocaleString()})</span>
-          <span class="mkt-day-val ${daysCls(daysAsking)}">~${daysAsking} days</span>
-        </div>`:'';
-
-    // Recommended price (only if asking is above market and rec price set)
-    const recPrice=mkt.recommended_price||0;
-    const recRow=askN&&recPrice>0&&recPrice<askN
-      ?`<div class="mkt-rec">
-          <span class="mkt-rec-ico">⚡</span>
-          <span class="mkt-rec-text">Price to sell in ~14 days</span>
-          <span class="mkt-rec-price">AED ${recPrice.toLocaleString()}</span>
-        </div>`:'';
-
-    const insightRow=mkt.insight
-      ?`<div class="mkt-insight">${mkt.insight}</div>`:'';
-
-    mktHtml=`
-    <div class="mkt-block ${cls}">
-      <div class="mkt-top">
-        <div class="mkt-label-row">
-          <span class="mkt-title">Marketability</span>
-          <span class="mkt-badge ${cls}">${label}</span>
+  // Position bar
+  let pposSection = '';
+  if(low && high && avg && high > low){
+    const avgPct = Math.max(5, Math.min(95, Math.round(((avg-low)/(high-low))*100)));
+    let askDot = '';
+    let askEntry = '';
+    if(askN && askN > 0){
+      const askPct = Math.max(4, Math.min(96, Math.round(((askN-low)/(high-low))*100)));
+      const offset = Math.abs(askPct-avgPct) < 4 ? 'top:calc(50% + 6px);' : '';
+      askDot = `<div class="r-ppos-dot-ask" style="left:${askPct}%;${offset}"></div>`;
+      askEntry = `<div class="r-ppos-entry ask"><span class="r-ppos-dot-sm ask"></span>Your Price · AED ${askN.toLocaleString()}</div>`;
+    }
+    pposSection = `
+      <div class="r-sep"></div>
+      <div class="r-bar-section">
+        <div class="r-ppos-ends">
+          <span style="color:#2ecc71;">Low · AED ${low.toLocaleString()}</span>
+          <span style="color:#e74c3c;">High · AED ${high.toLocaleString()}</span>
         </div>
-        <div class="mkt-score-wrap">
-          <span class="mkt-score-num ${cls}" id="mktScore">0</span>
-          <span class="mkt-score-unit">/100</span>
+        <div class="r-ppos-track">
+          <div class="r-ppos-dot-avg" style="left:${avgPct}%"></div>
+          ${askDot}
         </div>
-      </div>
-      <div class="mkt-bar-wrap">
-        <div class="mkt-bar">
-          <div class="mkt-bar-fill" id="mktBarFill" style="width:0%"></div>
+        <div class="r-ppos-legend">
+          <div class="r-ppos-entry avg"><span class="r-ppos-dot-sm avg"></span>Market Avg · AED ${avg.toLocaleString()}</div>
+          ${askEntry}
         </div>
-      </div>
-      <div class="mkt-days">
-        ${daysMarketRow}
-        ${daysAskingRow}
-      </div>
-      ${recRow}
-      ${insightRow}
-    </div>`;
+      </div>`;
   }
 
-  return `
-    <div class="pblock">
-      <div class="pblock-top">
-        <div class="pblock-left">
-          <div class="p-lbl">UAE Market Value</div>
-          <div class="p-main" id="priceMain">AED 0</div>
-          <div class="p-range">Range AED ${low.toLocaleString()} – AED ${high.toLocaleString()}</div>
+  // Asking vs market
+  let vsSection = '';
+  if(askN && avg){
+    const diff = askN - avg;
+    const pct = Math.round(Math.abs(diff/avg)*100);
+    const cls = diff < 0 ? 'under' : diff > 0 ? 'over' : 'fair';
+    const ico = diff < 0 ? '↓' : diff > 0 ? '↑' : '=';
+    const txt = diff < 0
+      ? `AED ${Math.abs(diff).toLocaleString()} (${pct}%) below market`
+      : diff > 0
+      ? `AED ${Math.abs(diff).toLocaleString()} (${pct}%) above market`
+      : 'Matches market average';
+    vsSection = `
+      <div class="r-sep"></div>
+      <div class="r-vs-section">
+        <div class="r-vs-pill ${cls}"><span class="r-vs-icon">${ico}</span>${txt}</div>
+      </div>`;
+  }
+
+  // Metrics: accuracy + marketability bars side by side as rows
+  const daysCls = d => d <= 14 ? 'fast' : d <= 45 ? 'medium' : 'slow';
+  let daysRows = '';
+  if(mkt){
+    if(mkt.days_at_market > 0){
+      daysRows += `<div class="r-days-row">
+        <span class="r-days-lbl">At market price (AED ${avg.toLocaleString()})</span>
+        <span class="r-days-val ${daysCls(mkt.days_at_market)}">~${mkt.days_at_market} days</span>
+      </div>`;
+    }
+    if(askN && mkt.days_at_asking > 0){
+      daysRows += `<div class="r-days-row">
+        <span class="r-days-lbl">At your price (AED ${askN.toLocaleString()})</span>
+        <span class="r-days-val ${daysCls(mkt.days_at_asking)}">~${mkt.days_at_asking} days</span>
+      </div>`;
+    }
+  }
+  const recRow = (mkt && askN && mkt.recommended_price > 0 && mkt.recommended_price < askN)
+    ? `<div class="r-rec-row">
+        <span class="r-rec-lbl">⚡ Price to sell in ~14 days</span>
+        <span class="r-rec-price">AED ${mkt.recommended_price.toLocaleString()}</span>
+      </div>` : '';
+
+  const metricsSection = `
+    <div class="r-sep"></div>
+    <div class="r-metrics-section">
+      <div class="r-metric-row">
+        <span class="r-metric-lbl">Accuracy</span>
+        <div class="r-metric-bar-wrap">
+          <div class="r-metric-bar accuracy" id="cbarFill" style="width:0%"></div>
         </div>
-        <div class="pblock-right">
-          <div class="p-meta">
-            <span class="pbadge">${comp} comparables</span>
-            <span class="pbadge">${r.fromCache?'Cached':'Live'}</span>
-            ${qs.accident==='yes'?'<span class="pbadge" style="color:var(--bad);border-color:var(--bad-line)">⚠ Accident</span>':''}
+        <span class="r-metric-val">${conf}%</span>
+      </div>
+      ${mkt ? `<div class="r-metric-row">
+        <span class="r-metric-lbl">Marketability</span>
+        <div class="r-metric-bar-wrap">
+          <div class="r-metric-bar mkt" id="mktBarFill" style="width:0%"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;">
+          <span class="r-metric-val"><span id="mktScore">0</span>/100</span>
+          <span class="r-mkt-badge ${mktCls}">${mkt.label||''}</span>
+        </div>
+      </div>
+      ${daysRows}
+      ${recRow}
+      ${mkt.insight ? `<div class="r-mkt-insight">${mkt.insight}</div>` : ''}` : ''}
+    </div>`;
+
+  // AI verdict section
+  let aiSection = '';
+  if(ai && ai.deal_rating){
+    const cls = aiRatingClass(ai.deal_rating);
+    const labelMap = {
+      'Good Deal':'Strong Value','Fair Price':'Fair Market Price',
+      'Slightly High':'Above Market','Overpriced':'Significantly Above Market'
+    };
+    const label = labelMap[ai.deal_rating] || ai.deal_rating;
+    const factors = (ai.key_factors||[]).map(f=>`<div class="r-factor">${f}</div>`).join('');
+    aiSection = `
+      <div class="r-sep"></div>
+      <div class="r-ai-section">
+        <div class="r-verdict-row">
+          <span class="r-verdict-label ${cls}">${label}</span>
+          ${ai.confidence ? `<span class="r-conf-txt">${ai.confidence} confidence</span>` : ''}
+        </div>
+        ${ai.explanation ? `<div class="r-explanation">${ai.explanation}</div>` : ''}
+        ${factors ? `<div class="r-factors">${factors}</div>` : ''}
+        ${ai.advice ? `<div class="r-insight-box"><span class="r-insight-lbl">Market Insight</span>${ai.advice}</div>` : ''}
+      </div>`;
+  } else {
+    const deal = dealVerdict(askN, avg);
+    if(deal){
+      aiSection = `
+        <div class="r-sep"></div>
+        <div class="r-ai-section">
+          <div class="r-verdict-row">
+            <span class="r-verdict-label ${deal.cls}">${deal.label}</span>
           </div>
-          <div class="trust-line">${comp>0?`<strong>${comp}</strong> live UAE listings`:'Live UAE data'}</div>
+          <div class="r-explanation">${deal.ver}</div>
+          ${deal.act ? `<div class="r-insight-box"><span class="r-insight-lbl">Advice</span>${deal.act}</div>` : ''}
+        </div>`;
+    }
+  }
+
+  return `<div class="r-card">
+    <div class="r-price-section">
+      <div class="r-price-header">
+        <span class="r-price-lbl">UAE Market Value</span>
+        <div class="r-price-badges">
+          ${comp > 0 ? `<span class="r-badge">${comp} listings</span>` : ''}
+          <span class="r-badge live">${r.fromCache ? 'Cached' : 'Live'}</span>
+          ${qs.accident === 'yes' ? '<span class="r-badge warn">⚠ Accident</span>' : ''}
         </div>
       </div>
-      ${pposHtml}
-      ${vsHtml}
-      <div class="cbar-wrap">
-        <div class="cbar-top"><span>Market Accuracy</span><span>${conf}%</span></div>
-        <div class="cbar"><div class="cbar-fill" id="cbarFill" style="width:0%"></div></div>
-        <div class="cbar-legend"><span>Low</span><span>High</span></div>
-      </div>
-      ${mktHtml}
+      <div class="r-price-main" id="priceMain">AED 0</div>
+      <div class="r-price-range">Range AED ${low.toLocaleString()} – AED ${high.toLocaleString()}</div>
     </div>
-    ${aiHtml}`;
+    ${vsSection}
+    ${pposSection}
+    ${metricsSection}
+    ${aiSection}
+  </div>`;
 }
 
 /* ── MAIN CALL ──────────────────────────────────────────── */
@@ -3462,10 +3671,8 @@ async function checkCarPrice(){
         const mb=document.getElementById('mktBarFill');
         const ms=document.getElementById('mktScore');
         if(mb&&ms){
-          const score=parseInt(ms.dataset.target||ms.textContent)||0;
           const mktData=r.marketability;
           if(mktData){
-            ms.dataset.target=mktData.score;
             setTimeout(()=>{
               mb.style.transition='width .9s var(--ease)';
               mb.style.width=Math.max(4,Math.min(100,mktData.score))+'%';
