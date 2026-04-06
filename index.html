@@ -4162,35 +4162,63 @@ async function checkCarPrice(){
   const model=g('model').value;
 
   try{
-    const controller=new AbortController();
-    const timeoutId=setTimeout(()=>controller.abort(),55000);
-    // Show "taking longer" message after 20s
-    const slowMsg=setTimeout(()=>{
-      const el=g('loadStep')||g('mobLoadStep');
-      if(el)el.textContent='Live search in progress — almost there…';
-    },20000);
+    const MAX_RETRIES = 3;
+    let attempt = 0;
+    let resp;
 
-    const resp=await fetch(`${API}/api/professional-valuation`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      signal:controller.signal,
-      body:JSON.stringify({
-        brand,model,year:parseInt(year),
-        trim:g('trim').value,
-        mileage:mileage?parseInt(mileage):null,
-        spec:g('spec').value||'GCC',
-        condition:g('condition').value,
-        colour:g('colour').value,
-        bodyType:g('body').value,
-        sellerType:g('seller').value,
-        service:g('service').value,
-        askingPrice:asking?parseInt(asking):null,
-        warranty:qs.warranty,singleOwner:qs.singleOwner,
-        fsh:qs.fsh,accidentHistory:qs.accident
-      })
-    });
-    if(!resp.ok)throw new Error(`API ${resp.status}`);
-    clearTimeout(timeoutId);
-    clearTimeout(slowMsg);
+    // Auto-retry on 503/502/429 with exponential backoff
+    while(attempt < MAX_RETRIES){
+      attempt++;
+      const controller=new AbortController();
+      const timeoutId=setTimeout(()=>controller.abort(),55000);
+      const slowMsg=setTimeout(()=>{
+        const el=g('loadStep');
+        if(el)el.textContent='Live search in progress — almost there…';
+      },20000);
+
+      try{
+        resp=await fetch(`${API}/api/professional-valuation`,{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          signal:controller.signal,
+          body:JSON.stringify({
+            brand,model,year:parseInt(year),
+            trim:g('trim').value,
+            mileage:mileage?parseInt(mileage):null,
+            spec:g('spec').value||'GCC',
+            condition:g('condition').value,
+            colour:g('colour').value,
+            bodyType:g('body').value,
+            sellerType:g('seller').value,
+            service:g('service').value,
+            askingPrice:asking?parseInt(asking):null,
+            warranty:qs.warranty,singleOwner:qs.singleOwner,
+            fsh:qs.fsh,accidentHistory:qs.accident
+          })
+        });
+        clearTimeout(timeoutId);
+        clearTimeout(slowMsg);
+
+        // Retry on recoverable server errors
+        if((resp.status===503||resp.status===502||resp.status===429)&&attempt<MAX_RETRIES){
+          const wait=attempt*3000; // 3s, 6s backoff
+          const el=g('loadStep');
+          if(el)el.textContent=`Server busy — retrying in ${wait/1000}s… (${attempt}/${MAX_RETRIES})`;
+          await new Promise(r=>setTimeout(r,wait));
+          continue;
+        }
+        if(!resp.ok)throw new Error(`API ${resp.status}`);
+        break; // success
+      }catch(fetchErr){
+        clearTimeout(timeoutId);
+        clearTimeout(slowMsg);
+        if(fetchErr.name==='AbortError')throw fetchErr; // timeout — don't retry
+        if(attempt>=MAX_RETRIES)throw fetchErr;
+        const wait=attempt*3000;
+        const el=g('loadStep');
+        if(el)el.textContent=`Connection issue — retrying in ${wait/1000}s… (${attempt}/${MAX_RETRIES})`;
+        await new Promise(r=>setTimeout(r,wait));
+      }
+    }
     const r=await resp.json();
     stopLoad();
 
@@ -4226,14 +4254,47 @@ async function checkCarPrice(){
     saveLastValuation();
   }catch(err){
     stopLoad();
-    const isTimeout=err.name==='AbortError';
-    const errMsg=isTimeout?'Request timed out — Claude is taking too long. Please try again.':err.message;
-    const errHtml=`<div style="padding:20px;text-align:center;">
-      <div style="font-size:1.4rem;margin-bottom:8px;">${isTimeout?'⏱️':'⚠️'}</div>
-      <div style="color:var(--bad);font-size:.88rem;font-weight:600;margin-bottom:6px;">${isTimeout?'Timed out':'Connection error'}</div>
-      <p style="color:var(--muted);font-size:.76rem;line-height:1.5;">${errMsg}</p>
-      <button class="reset-btn" style="margin:10px auto 0" onclick="resetForm()">← Try again</button>
+    const isTimeout = err.name==='AbortError';
+    const status    = err.message?.match(/API (\d+)/)?.[1];
+
+    const errTitle = isTimeout
+      ? 'Request timed out'
+      : status==='503'||status==='502' ? 'Server temporarily unavailable'
+      : status==='429' ? 'Too many requests'
+      : status==='401'||status==='403' ? 'Authentication error'
+      : 'Connection error';
+
+    const errBody = isTimeout
+      ? 'The valuation is taking longer than usual. The live market search may be slow — please try again.'
+      : status==='503'||status==='502' ? 'The valuation server is temporarily busy. It was retried automatically. Please wait a moment and try again.'
+      : status==='429' ? 'Too many requests sent. Please wait 30 seconds then try again.'
+      : status==='401'||status==='403' ? 'API key issue on the server. Please contact support.'
+      : `Could not reach the valuation server (${err.message}). Check your connection and try again.`;
+
+    const errIcon = isTimeout ? '⏱' : status==='503'||status==='502' ? '🔄' : '⚠';
+
+    const errHtml=`
+    <div style="padding:28px 20px;text-align:center;font-family:'Exo 2',sans-serif;">
+      <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">${errIcon}</div>
+      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">${errTitle}</div>
+      <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:300px;margin:0 auto 20px;">${errBody}</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="checkCarPrice()"
+          style="background:linear-gradient(135deg,#D4AF37,#B8960A);color:#1A2B4C;border:none;border-radius:8px;
+                 padding:10px 22px;font-family:'Exo 2',sans-serif;font-size:0.80rem;font-weight:800;
+                 letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+                 box-shadow:0 3px 12px rgba(184,150,10,0.35);">
+          ↻ Try Again
+        </button>
+        <button onclick="resetForm()"
+          style="background:#EEF1F6;color:#334155;border:1.5px solid #D0D5E0;border-radius:8px;
+                 padding:10px 18px;font-family:'Exo 2',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;">
+          ↺ Reset
+        </button>
+      </div>
+      ${status?`<p style="font-size:0.62rem;color:#A0AEC0;margin-top:14px;">Error code: ${status}</p>`:''}
     </div>`;
+
     g('rcontent').innerHTML=errHtml;
     showState('content');
   }finally{
