@@ -534,19 +534,13 @@
     }
 
     /* ── ENHANCED BOTTOM SHEET ───────────────────────────────── */
+    /* mob-result-toast base — overridden by mobile card stack CSS below */
     .mob-result-toast{
       display:none;
-      position:fixed;bottom:0;left:0;right:0;z-index:150;
       background:var(--white);
-      border-top:2px solid var(--accent);
-      border-radius:var(--r-xl) var(--r-xl) 0 0;
-      box-shadow:0 -12px 40px rgba(0,0,0,0.18),0 -4px 12px rgba(0,0,0,0.08);
-      max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
-      transform:translateY(100%);
-      transition:transform .42s var(--ease);
-      padding:0 0 16px; /* safe-area fallback */
+      padding:0;
     }
-    .mob-result-toast.show{transform:translateY(0);}
+    .mob-result-toast.show{ display:flex; flex-direction:column; }
     .mob-toast-handle{
       display:flex;align-items:center;justify-content:space-between;
       padding:14px 18px 12px;border-bottom:1px solid var(--border);
@@ -561,7 +555,7 @@
     .mob-toast-title{font-family:"Exo 2",sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
     .mob-toast-close{background:rgba(0,0,0,0.05);border:none;cursor:pointer;color:var(--muted);font-size:.9rem;padding:4px;min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .16s,color .16s;}
     .mob-toast-close:hover{background:rgba(0,0,0,0.1);color:var(--ink);}
-    .mob-toast-body{padding:14px 18px 20px;}
+    .mob-toast-body{ padding:12px 14px 16px; max-width:100%; width:100%; }
     .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:140;backdrop-filter:blur(2px);}
     .mob-overlay.show{display:block;}
 
@@ -985,7 +979,7 @@
     }
     .form-header-title {
       font-family: "Exo 2", sans-serif;
-      font-size: 0.62rem;
+      font-size: clamp(0.58rem, 1.5vw, 0.62rem);
       font-weight: 800;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -1063,9 +1057,9 @@
     /* ── LABEL STYLE ─────────────────────────────────────── */
     .ig label {
       font-family: "Exo 2", sans-serif;
-      font-size: 0.68rem;
+      font-size: clamp(0.6rem, 1.8vw, 0.68rem);
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--ink-soft);
       margin-bottom: 0.25rem;
@@ -1452,106 +1446,193 @@
     .tf-item { display: none !important; }
     .tf-icon { display: none !important; }
 
-    /* ── MOBILE CARD STACK ───────────────────────────────────
-       Card 1 = form-card   (full screen, starts visible)
-       Card 2 = mob-result-toast (full screen, slides from right)
-       Tab bar = fixed bottom navigation
-    ──────────────────────────────────────────────────────── */
-
-    /* Tab bar: hidden on desktop/tablet */
-    .mob-tab-bar { display: none !important; }
+    /* Mobile result card header strip */
+    /* ═══════════════════════════════════════════════════════
+       MOBILE — Fixed header (hero + card tabs) + card stack
+       ALL mobile-only styles in one place.
+    ═══════════════════════════════════════════════════════ */
+    .mob-fixed-header  { display: none; }
+    .mob-hero-strip    { display: none; }
+    .mob-tab-bar       { display: none !important; }
+    .mob-result-header { display: none; }
 
     @media(max-width:600px){
 
-      /* ── TAB BAR ── */
+      /* ── FIXED HEADER WRAPPER (hero + tabs) ── */
+      .mob-fixed-header {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 310;
+        /* same gradient as desktop hero */
+        background: linear-gradient(138deg,
+          #001a14 0%, #003424 35%,
+          #6b4d03 72%, #b8820e 100%);
+      }
+
+      /* ── HERO STRIP — compact, no wasted space ── */
+      .mob-hero-strip {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 10px 16px 8px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .mob-hero-brand {
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+      }
+      .mob-hero-kam {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: #E8D060;
+        letter-spacing: -0.01em;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      }
+      .mob-hero-sep {
+        font-size: 0.9rem;
+        color: rgba(232,208,96,0.32);
+        margin: 0 2px;
+      }
+      .mob-hero-say {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.62rem;
+        font-weight: 700;
+        color: rgba(255,255,255,0.7);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+      .mob-hero-tag {
+        font-family: "Exo 2", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.85);
+        line-height: 1.2;
+      }
+      .mob-hero-tag em {
+        color: #E8D060;
+        font-style: normal;
+        font-weight: 700;
+      }
+      .mob-hero-trust {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+      }
+      .mob-ht {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 0.56rem;
+        color: rgba(255,255,255,0.6);
+        font-family: "Exo 2", sans-serif;
+        letter-spacing: 0.02em;
+      }
+      .mob-htd {
+        width: 3px; height: 3px;
+        border-radius: 50%;
+        background: rgba(232,208,96,0.5);
+        flex-shrink: 0;
+      }
+
+      /* ── CARD TAB ROW — two physical card tabs ── */
       .mob-tab-bar {
         display: flex !important;
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        z-index: 300;
-        background: rgba(255,255,255,0.97);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-top: 1px solid var(--border);
-        padding: 10px 16px 16px;
-        gap: 10px;
-        box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+        align-items: flex-end;  /* tabs anchor to bottom of row */
+        padding: 0 10px;
+        gap: 5px;
+        height: 40px;
+        background: transparent; /* hero gradient shows through */
+        flex-shrink: 0;
       }
+
+      /* Tab = physical index-card tab shape */
       .mob-tab {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        padding: 11px 8px;
-        border-radius: 12px;
+        gap: 4px;
+        height: 34px;              /* inactive: slightly shorter = sits behind */
+        border-radius: 9px 9px 0 0;
         border: none;
-        background: var(--surface-2);
         font-family: "Exo 2", sans-serif;
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.07em;
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 0.09em;
         text-transform: uppercase;
-        color: var(--muted);
         cursor: pointer;
-        transition: background 0.22s, color 0.22s, transform 0.16s;
+        transition: height 0.22s ease, background 0.22s, color 0.22s, opacity 0.22s;
+        /* Inactive: semi-transparent glass on dark bg */
+        background: rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.52);
+        backdrop-filter: blur(4px);
       }
       .mob-tab svg {
-        width: 15px; height: 15px;
+        width: 12px; height: 12px;
         stroke: currentColor;
         flex-shrink: 0;
       }
+
+      /* Active tab: full height, white, seamlessly connects to card below */
       .mob-tab.active {
-        background: var(--accent);
-        color: #fff;
-        box-shadow: 0 4px 12px rgba(0,133,119,0.28);
+        height: 40px;              /* full row height — flush at bottom */
+        background: #ffffff;
+        color: var(--accent);
+        font-weight: 900;
       }
-      .mob-tab:disabled, .mob-tab[disabled] {
-        opacity: 0.32;
+      #tabResult.active {
+        background: var(--surface); /* slightly warm white for result card */
+        color: var(--accent);
+      }
+      .mob-tab:disabled,
+      .mob-tab[disabled] {
+        opacity: 0.22;
         cursor: not-allowed;
       }
-      .mob-tab:not(:disabled):not(.active):active {
-        transform: scale(0.97);
-      }
 
-      /* ── CARD 1: FORM — fixed full-screen ── */
+      /* ── CARDS — start exactly below the fixed header ── */
+      /* Header = hero (~72px) + tab row (40px) = 112px */
       .form-card {
         position: fixed !important;
-        top: 0; left: 0; right: 0; bottom: 0;
+        top: 112px !important;
+        left: 0; right: 0; bottom: 0;
         z-index: 51;
         border-radius: 0 !important;
         box-shadow: none !important;
         overflow-y: auto !important;
         overflow-x: hidden;
-        padding-bottom: 80px;
-        transform: translateX(0) scale(1);
-        transform-origin: center center;
-        transition: transform 0.38s cubic-bezier(0.16,1,0.3,1),
-                    box-shadow 0.38s;
+        padding-bottom: 16px;
+        transform: translateX(0);
+        transition: transform 0.34s cubic-bezier(0.16,1,0.3,1),
+                    opacity 0.34s;
+        background: #ffffff;
         will-change: transform;
       }
-      /* When result is shown — form scales back like a card under the deck */
       .form-card.mob-card-behind {
-        transform: scale(0.93) translateX(-6%);
-        box-shadow: none !important;
+        transform: scale(0.93) translateX(-5%);
+        opacity: 0.65;
         pointer-events: none;
       }
 
-      /* ── CARD 2: RESULT — slides in from right ── */
       .mob-result-toast {
         position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
+        top: 112px !important;
+        left: 0 !important; right: 0 !important; bottom: 0 !important;
         z-index: 52;
         max-height: none !important;
         border-radius: 0 !important;
         border-top: none !important;
         box-shadow: none !important;
         transform: translateX(100%) !important;
-        transition: transform 0.38s cubic-bezier(0.16,1,0.3,1) !important;
-        padding: 0 0 80px !important;
+        transition: transform 0.34s cubic-bezier(0.16,1,0.3,1) !important;
+        padding: 0 0 16px !important;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         background: var(--surface) !important;
@@ -1561,24 +1642,207 @@
         transform: translateX(0) !important;
       }
 
-      /* Hide the old drag handle — tab bar replaces it */
+      /* Result content max width — readable on wide portrait tablets */
+      .mob-toast-body { max-width: 640px; margin: 0 auto; }
+      #mobContent { max-width: 100%; }
+
+      /* Result card header (replaces drag handle) */
+      .mob-result-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px 10px;
+        background: linear-gradient(135deg, rgba(0,133,119,0.06) 0%, rgba(255,255,255,0) 60%);
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+      .mob-result-header-title {
+        font-family: "Exo 2", sans-serif;
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      /* Hide elements not needed on mobile */
       .mob-toast-handle { display: none !important; }
+      .mob-overlay      { display: none !important; }
 
-      /* Hide the dark overlay — not needed for card stack */
-      .mob-overlay { display: none !important; }
+      /* Page — no bottom nav padding */
+      .page { padding-bottom: 16px; }
 
-      /* Page: normal flow, give bottom padding for tab bar */
-      .page { padding-bottom: 100px; }
-
-      /* Keep layout hidden — form-card is fixed */
-      .layout { display: block !important; }
+      /* Layout: inline panels hidden — cards take over */
+      .layout       { display: block !important; }
       .result-panel { display: none !important; }
-      .restoreBar { display: none !important; }
+      #restoreBar   { display: none !important; }
 
-    } /* end @media mobile */
+    } /* end @media(max-width:600px) */
 
-    /* ── DISCLAIMER ───────────────────────────────────────── */
-    .disc { text-align: center; font-size: 0.6rem; color: var(--muted); margin-top: 16px; line-height: 1.6; padding: 0 8px; }
+        /* ── MARKETABILITY SCORE ─────────────────────────────────── */
+    .mkt-block {
+      margin-top: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-2);
+      animation: fIn 0.4s var(--ease) both;
+    }
+    /* colour variants by label */
+    .mkt-block.hot      { border-color: rgba(26,140,107,0.35); background: rgba(26,140,107,0.05); }
+    .mkt-block.good     { border-color: rgba(0,133,119,0.28);  background: rgba(0,133,119,0.04); }
+    .mkt-block.moderate { border-color: rgba(184,120,10,0.3);  background: rgba(184,120,10,0.05); }
+    .mkt-block.slow     { border-color: rgba(192,57,43,0.25);  background: rgba(192,57,43,0.05); }
+
+    .mkt-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .mkt-label-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mkt-title {
+      font-size: 0.52rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+    }
+    .mkt-badge {
+      font-size: 0.58rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-family: "Exo 2", sans-serif;
+    }
+    .mkt-badge.hot      { color: var(--good); background: var(--good-bg); }
+    .mkt-badge.good     { color: var(--accent); background: var(--accent-soft); }
+    .mkt-badge.moderate { color: var(--warn); background: var(--warn-bg); }
+    .mkt-badge.slow     { color: var(--bad); background: var(--bad-bg); }
+
+    .mkt-score-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .mkt-score-num {
+      font-family: "Orbitron", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .mkt-score-num.hot      { color: var(--good); }
+    .mkt-score-num.good     { color: var(--accent); }
+    .mkt-score-num.moderate { color: var(--warn); }
+    .mkt-score-num.slow     { color: var(--bad); }
+    .mkt-score-unit {
+      font-size: 0.5rem;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Score bar */
+    .mkt-bar-wrap { margin-bottom: 8px; }
+    .mkt-bar {
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .mkt-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.9s var(--ease);
+      background: linear-gradient(90deg, #e74c3c, #f1c40f, #1a8c6b);
+    }
+
+    /* Days rows */
+    .mkt-days {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .mkt-day-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .mkt-day-lbl {
+      font-size: 0.6rem;
+      color: var(--ink-soft);
+      font-family: "Exo 2", sans-serif;
+      font-weight: 600;
+      flex: 1;
+    }
+    .mkt-day-val {
+      font-size: 0.65rem;
+      font-weight: 800;
+      font-family: "Exo 2", sans-serif;
+      white-space: nowrap;
+    }
+    .mkt-day-val.fast   { color: var(--good); }
+    .mkt-day-val.medium { color: var(--warn); }
+    .mkt-day-val.slow   { color: var(--bad); }
+
+    /* Recommended price pill */
+    .mkt-rec {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      background: rgba(26,140,107,0.08);
+      border: 1px solid rgba(26,140,107,0.2);
+      margin-bottom: 5px;
+    }
+    .mkt-rec-ico { font-size: 0.7rem; }
+    .mkt-rec-text {
+      font-size: 0.6rem;
+      color: var(--good);
+      font-family: "Exo 2", sans-serif;
+      font-weight: 700;
+      flex: 1;
+    }
+    .mkt-rec-price {
+      font-family: "Orbitron", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--good);
+      white-space: nowrap;
+    }
+
+    /* Insight line */
+    .mkt-insight {
+      font-size: 0.6rem;
+      color: var(--muted);
+      font-family: "Exo 2", sans-serif;
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    /* Result panel size overrides */
+    .result-panel .mkt-score-num { font-size: 1rem; }
+    .result-panel .mkt-title { font-size: 0.54rem; }
+    .result-panel .mkt-badge { font-size: 0.52rem; padding: 2px 6px; }
+    .result-panel .mkt-day-lbl { font-size: 0.56rem; }
+    .result-panel .mkt-day-val { font-size: 0.6rem; }
+    .result-panel .mkt-rec-text { font-size: 0.56rem; }
+    .result-panel .mkt-rec-price { font-size: 0.66rem; }
+    .result-panel .mkt-insight { font-size: 0.56rem; }
     .share-strip {
       display: flex;
       align-items: center;
@@ -1650,9 +1914,16 @@
     }
     .sico:hover::after { opacity: 1; }
     @media(max-width:360px){
-      .share-strip-icons { gap: 5px; }
-      .sico { width: 26px; height: 26px; }
-      .sico svg { width: 12px; height: 12px; }
+      .share-strip { padding: 10px 10px 4px; gap: 5px; }
+      .share-strip-icons { gap: 4px; flex-wrap: wrap; justify-content: center; }
+      .sico { width: 24px; height: 24px; }
+      .sico svg { width: 11px; height: 11px; }
+      .share-strip-lbl { font-size: 0.55rem; }
+    }
+    @media(max-width:320px){
+      .share-strip-icons { gap: 3px; }
+      .sico { width: 22px; height: 22px; }
+      .sico svg { width: 10px; height: 10px; }
     }
 
 
@@ -1688,7 +1959,7 @@
       .layout {
         grid-template-columns: 1fr;
         grid-template-areas: "form" "result";
-        margin-top: -14px;
+        margin-top: 0;
         align-items: start;
       }
       .result-panel { position: static; height: auto; max-height: none; }
@@ -1706,11 +1977,24 @@
       /* Labels slightly larger */
       .ig label { font-size: 0.7rem; }
 
-      /* QC: 4 cols inline, slightly taller touch targets */
-      .qc-row { grid-template-columns: repeat(4, 1fr); }
-      .qc-item { padding: 8px 10px; }
-      .qb { min-width: 24px; min-height: 24px; font-size: 0.78rem; }
-      .qc-name { font-size: 0.6rem; }
+      /* QC: 2x2 on tablet portrait, 4-col on landscape */
+      .qc-row { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .qc-item {
+        padding: 8px 12px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface-2);
+      }
+      .qc-item:nth-child(odd) { border-right: none; }
+      .qc-item:nth-child(3), .qc-item:nth-child(4) { border-bottom: none; }
+      .qb { min-width: 28px; min-height: 28px; font-size: 0.8rem; }
+      .qc-name { font-size: 0.64rem; }
+      @media(min-width:760px) and (max-width:900px){
+        .qc-row { grid-template-columns: repeat(4, 1fr); }
+        .qc-item { border-radius: 0; background: none; border-bottom: none; border-right: 1px solid var(--border); }
+        .qc-item:last-child { border-right: none; }
+      }
 
       /* Footer button full feel */
       .btn-go { font-size: 0.82rem; padding: 0.65rem 1.6rem; }
@@ -1776,6 +2060,8 @@
       .hero-inner { padding: 0 16px 48px; }
       .hnav-links .hnav-link { display: none; }
       .snav-links .snav-link { display: none; }
+      /* Hide sticky nav on mobile — mob-fixed-header replaces it */
+      .snav { display: none !important; }
       .trust-footer { gap: 12px; }
 
       /* Share strip on mobile */
@@ -1938,7 +2224,7 @@
     .cbar-legend {
       display: flex;
       justify-content: space-between;
-      font-size: 0.48rem;
+      font-size: 0.56rem;
       color: var(--muted);
       margin-top: 2px;
       letter-spacing: 0.04em;
@@ -1972,9 +2258,9 @@
 
     /* ── REDUCE ALL RESULT PANEL TEXT/ICONS HALF SIZE ──────── */
     .result-panel .p-main { font-size: 1.3rem; }
-    .result-panel .p-lbl { font-size: 0.46rem; }
+    .result-panel .p-lbl { font-size: 0.54rem; }
     .result-panel .p-range { font-size: 0.54rem; }
-    .result-panel .cbar-top { font-size: 0.46rem; }
+    .result-panel .cbar-top { font-size: 0.54rem; }
     .result-panel .trust-line { font-size: 0.56rem; }
     .result-panel .ai-rating-badge { font-size: 0.58rem; padding: 3px 8px; }
     .result-panel .ai-conf-badge { font-size: 0.52rem; padding: 2px 6px; }
@@ -1982,9 +2268,9 @@
     .result-panel .ai-explanation { font-size: 0.65rem; }
     .result-panel .ai-factor { font-size: 0.62rem; }
     .result-panel .ai-advice { font-size: 0.62rem; }
-    .result-panel .ai-advice-lbl { font-size: 0.46rem; }
-    .result-panel .ai-factors-lbl { font-size: 0.46rem; }
-    .result-panel .ai-powered-note { font-size: 0.48rem; }
+    .result-panel .ai-advice-lbl { font-size: 0.54rem; }
+    .result-panel .ai-factors-lbl { font-size: 0.54rem; }
+    .result-panel .ai-powered-note { font-size: 0.54rem; }
     .result-panel .tag { font-size: 0.55rem; padding: 2px 7px; }
     .result-panel .pbadge { font-size: 0.52rem; padding: 2px 7px; }
     .result-panel .p-meta { gap: 4px; margin-top: 6px; }
@@ -2051,16 +2337,32 @@
   </div>
 </nav>
 
-<!-- MOBILE CARD STACK TAB BAR -->
-<div class="mob-tab-bar" id="mobTabBar" role="navigation" aria-label="Mobile navigation" style="display:none">
-  <button class="mob-tab active" id="tabForm" onclick="switchMobCard('form')" aria-label="Car Info">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h5l2 4v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-    Car Info
-  </button>
-  <button class="mob-tab" id="tabResult" onclick="switchMobCard('result')" aria-label="Valuation" disabled>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-    Valuation
-  </button>
+<!-- MOBILE FIXED HEADER: hero strip + card tabs (mobile only, hidden on desktop/tablet) -->
+<div class="mob-fixed-header" id="mobFixedHeader">
+  <!-- Hero strip -->
+  <div class="mob-hero-strip">
+    <div class="mob-hero-brand">
+      <span class="mob-hero-kam">KAM</span><span class="mob-hero-sep">·</span><span class="mob-hero-say">SAYARA</span>
+    </div>
+    <div class="mob-hero-tag">Live UAE Car Values, <em>No Guessing.</em></div>
+    <div class="mob-hero-trust">
+      <span class="mob-ht"><span class="mob-htd"></span>50,000+ listings</span>
+      <span class="mob-ht"><span class="mob-htd"></span>Live</span>
+      <span class="mob-ht"><span class="mob-htd"></span>GCC-spec</span>
+      <span class="mob-ht"><span class="mob-htd"></span>Free</span>
+    </div>
+  </div>
+  <!-- Card tabs -->
+  <div class="mob-tab-bar" id="mobTabBar" role="navigation" aria-label="Mobile navigation">
+    <button class="mob-tab active" id="tabForm" onclick="switchMobCard('form')" aria-label="Vehicle Info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+      Vehicle Info
+    </button>
+    <button class="mob-tab" id="tabResult" onclick="switchMobCard('result')" aria-label="Valuation" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Valuation
+    </button>
+  </div>
 </div>
 <div class="hero" id="heroTop">
   <div class="hero-inner">
@@ -2375,9 +2677,14 @@
 
 <!-- MOBILE BOTTOM SHEET RESULT -->
 <div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
+  <!-- Mobile result header strip — matches hero strip style -->
+  <div class="mob-result-header">
+    <div class="mob-result-header-title">UAE Market Valuation</div>
+    <span class="mob-ref" id="mobRef"></span>
+  </div>
   <div class="mob-toast-handle">
     <span class="mob-toast-title">Valuation Result</span>
-    <span class="mob-ref" id="mobRef"></span>
+    <span class="mob-ref" id="mobRefOld"></span>
     <button class="mob-toast-close" onclick="closeMobResult()" aria-label="Close">✕</button>
   </div>
   <div class="mob-toast-body" id="mobBody">
@@ -2709,6 +3016,20 @@ function aiRatingClass(rating){
   return'neu';
 }
 
+/* ── ANIMATED NUMBER COUNT-UP (generic integer) ─────────── */
+function animateCountUpNum(el,target,duration=800){
+  const start=performance.now();
+  function tick(now){
+    const elapsed=now-start;
+    const progress=Math.min(elapsed/duration,1);
+    const t=1-Math.pow(1-progress,3);
+    el.textContent=Math.round(target*t);
+    if(progress<1)requestAnimationFrame(tick);
+    else el.textContent=target;
+  }
+  requestAnimationFrame(tick);
+}
+
 /* ── ANIMATED PRICE COUNT-UP ─────────────────────────────── */
 function animateCountUp(el,target,duration=800){
   const start=performance.now();
@@ -2819,6 +3140,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     avg,low,high,comp,
     conf:r.confidence||0,
     askingPrice:askN,
+    marketability:r.marketability||null,
     ai,
     aiCls:ai?aiRatingClass(ai.deal_rating):'neu',
     inputs:[
@@ -2937,6 +3259,72 @@ function buildResult(r,brand,model,year,mileage,asking){
   const mailBody=encodeURIComponent(`I checked my ${carName} on KamSayara.\n\nMarket Value: AED ${avg.toLocaleString()}\nRange: AED ${low.toLocaleString()} – AED ${high.toLocaleString()}\n${ai?'Verdict: '+ai.deal_rating:''}\n\nCheck yours free: https://kamsayara.mbit0010.workers.dev`);
   const mailUrl=`mailto:?subject=${mailSubj}&body=${mailBody}`;
 
+  // ── Marketability block ──────────────────────────────────
+  let mktHtml='';
+  const mkt=r.marketability||null;
+  if(mkt&&mkt.score!=null){
+    const score=Math.round(mkt.score)||0;
+    const label=mkt.label||'';
+    const cls=label==='Hot Market'?'hot':label==='Good Demand'?'good':label==='Moderate'?'moderate':'slow';
+    const fillPct=Math.max(4,Math.min(100,score));
+
+    // Days speed class helper
+    function daysCls(d){return d<=14?'fast':d<=45?'medium':'slow';}
+
+    // Days at market price (always shown)
+    const daysMarket=mkt.days_at_market||0;
+    const daysMarketRow=daysMarket>0
+      ?`<div class="mkt-day-row">
+          <span class="mkt-day-lbl">At market price (AED ${avg.toLocaleString()})</span>
+          <span class="mkt-day-val ${daysCls(daysMarket)}">~${daysMarket} days</span>
+        </div>`:'';
+
+    // Days at asking price (only if asking price provided)
+    const daysAsking=mkt.days_at_asking||0;
+    const daysAskingRow=askN&&daysAsking>0
+      ?`<div class="mkt-day-row">
+          <span class="mkt-day-lbl">At your price (AED ${askN.toLocaleString()})</span>
+          <span class="mkt-day-val ${daysCls(daysAsking)}">~${daysAsking} days</span>
+        </div>`:'';
+
+    // Recommended price (only if asking is above market and rec price set)
+    const recPrice=mkt.recommended_price||0;
+    const recRow=askN&&recPrice>0&&recPrice<askN
+      ?`<div class="mkt-rec">
+          <span class="mkt-rec-ico">⚡</span>
+          <span class="mkt-rec-text">Price to sell in ~14 days</span>
+          <span class="mkt-rec-price">AED ${recPrice.toLocaleString()}</span>
+        </div>`:'';
+
+    const insightRow=mkt.insight
+      ?`<div class="mkt-insight">${mkt.insight}</div>`:'';
+
+    mktHtml=`
+    <div class="mkt-block ${cls}">
+      <div class="mkt-top">
+        <div class="mkt-label-row">
+          <span class="mkt-title">Marketability</span>
+          <span class="mkt-badge ${cls}">${label}</span>
+        </div>
+        <div class="mkt-score-wrap">
+          <span class="mkt-score-num ${cls}" id="mktScore">0</span>
+          <span class="mkt-score-unit">/100</span>
+        </div>
+      </div>
+      <div class="mkt-bar-wrap">
+        <div class="mkt-bar">
+          <div class="mkt-bar-fill" id="mktBarFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="mkt-days">
+        ${daysMarketRow}
+        ${daysAskingRow}
+      </div>
+      ${recRow}
+      ${insightRow}
+    </div>`;
+  }
+
   return `
     <div class="pblock">
       <div class="pblock-top">
@@ -2961,6 +3349,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         <div class="cbar"><div class="cbar-fill" id="cbarFill" style="width:0%"></div></div>
         <div class="cbar-legend"><span>Low</span><span>High</span></div>
       </div>
+      ${mktHtml}
     </div>
     ${aiHtml}`;
 }
@@ -3043,23 +3432,47 @@ async function checkCarPrice(){
         _unlockResultTab();
         switchMobCard('result');
       }
-      // animate price and confidence bar
+      // animate price, confidence bar, and marketability score
       requestAnimationFrame(()=>{
         const pm=g('mobContent').querySelector('#priceMain');
         if(pm)animateCountUp(pm,_avg);
         const cb=g('mobContent').querySelector('#cbarFill');
         if(cb){setTimeout(()=>{cb.style.transition='width .9s var(--ease)';cb.style.width=_conf+'%';},80);}
+        const mb=g('mobContent').querySelector('#mktBarFill');
+        const ms=g('mobContent').querySelector('#mktScore');
+        if(mb&&ms&&r.marketability){
+          setTimeout(()=>{
+            mb.style.transition='width .9s var(--ease)';
+            mb.style.width=Math.max(4,Math.min(100,r.marketability.score))+'%';
+            animateCountUpNum(ms,r.marketability.score,800);
+          },160);
+        }
       });
     }else{
       g('rcontent').innerHTML=html;
       showState('content');
       activateShareStrip();
-      // animate price and confidence bar
+      // animate price, confidence bar, and marketability score
       requestAnimationFrame(()=>{
         const pm=document.getElementById('priceMain');
         if(pm)animateCountUp(pm,_avg);
         const cb=document.getElementById('cbarFill');
         if(cb){setTimeout(()=>{cb.style.transition='width .9s var(--ease)';cb.style.width=_conf+'%';},80);}
+        // marketability bar + score count-up
+        const mb=document.getElementById('mktBarFill');
+        const ms=document.getElementById('mktScore');
+        if(mb&&ms){
+          const score=parseInt(ms.dataset.target||ms.textContent)||0;
+          const mktData=r.marketability;
+          if(mktData){
+            ms.dataset.target=mktData.score;
+            setTimeout(()=>{
+              mb.style.transition='width .9s var(--ease)';
+              mb.style.width=Math.max(4,Math.min(100,mktData.score))+'%';
+              animateCountUpNum(ms,mktData.score,800);
+            },160);
+          }
+        }
         g('rcontent').setAttribute('tabindex','-1');
         g('rcontent').focus({preventScroll:true});
       });
@@ -3270,10 +3683,26 @@ function printValuation(){
         <div class="pdf-cbar-top"><span>Market Accuracy</span><span>${Math.round((d.conf||0))*0||'—'}%</span></div>
         <div class="pdf-cbar"><div class="pdf-cbar-fill" style="width:${d.conf?Math.round(d.conf*100):75}%"></div></div>
       </div>
+      ${d.marketability?`
+      <div style="margin-top:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #e4d9c6;background:#faf7f0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:8px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8c7d68;">Marketability</span>
+            <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:99px;background:#e8f5f0;color:#1a8c6b;">${d.marketability.label||''}</span>
+          </div>
+          <span style="font-family:Arial;font-size:18px;font-weight:800;color:#008577;">${d.marketability.score||0}<span style="font-size:9px;color:#8c7d68;">/100</span></span>
+        </div>
+        <div style="height:5px;background:#e4d9c6;border-radius:99px;overflow:hidden;margin-bottom:8px;">
+          <div style="height:100%;width:${Math.max(4,Math.min(100,d.marketability.score||0))}%;background:linear-gradient(90deg,#e74c3c,#f1c40f,#1a8c6b);border-radius:99px;"></div>
+        </div>
+        ${d.marketability.days_at_market?`<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#4a4030;">At market price (AED ${d.avg.toLocaleString()})</span><span style="font-weight:700;color:#008577;">~${d.marketability.days_at_market} days</span></div>`:''}
+        ${d.marketability.days_at_asking&&d.askingPrice?`<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#4a4030;">At asking price (AED ${d.askingPrice.toLocaleString()})</span><span style="font-weight:700;color:#b8780a;">~${d.marketability.days_at_asking} days</span></div>`:''}
+        ${d.marketability.recommended_price&&d.askingPrice&&d.marketability.recommended_price<d.askingPrice?`<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;background:#e8f5f0;border:1px solid rgba(26,140,107,0.2);margin-top:5px;margin-bottom:4px;"><span style="font-size:10px;color:#1a8c6b;flex:1;">⚡ Price to sell in ~14 days</span><span style="font-size:11px;font-weight:800;color:#1a8c6b;">AED ${d.marketability.recommended_price.toLocaleString()}</span></div>`:''}
+        ${d.marketability.insight?`<div style="font-size:10px;color:#8c7d68;font-style:italic;margin-top:4px;">${d.marketability.insight}</div>`:''}
+      </div>`:''}
     </div>
 
-    ${d.ai?`<div class="pdf-ai">
-      <div class="pdf-ai-rating">${d.ai.deal_rating||'Analysis'}${d.ai.confidence?`<span class="pdf-ai-conf">${d.ai.confidence} confidence</span>`:''}
+    ${d.ai?`<div class="pdf-ai">      <div class="pdf-ai-rating">${d.ai.deal_rating||'Analysis'}${d.ai.confidence?`<span class="pdf-ai-conf">${d.ai.confidence} confidence</span>`:''}
       </div>
       ${d.ai.explanation?`<div class="pdf-ai-exp">${d.ai.explanation}</div>`:''}
       ${(d.ai.key_factors||[]).length?`<div class="pdf-ai-factors">${(d.ai.key_factors||[]).map(f=>`<div class="pdf-factor">${f}</div>`).join('')}</div>`:''}
@@ -3756,15 +4185,12 @@ function switchMobCard(which){
   const tabResult=g('tabResult');
 
   if(which==='result'){
-    // Slide result in, push form back
     form.classList.add('mob-card-behind');
     toast.classList.add('show');
     tabForm.classList.remove('active');
     tabResult.classList.add('active');
-    // Unlock scroll on body (card scrolls internally)
     document.body.style.overflow='';
   } else {
-    // Slide form forward, result away
     form.classList.remove('mob-card-behind');
     toast.classList.remove('show');
     tabForm.classList.add('active');
@@ -3789,10 +4215,24 @@ function _lockResultTab(){
 
 /* ── BOOT ───────────────────────────────────────────────── */
 initBrands();initYears();
-initKsDropdowns(); // must run after selects are populated
+initKsDropdowns();
 updateReadiness();
 initRestoreBar();
 initValuationCounter();
+
+/* ── MEASURE MOBILE HEADER HEIGHT & SET CARD TOPS ───────── */
+function setMobCardTops(){
+  if(window.innerWidth>600)return;
+  const hdr=document.getElementById('mobFixedHeader');
+  if(!hdr)return;
+  const h=hdr.getBoundingClientRect().height;
+  const px=Math.ceil(h)+'px';
+  document.getElementById('formCard').style.top=px;
+  const toast=document.getElementById('mobToast');
+  if(toast)toast.style.top=px;
+}
+setMobCardTops();
+window.addEventListener('resize',setMobCardTops);
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </body>
