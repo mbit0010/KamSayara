@@ -5060,12 +5060,12 @@ async function checkCarPrice(){
             service:g('service').value,
             askingPrice:asking?parseInt(asking):null,
             warranty:qs.warranty,singleOwner:qs.singleOwner,
-            fsh:qs.fsh,accidentHistory:g('accidentSel').value||qs.accident,
-            purpose:g('purpose').value,
-            owners:g('owners').value,
-            warrantyStatus:g('warrantySel').value,
-            emirate:g('emirate').value,
-            finance:g('finance').value
+            fsh:qs.fsh,accidentHistory:g('accidentSel')?.value||qs.accident||null,
+            purpose:g('purpose')?.value||'buying',
+            owners:g('owners')?.value||'',
+            warrantyStatus:g('warrantySel')?.value||'',
+            emirate:g('emirate')?.value||'',
+            finance:g('finance')?.value||''
           })
         });
         clearTimeout(timeoutId);
@@ -5184,8 +5184,7 @@ function closeMobResult(){
 
 /* ── RESET ──────────────────────────────────────────────── */
 function resetForm(){
-  ['brand','year','trim','mileage','colour','body','seller','service','asking',
-   'purpose','accidentSel','owners','warrantySel','emirate','finance'].forEach(id=>{
+  ['brand','year','trim','mileage','colour','body','seller','service','asking'].forEach(id=>{
     const el=g(id);if(el){el.value='';markFilled(el);}
   });
   g('model').innerHTML='<option value="">Select model…</option>';
