@@ -3001,6 +3001,158 @@
       .rpt-car-img-wrap { display: none; }
     }
 
+  /* ══════════════════════════════════════════════════════════
+     FINAL AUTHORITATIVE LAYOUT — stacked, responsive, clean
+     Overrides all previous conflicting rules
+  ══════════════════════════════════════════════════════════ */
+
+  /* Page */
+  body{background:#E8ECF2!important;}
+  body::before{display:none!important;}
+  .hero::after{background:#E8ECF2!important;}
+  .page{max-width:960px!important;margin:0 auto!important;padding:0 16px 48px!important;position:relative!important;z-index:1!important;}
+
+  /* Stacked layout — form top, result bottom */
+  .layout{display:flex!important;flex-direction:column!important;gap:16px!important;margin-top:clamp(-20px,-4vw,-10px)!important;align-items:stretch!important;}
+
+  /* Both cards: white, fully rounded all 4 corners, static */
+  .form-card{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:clip!important;position:static!important;max-height:none!important;width:100%!important;display:flex!important;flex-direction:column!important;transform:none!important;opacity:1!important;pointer-events:auto!important;}
+  .form-card.mob-card-behind{transform:none!important;opacity:1!important;pointer-events:auto!important;}
+  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:clip!important;position:static!important;min-height:120px!important;width:100%!important;display:block!important;border-left:none!important;}
+
+  /* Form header */
+  .form-header{background:#F4F6FA!important;border-bottom:1px solid #E2E6EE!important;border-radius:16px 16px 0 0!important;padding:11px 16px 10px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;flex-shrink:0!important;}
+  .form-header-title{font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;font-weight:800!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#1A2B4C!important;}
+
+  /* Form body */
+  .form-body{padding:12px 14px 6px!important;}
+  .sec-label{display:none!important;}
+  .more-field,.more-fields-start{display:flex!important;}
+  .more-toggle-btn{display:none!important;}
+
+  /* Field labels */
+  .ig{display:flex!important;flex-direction:column!important;min-width:0!important;}
+  .ig label{font-family:"Exo 2",sans-serif!important;font-size:.65rem!important;font-weight:700!important;letter-spacing:.05em!important;text-transform:uppercase!important;color:#3D4F66!important;margin-bottom:4px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;line-height:1.2!important;}
+  .ig:focus-within label{color:#1A2B4C!important;}
+  .rq{color:#C0392B!important;}
+
+  /* Inputs — darker than card */
+  .ig select,.ig input[type="text"],.ig input[type="number"]{height:36px!important;font-family:"Exo 2",sans-serif!important;font-size:.78rem!important;font-weight:500!important;color:#1E2D3D!important;background:#EEF1F7!important;border:1.5px solid #CDD2DE!important;border-radius:8px!important;padding:0 .6rem!important;width:100%!important;outline:none!important;transition:border-color .15s,box-shadow .15s,background .15s!important;-webkit-appearance:none!important;appearance:none!important;}
+  .ig select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right .65rem center!important;padding-right:1.8rem!important;cursor:pointer!important;}
+  .ig input:focus,.ig select:focus{border-color:#1A2B4C!important;box-shadow:0 0 0 3px rgba(26,43,76,.10)!important;background:#fff!important;}
+  .ig input.filled,.ig select.filled{background:#E6EAF3!important;border-color:#B0BACE!important;}
+  .ig input.err,.ig select.err{border-color:#C0392B!important;background:#FEF2F2!important;}
+  .ig .prefix-wrap{position:relative!important;display:flex!important;align-items:center!important;}
+  .ig .prefix-wrap .prefix-lbl{position:absolute!important;left:.55rem!important;font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;font-weight:700!important;color:#7A8FA8!important;pointer-events:none!important;z-index:1!important;}
+  .ig .prefix-wrap input{padding-left:2.4rem!important;width:100%!important;}
+  .asking-field-wrap .prefix-lbl{color:#1A2B4C!important;}
+  .errmsg{font-size:.60rem!important;color:#C0392B!important;margin-top:2px!important;display:none!important;font-family:"Exo 2",sans-serif!important;}
+  .errmsg.on{display:block!important;}
+
+  /* Field grid: 4 cols desktop, 3 tablet, 2 mobile */
+  .fg{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px 12px!important;margin-bottom:10px!important;align-items:start!important;}
+  @media(max-width:900px){.fg{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px 10px!important;}}
+  @media(max-width:600px){.fg{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;}}
+
+  /* QC bar — hide old, show new */
+  .qc{display:none!important;}
+  .qcbar{display:flex!important;align-items:center!important;flex-wrap:wrap!important;row-gap:6px!important;padding:8px 0 4px!important;border-top:1px solid #E8ECF2!important;}
+  .qcbar-item{display:flex!important;align-items:center!important;gap:5px!important;}
+  .qcbar-lbl{font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;font-weight:700!important;color:#3D4F66!important;white-space:nowrap!important;margin-right:2px!important;}
+  .qcbar-sep{color:#BDC5D4!important;font-size:1rem!important;padding:0 10px!important;user-select:none!important;line-height:1!important;}
+
+  /* QC buttons */
+  .qb{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;border-radius:6px!important;border:1.5px solid #CDD2DE!important;background:#EEF1F7!important;color:#8090A8!important;font-size:.80rem!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:all .14s!important;padding:0!important;}
+  .qb:hover{border-color:#8090A8!important;background:#E2E6EF!important;}
+  .qb.tick.on{background:#16A34A!important;border-color:#16A34A!important;color:#fff!important;box-shadow:0 2px 8px rgba(22,163,74,.30)!important;}
+  .qb.cross.on{background:#DC2626!important;border-color:#DC2626!important;color:#fff!important;box-shadow:0 2px 8px rgba(220,38,38,.28)!important;}
+
+  /* KS dropdowns */
+  .ks-trigger{height:36px!important;font-family:"Exo 2",sans-serif!important;font-size:.78rem!important;font-weight:500!important;color:#1E2D3D!important;background:#EEF1F7!important;border:1.5px solid #CDD2DE!important;border-radius:8px!important;}
+  .ks-trigger.ks-filled{background:#E6EAF3!important;border-color:#B0BACE!important;}
+  .ks-wrap.open .ks-trigger,.ks-trigger:focus{border-color:#1A2B4C!important;box-shadow:0 0 0 3px rgba(26,43,76,.10)!important;background:#fff!important;outline:none!important;}
+  .ks-trigger.ks-err{border-color:#C0392B!important;background:#FEF2F2!important;}
+  .ks-trigger::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;}
+  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:9999!important;}
+  .ks-search{font-size:.80rem!important;background:#F4F6FA!important;border-bottom:1px solid #E2E6EE!important;color:#1E2D3D!important;padding:0 .7rem!important;height:36px!important;}
+  .ks-opt{font-size:.76rem!important;color:#1E2D3D!important;padding:.38rem .7rem!important;}
+  .ks-opt:hover,.ks-opt:focus{background:#EEF1F7!important;color:#1A2B4C!important;}
+  .ks-opt.ks-selected{background:#E2E8F4!important;color:#1A2B4C!important;font-weight:700!important;}
+  .ks-sec{font-size:.58rem!important;color:#1A2B4C!important;background:#F4F6FA!important;padding:6px 10px 3px!important;}
+  .ks-mark{background:rgba(26,43,76,.12)!important;color:#1A2B4C!important;}
+
+  /* Form footer */
+  .ffoot{display:flex!important;flex-direction:column!important;gap:8px!important;padding:10px 14px 13px!important;border-top:1px solid #E2E6EE!important;background:#F4F6FA!important;border-radius:0 0 16px 16px!important;flex-shrink:0!important;}
+  .ffoot-hint{font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;color:#64748B!important;text-align:center!important;line-height:1.4!important;}
+  .ffoot-hint strong{color:#1A2B4C!important;}
+  .ffoot-hint.ready-hint strong{color:#16A34A!important;}
+  .ffoot-btns{display:flex!important;gap:8px!important;align-items:stretch!important;}
+  .btn-reset{flex:1 1 0!important;min-height:44px!important;height:44px!important;background:#E8ECF4!important;color:#3D4F66!important;border:1.5px solid #CDD2DE!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:.04em!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .14s,color .14s!important;white-space:nowrap!important;}
+  .btn-reset:hover{background:#DDE2EE!important;color:#1A2B4C!important;border-color:#B0BACE!important;}
+  .btn-go{flex:2 1 0!important;min-height:44px!important;height:44px!important;background:linear-gradient(135deg,#D4AF37 0%,#B8960A 100%)!important;color:#1A2B4C!important;border:none!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-weight:900!important;font-size:.84rem!important;letter-spacing:.12em!important;text-transform:uppercase!important;padding:0 14px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;cursor:pointer!important;position:relative!important;overflow:hidden!important;box-shadow:0 4px 14px rgba(184,150,10,.35)!important;transition:transform .14s,box-shadow .14s!important;white-space:nowrap!important;}
+  .btn-go::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 55%);pointer-events:none;}
+  .btn-go:hover:not(:disabled){transform:translateY(-2px)!important;box-shadow:0 7px 20px rgba(184,150,10,.45)!important;}
+  .btn-go:active:not(:disabled){transform:scale(.98)!important;}
+  .btn-go.ready{animation:gPulse 2.4s ease-in-out infinite!important;}
+  .btn-go:disabled{background:#D0D5E0!important;color:#8A96A8!important;box-shadow:none!important;cursor:not-allowed!important;}
+  @keyframes gPulse{0%,100%{box-shadow:0 4px 14px rgba(184,150,10,.35);}50%{box-shadow:0 6px 22px rgba(184,150,10,.58);}}
+
+  /* Restore chips */
+  .restore-lbl{color:#8090A8!important;font-size:.60rem!important;}
+  .restore-chip{background:#EEF1F7!important;border-color:#CDD2DE!important;color:#1A2B4C!important;font-size:.60rem!important;}
+  .restore-chip:hover{background:#1A2B4C!important;color:#D4AF37!important;border-color:#1A2B4C!important;}
+
+  /* Result panel */
+  .rcontent{background:#fff!important;padding:0!important;}
+  .rph{background:#fff!important;}
+  .share-strip{border-radius:0 0 16px 16px!important;border-top:1px solid #E2E6EE!important;background:#F4F6FA!important;}
+  .rpt-wrap{border-radius:0!important;overflow:visible!important;}
+  .rpt-header{border-radius:0!important;}
+  .r-price-section{background:#fff!important;border-radius:0!important;padding:18px 20px 14px!important;border-bottom:1px solid #E8ECF2!important;}
+  .r-price-lbl{color:#64748B!important;font-size:.58rem!important;}
+  .r-price-main{color:#1A2B4C!important;font-size:clamp(1.7rem,2.8vw,2.2rem)!important;}
+  .r-price-range{color:#8090A8!important;font-size:.62rem!important;}
+  .r-badge{background:#EEF1F7!important;border-color:#CDD2DE!important;color:#334155!important;}
+  .r-badge.live{background:rgba(22,163,74,.09)!important;border-color:rgba(22,163,74,.22)!important;color:#16A34A!important;}
+  .r-vs-section{background:#F8FAFC!important;padding:10px 20px!important;border-bottom:1px solid #E8ECF2!important;}
+  .r-bar-section{padding:12px 20px 10px!important;border-bottom:1px solid #E8ECF2!important;}
+  .r-metrics-section{padding:12px 20px!important;border-bottom:1px solid #E8ECF2!important;}
+  .r-ai-section{padding:14px 20px!important;background:#fff!important;}
+  .r-sep{display:none!important;}
+  .rpt-wrap .r-price-section{background:#fff!important;padding:16px 16px 18px 18px!important;border-bottom:none!important;border-right:1px solid #e8ecf2!important;}
+  .rpt-wrap .r-vs-section{background:#f8fafc!important;padding:16px 18px 18px 14px!important;border-bottom:none!important;}
+  .rpt-wrap .r-bar-section{padding:0!important;border-bottom:none!important;}
+  .rpt-wrap .r-metrics-section{padding:12px 18px 14px!important;border-bottom:none!important;}
+  .rpt-wrap .r-ai-section{padding:12px 18px 14px!important;background:#fff!important;}
+  .rph{padding:40px 24px!important;}
+  .rph-title{color:#1A2B4C!important;}
+
+  /* Mobile ≤600px — simple stacked, no card stack */
+  @media(max-width:600px){
+    .mob-fixed-header,.mob-hero-strip,.mob-tab-bar,.mob-overlay,.mob-result-header{display:none!important;}
+    .mob-result-toast{display:none!important;position:static!important;transform:none!important;}
+    .snav{display:none!important;}
+    .hero{display:block!important;}
+    .page{padding:0 10px 36px!important;}
+    .layout{gap:12px!important;}
+    .form-card,.result-panel{border-radius:14px!important;}
+    .form-header{border-radius:14px 14px 0 0!important;padding:10px 12px 9px!important;}
+    .ffoot{border-radius:0 0 14px 14px!important;padding:9px 12px 12px!important;}
+    .share-strip{border-radius:0 0 14px 14px!important;}
+    .form-body{padding:10px 12px 6px!important;}
+    .qcbar-sep{padding:0 7px!important;}
+    .ig select,.ig input[type="text"],.ig input[type="number"],.ks-trigger{height:38px!important;font-size:.80rem!important;}
+    #rcontent,#rph,#rld{display:block!important;}
+  }
+
+  /* Tablet 601–900px */
+  @media(min-width:601px) and (max-width:900px){
+    .page{padding:0 14px 40px!important;}
+    .layout{gap:14px!important;}
+    .form-body{padding:12px 16px 6px!important;}
+    .ffoot{padding:10px 16px 12px!important;}
+  }
+
   </style>
 </head>
 <body>
@@ -3089,34 +3241,38 @@
       </div>
 
       <div class="form-body">
+
+        <!-- 12 input cells -->
         <div class="fg">
-          <!-- Row 1: Brand | Model -->
+
           <div class="ig">
             <label for="brand">Brand <span class="rq">*</span></label>
-            <select id="brand" onchange="populateModels()" aria-required="true"><option value="">Select brand…</option></select>
+            <select id="brand" onchange="populateModels()" aria-required="true"><option value="">Select…</option></select>
             <span class="errmsg" id="err-brand">Select a brand</span>
           </div>
+
           <div class="ig">
             <label for="model">Model <span class="rq">*</span></label>
-            <select id="model" onchange="onModelChange()" aria-required="true"><option value="">Select model…</option></select>
+            <select id="model" onchange="onModelChange()" aria-required="true"><option value="">Select…</option></select>
             <span class="errmsg" id="err-model">Select a model</span>
           </div>
 
-          <!-- Row 2: Year | Trim -->
           <div class="ig">
             <label for="year">Year <span class="rq">*</span></label>
-            <select id="year" onchange="markFilled(this)" aria-required="true"><option value="">Year…</option></select>
+            <select id="year" onchange="markFilled(this)" aria-required="true"><option value="">Select…</option></select>
             <span class="errmsg" id="err-year">Select a year</span>
           </div>
+
           <div class="ig">
             <label for="trim">Trim / Variant</label>
             <input type="text" id="trim" placeholder="e.g. GLX, Sport" list="trim-dl" oninput="markFilled(this)">
             <datalist id="trim-dl">
-              <option value="Base"><option value="Sport"><option value="GLX"><option value="GX"><option value="EX"><option value="Limited"><option value="Premium"><option value="SE"><option value="LE"><option value="XLE"><option value="Platinum"><option value="S Line">
+              <option value="Base"><option value="Sport"><option value="GLX"><option value="GX">
+              <option value="EX"><option value="Limited"><option value="Premium">
+              <option value="SE"><option value="LE"><option value="XLE"><option value="Platinum">
             </datalist>
           </div>
 
-          <!-- Row 3: Mileage | Spec (Spec optional → inside more-fields on mobile) -->
           <div class="ig">
             <label for="mileage">Mileage <span class="rq">*</span></label>
             <div class="prefix-wrap">
@@ -3126,11 +3282,10 @@
             <span class="errmsg" id="err-mileage">Enter mileage</span>
           </div>
 
-          <!-- Optional fields — always visible on all devices -->
-          <div class="ig more-fields-start">
+          <div class="ig">
             <label for="spec">Spec</label>
             <select id="spec" onchange="markFilled(this)">
-              <option value="">Spec…</option>
+              <option value="">Select…</option>
               <option value="GCC">GCC</option>
               <option value="American">American</option>
               <option value="European">European</option>
@@ -3140,36 +3295,43 @@
             </select>
           </div>
 
-          <div class="ig more-field">
+          <div class="ig">
             <label for="condition">Condition</label>
             <select id="condition" onchange="markFilled(this)">
-              <option value="">Condition…</option>
-              <option>Excellent</option><option>Very Good</option>
-              <option>Good</option><option>Fair</option><option>Poor</option>
+              <option value="">Select…</option>
+              <option>Excellent</option>
+              <option>Very Good</option>
+              <option>Good</option>
+              <option>Fair</option>
+              <option>Poor</option>
             </select>
           </div>
-          <div class="ig more-field">
+
+          <div class="ig">
             <label for="body">Body Type</label>
             <select id="body" onchange="markFilled(this)">
-              <option value="">Body…</option>
+              <option value="">Select…</option>
               <option>Sedan</option><option>SUV</option><option>Hatchback</option>
               <option>Coupe</option><option>Convertible</option><option>Pickup</option>
               <option>Van</option><option>Wagon</option><option>Other</option>
             </select>
           </div>
 
-          <div class="ig more-field">
+          <div class="ig">
             <label for="seller">Seller Type</label>
             <select id="seller" onchange="markFilled(this)">
-              <option value="">Seller…</option>
-              <option>Individual</option><option>Dealer</option>
-              <option>Showroom</option><option>Export</option>
+              <option value="">Select…</option>
+              <option>Individual</option>
+              <option>Dealer</option>
+              <option>Showroom</option>
+              <option>Export</option>
             </select>
           </div>
-          <div class="ig more-field">
+
+          <div class="ig">
             <label for="colour">Colour</label>
             <select id="colour" onchange="markFilled(this)">
-              <option value="">Colour…</option>
+              <option value="">Select…</option>
               <option>White</option><option>Pearl White</option>
               <option>Black</option><option>Midnight Black</option>
               <option>Silver</option><option>Gray</option><option>Dark Gray</option>
@@ -3177,25 +3339,25 @@
               <option>Red</option><option>Maroon</option><option>Burgundy</option>
               <option>Gold</option><option>Champagne</option><option>Bronze</option>
               <option>Beige</option><option>Cream</option><option>Sand</option>
-              <option>Brown</option>
-              <option>Green</option><option>Dark Green</option>
-              <option>Orange</option><option>Yellow</option>
-              <option>Purple</option>
+              <option>Brown</option><option>Green</option><option>Dark Green</option>
+              <option>Orange</option><option>Yellow</option><option>Purple</option>
               <option>Other</option>
             </select>
           </div>
 
-          <div class="ig more-field">
-            <label for="service">Service History</label>
+          <div class="ig">
+            <label for="service">Service</label>
             <select id="service" onchange="markFilled(this)">
-              <option value="">Service…</option>
-              <option>Full Agency</option><option>Agency</option>
-              <option>Non-Agency</option><option>Mixed</option><option>Unknown</option>
+              <option value="">Select…</option>
+              <option>Full Agency</option>
+              <option>Agency</option>
+              <option>Non-Agency</option>
+              <option>Mixed</option>
+              <option>Unknown</option>
             </select>
           </div>
 
-          <!-- Asking Price -->
-          <div class="ig asking-field-wrap more-field">
+          <div class="ig asking-field-wrap">
             <label for="asking">Asking Price</label>
             <div class="prefix-wrap">
               <span class="prefix-lbl">AED</span>
@@ -3203,110 +3365,42 @@
             </div>
           </div>
 
-          <!-- NEW: Purpose -->
-          <div class="ig more-field">
-            <label for="purpose">I Am</label>
-            <select id="purpose" onchange="markFilled(this)">
-              <option value="">Purpose…</option>
-              <option value="buying">Buying</option>
-              <option value="selling">Selling</option>
-              <option value="researching">Researching</option>
-            </select>
-          </div>
-
-          <!-- NEW: Accident History -->
-          <div class="ig more-field">
-            <label for="accidentSel">Accident History</label>
-            <select id="accidentSel" onchange="markFilled(this)">
-              <option value="">Accident…</option>
-              <option value="none">None / Clean</option>
-              <option value="minor">Minor (repaired)</option>
-              <option value="major">Major damage</option>
-            </select>
-          </div>
-
-          <!-- NEW: Ownership -->
-          <div class="ig more-field">
-            <label for="owners">No. of Owners</label>
-            <select id="owners" onchange="markFilled(this)">
-              <option value="">Owners…</option>
-              <option value="1">1st Owner</option>
-              <option value="2">2nd Owner</option>
-              <option value="3">3rd Owner</option>
-              <option value="4+">4+ Owners</option>
-            </select>
-          </div>
-
-          <!-- NEW: Warranty -->
-          <div class="ig more-field">
-            <label for="warrantySel">Warranty</label>
-            <select id="warrantySel" onchange="markFilled(this)">
-              <option value="">Warranty…</option>
-              <option value="active">Active (manufacturer)</option>
-              <option value="extended">Extended warranty</option>
-              <option value="expired">Expired</option>
-              <option value="none">No Warranty</option>
-            </select>
-          </div>
-
-          <!-- NEW: Emirate -->
-          <div class="ig more-field">
-            <label for="emirate">Emirate</label>
-            <select id="emirate" onchange="markFilled(this)">
-              <option value="">Emirate…</option>
-              <option>Dubai</option><option>Abu Dhabi</option>
-              <option>Sharjah</option><option>Ajman</option>
-              <option>RAK</option><option>Fujairah</option><option>UAQ</option>
-            </select>
-          </div>
-
-          <!-- NEW: Finance/Cash -->
-          <div class="ig more-field">
-            <label for="finance">Payment</label>
-            <select id="finance" onchange="markFilled(this)">
-              <option value="">Payment…</option>
-              <option value="cash">Cash</option>
-              <option value="finance">Bank Finance</option>
-              <option value="loan-transfer">Loan Transfer</option>
-            </select>
-          </div>
-
         </div><!-- /fg -->
 
-        <!-- Additional details: 4 items, single row, ✓ ✗ buttons -->
-        <div class="qc">
-          <div class="qc-section-label">Additional Details</div>
-          <div class="qc-row" role="group" aria-label="Additional details">
-            <div class="qc-item">
-              <span class="qc-name">Warranty</span>
-              <div class="qc-btns">
-                <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty: Yes">✓</button>
-                <button class="qb cross" onclick="setYN('warranty','no',this)" aria-label="Warranty: No">✗</button>
-              </div>
-            </div>
-            <div class="qc-item">
-              <span class="qc-name">Single Owner</span>
-              <div class="qc-btns">
-                <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single owner: Yes">✓</button>
-                <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single owner: No">✗</button>
-              </div>
-            </div>
-            <div class="qc-item">
-              <span class="qc-name">Svc. History</span>
-              <div class="qc-btns">
-                <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="FSH: Yes">✓</button>
-                <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="FSH: No">✗</button>
-              </div>
-            </div>
-            <div class="qc-item">
-              <span class="qc-name">Accident</span>
-              <div class="qc-btns">
-                <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident: Yes">✓</button>
-                <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident: No">✗</button>
-              </div>
-            </div>
+        <!-- 4 Yes/No toggles — inline bar, no borders, separated by | -->
+        <div class="qcbar" role="group" aria-label="Additional details">
+
+          <div class="qcbar-item">
+            <span class="qcbar-lbl">Warranty</span>
+            <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty Yes">✓</button>
+            <button class="qb cross" onclick="setYN('warranty','no',this)" aria-label="Warranty No">✗</button>
           </div>
-        </div>
+
+          <span class="qcbar-sep">|</span>
+
+          <div class="qcbar-item">
+            <span class="qcbar-lbl">Single Owner</span>
+            <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
+            <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single Owner No">✗</button>
+          </div>
+
+          <span class="qcbar-sep">|</span>
+
+          <div class="qcbar-item">
+            <span class="qcbar-lbl">Svc. History</span>
+            <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
+            <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
+          </div>
+
+          <span class="qcbar-sep">|</span>
+
+          <div class="qcbar-item">
+            <span class="qcbar-lbl">Accident</span>
+            <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
+            <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
+          </div>
+
+        </div><!-- /qcbar -->
 
       </div><!-- /form-body -->
 
