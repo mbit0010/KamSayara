@@ -2113,8 +2113,8 @@
     /* ── RESET BUTTON — 1/3 width ── */
     .btn-reset {
       flex: 1 1 0 !important;
-      min-height: 44px !important;
-      height: 44px !important;
+      height: 36px !important;
+      min-height: 36px !important;
       background: #EEF1F6 !important;
       color: #334155 !important;
       border: 1.5px solid #D0D5E0 !important;
@@ -2139,8 +2139,8 @@
     /* ── GET VALUATION BUTTON — 2/3 width, gold, prominent ── */
     .btn-go {
       flex: 2 1 0 !important;
-      min-height: 44px !important;
-      height: 44px !important;
+      height: 36px !important;
+      min-height: 36px !important;
       background: linear-gradient(135deg, #D4AF37 0%, #B8960A 100%) !important;
       color: #1A2B4C !important;
       font-family: "Exo 2", sans-serif !important;
@@ -3054,18 +3054,44 @@
   @media(max-width:900px){.fg{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px 10px!important;}}
   @media(max-width:600px){.fg{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;}}
 
-  /* QC bar — hide old, show new */
-  .qc{display:none!important;}
-  .qcbar{display:flex!important;align-items:center!important;flex-wrap:wrap!important;row-gap:6px!important;padding:8px 0 4px!important;border-top:1px solid #E8ECF2!important;}
-  .qcbar-item{display:flex!important;align-items:center!important;gap:5px!important;}
-  .qcbar-lbl{font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;font-weight:700!important;color:#3D4F66!important;white-space:nowrap!important;margin-right:2px!important;}
-  .qcbar-sep{color:#BDC5D4!important;font-size:1rem!important;padding:0 10px!important;user-select:none!important;line-height:1!important;}
+  /* QC bar — 4 equal cards centered in a single row */
+  .qcbar{display:flex!important;align-items:stretch!important;justify-content:center!important;gap:6px!important;padding:8px 0 6px!important;border-top:1px solid #E8ECF2!important;flex-wrap:nowrap!important;}
+  .qcbar-sep{display:none!important;}/* hide the | separators — cards provide visual separation */
+  .qcbar-item{
+    display:flex!important;flex-direction:column!important;align-items:center!important;
+    justify-content:center!important;gap:5px!important;
+    flex:1 1 0!important;min-width:0!important;
+    padding:6px 4px 7px!important;
+    background:#F4F6FA!important;
+    border:1.5px solid #DDE2EE!important;
+    border-radius:9px!important;
+    transition:border-color .18s,box-shadow .18s,background .18s!important;
+  }
+  .qcbar-item--unset{
+    border-color:#D4AF37!important;
+    background:rgba(212,175,55,0.06)!important;
+    animation:qcPulse .65s ease-in-out 2!important;
+  }
+  @keyframes qcPulse{
+    0%,100%{box-shadow:none;}
+    50%{box-shadow:0 0 0 3px rgba(212,175,55,0.30);}
+  }
+  .qcbar-lbl{font-family:"Exo 2",sans-serif!important;font-size:.60rem!important;font-weight:700!important;color:#3D4F66!important;white-space:nowrap!important;letter-spacing:.04em!important;text-transform:uppercase!important;}
+  .qcbar-btns{display:flex!important;gap:4px!important;align-items:center!important;}
 
   /* QC buttons */
-  .qb{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;border-radius:6px!important;border:1.5px solid #CDD2DE!important;background:#EEF1F7!important;color:#8090A8!important;font-size:.80rem!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:all .14s!important;padding:0!important;}
+  .qb{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;border-radius:6px!important;border:1.5px solid #CDD2DE!important;background:#EEF1F7!important;color:#8090A8!important;font-size:.80rem!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:all .15s!important;padding:0!important;}
   .qb:hover{border-color:#8090A8!important;background:#E2E6EF!important;}
-  .qb.tick.on{background:#16A34A!important;border-color:#16A34A!important;color:#fff!important;box-shadow:0 2px 8px rgba(22,163,74,.30)!important;}
-  .qb.cross.on{background:#DC2626!important;border-color:#DC2626!important;color:#fff!important;box-shadow:0 2px 8px rgba(220,38,38,.28)!important;}
+  .qb.tick.on{background:#16A34A!important;border-color:#16A34A!important;color:#fff!important;box-shadow:0 0 0 3px rgba(22,163,74,.22),0 0 12px rgba(22,163,74,.55)!important;}
+  .qb.cross.on{background:#DC2626!important;border-color:#DC2626!important;color:#fff!important;box-shadow:0 0 0 3px rgba(220,38,38,.20),0 0 12px rgba(220,38,38,.52)!important;}
+
+  /* Spec dropdown — constrain panel so scrollbar is always visible */
+  #spec + .ks-wrap .ks-panel{max-height:170px!important;}
+  #spec + .ks-wrap .ks-list{max-height:120px!important;}
+
+  /* Dropdowns that open near the bottom of the form — open upward */
+  .ks-wrap.open-up .ks-panel{top:auto!important;bottom:calc(100% + 3px)!important;transform:translateY(5px)!important;}
+  .ks-wrap.open-up.open .ks-panel{transform:translateY(0)!important;}
 
   /* KS dropdowns */
   .ks-trigger{height:36px!important;font-family:"Exo 2",sans-serif!important;font-size:.78rem!important;font-weight:500!important;color:#1E2D3D!important;background:#EEF1F7!important;border:1.5px solid #CDD2DE!important;border-radius:8px!important;}
@@ -3087,9 +3113,9 @@
   .ffoot-hint strong{color:#1A2B4C!important;}
   .ffoot-hint.ready-hint strong{color:#16A34A!important;}
   .ffoot-btns{display:flex!important;gap:8px!important;align-items:stretch!important;}
-  .btn-reset{flex:1 1 0!important;min-height:44px!important;height:44px!important;background:#E8ECF4!important;color:#3D4F66!important;border:1.5px solid #CDD2DE!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:.04em!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .14s,color .14s!important;white-space:nowrap!important;}
+  .btn-reset{flex:1 1 0!important;height:36px!important;min-height:36px!important;background:#E8ECF4!important;color:#3D4F66!important;border:1.5px solid #CDD2DE!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:.04em!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .14s,color .14s!important;white-space:nowrap!important;}
   .btn-reset:hover{background:#DDE2EE!important;color:#1A2B4C!important;border-color:#B0BACE!important;}
-  .btn-go{flex:2 1 0!important;min-height:44px!important;height:44px!important;background:linear-gradient(135deg,#D4AF37 0%,#B8960A 100%)!important;color:#1A2B4C!important;border:none!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-weight:900!important;font-size:.84rem!important;letter-spacing:.12em!important;text-transform:uppercase!important;padding:0 14px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;cursor:pointer!important;position:relative!important;overflow:hidden!important;box-shadow:0 4px 14px rgba(184,150,10,.35)!important;transition:transform .14s,box-shadow .14s!important;white-space:nowrap!important;}
+  .btn-go{flex:2 1 0!important;height:36px!important;min-height:36px!important;background:linear-gradient(135deg,#D4AF37 0%,#B8960A 100%)!important;color:#1A2B4C!important;border:none!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-weight:900!important;font-size:.84rem!important;letter-spacing:.12em!important;text-transform:uppercase!important;padding:0 14px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;cursor:pointer!important;position:relative!important;overflow:hidden!important;box-shadow:0 4px 14px rgba(184,150,10,.35)!important;transition:transform .14s,box-shadow .14s!important;white-space:nowrap!important;}
   .btn-go::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 55%);pointer-events:none;}
   .btn-go:hover:not(:disabled){transform:translateY(-2px)!important;box-shadow:0 7px 20px rgba(184,150,10,.45)!important;}
   .btn-go:active:not(:disabled){transform:scale(.98)!important;}
@@ -3153,8 +3179,321 @@
     .ffoot{padding:10px 16px 12px!important;}
   }
 
+  /* ══════════════════════════════════════════════════════════════
+     STAGE 1 — Landing: Authority Panel
+  ══════════════════════════════════════════════════════════════ */
+  .rph { padding: 0 !important; display: flex; flex-direction: column; height: 100%; }
+  .rph-stage1, .rph-stage2 { flex: 1; display: flex; flex-direction: column; }
+
+  /* Stage 1 layout */
+  .rph-stage1 {
+    padding: 20px 20px 16px;
+    gap: 16px;
+    animation: rphIn .45s var(--ease) both;
+  }
+  @keyframes rphIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:none;} }
+
+  .rph-s1-eyebrow {
+    font-family:"Exo 2",sans-serif;
+    font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--accent);opacity:.7;text-align:center;
+  }
+
+  /* Feature grid */
+  .rph-feat-grid {
+    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  }
+  .rph-feat-card {
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    padding:12px 8px 10px;
+    background:rgba(0,133,119,0.04);
+    border:1px solid rgba(0,133,119,0.14);
+    border-radius:12px;text-align:center;
+    transition:border-color .2s,background .2s;
+  }
+  .rph-feat-card:hover { border-color:rgba(0,133,119,0.28); background:rgba(0,133,119,0.08); }
+  .rph-feat-ico { width:44px;height:44px; }
+  .rph-feat-ico svg { width:100%;height:100%; }
+  .rph-feat-name {
+    font-family:"Exo 2",sans-serif;font-size:.58rem;font-weight:800;
+    letter-spacing:.04em;color:var(--ink);line-height:1.25;
+  }
+  .rph-feat-desc {
+    font-size:.55rem;color:var(--muted);line-height:1.4;
+  }
+
+  /* Methodology funnel */
+  .rph-method {
+    display:flex;align-items:center;justify-content:center;
+    gap:6px;padding:10px 4px;
+    background:rgba(10,37,64,0.03);
+    border:1px solid rgba(10,37,64,0.08);
+    border-radius:10px;
+  }
+  .rph-method-step { display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:0; }
+  .rph-mstep-ico { width:32px;height:32px; }
+  .rph-mstep-ico svg { width:100%;height:100%; }
+  .rph-mstep-lbl { font-size:.5rem;font-weight:700;color:var(--ink-soft);text-align:center;line-height:1.2; }
+  .rph-method-arrow { font-size:.75rem;color:rgba(0,133,119,0.4);flex-shrink:0; }
+
+  /* Trust bar */
+  .rph-trust-bar {
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+    border-top:1px solid rgba(0,0,0,0.05);padding-top:10px;
+  }
+  .rph-trust-lbl { font-size:.48rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);opacity:.6; }
+  .rph-trust-sources { display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:center; }
+  .rph-src-pill {
+    font-size:.48rem;font-weight:700;letter-spacing:.04em;
+    padding:2px 8px;border-radius:99px;
+    background:rgba(10,37,64,0.05);border:1px solid rgba(10,37,64,0.10);
+    color:rgba(10,37,64,0.35);white-space:nowrap;
+    filter:grayscale(1);
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     STAGE 2 — During Input: Live-Sync Panel
+  ══════════════════════════════════════════════════════════════ */
+  .rph-stage2 {
+    padding: 22px 20px 20px;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+    animation: rphIn .35s var(--ease) both;
+  }
+
+  /* Live silhouette */
+  .rph-s2-silhouette {
+    width:100%;max-width:180px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .rph-s2-silhouette svg { width:100%;height:auto; transition: all .4s var(--ease); }
+
+  /* Data ticker */
+  .rph-s2-ticker-wrap {
+    display:flex;align-items:center;gap:7px;
+    background:rgba(0,133,119,0.06);
+    border:1px solid rgba(0,133,119,0.18);
+    border-radius:99px;padding:5px 12px;
+    width:100%;justify-content:center;
+  }
+  .rph-s2-ticker-dot {
+    width:7px;height:7px;border-radius:50%;
+    background:var(--accent);flex-shrink:0;
+    animation:tickerPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes tickerPulse {
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:.45;transform:scale(.7);}
+  }
+  .rph-s2-ticker-text {
+    font-family:"Exo 2",sans-serif;
+    font-size:.6rem;font-weight:600;color:var(--accent);
+    letter-spacing:.02em;line-height:1.3;text-align:center;
+    transition:opacity .25s;
+  }
+
+  /* Fields summary chips */
+  .rph-s2-fields-summary {
+    display:flex;gap:4px;flex-wrap:wrap;justify-content:center;min-height:18px;
+  }
+  .rph-s2-chip {
+    font-size:.52rem;font-weight:700;letter-spacing:.04em;
+    padding:2px 8px;border-radius:99px;
+    background:rgba(10,37,64,0.06);border:1px solid rgba(10,37,64,0.14);
+    color:var(--ink-soft);
+  }
+  .rph-s2-chip.active {
+    background:rgba(0,133,119,0.1);border-color:rgba(0,133,119,0.28);color:var(--accent);
+  }
+
+  /* Progress bar */
+  .rph-s2-progress { width:100%; display:flex;flex-direction:column;gap:5px; }
+  .rph-s2-prog-bar { height:3px;background:var(--border);border-radius:99px;overflow:hidden; }
+  .rph-s2-prog-fill {
+    height:100%;border-radius:99px;width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    transition:width .5s var(--ease);
+  }
+  .rph-s2-prog-lbl {
+    font-size:.52rem;color:var(--muted);text-align:center;font-weight:600;letter-spacing:.04em;
+  }
+
+  /* CTA hint */
+  .rph-s2-cta-hint {
+    display:flex;align-items:center;gap:5px;
+    font-size:.62rem;font-weight:700;color:var(--good);
+    background:var(--good-bg);border:1px solid var(--good-line);
+    border-radius:99px;padding:5px 14px;
+    animation:rphIn .3s var(--ease) both;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     STAGE 3 — Loading: Intellectual Entertainment
+  ══════════════════════════════════════════════════════════════ */
+  .rld {
+    display: flex; flex-direction: column;
+    gap: 12px; padding: 16px 18px 14px;
+    flex: 1; overflow: hidden;
+    text-align: left !important;
+  }
+
+  /* ── Named step progress track ── */
+  .rld-steps-wrap {
+    background: rgba(0,133,119,0.04);
+    border: 1px solid rgba(0,133,119,0.14);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .rld-steps-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 7px;
+  }
+  .rld-steps-eyebrow {
+    font-size: .52rem; font-weight: 800; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent); opacity: .8;
+    font-family: "Exo 2", sans-serif;
+  }
+  .rld-steps-pct {
+    font-family: "Orbitron", sans-serif;
+    font-size: .62rem; font-weight: 700; color: var(--accent);
+    transition: opacity .3s;
+  }
+  .rld-master-bar {
+    height: 3px; background: var(--border); border-radius: 99px;
+    overflow: hidden; margin-bottom: 10px;
+  }
+  .rld-master-fill {
+    height: 100%; border-radius: 99px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width .65s cubic-bezier(0.16,1,0.3,1);
+  }
+  .rld-step-list {
+    list-style: none; display: flex; flex-direction: column; gap: 7px;
+  }
+  .rld-step-item {
+    display: flex; align-items: center; gap: 7px;
+    opacity: .3; transition: opacity .4s ease;
+    font-family: "Exo 2", sans-serif;
+  }
+  .rld-step-item.active { opacity: 1; }
+  .rld-step-item.done   { opacity: .55; }
+  .rld-step-ico {
+    width: 14px; height: 14px; flex-shrink: 0; color: var(--muted);
+    transition: color .3s;
+  }
+  .rld-step-item.active .rld-step-ico { color: var(--accent); }
+  .rld-step-item.done   .rld-step-ico { color: var(--good); }
+  .rld-step-lbl {
+    flex: 1; font-size: .6rem; font-weight: 600; color: var(--ink-soft);
+    line-height: 1.3; transition: color .3s;
+  }
+  .rld-step-item.active .rld-step-lbl { color: var(--ink); }
+  .rld-step-item.done   .rld-step-lbl { color: var(--muted); }
+  .rld-step-state {
+    font-size: .6rem; font-weight: 700; flex-shrink: 0;
+    width: 14px; text-align: center; color: var(--good);
+    opacity: 0; transition: opacity .3s;
+  }
+  .rld-step-item.done .rld-step-state::before { content: '✓'; }
+  .rld-step-item.done .rld-step-state { opacity: 1; }
+  .rld-step-item.active .rld-step-ico svg {
+    animation: stepPulse 1.1s ease-in-out infinite;
+  }
+  @keyframes stepPulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  /* ── Did You Know fact rotator ── */
+  .rld-fact-wrap {
+    background: linear-gradient(135deg, rgba(196,154,42,0.07), rgba(196,154,42,0.03));
+    border: 1px solid rgba(196,154,42,0.22);
+    border-radius: 10px;
+    padding: 10px 13px;
+    display: flex; flex-direction: column; gap: 5px;
+    min-height: 68px; justify-content: center;
+  }
+  .rld-fact-label {
+    font-size: .48rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); font-family: "Exo 2", sans-serif;
+  }
+  .rld-fact-text {
+    font-size: .65rem; color: var(--ink-soft); line-height: 1.5; font-weight: 500;
+    font-family: "Exo 2", sans-serif; transition: opacity .35s ease; min-height: 2.6em;
+  }
+  .rld-fact-dots { display: flex; gap: 4px; align-items: center; margin-top: 2px; }
+  .rld-fdot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(196,154,42,0.2); transition: background .3s, transform .3s;
+  }
+  .rld-fdot.active { background: var(--gold); transform: scale(1.35); }
+
+  /* ── Skeleton UI ── */
+  .rld-skeleton {
+    border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; flex: 1; min-height: 100px;
+  }
+  .sk-section { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  .sk-section:last-child { border-bottom: none; }
+  .sk-price-section { background: rgba(0,133,119,0.025); }
+  .sk-metrics-section { background: var(--surface-2); }
+  .sk-analysis-section { background: var(--white); }
+  .sk-line, .sk-badge, .sk-metric-card {
+    background: linear-gradient(90deg,#f0eee8 25%,#e6e2d8 50%,#f0eee8 75%);
+    background-size: 200% 100%;
+    animation: skShimmer 1.7s ease-in-out infinite;
+    border-radius: 4px;
+  }
+  @keyframes skShimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .sk-line { height: 8px; }
+  .sk-line--xs  { height: 6px; }
+  .sk-line--xl  { height: 18px; border-radius: 6px; }
+  .sk-line--100 { width:100%; } .sk-line--88 { width:88%; }
+  .sk-line--75  { width:75%; }  .sk-line--72 { width:72%; }
+  .sk-line--60  { width:60%; }  .sk-line--45 { width:45%; }
+  .sk-line--40  { width:40%; }  .sk-line--35 { width:35%; }
+  .sk-badges { display:flex; gap:5px; margin-top:8px; }
+  .sk-badge  { height:18px; width:62px; border-radius:99px; }
+  .sk-metric-row { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .sk-metric-card { height:42px; border-radius:8px; }
+
+  /* Stagger shimmer so they don't all pulse together */
+  .sk-line:nth-child(2)   { animation-delay:.18s; }
+  .sk-line:nth-child(3)   { animation-delay:.36s; }
+  .sk-badge:nth-child(2)  { animation-delay:.22s; }
+  .sk-badge:nth-child(3)  { animation-delay:.44s; }
+  .sk-metric-card:nth-child(2) { animation-delay:.20s; }
+  .sk-metric-card:nth-child(3) { animation-delay:.40s; }
+
+  /* ══════════════════════════════════════════════════════════════
+     PRE-SCROLL PEEK — result panel subtly visible below fold
+  ══════════════════════════════════════════════════════════════ */
+  @media(min-width:901px){
+    .layout { align-items: start; }
+    .result-panel {
+      position: sticky;
+      top: 18px;
+      /* Tall enough that its bottom peeks below the fold naturally */
+      min-height: calc(100vh - 110px);
+      max-height: calc(100vh - 18px);
+      overflow-y: auto;
+    }
+    /* Subtle gradient hint at bottom edge to signal "more below" */
+    .result-panel::after {
+      content: '';
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 32px;
+      background: linear-gradient(to top, rgba(255,255,255,0.9), transparent);
+      pointer-events: none;
+      display: block;
+    }
+  }
+
   </style>
-</head>
 <body>
 
 <!-- STICKY NAV -->
@@ -3265,12 +3604,21 @@
 
           <div class="ig">
             <label for="trim">Trim / Variant</label>
-            <input type="text" id="trim" placeholder="e.g. GLX, Sport" list="trim-dl" oninput="markFilled(this)">
-            <datalist id="trim-dl">
-              <option value="Base"><option value="Sport"><option value="GLX"><option value="GX">
-              <option value="EX"><option value="Limited"><option value="Premium">
-              <option value="SE"><option value="LE"><option value="XLE"><option value="Platinum">
-            </datalist>
+            <select id="trim" onchange="markFilled(this)">
+              <option value="">Select…</option>
+              <option value="Base">Base</option>
+              <option value="Sport">Sport</option>
+              <option value="GLX">GLX</option>
+              <option value="GX">GX</option>
+              <option value="EX">EX</option>
+              <option value="Limited">Limited</option>
+              <option value="Premium">Premium</option>
+              <option value="SE">SE</option>
+              <option value="LE">LE</option>
+              <option value="XLE">XLE</option>
+              <option value="Platinum">Platinum</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
 
           <div class="ig">
@@ -3367,37 +3715,39 @@
 
         </div><!-- /fg -->
 
-        <!-- 4 Yes/No toggles — inline bar, no borders, separated by | -->
+        <!-- 4 Yes/No toggle cards — centered row, one ✓/✗ selection each -->
         <div class="qcbar" role="group" aria-label="Additional details">
 
           <div class="qcbar-item">
             <span class="qcbar-lbl">Warranty</span>
-            <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty Yes">✓</button>
-            <button class="qb cross" onclick="setYN('warranty','no',this)" aria-label="Warranty No">✗</button>
+            <div class="qcbar-btns">
+              <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty Yes">✓</button>
+              <button class="qb cross" onclick="setYN('warranty','no',this)" aria-label="Warranty No">✗</button>
+            </div>
           </div>
-
-          <span class="qcbar-sep">|</span>
 
           <div class="qcbar-item">
             <span class="qcbar-lbl">Single Owner</span>
-            <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
-            <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single Owner No">✗</button>
+            <div class="qcbar-btns">
+              <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
+              <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single Owner No">✗</button>
+            </div>
           </div>
-
-          <span class="qcbar-sep">|</span>
 
           <div class="qcbar-item">
             <span class="qcbar-lbl">Svc. History</span>
-            <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
-            <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
+            <div class="qcbar-btns">
+              <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
+              <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
+            </div>
           </div>
-
-          <span class="qcbar-sep">|</span>
 
           <div class="qcbar-item">
             <span class="qcbar-lbl">Accident</span>
-            <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
-            <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
+            <div class="qcbar-btns">
+              <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
+              <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
+            </div>
           </div>
 
         </div><!-- /qcbar -->
@@ -3427,34 +3777,138 @@
     <div class="result-panel" id="resultPanel" role="region" aria-label="Valuation result" aria-live="polite">
       <div class="rpanel-inner" id="rpanelInner">
 
-        <!-- Placeholder state with Ad -->
+        <!-- ── STAGE 1: Landing — Authority Panel ─────────────── -->
         <div class="rph" id="rph">
-          <div class="rph-car" aria-hidden="true">
-            <svg viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:65%;max-width:130px;opacity:.45">
-              <rect x="10" y="38" width="180" height="32" rx="8" fill="rgba(10,37,64,0.10)" stroke="rgba(10,37,64,0.25)" stroke-width="1.2"/>
-              <path d="M30 38 C38 20 52 16 80 16 L120 16 C148 16 162 20 170 38" fill="rgba(10,37,64,0.07)" stroke="rgba(10,37,64,0.22)" stroke-width="1.2"/>
-              <circle cx="50" cy="70" r="11" fill="rgba(10,37,64,0.08)" stroke="rgba(10,37,64,0.30)" stroke-width="1.5"/>
-              <circle cx="50" cy="70" r="5" fill="rgba(10,37,64,0.20)"/>
-              <circle cx="150" cy="70" r="11" fill="rgba(10,37,64,0.08)" stroke="rgba(10,37,64,0.30)" stroke-width="1.5"/>
-              <circle cx="150" cy="70" r="5" fill="rgba(10,37,64,0.20)"/>
-              <rect x="78" y="20" width="44" height="18" rx="3" fill="rgba(196,154,42,0.08)" stroke="rgba(196,154,42,0.20)" stroke-width="1"/>
-              <line x1="1" y1="70" x2="199" y2="70" stroke="rgba(10,37,64,0.10)" stroke-width="1" stroke-dasharray="4 3"/>
-            </svg>
-          </div>
-          <div class="rph-title">Live Valuation Ready</div>
-          <p>Fill the form and get the <strong>real UAE market price</strong> instantly.</p>
-          <div class="rph-sample" aria-hidden="true">
-            <div class="rph-s-row">
-              <div>
-                <div class="rph-s-lbl">UAE Market Value</div>
-                <div class="rph-s-price">AED ▓▓▓,▓▓▓</div>
-                <div class="rph-s-range">Range AED ▓▓▓ – ▓▓▓,▓▓▓</div>
+
+          <!-- Stage 1: Feature Grid + Methodology (shown on landing) -->
+          <div class="rph-stage1" id="rphStage1">
+
+            <div class="rph-s1-eyebrow">How the Engine Works</div>
+
+            <!-- 3-pillar feature grid -->
+            <div class="rph-feat-grid">
+
+              <div class="rph-feat-card">
+                <div class="rph-feat-ico">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Isometric data tower -->
+                    <polygon points="24,6 40,15 40,33 24,42 8,33 8,15" fill="rgba(0,133,119,0.08)" stroke="rgba(0,133,119,0.35)" stroke-width="1.2"/>
+                    <polygon points="24,6 40,15 24,24 8,15" fill="rgba(0,133,119,0.14)" stroke="rgba(0,133,119,0.30)" stroke-width="1"/>
+                    <polygon points="40,15 40,33 24,42 24,24" fill="rgba(0,133,119,0.06)" stroke="rgba(0,133,119,0.20)" stroke-width="1"/>
+                    <polygon points="8,15 24,24 24,42 8,33" fill="rgba(0,133,119,0.10)" stroke="rgba(0,133,119,0.22)" stroke-width="1"/>
+                    <circle cx="24" cy="24" r="4" fill="rgba(0,168,150,0.8)"/>
+                    <line x1="24" y1="20" x2="24" y2="8" stroke="rgba(0,133,119,0.5)" stroke-width="1.2" stroke-dasharray="2 2"/>
+                    <circle cx="24" cy="7" r="2" fill="rgba(196,154,42,0.9)"/>
+                  </svg>
+                </div>
+                <div class="rph-feat-name">Real-Time UAE Data</div>
+                <div class="rph-feat-desc">50,000+ live listings scanned across Dubai, Sharjah &amp; Abu Dhabi</div>
               </div>
-              <div class="rph-s-badge">✓ Fair</div>
+
+              <div class="rph-feat-card">
+                <div class="rph-feat-ico">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Isometric liquidity bars -->
+                    <rect x="8" y="28" width="8" height="12" rx="1.5" fill="rgba(0,133,119,0.12)" stroke="rgba(0,133,119,0.32)" stroke-width="1.1"/>
+                    <rect x="20" y="20" width="8" height="20" rx="1.5" fill="rgba(0,133,119,0.18)" stroke="rgba(0,133,119,0.38)" stroke-width="1.1"/>
+                    <rect x="32" y="12" width="8" height="28" rx="1.5" fill="rgba(0,133,119,0.26)" stroke="rgba(0,133,119,0.45)" stroke-width="1.1"/>
+                    <path d="M8 26 L20 18 L32 10" stroke="rgba(196,154,42,0.75)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+                    <circle cx="8" cy="26" r="2" fill="rgba(196,154,42,0.85)"/>
+                    <circle cx="20" cy="18" r="2" fill="rgba(196,154,42,0.85)"/>
+                    <circle cx="32" cy="10" r="2" fill="rgba(196,154,42,0.85)"/>
+                  </svg>
+                </div>
+                <div class="rph-feat-name">Liquidity Analysis</div>
+                <div class="rph-feat-desc">Demand velocity, days-to-sell, and GCC market absorption rates</div>
+              </div>
+
+              <div class="rph-feat-card">
+                <div class="rph-feat-ico">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Isometric brain/logic cube -->
+                    <polygon points="24,8 40,17 40,31 24,40 8,31 8,17" fill="rgba(0,133,119,0.07)" stroke="rgba(0,133,119,0.28)" stroke-width="1.2"/>
+                    <polygon points="24,8 40,17 24,26 8,17" fill="rgba(0,133,119,0.13)" stroke="rgba(0,133,119,0.28)" stroke-width="1"/>
+                    <polygon points="40,17 40,31 24,40 24,26" fill="rgba(0,133,119,0.05)" stroke="rgba(0,133,119,0.18)" stroke-width="1"/>
+                    <!-- circuit lines -->
+                    <line x1="16" y1="17" x2="24" y2="20" stroke="rgba(196,154,42,0.6)" stroke-width="1" stroke-linecap="round"/>
+                    <line x1="32" y1="17" x2="24" y2="20" stroke="rgba(196,154,42,0.6)" stroke-width="1" stroke-linecap="round"/>
+                    <line x1="24" y1="20" x2="24" y2="28" stroke="rgba(196,154,42,0.6)" stroke-width="1" stroke-linecap="round"/>
+                    <circle cx="24" cy="20" r="2.5" fill="rgba(196,154,42,0.9)"/>
+                    <circle cx="16" cy="17" r="1.5" fill="rgba(0,133,119,0.7)"/>
+                    <circle cx="32" cy="17" r="1.5" fill="rgba(0,133,119,0.7)"/>
+                    <circle cx="24" cy="28" r="1.5" fill="rgba(0,133,119,0.7)"/>
+                  </svg>
+                </div>
+                <div class="rph-feat-name">Expert Human Logic</div>
+                <div class="rph-feat-desc">GCC spec premiums, regional demand curves &amp; depreciation logic</div>
+              </div>
+
+            </div><!-- /rph-feat-grid -->
+
+            <!-- Methodology funnel -->
+            <div class="rph-method">
+              <div class="rph-method-step">
+                <div class="rph-mstep-ico">
+                  <svg viewBox="0 0 28 28" fill="none"><rect x="4" y="8" width="20" height="14" rx="3" fill="rgba(10,37,64,0.08)" stroke="rgba(10,37,64,0.25)" stroke-width="1.1"/><path d="M8 12h4M8 16h8" stroke="rgba(10,37,64,0.35)" stroke-width="1" stroke-linecap="round"/><circle cx="20" cy="10" r="3" fill="rgba(196,154,42,0.85)"/></svg>
+                </div>
+                <div class="rph-mstep-lbl">Your Car Details</div>
+              </div>
+              <div class="rph-method-arrow">→</div>
+              <div class="rph-method-step">
+                <div class="rph-mstep-ico rph-mstep-ico--funnel">
+                  <svg viewBox="0 0 28 28" fill="none"><path d="M6 8h16l-6 8v6l-4-2v-4L6 8z" fill="rgba(0,133,119,0.12)" stroke="rgba(0,133,119,0.4)" stroke-width="1.1" stroke-linejoin="round"/><circle cx="22" cy="8" r="2" fill="rgba(0,133,119,0.7)"/><circle cx="14" cy="8" r="2" fill="rgba(0,133,119,0.5)"/><circle cx="6" cy="8" r="2" fill="rgba(0,133,119,0.5)"/></svg>
+                </div>
+                <div class="rph-mstep-lbl">Market Data Funnel</div>
+              </div>
+              <div class="rph-method-arrow">→</div>
+              <div class="rph-method-step">
+                <div class="rph-mstep-ico rph-mstep-ico--price">
+                  <svg viewBox="0 0 28 28" fill="none"><rect x="4" y="6" width="20" height="16" rx="3" fill="rgba(196,154,42,0.1)" stroke="rgba(196,154,42,0.45)" stroke-width="1.1"/><text x="14" y="17" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="7" font-weight="700" fill="rgba(196,154,42,0.9)">AED</text></svg>
+                </div>
+                <div class="rph-mstep-lbl">Real Valuation</div>
+              </div>
+            </div><!-- /rph-method -->
+
+            <!-- Trust bar -->
+            <div class="rph-trust-bar">
+              <div class="rph-trust-lbl">Data sourced from</div>
+              <div class="rph-trust-sources">
+                <span class="rph-src-pill">dubizzle</span>
+                <span class="rph-src-pill">Yalla Motor</span>
+                <span class="rph-src-pill">OpenSooq</span>
+                <span class="rph-src-pill">Motory</span>
+                <span class="rph-src-pill">GCC Classifieds</span>
+              </div>
             </div>
-            <div class="rph-s-bar"><div class="rph-s-bar-fill"></div></div>
-            <div class="rph-s-chips"><span>2023 Toyota</span><span>45,000 km</span><span>GCC</span></div>
-          </div>
+
+          </div><!-- /rph-stage1 -->
+
+          <!-- Stage 2: Live-Sync (shown when user starts interacting) -->
+          <div class="rph-stage2" id="rphStage2" style="display:none" aria-live="polite">
+
+            <div class="rph-s2-silhouette" id="rphSilhouette" aria-hidden="true">
+              <!-- SVG is injected by JS based on body type + colour -->
+            </div>
+
+            <div class="rph-s2-ticker-wrap">
+              <div class="rph-s2-ticker-dot"></div>
+              <div class="rph-s2-ticker-text" id="rphTickerText">Initialising UAE market scan…</div>
+            </div>
+
+            <div class="rph-s2-fields-summary" id="rphFieldsSummary"></div>
+
+            <div class="rph-s2-progress">
+              <div class="rph-s2-prog-bar"><div class="rph-s2-prog-fill" id="rphProgFill"></div></div>
+              <div class="rph-s2-prog-lbl" id="rphProgLbl">0 of 3 required fields complete</div>
+            </div>
+
+            <div class="rph-s2-cta-hint" id="rphCtaHint" style="display:none">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v5l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
+              Ready — hit <strong>Get Valuation</strong>
+            </div>
+
+          </div><!-- /rph-stage2 -->
+
         </div>
 
         <!-- Ad placeholder — shown during loading (15-second countdown) -->
@@ -3475,12 +3929,96 @@
           <div class="ad-done-msg" id="adDoneMsg">✓ Data fetched — displaying results now</div>
         </div>
 
-        <!-- Loading state -->
-        <div class="rld" id="rld" style="display:none" role="status">
-          <div class="spinner" aria-hidden="true"></div>
-          <p id="loadMsg">Scanning UAE market…</p>
-          <p class="rld-step" id="loadStep"></p>
-          <div class="load-tip" id="loadTip" style="display:none"></div>
+        <!-- ── Loading state — Intellectual Entertainment ───── -->
+        <div class="rld" id="rld" style="display:none" role="status" aria-label="Fetching valuation">
+
+          <!-- Named step progress track -->
+          <div class="rld-steps-wrap">
+            <div class="rld-steps-header">
+              <span class="rld-steps-eyebrow">Processing your valuation</span>
+              <span class="rld-steps-pct" id="rldPct">0%</span>
+            </div>
+            <div class="rld-master-bar">
+              <div class="rld-master-fill" id="rldMasterFill"></div>
+            </div>
+            <ol class="rld-step-list" id="rldStepList">
+              <li class="rld-step-item" id="lstep0">
+                <span class="rld-step-ico" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg>
+                </span>
+                <span class="rld-step-lbl">Fetching live UAE auction &amp; listing data…</span>
+                <span class="rld-step-state"></span>
+              </li>
+              <li class="rld-step-item" id="lstep1">
+                <span class="rld-step-ico" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </span>
+                <span class="rld-step-lbl">Adjusting for current UAE market liquidity…</span>
+                <span class="rld-step-state"></span>
+              </li>
+              <li class="rld-step-item" id="lstep2">
+                <span class="rld-step-ico" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="rld-step-lbl" id="lstep2lbl">Calculating depreciation curves &amp; GCC premiums…</span>
+                <span class="rld-step-state"></span>
+              </li>
+              <li class="rld-step-item" id="lstep3">
+                <span class="rld-step-ico" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
+                </span>
+                <span class="rld-step-lbl">Applying expert human valuation logic…</span>
+                <span class="rld-step-state"></span>
+              </li>
+              <li class="rld-step-item" id="lstep4">
+                <span class="rld-step-ico" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg>
+                </span>
+                <span class="rld-step-lbl">Compiling your personalised report…</span>
+                <span class="rld-step-state"></span>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Did You Know fact rotator -->
+          <div class="rld-fact-wrap" id="rldFactWrap">
+            <div class="rld-fact-label">Did You Know?</div>
+            <div class="rld-fact-text" id="rldFactText"></div>
+            <div class="rld-fact-dots" id="rldFactDots">
+              <span class="rld-fdot active"></span>
+              <span class="rld-fdot"></span>
+              <span class="rld-fdot"></span>
+            </div>
+          </div>
+
+          <!-- Skeleton UI — mimics the result layout -->
+          <div class="rld-skeleton" id="rldSkeleton" aria-hidden="true">
+            <div class="sk-section sk-price-section">
+              <div class="sk-line sk-line--xs sk-line--60"></div>
+              <div class="sk-line sk-line--xl sk-line--75" style="margin:8px 0 4px"></div>
+              <div class="sk-line sk-line--sm sk-line--45"></div>
+              <div class="sk-badges">
+                <div class="sk-badge"></div>
+                <div class="sk-badge"></div>
+                <div class="sk-badge"></div>
+              </div>
+            </div>
+            <div class="sk-section sk-metrics-section">
+              <div class="sk-line sk-line--xs sk-line--40" style="margin-bottom:8px"></div>
+              <div class="sk-metric-row">
+                <div class="sk-metric-card"></div>
+                <div class="sk-metric-card"></div>
+                <div class="sk-metric-card"></div>
+              </div>
+            </div>
+            <div class="sk-section sk-analysis-section">
+              <div class="sk-line sk-line--xs sk-line--35" style="margin-bottom:8px"></div>
+              <div class="sk-line sk-line--sm sk-line--100"></div>
+              <div class="sk-line sk-line--sm sk-line--88" style="margin-top:5px"></div>
+              <div class="sk-line sk-line--sm sk-line--72" style="margin-top:5px"></div>
+            </div>
+          </div>
+
         </div>
 
         <!-- Result content -->
@@ -3786,8 +4324,10 @@ function onModelChange(){
 /* ── QUICK CHECK ────────────────────────────────────────── */
 function setYN(key,val,btn){
   qs[key]=val;
-  btn.closest('.qc-item').querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
+  btn.closest('.qcbar-item').querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
+  // Remove unselected highlight if any
+  btn.closest('.qcbar-item').classList.remove('qcbar-item--unset');
 }
 
 /* ── SHOW STATE ─────────────────────────────────────────── */
@@ -3853,68 +4393,121 @@ function stopAdCountdown(){
   if(_adTimer){clearInterval(_adTimer);_adTimer=null;}
 }
 
-/* ── UAE MARKET FACTS (shown during loading) ─────────────── */
-const LOAD_TIPS=[
-  'White cars resell faster in UAE ☀️',
-  'GCC spec holds value better than American import',
-  'Full service history can add up to 5% to resale value',
-  'Single-owner cars are more trusted by UAE buyers',
-  'Accident-free cars attract more serious buyers',
-  'Dealer prices average 8% higher than private sellers',
-  'Silver and grey tones are rising in UAE market demand',
-  'Low mileage is the top filter used by UAE car buyers',
+/* ── UAE MARKET FACTS — Did You Know rotator ─────────────── */
+const UAE_FACTS = [
+  'White and Silver cars hold up to 5% more resale value in the GCC due to heat reflection and high local demand.',
+  'Full service history at an authorised dealer can increase your car\'s valuation by up to 12% vs. non-agency service.',
+  'GCC-specification cars typically command an AED 5,000–15,000 premium over American or European imports in UAE.',
+  'Single-owner vehicles sell 30% faster on UAE platforms — ownership history is the #1 trust signal for buyers.',
+  'Dubizzle data shows accident-free cars receive 40% more enquiries in the first 48 hours of listing.',
+  'Low mileage (under 30,000 km/year) is the single biggest filter used by UAE car buyers on listing platforms.',
+  'Pearl White and Midnight Black are the two fastest-selling colours in Dubai & Abu Dhabi markets right now.',
+  'Dealer-listed cars average 8–11% higher asking prices than private sellers for the same make, model, and year.',
 ];
+
+const LOAD_STEPS_DEF = [
+  { id:'lstep0', pct:10,  label:null },
+  { id:'lstep1', pct:35,  label:null },
+  { id:'lstep2', pct:62,  label:null },
+  { id:'lstep3', pct:82,  label:null },
+  { id:'lstep4', pct:96,  label:null },
+];
+
 let loadTimer=null,tipTimeoutId=null,tipIntervalId=null;
+let _stepTimer=null,_factTimer=null,_factIdx=0,_stepIdx=0;
 
 function buildLoadSteps(mobile){
-  const brand=g('brand').value||'your car';
-  const model=g('model').value||'';
-  const year=g('year').value||'';
-  const mileage=g('mileage').value?parseInt(g('mileage').value).toLocaleString()+' km':'';
-  const spec=g('spec').value||'GCC';
-  const listCount=(Math.floor(Math.random()*2500)+2500).toLocaleString();
-  const carLabel=[year,brand,model].filter(Boolean).join(' ');
-  return[
-    `Searching live UAE listings for ${carLabel}…`,
-    `Scanning Dubizzle and YallaMotor…`,
-    mileage?`Comparing similar cars with ${mileage}…`:'Finding comparable cars…',
-    'Analysing market position…',
-    'Calculating your valuation…',
-  ];
+  /* kept for compat — no longer used for display but called from legacy paths */
+  return[];
+}
+
+function _setStep(idx){
+  const steps = document.querySelectorAll('.rld-step-item');
+  steps.forEach((el,i)=>{
+    el.classList.remove('active','done');
+    if(i < idx)  el.classList.add('done');
+    if(i === idx) el.classList.add('active');
+  });
+  const pct = LOAD_STEPS_DEF[Math.min(idx, LOAD_STEPS_DEF.length-1)].pct;
+  const fill = document.getElementById('rldMasterFill');
+  const pctEl= document.getElementById('rldPct');
+  if(fill)  fill.style.width = pct+'%';
+  if(pctEl) pctEl.textContent = pct+'%';
+}
+
+function _rotateFact(idx){
+  const textEl = document.getElementById('rldFactText');
+  const dots    = document.querySelectorAll('.rld-fdot');
+  if(!textEl) return;
+  textEl.style.opacity='0';
+  setTimeout(()=>{
+    textEl.textContent = UAE_FACTS[idx % UAE_FACTS.length];
+    textEl.style.opacity='1';
+  },300);
+  dots.forEach((d,i)=>d.classList.toggle('active', i===(idx % dots.length)));
 }
 
 function startLoad(mobile=false){
-  const steps=buildLoadSteps(mobile);
-  let i=0;
-  const msg=mobile?g('mobLoadMsg'):g('loadMsg');
-  const step=mobile?g('mobLoadStep'):g('loadStep');
-  const tipEl=mobile?g('mobLoadTip'):g('loadTip');
-  if(msg)msg.textContent=steps[0];
-  if(step)step.textContent='';
-  if(tipEl){tipEl.style.display='none';tipEl.textContent='';}
-  loadTimer=setInterval(()=>{
-    i=(i+1)%steps.length;
-    if(step){step.style.opacity=0;setTimeout(()=>{step.textContent=steps[i];step.style.opacity=1;},200);}
-  },1200);
-  let tipIdx=Math.floor(Math.random()*LOAD_TIPS.length);
-  if(tipEl){
-    tipTimeoutId=setTimeout(()=>{
-      tipEl.textContent=LOAD_TIPS[tipIdx];tipEl.style.display='block';tipEl.style.opacity=1;
-      tipIntervalId=setInterval(()=>{
-        tipIdx=(tipIdx+1)%LOAD_TIPS.length;
-        tipEl.style.opacity=0;
-        setTimeout(()=>{tipEl.textContent=LOAD_TIPS[tipIdx];tipEl.style.opacity=1;},250);
-      },4000);
-    },3500);
+  stopLoad();
+
+  /* personalise step 2 label based on inputs */
+  const brand   = (document.getElementById('brand')||{}).value||'';
+  const model   = (document.getElementById('model')||{}).value||'';
+  const year    = (document.getElementById('year')||{}).value||'';
+  const mileage = (document.getElementById('mileage')||{}).value;
+  const carLabel= [year,brand,model].filter(Boolean).join(' ')||'your car';
+  const lbl2 = document.getElementById('lstep2lbl');
+  if(lbl2){
+    const km = mileage ? parseInt(mileage).toLocaleString()+' km ' : '';
+    lbl2.textContent = `Calculating depreciation for ${km}${carLabel}…`;
   }
+
+  /* reset steps */
+  _stepIdx=0;
+  _setStep(0);
+  const fill=document.getElementById('rldMasterFill');
+  if(fill) fill.style.width='0%';
+
+  /* step progression — spread across ~12 seconds */
+  const stepDelays=[0, 2400, 5200, 8400, 11200];
+  stepDelays.forEach((delay,i)=>{
+    setTimeout(()=>{ if(_stepTimer!==null) _setStep(i); }, delay);
+  });
+  _stepTimer=1; /* sentinel so we know load is running */
+
+  /* fact rotator — first fact after 1.5s, then every 3.5s */
+  _factIdx = Math.floor(Math.random()*UAE_FACTS.length);
+  tipTimeoutId = setTimeout(()=>{
+    _rotateFact(_factIdx);
+    _factTimer = setInterval(()=>{
+      _factIdx++;
+      _rotateFact(_factIdx);
+    }, 3500);
+  }, 1500);
+
+  /* legacy: keep loadMsg/loadStep alive for any code that reads them */
+  const msg=mobile?document.getElementById('mobLoadMsg'):document.getElementById('loadMsg');
+  if(msg) msg.textContent='';
 }
 
 function stopLoad(){
   if(loadTimer){clearInterval(loadTimer);loadTimer=null;}
   if(tipTimeoutId){clearTimeout(tipTimeoutId);tipTimeoutId=null;}
   if(tipIntervalId){clearInterval(tipIntervalId);tipIntervalId=null;}
-  const tipEl=g('loadTip');if(tipEl){tipEl.style.display='none';}
-  const mobTipEl=g('mobLoadTip');if(mobTipEl){mobTipEl.style.display='none';}
+  if(_factTimer){clearInterval(_factTimer);_factTimer=null;}
+  _stepTimer=null;
+
+  /* mark all steps done */
+  const fill=document.getElementById('rldMasterFill');
+  const pctEl=document.getElementById('rldPct');
+  if(fill)  fill.style.width='100%';
+  if(pctEl) pctEl.textContent='100%';
+  document.querySelectorAll('.rld-step-item').forEach(el=>{
+    el.classList.remove('active'); el.classList.add('done');
+  });
+  /* legacy tip elements */
+  const tipEl=document.getElementById('loadTip');if(tipEl){tipEl.style.display='none';}
+  const mobTipEl=document.getElementById('mobLoadTip');if(mobTipEl){mobTipEl.style.display='none';}
 }
 
 /* ── DEAL LOGIC (fallback if AI unavailable) ─────────────── */
@@ -4405,6 +4998,27 @@ async function checkCarPrice(){
   if(!mileage){showErr('mileage','Enter mileage');bad=true;}
   if(bad){document.querySelector('.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
 
+  // Highlight any QC pairs that haven't been answered yet
+  const qcKeys=['warranty','singleOwner','fsh','accident'];
+  const qcItems=document.querySelectorAll('.qcbar-item');
+  let qcMissing=false;
+  qcKeys.forEach((key,i)=>{
+    const item=qcItems[i];
+    if(!item)return;
+    if(qs[key]===null||qs[key]===undefined){
+      item.classList.add('qcbar-item--unset');
+      qcMissing=true;
+    }else{
+      item.classList.remove('qcbar-item--unset');
+    }
+  });
+  if(qcMissing){
+    const qcEl=document.querySelector('.qcbar');
+    if(qcEl)qcEl.scrollIntoView({behavior:'smooth',block:'center'});
+    // Pulse the unset items then proceed after brief delay
+    await new Promise(r=>setTimeout(r,900));
+  }
+
   // Always treat as desktop layout — unified cards, no card-stack
   const mobile=false;
   g('btnCheck').disabled=true;
@@ -4578,6 +5192,7 @@ function resetForm(){
   g('spec').value='';
   g('condition').value='';
   document.querySelectorAll('.qb.on').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.qcbar-item--unset').forEach(el=>el.classList.remove('qcbar-item--unset'));
   Object.keys(qs).forEach(k=>qs[k]=null);
   document.querySelectorAll('select,input').forEach(el=>el.classList.remove('filled','err','warn-field'));
   document.querySelectorAll('.errmsg').forEach(el=>el.classList.remove('on','warn-msg'));
@@ -4589,6 +5204,13 @@ function resetForm(){
     wrap.querySelectorAll('.ks-opt').forEach(o=>o.classList.remove('ks-selected'));
   });
   ksRefresh(g('model'));
+  // Restore result panel to stage 1
+  _s2Active=false;
+  clearInterval(_tickerInterval);
+  const stage1=document.getElementById('rphStage1');
+  const stage2=document.getElementById('rphStage2');
+  if(stage1)stage1.style.display='flex';
+  if(stage2)stage2.style.display='none';
   showState('placeholder');
   // Reset ref stamps
   const refEl=g('resultRef');
@@ -4903,22 +5525,23 @@ function _ksMakeWrap(sel){
 }
 
 function _ksOpenPanel(wrap,sel,srch,list){
+  /* Decide direction — open upward if not enough room below */
+  const rect=wrap.getBoundingClientRect();
+  const panelH=320;
+  if(window.innerHeight-rect.bottom<panelH){
+    wrap.classList.add('open-up');
+  }else{
+    wrap.classList.remove('open-up');
+  }
   wrap.classList.add('open');
   wrap.querySelector('.ks-trigger').setAttribute('aria-expanded','true');
   srch.value='';
   _ksDrawList(sel,list,'');
-  /* Ensure panel opens downward — scroll page if not enough room below */
-  const rect=wrap.getBoundingClientRect();
-  const panelH=320; /* panel max-height + search + buffer */
-  if(window.innerHeight-rect.bottom<panelH){
-    const target=window.scrollY+(rect.top-(window.innerHeight*0.18));
-    window.scrollTo({top:Math.max(0,target),behavior:'instant'});
-  }
   setTimeout(()=>srch.focus(),60);
 }
 
 function _ksClose(wrap){
-  wrap.classList.remove('open');
+  wrap.classList.remove('open','open-up');
   wrap.querySelector('.ks-trigger')?.setAttribute('aria-expanded','false');
 }
 function _ksCloseAll(){
@@ -5281,6 +5904,245 @@ function wrapResultInAccordion(){
     btn.style.display=window.scrollY>200?'flex':'none';
   },{passive:true});
 })();
+
+/* ── STAGE 2: LIVE-SYNC PLACEHOLDER ─────────────────────── */
+const SILHOUETTES = {
+  sedan:`<svg viewBox="0 0 220 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="46" width="196" height="28" rx="9" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
+    <path d="M38 46 C46 26 60 20 90 20 L130 20 C160 20 174 26 182 46" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
+    <rect x="92" y="23" width="40" height="16" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.25)" stroke-width="1"/>
+    <circle cx="55" cy="74" r="12" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="55" cy="74" r="6" fill="rgba(20,20,20,0.25)"/>
+    <circle cx="165" cy="74" r="12" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="165" cy="74" r="6" fill="rgba(20,20,20,0.25)"/>
+    <line x1="2" y1="74" x2="218" y2="74" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  suv:`<svg viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="44" width="196" height="36" rx="7" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
+    <path d="M30 44 C34 18 50 12 85 12 L135 12 C170 12 186 18 190 44" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
+    <rect x="90" y="15" width="40" height="18" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
+    <circle cx="55" cy="80" r="14" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="55" cy="80" r="7" fill="rgba(20,20,20,0.25)"/>
+    <circle cx="165" cy="80" r="14" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="165" cy="80" r="7" fill="rgba(20,20,20,0.25)"/>
+    <line x1="2" y1="80" x2="218" y2="80" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  hatchback:`<svg viewBox="0 0 200 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="44" width="176" height="28" rx="8" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
+    <path d="M40 44 C44 24 56 18 80 18 L130 18 C154 18 162 28 168 44" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
+    <rect x="84" y="21" width="36" height="15" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
+    <circle cx="50" cy="72" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="50" cy="72" r="5.5" fill="rgba(20,20,20,0.25)"/>
+    <circle cx="150" cy="72" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="150" cy="72" r="5.5" fill="rgba(20,20,20,0.25)"/>
+    <line x1="2" y1="72" x2="198" y2="72" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  pickup:`<svg viewBox="0 0 240 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="44" width="216" height="32" rx="7" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
+    <path d="M30 44 C34 22 46 16 74 16 L118 16 C134 18 140 30 142 44" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
+    <rect x="142" y="44" width="80" height="26" rx="3" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.1" opacity=".7"/>
+    <rect x="76" y="19" width="34" height="14" rx="2.5" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
+    <circle cx="55" cy="76" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="55" cy="76" r="6.5" fill="rgba(20,20,20,0.25)"/>
+    <circle cx="185" cy="76" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="185" cy="76" r="6.5" fill="rgba(20,20,20,0.25)"/>
+    <line x1="2" y1="76" x2="238" y2="76" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  coupe:`<svg viewBox="0 0 210 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="42" width="186" height="26" rx="9" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
+    <path d="M46 42 C50 20 66 14 95 14 L130 14 C155 14 170 22 178 42" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
+    <rect x="95" y="17" width="32" height="14" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
+    <circle cx="53" cy="68" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="53" cy="68" r="5.5" fill="rgba(20,20,20,0.25)"/>
+    <circle cx="160" cy="68" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="160" cy="68" r="5.5" fill="rgba(20,20,20,0.25)"/>
+    <line x1="2" y1="68" x2="208" y2="68" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  van:`<svg viewBox="0 0 240 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="20" width="216" height="56" rx="7" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
+    <rect x="12" y="20" width="56" height="56" rx="7 0 0 7" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.1" opacity=".6"/>
+    <rect x="22" y="28" width="34" height="22" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
+    <rect x="90" y="28" width="50" height="26" rx="3" fill="rgba(196,154,42,0.06)" stroke="rgba(196,154,42,0.14)" stroke-width="1"/>
+    <circle cx="58" cy="78" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="58" cy="78" r="6.5" fill="rgba(20,20,20,0.25)"/>
+    <circle cx="188" cy="78" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
+    <circle cx="188" cy="78" r="6.5" fill="rgba(20,20,20,0.25)"/>
+    <line x1="2" y1="78" x2="238" y2="78" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+};
+
+// Colour map → CSS rgba for body fill and stroke
+const COLOUR_MAP = {
+  'White':       {fill:'rgba(240,240,240,0.55)',stroke:'rgba(180,180,180,0.55)'},
+  'Pearl White': {fill:'rgba(245,242,235,0.55)',stroke:'rgba(180,175,165,0.50)'},
+  'Black':       {fill:'rgba(25,25,30,0.45)',stroke:'rgba(20,20,25,0.6)'},
+  'Midnight Black':{fill:'rgba(18,18,24,0.48)',stroke:'rgba(15,15,20,0.65)'},
+  'Silver':      {fill:'rgba(180,185,190,0.5)',stroke:'rgba(130,135,140,0.5)'},
+  'Gray':        {fill:'rgba(140,145,150,0.45)',stroke:'rgba(100,105,110,0.5)'},
+  'Dark Gray':   {fill:'rgba(75,80,85,0.48)',stroke:'rgba(55,60,65,0.6)'},
+  'Blue':        {fill:'rgba(50,100,200,0.3)',stroke:'rgba(30,70,160,0.45)'},
+  'Dark Blue':   {fill:'rgba(20,40,110,0.38)',stroke:'rgba(15,30,90,0.55)'},
+  'Light Blue':  {fill:'rgba(100,160,230,0.32)',stroke:'rgba(70,130,200,0.42)'},
+  'Red':         {fill:'rgba(210,35,35,0.32)',stroke:'rgba(170,20,20,0.48)'},
+  'Maroon':      {fill:'rgba(130,20,20,0.38)',stroke:'rgba(100,15,15,0.55)'},
+  'Burgundy':    {fill:'rgba(120,15,40,0.38)',stroke:'rgba(90,10,30,0.55)'},
+  'Gold':        {fill:'rgba(196,154,42,0.35)',stroke:'rgba(160,120,20,0.5)'},
+  'Champagne':   {fill:'rgba(215,195,155,0.4)',stroke:'rgba(180,158,110,0.45)'},
+  'Bronze':      {fill:'rgba(165,110,50,0.38)',stroke:'rgba(130,80,30,0.5)'},
+  'Beige':       {fill:'rgba(210,195,165,0.42)',stroke:'rgba(170,155,120,0.45)'},
+  'Cream':       {fill:'rgba(230,220,190,0.45)',stroke:'rgba(185,172,140,0.42)'},
+  'Sand':        {fill:'rgba(205,185,140,0.42)',stroke:'rgba(165,145,100,0.45)'},
+  'Brown':       {fill:'rgba(110,65,25,0.40)',stroke:'rgba(80,45,15,0.55)'},
+  'Green':       {fill:'rgba(40,130,60,0.32)',stroke:'rgba(25,100,40,0.48)'},
+  'Dark Green':  {fill:'rgba(20,75,35,0.38)',stroke:'rgba(12,55,22,0.55)'},
+  'Orange':      {fill:'rgba(230,110,20,0.35)',stroke:'rgba(190,80,10,0.5)'},
+  'Yellow':      {fill:'rgba(240,210,20,0.35)',stroke:'rgba(200,170,10,0.5)'},
+  'Purple':      {fill:'rgba(110,40,160,0.32)',stroke:'rgba(80,25,125,0.48)'},
+  'Other':       {fill:'rgba(100,110,120,0.35)',stroke:'rgba(70,80,90,0.48)'},
+};
+
+const DEFAULT_COLOUR = {fill:'rgba(10,37,64,0.10)',stroke:'rgba(10,37,64,0.28)'};
+const ROOF_MULTIPLIER = 0.7; // roof is slightly darker/more transparent
+
+let _s2Active = false; // whether stage 2 is currently shown
+
+function _getRoofFill(baseHex){
+  // Just return a slightly dimmed version of the fill
+  return baseHex.replace(/[\d.]+\)$/, m => (parseFloat(m)*ROOF_MULTIPLIER).toFixed(2)+')');
+}
+
+function buildSilhouetteSVG(bodyType, colourName){
+  const type = (bodyType||'').toLowerCase();
+  const key = ['sedan','suv','hatchback','pickup','coupe','van'].find(k=>type.includes(k)) || 'sedan';
+  const svg = SILHOUETTES[key] || SILHOUETTES.sedan;
+  const col = COLOUR_MAP[colourName] || DEFAULT_COLOUR;
+  const roofFill = _getRoofFill(col.fill);
+  return svg
+    .replace(/BODY_FILL/g, col.fill)
+    .replace(/BODY_STROKE/g, col.stroke)
+    .replace(/ROOF_FILL/g, roofFill);
+}
+
+function _getTickerText(brand, model){
+  const count = brand ? Math.floor(4800 + Math.random()*2200) : 5000;
+  const suffix = brand ? ` for ${brand}${model?' '+model:''}` : '';
+  return `Accessing ${count.toLocaleString()}+ recent UAE transactions${suffix}…`;
+}
+
+let _tickerInterval = null;
+function _startTickerAnim(brand, model){
+  clearInterval(_tickerInterval);
+  const el = document.getElementById('rphTickerText');
+  if(!el)return;
+  el.style.opacity='0';
+  setTimeout(()=>{
+    el.textContent = _getTickerText(brand, model);
+    el.style.opacity='1';
+  },200);
+  _tickerInterval = setInterval(()=>{
+    el.style.opacity='0';
+    setTimeout(()=>{
+      el.textContent = _getTickerText(brand, model);
+      el.style.opacity='1';
+    },220);
+  }, 3800);
+}
+
+function _updateStage2(){
+  const stage1 = document.getElementById('rphStage1');
+  const stage2 = document.getElementById('rphStage2');
+  if(!stage1||!stage2) return;
+
+  const brand   = (document.getElementById('brand')||{}).value||'';
+  const model   = (document.getElementById('model')||{}).value||'';
+  const year    = (document.getElementById('year')||{}).value||'';
+  const mileage = (document.getElementById('mileage')||{}).value||'';
+  const body    = (document.getElementById('body')||{}).value||'';
+  const colour  = (document.getElementById('colour')||{}).value||'';
+
+  const hasActivity = brand||year||mileage||body||colour;
+  const rph = document.getElementById('rph');
+  const rcontent = document.getElementById('rcontent');
+  const resultVisible = rcontent && rcontent.style.display!=='none';
+
+  // Never show stage 1/2 if results are visible
+  if(resultVisible) return;
+
+  if(hasActivity){
+    if(!_s2Active){
+      stage1.style.display='none';
+      stage2.style.display='flex';
+      _s2Active=true;
+    }
+    // Update silhouette
+    const silEl = document.getElementById('rphSilhouette');
+    if(silEl) silEl.innerHTML = buildSilhouetteSVG(body, colour);
+
+    // Update ticker
+    _startTickerAnim(brand, model);
+
+    // Update fields summary chips
+    const summaryEl = document.getElementById('rphFieldsSummary');
+    if(summaryEl){
+      const chips = [];
+      if(brand) chips.push({label:brand,active:true});
+      if(model) chips.push({label:model,active:true});
+      if(year)  chips.push({label:year,active:true});
+      if(mileage) chips.push({label:Number(mileage).toLocaleString()+' km',active:true});
+      if(body)  chips.push({label:body,active:false});
+      if(colour) chips.push({label:colour,active:false});
+      summaryEl.innerHTML = chips.map(c=>`<span class="rph-s2-chip${c.active?' active':''}">${c.label}</span>`).join('');
+    }
+
+    // Progress bar (required: brand, year, mileage)
+    const filled = [brand,year,mileage].filter(Boolean).length;
+    const progFill = document.getElementById('rphProgFill');
+    const progLbl  = document.getElementById('rphProgLbl');
+    if(progFill) progFill.style.width = Math.round(filled/3*100)+'%';
+    if(progLbl)  progLbl.textContent  = `${filled} of 3 required fields complete`;
+
+    // CTA hint
+    const ctaHint = document.getElementById('rphCtaHint');
+    if(ctaHint) ctaHint.style.display = (filled===3)?'flex':'none';
+
+    // Silhouette placeholder text when no body type yet
+    const silhouetteEl = document.getElementById('rphSilhouette');
+    if(silhouetteEl && !body){
+      silhouetteEl.innerHTML = buildSilhouetteSVG('sedan', colour||'');
+    }
+
+  } else {
+    if(_s2Active){
+      clearInterval(_tickerInterval);
+      stage2.style.display='none';
+      stage1.style.display='flex';
+      _s2Active=false;
+    }
+  }
+}
+
+// Hook into form fields for live-sync
+(function initStage2Listeners(){
+  const watchIds = ['brand','model','year','mileage','body','colour','trim','spec','condition'];
+  watchIds.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('change', _updateStage2);
+    el.addEventListener('input',  _updateStage2);
+  });
+  // Initial silhouette (sedan, no colour)
+  const silEl = document.getElementById('rphSilhouette');
+  if(silEl) silEl.innerHTML = buildSilhouetteSVG('sedan','');
+})();
+
+// Reset hook — full form clear + restore stage 1
+// (primary resetForm defined earlier at line ~5143 handles field clearing)
+// This block adds the stage-2 panel reset on top.
 
 /* ── BOOT ───────────────────────────────────────────────── */
 initBrands();initYears();
