@@ -33,7 +33,7 @@
     }
 
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;max-width:100vw;overflow-x:hidden;}
     body{
       font-family:"Exo 2",system-ui,sans-serif;
       background:linear-gradient(155deg,#FFFDF5 0%,#FFF8E4 55%,#FFFBEE 100%);
@@ -42,6 +42,9 @@
       -moz-osx-font-smoothing:grayscale;
       text-rendering:optimizeLegibility;
       min-height:100vh;
+      max-width:100vw;
+      overflow-x:hidden;
+      font-size:clamp(13px,1.4vw,16px);
     }
     body::before{
       content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -136,7 +139,7 @@
     @keyframes hIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
     /* ── PAGE SHELL ─────────────────────────────────────────── */
-    .page{max-width:1120px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;}
+    .page{max-width:1120px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;box-sizing:border-box;width:100%;}
 
     /* ── MAIN LAYOUT ────────────────────────────────────────── */
     /*
@@ -324,49 +327,7 @@
     .ffoot-hint strong{color:rgba(255,255,255,.72);}
     .ffoot-hint.ready-hint strong{color:var(--gold);}
 
-    /* ── AD PLACEHOLDER in output panel ── */
-    .ad-placeholder {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 10px; padding: 24px 20px; text-align: center;
-      background: linear-gradient(135deg, rgba(10,37,64,0.03) 0%, rgba(196,154,42,0.05) 100%);
-      border: 1.5px dashed rgba(196,154,42,0.30);
-      border-radius: 12px; margin: 16px;
-      animation: fIn 0.4s var(--ease) both;
-    }
-    .ad-placeholder-lbl {
-      font-size:.48rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-      color:var(--muted);opacity:.55;margin-bottom:2px;
-    }
-    .ad-placeholder-img {
-      width:100%;max-width:340px;height:88px;
-      background:linear-gradient(135deg,rgba(10,37,64,0.05),rgba(196,154,42,0.07));
-      border-radius:8px;border:1px solid var(--border);
-      display:flex;align-items:center;justify-content:center;
-      font-size:.72rem;color:var(--muted);font-family:"Exo 2",sans-serif;font-weight:600;
-      letter-spacing:.05em;
-    }
-    .ad-notice {
-      font-size:.66rem;color:var(--muted);font-family:"Exo 2",sans-serif;
-      max-width:280px;line-height:1.5;
-    }
-    .ad-notice strong{color:var(--ink-soft);}
-    .ad-countdown-bar {
-      width:100%;max-width:280px;height:3px;
-      background:var(--border);border-radius:99px;overflow:hidden;
-    }
-    .ad-countdown-fill {
-      height:100%;border-radius:99px;width:100%;
-      background:linear-gradient(90deg,var(--gold),#E8D060);
-      transition:width .25s linear;
-    }
-    .ad-countdown-txt {
-      font-size:.6rem;color:var(--muted);font-family:"Exo 2",sans-serif;
-    }
-    .ad-countdown-txt strong{color:var(--gold);}
-    .ad-done-msg {
-      font-size:.7rem;color:var(--good);font-family:"Exo 2",sans-serif;font-weight:700;
-      display:none;
-    }
+    /* Ad placeholders removed */
 
     /* ── DIVIDER ────────────────────────────────────────────── */
     .divider{margin:14px 0 10px;border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);}
@@ -420,24 +381,7 @@
     .rph-title{font-family:"Exo 2",sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
     .rph p{font-size:.76rem;color:var(--muted);line-height:1.5;max-width:190px;}
     .rph strong{color:var(--ink-soft);}
-    .rph-sample{
-      background:var(--surface-2);border-radius:var(--r-md);
-      border:1px solid var(--border);padding:12px 14px;width:100%;text-align:left;
-    }
-    .rph-s-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-    .rph-s-lbl{font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-    .rph-s-price{font-family:"Orbitron",sans-serif;font-size:1.1rem;font-weight:700;color:rgba(0,133,119,0.3);letter-spacing:-.02em;}
-    .rph-s-range{font-size:.62rem;color:rgba(139,125,104,0.4);margin-top:2px;}
-    .rph-s-badge{
-      background:rgba(26,140,107,0.08);color:rgba(26,140,107,0.45);
-      border:1px solid rgba(26,140,107,0.15);border-radius:99px;
-      font-size:.62rem;font-weight:700;padding:3px 9px;white-space:nowrap;
-      flex-shrink:0;margin-top:2px;
-    }
-    .rph-s-bar{height:3px;background:var(--border);border-radius:99px;overflow:hidden;margin:10px 0 8px;}
-    .rph-s-bar-fill{height:100%;width:62%;border-radius:99px;background:linear-gradient(90deg,rgba(0,168,150,0.3),rgba(0,133,119,0.3));}
-    .rph-s-chips{display:flex;gap:4px;flex-wrap:wrap;}
-    .rph-s-chips span{font-size:.6rem;padding:2px 7px;border-radius:5px;background:var(--white);border:1px solid var(--border);color:rgba(139,125,104,0.5);}
+    /* rph-sample removed */
 
     /* loading */
     .rld{text-align:center;padding:48px 24px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
@@ -880,6 +824,42 @@
     }
     .ks-wrap.open .ks-panel{visibility:visible;opacity:1;pointer-events:auto;transform:translateY(0);}
 
+    /* ── ROW-BASED DROPDOWN DIRECTION ───────────────────────────
+       Row 1 (items 1-4): open downward (default)
+       Row 2 (items 5-8): open downward
+       Row 3 (items 9-12): open upward — avoids viewport clip   */
+    .fg .ig:nth-child(1) .ks-panel,
+    .fg .ig:nth-child(2) .ks-panel,
+    .fg .ig:nth-child(3) .ks-panel,
+    .fg .ig:nth-child(4) .ks-panel,
+    .fg .ig:nth-child(5) .ks-panel,
+    .fg .ig:nth-child(6) .ks-panel,
+    .fg .ig:nth-child(7) .ks-panel,
+    .fg .ig:nth-child(8) .ks-panel {
+      top: calc(100% + 3px) !important;
+      bottom: auto !important;
+      transform-origin: top center;
+    }
+    .fg .ig:nth-child(9)  .ks-panel,
+    .fg .ig:nth-child(10) .ks-panel,
+    .fg .ig:nth-child(11) .ks-panel,
+    .fg .ig:nth-child(12) .ks-panel {
+      top: auto !important;
+      bottom: calc(100% + 3px) !important;
+      transform: translateY(5px);   /* slide up on open */
+      transform-origin: bottom center;
+    }
+    .fg .ig:nth-child(9)  .ks-wrap.open .ks-panel,
+    .fg .ig:nth-child(10) .ks-wrap.open .ks-panel,
+    .fg .ig:nth-child(11) .ks-wrap.open .ks-panel,
+    .fg .ig:nth-child(12) .ks-wrap.open .ks-panel {
+      transform: translateY(0) !important;
+    }
+    /* Prevent parent containers from clipping panels */
+    .fg { overflow: visible !important; }
+    .ig { overflow: visible !important; }
+    .form-body { overflow: visible !important; }
+
     /* Inline search — flush at top, no wrapper box */
     .ks-search-row{flex-shrink:0;}
     .ks-search-icon{display:none;}
@@ -1071,6 +1051,25 @@
     .ig { display: flex; flex-direction: column; justify-content: flex-start; }
     .ks-trigger, select, input[type="number"], input[type="text"] { height: 34px !important; }
 
+    /* ══════════════════════════════════════════════════════════
+       GLOBAL DROPDOWN STANDARDS (all viewports)
+       • Panel z-index above all form stacking contexts
+       • Panel width = trigger width (left:0;right:0 — inherited)
+       • Max-height = 6 items — controlled on .ks-list (192px)
+       • Persistent right-side scrollbar — overflow-y:scroll on .ks-list
+    ══════════════════════════════════════════════════════════ */
+    .ks-panel {
+      z-index: 999999 !important;
+      /* Ensure panel is never clipped by ancestor overflow */
+      position: absolute;
+    }
+    /* Tablet and Mobile triggers mirror desktop cell height */
+    @media (min-width: 601px) and (max-width: 900px) {
+      .ks-trigger { height: 34px !important; }
+    }
+    @media (max-width: 600px) {
+      .ks-trigger { height: 34px !important; }
+    }
 
     /* ══════════════════════════════════════════════════════════
        DESKTOP ≥ 901px  —  30 / 70  Control-Center Split
@@ -1378,13 +1377,13 @@
       .rq { color: var(--gold) !important; }
 
       /* 3-column grid */
-      .fg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 12px; margin-bottom: 8px; align-items: end; }
+      .fg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 10px; margin-bottom: 8px; align-items: end; }
       .asking-field-wrap { grid-column: unset; }
       .more-field { display: flex !important; }
 
-      /* Inputs */
+      /* Inputs — height matches desktop (34px) per global consistency standard */
       select, input[type="number"], input[type="text"] {
-        height: 38px !important; font-size: 0.82rem !important; padding: 0 0.7rem !important;
+        height: 34px !important; font-size: 0.82rem !important; padding: 0 0.7rem !important;
         background: rgba(255,255,255,0.96) !important;
         border: 1px solid rgba(255,255,255,0.20) !important;
         border-radius: 8px !important; color: var(--navy) !important;
@@ -1394,10 +1393,13 @@
       select:focus, input:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; outline: none; background: #fff !important; }
       select.filled, input.filled { border-color: var(--gold-bdr) !important; background: #fff !important; }
 
-      .ks-trigger { height: 38px !important; font-size: 0.82rem !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.20) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
+      /* Tablet trigger — height mirrors desktop cell size (34px) per global standard */
+      .ks-trigger { height: 34px !important; font-size: 0.82rem !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.20) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
       .ks-trigger.ks-filled { border-color: var(--gold-bdr) !important; }
       .ks-wrap.open .ks-trigger { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; }
-      .ks-panel { background: #fff !important; border: 1px solid var(--border) !important; box-shadow: 0 8px 24px rgba(10,37,64,0.16) !important; }
+      /* Tablet panel — inline dropdown (no full-screen), contained within component layout.
+         position:fixed ensures panel escapes any stacking context and always renders above form fields. */
+      .ks-panel { background: #fff !important; border: 1px solid var(--border) !important; box-shadow: 0 8px 24px rgba(10,37,64,0.16) !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; right: 0 !important; top: auto !important; }
 
       .ig .prefix-wrap .prefix-lbl { color: rgba(255,255,255,0.36); font-size: 0.72rem; }
       .asking-field-wrap .prefix-lbl { color: var(--gold) !important; }
@@ -1655,9 +1657,9 @@
       .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; margin-bottom: 8px; align-items: end; }
       .more-field { display: flex !important; }
 
-      /* Inputs mobile */
+      /* Inputs mobile — height mirrors desktop (34px) per consistency standard */
       select, input[type="number"], input[type="text"] {
-        height: 42px !important; font-size: 16px !important; padding: 0 0.7rem !important;
+        height: 34px !important; font-size: 16px !important; padding: 0 0.7rem !important;
         background: rgba(255,255,255,0.96) !important;
         border: 1px solid rgba(255,255,255,0.18) !important;
         border-radius: 8px !important; color: var(--navy) !important;
@@ -1665,9 +1667,18 @@
       }
       select:focus, input:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; outline: none; background: #fff !important; }
       select.filled, input.filled { border-color: var(--gold-bdr) !important; background: #fff !important; }
-      .ks-trigger { height: 42px !important; font-size: 15px !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.18) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
+      /* Mobile trigger — height matches desktop cell size (34px) */
+      .ks-trigger { height: 34px !important; font-size: 15px !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.18) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
       .ks-trigger.ks-filled { border-color: var(--gold-bdr) !important; }
       .ks-wrap.open .ks-trigger { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; }
+      /* Mobile panel — must escape overflow-y:auto on form-card.
+         Use position:fixed anchored to trigger rect via JS (_ksPositionPanel). */
+      .ks-panel { background: #fff !important; border: 1px solid var(--border) !important; box-shadow: 0 8px 24px rgba(10,37,64,0.16) !important; z-index: 999999 !important; max-width: 100% !important; width: 100% !important; visibility: hidden; opacity: 0; pointer-events: none;
+        position: fixed !important; left: 0 !important; right: 0 !important; top: auto !important;
+      }
+      .ks-wrap.open .ks-panel { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+      /* Suppress full-screen mobile modal — use inline fixed panel instead */
+      .ks-overlay { display: none !important; }
 
       .ig .prefix-wrap .prefix-lbl { color: rgba(255,255,255,0.35); }
       .asking-field-wrap .prefix-lbl { color: var(--gold) !important; }
@@ -1896,8 +1907,8 @@
     }
 
     /* ── SMALL MOBILE EDGE CASES ──────────────────────────── */
-    @media(max-width:400px){ .fg { grid-template-columns: 1fr 1fr; gap: 8px; } }
-    @media(max-width:350px){ .fg { grid-template-columns: 1fr; gap: 8px; } }
+    @media(max-width:400px){ .fg { grid-template-columns: 1fr 1fr !important; gap: 7px !important; } }
+    @media(max-width:350px){ .fg { grid-template-columns: 1fr 1fr !important; gap: 6px !important; } }
     @media(max-width:360px){ .share-strip { padding: 10px 10px 4px; gap: 4px; } .sico { width: 28px; height: 28px; } .sico svg { width: 13px; height: 13px; } }
 
     /* ── ALL OPTIONAL FIELDS ALWAYS VISIBLE ────────────────── */
@@ -2278,7 +2289,7 @@
       }
       .form-header  { border-radius: 16px 16px 0 0 !important; }
       .ffoot        { border-radius: 0 0 16px 16px !important; }
-      .fg           { grid-template-columns: repeat(3,1fr) !important; gap: 6px 10px !important; }
+      .fg           { grid-template-columns: repeat(4,1fr) !important; gap: 6px 8px !important; }
       .form-body    { padding: 10px 16px 6px !important; }
       select, input[type="number"], input[type="text"] { height: 36px !important; font-size: 0.82rem !important; }
       .ks-trigger   { height: 36px !important; font-size: 0.82rem !important; }
@@ -2571,8 +2582,6 @@
       }
       /* Output subsections get generous card feel */
       .r-bar-section, .r-metrics-section { background: var(--panel-bg2) !important; }
-      /* Ad placeholder desktop sizing */
-      .ad-placeholder { margin: 14px 18px; }
     }
 
     /* Tablet: top card rounded top, bottom card rounded bottom */
@@ -2585,7 +2594,6 @@
         background: rgba(0,0,0,0.10);
         border-top: 1px solid rgba(255,255,255,0.07);
       }
-      .ad-placeholder { margin: 12px 16px; }
     }
 
     /* Mobile: both cards full-screen, no radius needed at edges */
@@ -2597,13 +2605,6 @@
         background: rgba(0,0,0,0.12);
         border-top: 1px solid rgba(255,255,255,0.06);
       }
-      /* Mobile ad inside toast */
-      #mobAdPlaceholder {
-        margin: 10px 12px;
-        border-radius: 10px;
-        padding: 18px 14px;
-      }
-      #mobAdPlaceholder .ad-placeholder-img { height: 70px; }
     }
 
     /* ── QC label always visible on navy ── */
@@ -2630,9 +2631,6 @@
 
     /* ── Btn-go — overridden by unified block below ── */
     .btn-go { white-space: nowrap; }
-
-    /* ── Ad placeholder ── */
-    .ad-placeholder { display: none; }
 
     /* ══════════════════════════════════════════════════════════
        NEW ENRICHED OUTPUT SECTIONS
@@ -3050,7 +3048,7 @@
     margin-bottom:0!important;
     align-items:stretch!important;
   }
-  @media(max-width:900px){.qcbar{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px 10px!important;margin-top:8px!important;}}
+  @media(max-width:900px){.qcbar{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px 10px!important;margin-top:8px!important;}}
   @media(max-width:600px){.qcbar{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:8px!important;}}
   .qcbar-sep{display:none!important;}
   .qcbar-item{
@@ -3060,21 +3058,25 @@
     justify-content:space-between!important;
     gap:4px!important;
     height:36px!important;
-    padding:0 8px!important;
-    background:#EEF1F7!important;
-    border:1.5px solid #CDD2DE!important;
+    padding:0 6px!important;
+    background:transparent!important;
+    border:none!important;
     border-radius:8px!important;
     min-width:0!important;
-    transition:border-color .15s,box-shadow .15s!important;
+    transition:none!important;
   }
   .qcbar-item--unset{
-    border-color:#D4AF37!important;
-    background:rgba(212,175,55,0.08)!important;
+    border-bottom:2px solid #D4AF37!important;
+    border-top:none!important;
+    border-left:none!important;
+    border-right:none!important;
+    background:rgba(212,175,55,0.05)!important;
+    border-radius:0 0 4px 4px!important;
     animation:qcPulse .65s ease-in-out 2!important;
   }
   @keyframes qcPulse{
-    0%,100%{box-shadow:none;}
-    50%{box-shadow:0 0 0 3px rgba(212,175,55,0.30);}
+    0%,100%{background:rgba(212,175,55,0.05);}
+    50%{background:rgba(212,175,55,0.14);}
   }
   .qcbar-lbl{
     font-family:"Exo 2",sans-serif!important;
@@ -3115,11 +3117,11 @@
   .qb:hover{border-color:#8090A8!important;background:#EEF1F7!important;}
   .qb.tick.on{
     background:#16A34A!important;border-color:#16A34A!important;color:#fff!important;
-    box-shadow:0 0 0 2px rgba(22,163,74,.20),0 0 8px rgba(22,163,74,.45)!important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)!important;
   }
   .qb.cross.on{
     background:#DC2626!important;border-color:#DC2626!important;color:#fff!important;
-    box-shadow:0 0 0 2px rgba(220,38,38,.18),0 0 8px rgba(220,38,38,.42)!important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)!important;
   }
 
   /* ── ig-qc: QC cell wrapper — aligns with .ig in fg grid ── */
@@ -3523,6 +3525,78 @@
       overflow: visible !important;
     }
     .result-panel::after { display: none; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     FINAL OVERRIDES — v23 spec compliance
+     1. Zero horizontal scroll on all containers
+     2. Grid locked: 4-col desktop/tablet, 2-col mobile
+     3. Dropdown z-index / overflow parents cleared
+     4. Checkbox group: borderless, glow strictly contained
+  ══════════════════════════════════════════════════════════════ */
+
+  /* No-scroll guarantee */
+  html, body { max-width: 100vw !important; overflow-x: hidden !important; }
+  .page, .layout, .form-card, .result-panel,
+  .form-body, .fg, .qcbar, .ffoot, .hero-inner,
+  .snav-inner { box-sizing: border-box !important; }
+
+  /* Desktop (>900px): fg = 4 cols, qcbar = 4 cols */
+  @media(min-width: 901px) {
+    .fg    { grid-template-columns: repeat(4, 1fr) !important; }
+    .qcbar { grid-template-columns: repeat(4, minmax(0,1fr)) !important; }
+  }
+
+  /* Tablet (601–900px): fg = 4 cols, qcbar = 4 cols */
+  @media(min-width: 601px) and (max-width: 900px) {
+    .fg    { grid-template-columns: repeat(4, 1fr) !important; gap: 6px 8px !important; }
+    .qcbar { grid-template-columns: repeat(4, minmax(0,1fr)) !important; }
+  }
+
+  /* Mobile (≤600px): fg = 2 cols, qcbar = 2 cols */
+  @media(max-width: 600px) {
+    .fg    { grid-template-columns: repeat(2, 1fr) !important; gap: 7px 8px !important; }
+    .qcbar { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 7px !important; }
+  }
+
+  /* Overflow-visible chain so dropdown panels escape all clipping ancestors */
+  .fg, .ig, .form-body, .form-card { overflow: visible !important; }
+  .ks-wrap { overflow: visible !important; position: relative !important; }
+  .ks-panel { z-index: 999999 !important; }
+
+  /* Checkbox group: fully borderless outer container, no glow bleed */
+  .qcbar-item {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 4px !important;
+  }
+  .qcbar-item--unset {
+    border-bottom: 2px solid #D4AF37 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    background: rgba(212,175,55,0.06) !important;
+    border-radius: 0 0 4px 4px !important;
+  }
+  /* Active-state glow: inset only — zero external shadow spread */
+  .qb.tick.on  { box-shadow: inset 0 0 0 1px rgba(255,255,255,.28) !important; }
+  .qb.cross.on { box-shadow: inset 0 0 0 1px rgba(255,255,255,.24) !important; }
+
+  /* Fluid typography — proportional scaling per breakpoint */
+  @media(max-width: 600px) {
+    .ig label          { font-size: clamp(0.60rem, 3vw, 0.70rem) !important; }
+    .qcbar-lbl         { font-size: clamp(0.58rem, 2.8vw, 0.65rem) !important; }
+    .ffoot-hint        { font-size: clamp(0.62rem, 3vw, 0.72rem) !important; }
+    .form-header-title { font-size: clamp(0.60rem, 3vw, 0.70rem) !important; }
+    select, input[type="number"], input[type="text"] {
+      font-size: clamp(0.80rem, 4vw, 0.90rem) !important;
+    }
+    .ks-trigger { font-size: clamp(0.80rem, 4vw, 0.90rem) !important; }
+  }
+  @media(min-width: 601px) and (max-width: 900px) {
+    .ig label  { font-size: clamp(0.60rem, 1.4vw, 0.68rem) !important; }
+    .qcbar-lbl { font-size: clamp(0.58rem, 1.3vw, 0.65rem) !important; }
   }
 
   </style>
@@ -3948,23 +4022,6 @@
 
         </div>
 
-        <!-- Ad placeholder — shown during loading (15-second countdown) -->
-        <div class="ad-placeholder" id="adPlaceholder" style="display:none;" role="region" aria-label="Advertisement">
-          <div class="ad-placeholder-lbl">Advertisement · Supports Free Valuation</div>
-          <div class="ad-placeholder-img" id="adSlot">
-            <!-- Your ad network tag goes here e.g. Google AdSense, Carbon, etc. -->
-            <span style="opacity:.5;">📢 Your Ad Here · 728×90</span>
-          </div>
-          <div class="ad-notice">
-            <strong>Fetching live market data…</strong><br>
-            Your valuation will appear in <strong id="adCountdownNum">15</strong> seconds while we scan UAE listings.
-          </div>
-          <div class="ad-countdown-bar">
-            <div class="ad-countdown-fill" id="adCountdownFill"></div>
-          </div>
-          <div class="ad-countdown-txt">Results ready in <strong id="adCountdownSec">15s</strong></div>
-          <div class="ad-done-msg" id="adDoneMsg">✓ Data fetched — displaying results now</div>
-        </div>
 
         <!-- ── Loading state — Intellectual Entertainment ───── -->
         <div class="rld" id="rld" style="display:none" role="status" aria-label="Fetching valuation">
@@ -4125,20 +4182,6 @@
     <button class="mob-toast-close" onclick="closeMobResult()" aria-label="Close">✕</button>
   </div>
   <div class="mob-toast-body" id="mobBody">
-    <!-- Mobile ad placeholder during loading -->
-    <div class="ad-placeholder" id="mobAdPlaceholder" style="display:none;" role="region" aria-label="Advertisement">
-      <div class="ad-placeholder-lbl">Advertisement · Supports Free Valuation</div>
-      <div class="ad-placeholder-img">
-        <span style="opacity:.5;">📢 Your Ad Here</span>
-      </div>
-      <div class="ad-notice">
-        <strong>Scanning UAE market…</strong><br>
-        Results in <strong id="mobAdCountdownNum">15</strong> seconds.
-      </div>
-      <div class="ad-countdown-bar">
-        <div class="ad-countdown-fill" id="mobAdCountdownFill"></div>
-      </div>
-    </div>
     <div class="rld" id="mobLoad" style="display:none" role="status">
       <div class="spinner"></div>
       <p id="mobLoadMsg">Scanning UAE market…</p>
@@ -4372,65 +4415,20 @@ function setYN(key,val,btn){
 /* ── SHOW STATE ─────────────────────────────────────────── */
 function showState(st,mobile=false){
   const ph=g('rph'),ld=mobile?g('mobLoad'):g('rld'),ct=mobile?g('mobContent'):g('rcontent');
-  const ad=g('adPlaceholder'),mobAd=g('mobAdPlaceholder');
   if(mobile){
-    if(mobAd)mobAd.style.display=st==='loading'?'flex':'none';
     if(ld)ld.style.display=st==='loading'?'flex':'none';
     if(ct)ct.style.display=st==='content'?'block':'none';
-    if(st==='loading')startMobAdCountdown();
-    else stopAdCountdown();
   }else{
     if(ph)ph.style.display=st==='placeholder'?'flex':'none';
     if(ld)ld.style.display=st==='loading'?'flex':'none';
-    if(ad)ad.style.display=st==='loading'?'flex':'none';
     if(ct){
       ct.style.display=st==='content'?'block':'none';
       if(st==='content'){ct.style.animation='none';ct.offsetHeight;ct.style.animation='fIn .38s var(--ease) both';}
     }
-    if(st==='loading')startAdCountdown();
-    else stopAdCountdown();
   }
 }
 
-/* ── AD COUNTDOWN (15 seconds, runs while fetching) ─────────── */
-let _adTimer=null,_adSec=15;
-function startAdCountdown(){
-  stopAdCountdown();
-  _adSec=15;
-  const fill=g('adCountdownFill'),num=g('adCountdownNum'),sec=g('adCountdownSec'),done=g('adDoneMsg');
-  if(!fill)return;
-  fill.style.width='100%';
-  if(num)num.textContent=_adSec;
-  if(sec)sec.textContent=_adSec+'s';
-  if(done)done.style.display='none';
-  _adTimer=setInterval(()=>{
-    _adSec--;
-    if(fill)fill.style.width=Math.max(0,(_adSec/15)*100)+'%';
-    if(num)num.textContent=Math.max(0,_adSec);
-    if(sec)sec.textContent=Math.max(0,_adSec)+'s';
-    if(_adSec<=0){
-      stopAdCountdown();
-      if(done)done.style.display='block';
-    }
-  },1000);
-}
-function startMobAdCountdown(){
-  stopAdCountdown();
-  _adSec=15;
-  const fill=g('mobAdCountdownFill'),num=g('mobAdCountdownNum');
-  if(!fill)return;
-  fill.style.width='100%';
-  if(num)num.textContent=_adSec;
-  _adTimer=setInterval(()=>{
-    _adSec--;
-    if(fill)fill.style.width=Math.max(0,(_adSec/15)*100)+'%';
-    if(num)num.textContent=Math.max(0,_adSec);
-    if(_adSec<=0)stopAdCountdown();
-  },1000);
-}
-function stopAdCountdown(){
-  if(_adTimer){clearInterval(_adTimer);_adTimer=null;}
-}
+/* Ad countdown removed — no ads */
 
 /* ── UAE MARKET FACTS — Did You Know rotator ─────────────── */
 const UAE_FACTS = [
@@ -5064,6 +5062,12 @@ async function checkCarPrice(){
   showState('loading');
   startLoad(false);
 
+  // Scroll to result panel immediately so user sees loading progress
+  setTimeout(()=>{
+    const panel=g('resultPanel');
+    if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
+
   const asking=g('asking').value;
   const model=g('model').value;
 
@@ -5141,10 +5145,13 @@ async function checkCarPrice(){
     g('rcontent').innerHTML=html;
     showState('content');
     activateShareStrip();
-    // Scroll result panel into view on mobile
-    if(window.innerWidth<=600){
-      setTimeout(()=>{g('rcontent').closest('.result-panel')?.scrollIntoView({behavior:'smooth',block:'start'});},100);
-    }
+    // Smooth scroll to result panel on all screen sizes
+    setTimeout(()=>{
+      const panel=g('resultPanel')||g('rcontent').closest('.result-panel');
+      if(panel){
+        panel.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    },120);
     requestAnimationFrame(()=>{
       const pm=document.getElementById('priceMain');
       if(pm)animateCountUp(pm,_avg);
@@ -5446,7 +5453,40 @@ new IntersectionObserver(([e])=>{
 /* ── ENHANCED SEARCHABLE DROPDOWN SYSTEM ────────────────── */
 const _ksMap=new Map();
 let _ksActiveSel=null; // which select is open in mobile modal
-const _ksIsMob=()=>window.innerWidth<=600;
+// Global dropdown standard: inline panel on ALL viewports (no full-screen modal).
+// Mobile full-screen sheet is suppressed via CSS (.ks-overlay { display:none }) and JS.
+const _ksIsMob=()=>false; // Always use inline panel — never open full-screen modal
+
+/* On mobile/tablet the form-card may have overflow:auto which clips absolute children.
+   _ksPositionPanel() measures the trigger and sets the panel to position:fixed
+   so it escapes the clipping context but still aligns with the trigger cell. */
+function _ksPositionPanel(wrap){
+  if(window.innerWidth > 900) return; // desktop uses CSS row-based positioning only
+  const trig = wrap.querySelector('.ks-trigger');
+  const panel = wrap.querySelector('.ks-panel');
+  if(!trig || !panel) return;
+  const rect = trig.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - rect.bottom - 8;
+  const spaceAbove = rect.top - 8;
+  const panelNeeded = 192 + 40; // max-height list + search row
+  const openUp = spaceBelow < panelNeeded && spaceAbove > spaceBelow;
+
+  panel.style.left  = rect.left + 'px';
+  panel.style.width = rect.width + 'px';
+  panel.style.right = 'auto';
+
+  const list = panel.querySelector('.ks-list');
+
+  if(openUp){
+    panel.style.top    = 'auto';
+    panel.style.bottom = (window.innerHeight - rect.top + 3) + 'px';
+    if(list) list.style.maxHeight = Math.max(80, Math.min(192, spaceAbove - 40)) + 'px';
+  } else {
+    panel.style.top    = (rect.bottom + 3) + 'px';
+    panel.style.bottom = 'auto';
+    if(list) list.style.maxHeight = Math.max(80, Math.min(192, spaceBelow - 40)) + 'px';
+  }
+}
 
 // UAE popular brands (Dubizzle/YallaMotor top sellers)
 const KS_POPULAR=['Toyota','Nissan','Hyundai','Honda','Kia','Mitsubishi','BMW','Mercedes-Benz','Ford','Chevrolet','Land Rover','Lexus'];
@@ -5559,6 +5599,7 @@ function _ksOpenPanel(wrap,sel,srch,list){
   wrap.querySelector('.ks-trigger').setAttribute('aria-expanded','true');
   srch.value='';
   _ksDrawList(sel,list,'');
+  _ksPositionPanel(wrap); // reposition for mobile fixed-escape from overflow:auto
   setTimeout(()=>srch.focus(),60);
 }
 
