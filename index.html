@@ -5196,10 +5196,23 @@ function displayValuationResult(data){
   const resultContainer = g('rcontent');
   if(!resultContainer) return;
 
-  const isEstimate = data.isEstimate || false;
-  const listingsCount = data.listingsFound || 0;
+  // Log raw response so field names are visible in DevTools console
+  console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
+
+  // Normalise field names — API may use different keys
+  const avgPrice = data.averagePrice || data.estimatedPrice || data.price
+                || data.marketValue || data.valuation || data.mid
+                || data.medianPrice || data.recommendedPrice || 0;
+  const lowPrice  = data.lowPrice  || data.minPrice || data.low  || data.min  || null;
+  const highPrice = data.highPrice || data.maxPrice || data.high || data.max  || null;
+
+  const isEstimate = data.isEstimate ?? (!data.listingsFound && !data.listingsCount);
+  const listingsCount = data.listingsFound || data.listingsCount || data.count || 0;
   const source = data.source || (isEstimate ? 'AI Estimate' : 'Live Market Data');
   const cacheInfo = data.cached ? ` (cached ${data.cacheAge || ''} ago)` : '';
+
+  // Normalise comparisonToAsking — may also be at data.dealAnalysis or data.priceComparison
+  const cmp = data.comparisonToAsking || data.dealAnalysis || data.priceComparison || null;
 
   resultContainer.innerHTML = `
 <div style="padding: 20px;">
@@ -5208,9 +5221,9 @@ function displayValuationResult(data){
       ${isEstimate ? 'ESTIMATED MARKET VALUE' : 'LIVE UAE MARKET VALUE'}
     </div>
     <div id="priceMain" style="font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 800; color: #D4AF37; margin-bottom: 8px;">
-      AED ${data.averagePrice?.toLocaleString() || '—'}
+      AED ${avgPrice ? avgPrice.toLocaleString() : '—'}
     </div>
-    ${data.lowPrice && data.highPrice ? `<div style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">Range: AED ${data.lowPrice.toLocaleString()} – AED ${data.highPrice.toLocaleString()}</div>` : ''}
+    ${lowPrice && highPrice ? `<div style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">Range: AED ${lowPrice.toLocaleString()} – AED ${highPrice.toLocaleString()}</div>` : ''}
     ${listingsCount > 0 ? `<div style="margin-top: 12px;"><span style="font-size: 0.6rem; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px;">📊 ${listingsCount} live listings${cacheInfo}</span></div>` : ''}
     <div style="margin-top: 12px; font-size: 0.65rem; color: ${isEstimate ? '#FCA5A5' : '#4ADE80'};">
       ${isEstimate ? '⚠️ AI estimate — not based on live listings' : `✓ Based on ${listingsCount || 'current'} UAE listings from today`}
@@ -5218,21 +5231,21 @@ function displayValuationResult(data){
     <div style="margin-top: 4px; font-size: 0.55rem; color: rgba(255,255,255,0.35);">Source: ${source}</div>
   </div>
 
-  ${data.comparisonToAsking ? `
+  ${cmp ? `
   <div style="border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; text-align: center;
-    ${data.comparisonToAsking.verdict === 'Good Deal' ? 'background:#D1FAE5;border:1px solid #6EE7B7;' :
-      data.comparisonToAsking.verdict === 'Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;' :
+    ${cmp.verdict === 'Good Deal' ? 'background:#D1FAE5;border:1px solid #6EE7B7;' :
+      cmp.verdict === 'Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;' :
       'background:#FEF3C7;border:1px solid #FCD34D;'}">
     <div style="font-size:0.85rem;font-weight:800;
-      ${data.comparisonToAsking.verdict === 'Good Deal' ? 'color:#065F46;' :
-        data.comparisonToAsking.verdict === 'Overpriced' ? 'color:#991B1B;' : 'color:#92400E;'}">
-      ${data.comparisonToAsking.verdict}
+      ${cmp.verdict === 'Good Deal' ? 'color:#065F46;' :
+        cmp.verdict === 'Overpriced' ? 'color:#991B1B;' : 'color:#92400E;'}">
+      ${cmp.verdict}
     </div>
     <div style="font-size:0.7rem;color:#555;">
-      ${data.comparisonToAsking.verdict === 'Good Deal'
-        ? `AED ${Math.abs(data.comparisonToAsking.difference).toLocaleString()} below market average`
-        : data.comparisonToAsking.verdict === 'Overpriced'
-          ? `AED ${data.comparisonToAsking.difference.toLocaleString()} above market average`
+      ${cmp.verdict === 'Good Deal'
+        ? `AED ${Math.abs(cmp.difference).toLocaleString()} below market average`
+        : cmp.verdict === 'Overpriced'
+          ? `AED ${cmp.difference.toLocaleString()} above market average`
           : 'At market price'}
     </div>
   </div>` : ''}
@@ -5257,8 +5270,8 @@ function displayValuationResult(data){
 
   // Animate price count-up
   const priceEl = g('priceMain');
-  if(priceEl && data.averagePrice){
-    animateCountUp(priceEl, data.averagePrice);
+  if(priceEl && avgPrice){
+    animateCountUp(priceEl, avgPrice);
   }
 
   // Scroll result into view
