@@ -4320,7 +4320,7 @@ function blockNonNumeric(e){
 }
 
 
-const API='https://kamsayara-valuation-api.mbit0010.workers.dev';
+const API='https://kamsayara-api.mbit0010.workers.dev';
 const qs={warranty:null,singleOwner:null,fsh:null,accident:null};
 const isMobile=()=>window.innerWidth<=600;
 
@@ -5101,39 +5101,77 @@ async function checkCarPrice(){
     if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
   },80);
 
-  try{
+  const payload = JSON.stringify({
+    brand, model, year:parseInt(year), mileage:parseInt(mileage),
+    trim:g('trim')?.value||'',
+    spec:spec||'GCC', condition:condition||'Good',
+    colour:g('colour')?.value||'',
+    bodyType:g('body')?.value||'',
+    sellerType:g('seller')?.value||'',
+    service:g('service')?.value||'',
+    askingPrice:asking?parseInt(asking):null,
+    warranty:qs.warranty, singleOwner:qs.singleOwner,
+    fsh:qs.fsh, accidentHistory:g('accidentSel')?.value||qs.accident||null,
+    purpose:g('purpose')?.value||'buying',
+    owners:g('owners')?.value||'',
+    warrantyStatus:g('warrantySel')?.value||'',
+    emirate:g('emirate')?.value||'',
+    finance:g('finance')?.value||''
+  });
+
+  // Try /api/valuation first, fall back to /api/professional-valuation
+  async function tryFetch(endpoint){
     const controller = new AbortController();
-    const timeoutId = setTimeout(()=>controller.abort(), 30000);
+    const timeoutId = setTimeout(()=>controller.abort(), 55000);
+    try{
+      const resp = await fetch(`${API}${endpoint}`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        signal:controller.signal,
+        body:payload
+      });
+      clearTimeout(timeoutId);
+      return resp;
+    }catch(e){
+      clearTimeout(timeoutId);
+      throw e;
+    }
+  }
 
-    const response = await fetch(`${API}/api/valuation`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      signal:controller.signal,
-      body:JSON.stringify({
-        brand, model, year:parseInt(year), mileage:parseInt(mileage),
-        spec:spec||'GCC', condition:condition||'Good',
-        askingPrice:asking?parseInt(asking):null
-      })
-    });
+  try{
+    let response;
+    try{
+      response = await tryFetch('/api/valuation');
+      // If endpoint not found, fall back
+      if(response.status === 404){
+        response = await tryFetch('/api/professional-valuation');
+      }
+    }catch(fetchErr){
+      // Network / CORS failure on first endpoint — try the other
+      response = await tryFetch('/api/professional-valuation');
+    }
 
-    clearTimeout(timeoutId);
-
-    if(!response.ok) throw new Error(`Server error: ${response.status}`);
+    if(!response.ok){
+      let errDetail = '';
+      try{ const t=await response.text(); errDetail=t.slice(0,200); }catch(_){}
+      throw new Error(`HTTP ${response.status}${errDetail?' — '+errDetail:''}`);
+    }
     const data = await response.json();
     if(data.error) throw new Error(data.error);
     displayValuationResult(data);
 
   }catch(error){
     stopLoad();
-    const msg = error.name==='AbortError'
-      ? 'Request timed out. Please try again.'
-      : 'Unable to get valuation. Please try again.';
+    const isTimeout = error.name==='AbortError';
+    const msg = isTimeout
+      ? 'Request timed out. The live market search may be slow — please try again.'
+      : error.message || 'Unable to get valuation. Please try again.';
 
     const errHtml=`
     <div style="padding:28px 20px;text-align:center;font-family:'Exo 2',sans-serif;">
-      <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">⚠️</div>
-      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">Valuation Error</div>
-      <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:300px;margin:0 auto 20px;">${msg}</p>
+      <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">${isTimeout?'⏱':'⚠️'}</div>
+      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">${isTimeout?'Request Timed Out':'Valuation Error'}</div>
+      <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:320px;margin:0 auto 20px;">${msg}</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
         <button onclick="checkCarPrice()"
           style="background:linear-gradient(135deg,#D4AF37,#B8960A);color:#1A2B4C;border:none;border-radius:8px;
