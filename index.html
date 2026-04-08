@@ -5252,10 +5252,12 @@ function displayValuationResult(data){
 
   <div style="background:#F8FAFC;border-radius:12px;padding:14px;margin-bottom:16px;border-left:3px solid #D4AF37;">
     <div style="font-size:0.7rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;">📌 HOW THIS PRICE WAS CALCULATED</div>
-    <div style="font-size:0.68rem;color:#475569;line-height:1.5;">
+    <div style="font-size:0.68rem;color:#475569;line-height:1.6;">
       ${isEstimate
-        ? 'This is an AI estimate based on market trends. For accurate pricing, check Dubizzle or YallaMotor.'
-        : `This price comes from ${listingsCount || 'multiple'} actual car listings found TODAY on UAE classified websites.`}
+        ? '🤖 Gemini searched UAE classified sites but found no listings today. Claude estimated this price from UAE market knowledge, depreciation rates, and spec premiums.'
+        : `🔍 Gemini scraped <strong>${listingsCount} live listings</strong> from Dubizzle, YallaMotor and other UAE sites. Claude then analysed those listings, filtered outliers, and adjusted for your car's mileage and condition.`}
+      ${data.valuationNotes ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #E2E8F0;color:#334155;font-style:italic;">"${data.valuationNotes}"</div>` : ''}
+      ${data.geminiData ? `<div style="margin-top:6px;font-size:0.6rem;color:#94A3B8;">Data: ${data.geminiData}</div>` : ''}
     </div>
   </div>
 
