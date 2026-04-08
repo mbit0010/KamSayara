@@ -5043,16 +5043,37 @@ function buildResult(r,brand,model,year,mileage,asking){
 </div>`;
 }
 async function checkCarPrice(){
-  const brand=g('brand').value,year=g('year').value,mileage=g('mileage').value;
-  let bad=false;
+  const brand = g('brand')?.value;
+  const model = g('model')?.value;
+  const year = g('year')?.value;
+  const mileage = g('mileage')?.value;
+  const spec = g('spec')?.value;
+  const condition = g('condition')?.value;
+  const asking = g('asking')?.value;
+
+  // Validate required fields
+  let bad = false;
   if(!brand){showErr('brand','Select a brand');bad=true;}
   if(!year){showErr('year','Select a year');bad=true;}
   if(!mileage){showErr('mileage','Enter mileage');bad=true;}
   if(bad){document.querySelector('.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
 
+  const mileageNum = parseInt(mileage);
+  if(mileageNum > 500000){
+    showErr('mileage','Mileage seems unusually high. Please verify.');
+    return;
+  }
+
+  const yearNum = parseInt(year);
+  const currentYear = new Date().getFullYear();
+  if(yearNum < 1980 || yearNum > currentYear + 1){
+    showErr('year','Please select a valid year');
+    return;
+  }
+
   // Highlight any QC pairs that haven't been answered yet
   const qcKeys=['warranty','singleOwner','fsh','accident'];
-  const qcItems=document.querySelectorAll('.qcbar-item');  let qcMissing=false;
+  const qcItems=document.querySelectorAll('.qcbar-item'); let qcMissing=false;
   qcKeys.forEach((key,i)=>{
     const item=qcItems[i];
     if(!item)return;
@@ -5066,174 +5087,149 @@ async function checkCarPrice(){
   if(qcMissing){
     const qcEl=document.querySelector('.qcbar');
     if(qcEl)qcEl.scrollIntoView({behavior:'smooth',block:'center'});
-    // Pulse the unset items then proceed after brief delay
     await new Promise(r=>setTimeout(r,900));
   }
 
-  // Always treat as desktop layout — unified cards, no card-stack
-  const mobile=false;
-  g('btnCheck').disabled=true;
-
   showState('loading');
   startLoad(false);
+  const btn = g('btnCheck');
+  if(btn) btn.disabled = true;
 
-  // Scroll to result panel immediately so user sees loading progress
+  // Scroll to result panel immediately
   setTimeout(()=>{
     const panel=g('resultPanel');
     if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
   },80);
 
-  const asking=g('asking').value;
-  const model=g('model').value;
-
   try{
-    const MAX_RETRIES = 3;
-    let attempt = 0;
-    let resp;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(()=>controller.abort(), 30000);
 
-    // Auto-retry on 503/502/429 with exponential backoff
-    while(attempt < MAX_RETRIES){
-      attempt++;
-      const controller=new AbortController();
-      const timeoutId=setTimeout(()=>controller.abort(),55000);
-      const slowMsg=setTimeout(()=>{
-        const el=g('loadStep');
-        if(el)el.textContent='Live search in progress — almost there…';
-      },20000);
-
-      try{
-        resp=await fetch(`${API}/api/professional-valuation`,{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          signal:controller.signal,
-          body:JSON.stringify({
-            brand,model,year:parseInt(year),
-            trim:g('trim').value,
-            mileage:mileage?parseInt(mileage):null,
-            spec:g('spec').value||'GCC',
-            condition:g('condition').value,
-            colour:g('colour').value,
-            bodyType:g('body').value,
-            sellerType:g('seller').value,
-            service:g('service').value,
-            askingPrice:asking?parseInt(asking):null,
-            warranty:qs.warranty,singleOwner:qs.singleOwner,
-            fsh:qs.fsh,accidentHistory:g('accidentSel')?.value||qs.accident||null,
-            purpose:g('purpose')?.value||'buying',
-            owners:g('owners')?.value||'',
-            warrantyStatus:g('warrantySel')?.value||'',
-            emirate:g('emirate')?.value||'',
-            finance:g('finance')?.value||''
-          })
-        });
-        clearTimeout(timeoutId);
-        clearTimeout(slowMsg);
-
-        // Retry on recoverable server errors
-        if((resp.status===503||resp.status===502||resp.status===429)&&attempt<MAX_RETRIES){
-          const wait=attempt*3000; // 3s, 6s backoff
-          const el=g('loadStep');
-          if(el)el.textContent=`Server busy — retrying in ${wait/1000}s… (${attempt}/${MAX_RETRIES})`;
-          await new Promise(r=>setTimeout(r,wait));
-          continue;
-        }
-        if(!resp.ok)throw new Error(`API ${resp.status}`);
-        break; // success
-      }catch(fetchErr){
-        clearTimeout(timeoutId);
-        clearTimeout(slowMsg);
-        if(fetchErr.name==='AbortError')throw fetchErr; // timeout — don't retry
-        if(attempt>=MAX_RETRIES)throw fetchErr;
-        const wait=attempt*3000;
-        const el=g('loadStep');
-        if(el)el.textContent=`Connection issue — retrying in ${wait/1000}s… (${attempt}/${MAX_RETRIES})`;
-        await new Promise(r=>setTimeout(r,wait));
-      }
-    }
-    const r=await resp.json();
-    stopLoad();
-
-    const _avg=r.averagePrice||0;
-    const _conf=Math.round((r.confidence||0)*100);
-    const html=buildResult(r,brand,model,year,mileage,asking);
-
-    // Always render into the main result panel
-    g('rcontent').innerHTML=html;
-    showState('content');
-    activateShareStrip();
-    // Smooth scroll to result panel on all screen sizes
-    setTimeout(()=>{
-      const panel=g('resultPanel')||g('rcontent').closest('.result-panel');
-      if(panel){
-        panel.scrollIntoView({behavior:'smooth',block:'start'});
-      }
-    },120);
-    requestAnimationFrame(()=>{
-      const pm=document.getElementById('priceMain');
-      if(pm)animateCountUp(pm,_avg);
-      const cb=document.getElementById('cbarFill');
-      if(cb){setTimeout(()=>{cb.style.transition='width .9s var(--ease)';cb.style.width=_conf+'%';},80);}
-      const mb=document.getElementById('mktBarFill');
-      const ms=document.getElementById('mktScore');
-      if(mb&&ms&&r.marketability){
-        setTimeout(()=>{
-          mb.style.transition='width .9s var(--ease)';
-          mb.style.width=Math.max(4,Math.min(100,r.marketability.score))+'%';
-          animateCountUpNum(ms,r.marketability.score,800);
-        },160);
-      }
-      g('rcontent').setAttribute('tabindex','-1');
-      g('rcontent').focus({preventScroll:true});
+    const response = await fetch(`${API}/api/valuation`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      signal:controller.signal,
+      body:JSON.stringify({
+        brand, model, year:parseInt(year), mileage:parseInt(mileage),
+        spec:spec||'GCC', condition:condition||'Good',
+        askingPrice:asking?parseInt(asking):null
+      })
     });
-    saveLastValuation();
-  }catch(err){
+
+    clearTimeout(timeoutId);
+
+    if(!response.ok) throw new Error(`Server error: ${response.status}`);
+    const data = await response.json();
+    if(data.error) throw new Error(data.error);
+    displayValuationResult(data);
+
+  }catch(error){
     stopLoad();
-    const isTimeout = err.name==='AbortError';
-    const status    = err.message?.match(/API (\d+)/)?.[1];
-
-    const errTitle = isTimeout
-      ? 'Request timed out'
-      : status==='503'||status==='502' ? 'Server temporarily unavailable'
-      : status==='429' ? 'Too many requests'
-      : status==='401'||status==='403' ? 'Authentication error'
-      : 'Connection error';
-
-    const errBody = isTimeout
-      ? 'The valuation is taking longer than usual. The live market search may be slow — please try again.'
-      : status==='503'||status==='502' ? 'The valuation server is temporarily busy. It was retried automatically. Please wait a moment and try again.'
-      : status==='429' ? 'Too many requests sent. Please wait 30 seconds then try again.'
-      : status==='401'||status==='403' ? 'API key issue on the server. Please contact support.'
-      : `Could not reach the valuation server (${err.message}). Check your connection and try again.`;
-
-    const errIcon = isTimeout ? '⏱' : status==='503'||status==='502' ? '🔄' : '⚠';
+    const msg = error.name==='AbortError'
+      ? 'Request timed out. Please try again.'
+      : 'Unable to get valuation. Please try again.';
 
     const errHtml=`
     <div style="padding:28px 20px;text-align:center;font-family:'Exo 2',sans-serif;">
-      <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">${errIcon}</div>
-      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">${errTitle}</div>
-      <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:300px;margin:0 auto 20px;">${errBody}</p>
+      <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">⚠️</div>
+      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">Valuation Error</div>
+      <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:300px;margin:0 auto 20px;">${msg}</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
         <button onclick="checkCarPrice()"
           style="background:linear-gradient(135deg,#D4AF37,#B8960A);color:#1A2B4C;border:none;border-radius:8px;
                  padding:10px 22px;font-family:'Exo 2',sans-serif;font-size:0.80rem;font-weight:800;
                  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
-                 box-shadow:0 3px 12px rgba(184,150,10,0.35);">
-          ↻ Try Again
-        </button>
+                 box-shadow:0 3px 12px rgba(184,150,10,0.35);">↻ Try Again</button>
         <button onclick="resetForm()"
           style="background:#EEF1F6;color:#334155;border:1.5px solid #D0D5E0;border-radius:8px;
-                 padding:10px 18px;font-family:'Exo 2',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;">
-          ↺ Reset
-        </button>
+                 padding:10px 18px;font-family:'Exo 2',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;">↺ Reset</button>
       </div>
-      ${status?`<p style="font-size:0.62rem;color:#A0AEC0;margin-top:14px;">Error code: ${status}</p>`:''}
     </div>`;
-
     g('rcontent').innerHTML=errHtml;
     showState('content');
   }finally{
-    g('btnCheck').disabled=false;
+    if(btn) btn.disabled=false;
     updateReadiness();
   }
+}
+
+function displayValuationResult(data){
+  stopLoad();
+  const resultContainer = g('rcontent');
+  if(!resultContainer) return;
+
+  const isEstimate = data.isEstimate || false;
+  const listingsCount = data.listingsFound || 0;
+  const source = data.source || (isEstimate ? 'AI Estimate' : 'Live Market Data');
+  const cacheInfo = data.cached ? ` (cached ${data.cacheAge || ''} ago)` : '';
+
+  resultContainer.innerHTML = `
+<div style="padding: 20px;">
+  <div style="background: linear-gradient(135deg, #0A2540 0%, #1A3A5C 100%); border-radius: 16px; padding: 24px 20px; text-align: center; margin-bottom: 16px;">
+    <div style="font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+      ${isEstimate ? 'ESTIMATED MARKET VALUE' : 'LIVE UAE MARKET VALUE'}
+    </div>
+    <div id="priceMain" style="font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 800; color: #D4AF37; margin-bottom: 8px;">
+      AED ${data.averagePrice?.toLocaleString() || '—'}
+    </div>
+    ${data.lowPrice && data.highPrice ? `<div style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">Range: AED ${data.lowPrice.toLocaleString()} – AED ${data.highPrice.toLocaleString()}</div>` : ''}
+    ${listingsCount > 0 ? `<div style="margin-top: 12px;"><span style="font-size: 0.6rem; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px;">📊 ${listingsCount} live listings${cacheInfo}</span></div>` : ''}
+    <div style="margin-top: 12px; font-size: 0.65rem; color: ${isEstimate ? '#FCA5A5' : '#4ADE80'};">
+      ${isEstimate ? '⚠️ AI estimate — not based on live listings' : `✓ Based on ${listingsCount || 'current'} UAE listings from today`}
+    </div>
+    <div style="margin-top: 4px; font-size: 0.55rem; color: rgba(255,255,255,0.35);">Source: ${source}</div>
+  </div>
+
+  ${data.comparisonToAsking ? `
+  <div style="border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; text-align: center;
+    ${data.comparisonToAsking.verdict === 'Good Deal' ? 'background:#D1FAE5;border:1px solid #6EE7B7;' :
+      data.comparisonToAsking.verdict === 'Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;' :
+      'background:#FEF3C7;border:1px solid #FCD34D;'}">
+    <div style="font-size:0.85rem;font-weight:800;
+      ${data.comparisonToAsking.verdict === 'Good Deal' ? 'color:#065F46;' :
+        data.comparisonToAsking.verdict === 'Overpriced' ? 'color:#991B1B;' : 'color:#92400E;'}">
+      ${data.comparisonToAsking.verdict}
+    </div>
+    <div style="font-size:0.7rem;color:#555;">
+      ${data.comparisonToAsking.verdict === 'Good Deal'
+        ? `AED ${Math.abs(data.comparisonToAsking.difference).toLocaleString()} below market average`
+        : data.comparisonToAsking.verdict === 'Overpriced'
+          ? `AED ${data.comparisonToAsking.difference.toLocaleString()} above market average`
+          : 'At market price'}
+    </div>
+  </div>` : ''}
+
+  <div style="background:#F8FAFC;border-radius:12px;padding:14px;margin-bottom:16px;border-left:3px solid #D4AF37;">
+    <div style="font-size:0.7rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;">📌 HOW THIS PRICE WAS CALCULATED</div>
+    <div style="font-size:0.68rem;color:#475569;line-height:1.5;">
+      ${isEstimate
+        ? 'This is an AI estimate based on market trends. For accurate pricing, check Dubizzle or YallaMotor.'
+        : `This price comes from ${listingsCount || 'multiple'} actual car listings found TODAY on UAE classified websites.`}
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <button onclick="window.open('https://dubizzle.com','_blank')" style="padding:10px 18px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;">🔍 Check Dubizzle</button>
+    <button onclick="window.open('https://yallamotor.com','_blank')" style="padding:10px 18px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;">🚗 Check YallaMotor</button>
+    <button onclick="resetForm()" style="padding:10px 18px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;">↺ New Search</button>
+  </div>
+</div>`;
+
+  showState('content');
+
+  // Animate price count-up
+  const priceEl = g('priceMain');
+  if(priceEl && data.averagePrice){
+    animateCountUp(priceEl, data.averagePrice);
+  }
+
+  // Scroll result into view
+  setTimeout(()=>{
+    const panel = g('resultPanel') || resultContainer.closest('.result-panel');
+    if(panel) panel.scrollIntoView({behavior:'smooth',block:'start'});
+  },120);
+
+  saveLastValuation();
 }
 
 /* ── MOBILE BOTTOM SHEET / CARD STACK (no-op in unified layout) ── */
@@ -6237,6 +6233,11 @@ function _updateStage2(){
 // Reset hook — full form clear + restore stage 1
 // (primary resetForm defined earlier at line ~5143 handles field clearing)
 // This block adds the stage-2 panel reset on top.
+
+/* ── GLOBAL EXPORTS ─────────────────────────────────────── */
+window.checkCarPrice = checkCarPrice;
+window.resetForm = resetForm;
+window.displayValuationResult = displayValuationResult;
 
 /* ── BOOT ───────────────────────────────────────────────── */
 initBrands();initYears();
