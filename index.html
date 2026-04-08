@@ -96,8 +96,8 @@
     }
     .hero-inner{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 20px 52px;}
 
-    /* hero nav */
-    .hnav{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;gap:12px;}
+    /* hero nav — centered brand + links */
+    .hnav{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;gap:12px;}
     .wm{display:flex;flex-direction:column;gap:2px;text-decoration:none;flex-shrink:0;}
     .wm-name{display:flex;align-items:baseline;}
     .wm-kam{font-family:"Orbitron",sans-serif;font-size:clamp(1.5rem,4vw,2rem);font-weight:900;color:#E8D060;letter-spacing:-.01em;text-shadow:0 2px 18px rgba(0,0,0,0.3);}
@@ -114,35 +114,25 @@
     }
     .hnav-link:hover{color:rgba(255,255,255,0.88);border-color:rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);}
 
-    /* hero headline */
-    .hero-hl{text-align:center;padding:6px 0 0;}
+    /* hero headline — fully centred, no button */
+    .hero-hl{text-align:center;padding:0 0 8px;display:flex;flex-direction:column;align-items:center;gap:12px;}
     .hero-tag{
       font-family:"Exo 2",sans-serif;
       font-size:clamp(1.65rem,4.5vw,2.8rem);
-      font-weight:700;color:#fff;line-height:1.2;margin-bottom:14px;
+      font-weight:700;color:#fff;line-height:1.2;margin-bottom:0;
       text-shadow:0 2px 18px rgba(0,0,0,0.22);letter-spacing:.01em;
       animation:hIn .75s var(--ease) both;
       text-align:center;
     }
     .hero-tag em{color:#E8D060;font-style:normal;}
     .hero-trust{
-      display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
-      margin-bottom:18px;animation:hIn .75s .12s var(--ease) both;
+      display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
+      animation:hIn .75s .12s var(--ease) both;
+      margin-bottom:0;
     }
-    .ht{display:flex;align-items:center;gap:5px;font-size:.72rem;color:rgba(255,255,255,0.72);letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
-    .htd{width:4px;height:4px;border-radius:50%;background:rgba(232,208,96,0.5);}
-    .hero-btn{
-      display:inline-flex;align-items:center;gap:.45rem;
-      background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 100%);
-      color:#1A1610;font-family:"Exo 2",sans-serif;font-size:.85rem;
-      font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-      border:none;border-radius:var(--r-md);
-      padding:.7rem 1.8rem;cursor:pointer;
-      box-shadow:0 6px 20px rgba(196,154,42,0.38);
-      animation:hIn .75s .22s var(--ease) both;
-      transition:all .22s var(--spring);
-    }
-    .hero-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 30px rgba(196,154,42,0.48);}
+    .ht{display:flex;align-items:center;gap:5px;font-size:.74rem;color:rgba(255,255,255,0.78);letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+    .htd{width:5px;height:5px;border-radius:50%;background:rgba(232,208,96,0.6);}
+    /* hero-btn CSS removed — button deleted */
     @keyframes hIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
     /* ── PAGE SHELL ─────────────────────────────────────────── */
@@ -417,7 +407,7 @@
     .btn-go span{position:relative;z-index:1;}
 
     /* ── RESULT PANEL STATES ────────────────────────────────── */
-    .rpanel-inner{display:flex;flex-direction:column;flex:1;overflow-y:auto;}
+    .rpanel-inner{display:flex;flex-direction:column;flex:1;overflow:visible;}
 
     /* placeholder */
     .rph{
@@ -457,7 +447,7 @@
     .rld-step{font-size:.68rem;color:var(--accent);margin-top:5px;min-height:1.1em;transition:opacity .25s;}
 
     /* result content */
-    .rcontent{padding:16px 18px;overflow-y:auto;flex:1;animation:fIn .38s var(--ease) both;}
+    .rcontent{padding:16px 18px;overflow:visible;flex:1;animation:fIn .38s var(--ease) both;}
     @keyframes fIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
 
     /* decision banner */
@@ -875,15 +865,15 @@
     .ks-trigger:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow2),var(--sh-field);}
     .ks-trigger:hover:not(.ks-filled){border-color:rgba(0,133,119,0.3);}
 
-    /* Desktop panel — smooth visibility transition */
+    /* Desktop panel — always opens downward, layered above everything */
     .ks-panel{
       position:absolute;top:calc(100% + 3px);left:0;right:0;
       background:var(--white);border:1.5px solid var(--accent-line);
       border-radius:var(--r-md);
       box-shadow:0 10px 32px rgba(0,0,0,0.13),0 2px 8px rgba(0,0,0,0.06);
-      z-index:600;display:flex;flex-direction:column;
-      max-height:300px;          /* panel is the ONLY height cap */
-      overflow:hidden;           /* clips the flex children to 300px */
+      z-index:99999;             /* always on top of every form element */
+      display:flex;flex-direction:column;
+      overflow:hidden;           /* clips search row + list */
       visibility:hidden;opacity:0;pointer-events:none;
       transform:translateY(-5px);
       transition:opacity .16s var(--ease),transform .16s var(--ease),visibility .16s;
@@ -905,16 +895,19 @@
     .ks-search::placeholder{color:var(--muted);}
     .ks-search:focus{background:var(--white);border-bottom-color:var(--accent);}
 
-    /* Options list — fills panel space, scrolls within it */
+    /* Options list — max 6 items visible, right-side scrollbar always shown */
     .ks-list{
-      flex:1;                    /* fills remaining panel height */
-      overflow-y:scroll;         /* always-visible scrollbar */
+      flex:1;
+      max-height:192px;          /* 6 × ~32px per item */
+      overflow-y:scroll;         /* right-side scrollbar always visible */
+      overflow-x:hidden;
+      direction:ltr;             /* scrollbar on right */
       -webkit-overflow-scrolling:touch;
-      scrollbar-width:thin;scrollbar-color:rgba(0,133,119,0.35) var(--surface-2);
+      scrollbar-width:thin;scrollbar-color:rgba(0,133,119,0.45) var(--surface-2);
     }
-    .ks-list::-webkit-scrollbar{width:6px;-webkit-appearance:none;}
+    .ks-list::-webkit-scrollbar{width:6px;display:block;-webkit-appearance:none;}
     .ks-list::-webkit-scrollbar-track{background:var(--surface-2);border-radius:3px;}
-    .ks-list::-webkit-scrollbar-thumb{background:rgba(0,133,119,0.35);border-radius:3px;}
+    .ks-list::-webkit-scrollbar-thumb{background:rgba(0,133,119,0.45);border-radius:3px;}
     .ks-list::-webkit-scrollbar-thumb:hover{background:var(--accent);}
 
     /* Mobile modal list — same always-visible scrollbar */
@@ -1095,7 +1088,7 @@
         align-items: start;
       }
 
-      /* ── LEFT: Navy Input Panel — sticky ── */
+      /* ── LEFT: Navy Input Panel ── */
       .form-card {
         grid-area: form;
         background: var(--navy) !important;
@@ -1104,17 +1097,13 @@
         box-shadow: 4px 0 24px rgba(10,37,64,0.24);
         display: flex;
         flex-direction: column;
-        position: sticky;
-        top: 12px;
-        max-height: calc(100vh - 24px);
-        overflow-y: auto;
+        position: static;
+        top: auto;
+        max-height: none;
+        overflow-y: visible;
         overflow-x: visible;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(255,255,255,0.15) transparent;
         z-index: 10;
       }
-      .form-card::-webkit-scrollbar { width: 4px; }
-      .form-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16); border-radius: 2px; }
 
       /* ── RIGHT: White Output Panel — scrollable ── */
       .result-panel {
@@ -1124,8 +1113,8 @@
         border: none;
         border-left: 1px solid var(--border);
         box-shadow: var(--card-shadow-deep);
-        min-height: calc(100vh - 24px);
-        overflow-y: visible;
+        min-height: 0;
+        overflow: visible;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -1852,8 +1841,8 @@
 
     /* ── EQUAL HEIGHT PANELS (large desktop) ─────────────── */
     @media(min-width:901px){
-      .result-panel { display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; }
-      .rpanel-inner { flex: 1; overflow-y: auto; min-height: 0; }
+      .result-panel { display: flex; flex-direction: column; overflow: visible; }
+      .rpanel-inner { flex: 1; overflow: visible; }
     }
 
     /* ── PRINT ───────────────────────────────────────────── */
@@ -2186,35 +2175,31 @@
     }
 
     /* ══════════════════════════════════════════════════════════
-       ROUNDED CORNERS — force correct on ALL viewports
-       Using overflow:clip so dropdowns still escape
+       ROUNDED CORNERS — form-card clips to radius; result-panel expands freely
     ══════════════════════════════════════════════════════════ */
 
-    /* Both panels: full 16px all corners everywhere */
-    .form-card,
-    .result-panel {
-      border-radius: 16px !important;
-      overflow: clip !important;       /* clips background to radius; dropdowns use absolute/fixed so still escape */
-    }
+    /* Form card clips to its border-radius; result panel is open */
+    .form-card  { border-radius: 16px !important; overflow: clip !important; }
+    .result-panel { border-radius: 16px !important; overflow: visible !important; height: auto !important; }
 
     /* Form inner edge elements must match the card radius */
     .form-header  { border-radius: 16px 16px 0 0 !important; }
     .ffoot        { border-radius: 0 0 16px 16px !important; }
-    .rcontent     { border-radius: 0 0 16px 16px !important; }
+    .rcontent     { border-radius: 0 0 16px 16px !important; overflow: visible !important; }
     .rph          { border-radius: 16px !important; }
     .share-strip  { border-radius: 0 0 16px 16px !important; }
 
     /* Placeholder stays rounded */
     .result-panel .rph { border-radius: 16px !important; overflow: hidden !important; }
 
-    /* rpt-wrap inside result-panel — inherit the panel's clipping */
+    /* rpt-wrap inside result-panel */
     .rpt-wrap { border-radius: 0 !important; overflow: visible !important; }
     .rpt-header { border-radius: 0 !important; }
 
     /* Mobile-specific corner fix */
     @media(max-width:600px){
-      .form-card,
-      .result-panel { border-radius: 14px !important; overflow: clip !important; }
+      .form-card  { border-radius: 14px !important; overflow: clip !important; }
+      .result-panel { border-radius: 14px !important; overflow: visible !important; }
       .form-header   { border-radius: 14px 14px 0 0 !important; }
       .ffoot         { border-radius: 0 0 14px 14px !important; }
       .rcontent      { border-radius: 0 0 14px 14px !important; }
@@ -2223,8 +2208,8 @@
 
     /* Tablet-specific corner fix */
     @media(min-width:601px) and (max-width:900px){
-      .form-card,
-      .result-panel { border-radius: 16px !important; overflow: clip !important; }
+      .form-card  { border-radius: 16px !important; overflow: clip !important; }
+      .result-panel { border-radius: 16px !important; overflow: visible !important; }
     }
 
     /* ── Restore chips ── */
@@ -3018,7 +3003,7 @@
   /* Both cards: white, fully rounded all 4 corners, static */
   .form-card{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:clip!important;position:static!important;max-height:none!important;width:100%!important;display:flex!important;flex-direction:column!important;transform:none!important;opacity:1!important;pointer-events:auto!important;}
   .form-card.mob-card-behind{transform:none!important;opacity:1!important;pointer-events:auto!important;}
-  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:clip!important;position:static!important;min-height:120px!important;width:100%!important;display:block!important;border-left:none!important;}
+  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;}
 
   /* Form header */
   .form-header{background:#F4F6FA!important;border-bottom:1px solid #E2E6EE!important;border-radius:16px 16px 0 0!important;padding:11px 16px 10px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;flex-shrink:0!important;}
@@ -3050,48 +3035,104 @@
   .errmsg.on{display:block!important;}
 
   /* Field grid: 4 cols desktop, 3 tablet, 2 mobile */
-  .fg{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px 12px!important;margin-bottom:10px!important;align-items:start!important;}
+  .fg{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px 12px!important;margin-bottom:0!important;align-items:start!important;}
   @media(max-width:900px){.fg{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px 10px!important;}}
   @media(max-width:600px){.fg{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;}}
 
-  /* QC bar — 4 equal cards centered in a single row */
-  .qcbar{display:flex!important;align-items:stretch!important;justify-content:center!important;gap:6px!important;padding:8px 0 6px!important;border-top:1px solid #E8ECF2!important;flex-wrap:nowrap!important;}
-  .qcbar-sep{display:none!important;}/* hide the | separators — cards provide visual separation */
+  /* ── QC BAR: mirrors fg exactly — same gap, same columns, same gutter spacing ── */
+  .qcbar{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important; /* identical to fg */
+    gap:10px 12px!important;                                  /* identical to fg */
+    padding:0!important;
+    border-top:none!important;
+    margin-top:10px!important;  /* matches fg row-gap so it reads as another row */
+    margin-bottom:0!important;
+    align-items:stretch!important;
+  }
+  @media(max-width:900px){.qcbar{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px 10px!important;margin-top:8px!important;}}
+  @media(max-width:600px){.qcbar{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:8px!important;}}
+  .qcbar-sep{display:none!important;}
   .qcbar-item{
-    display:flex!important;flex-direction:column!important;align-items:center!important;
-    justify-content:center!important;gap:5px!important;
-    flex:1 1 0!important;min-width:0!important;
-    padding:6px 4px 7px!important;
-    background:#F4F6FA!important;
-    border:1.5px solid #DDE2EE!important;
-    border-radius:9px!important;
-    transition:border-color .18s,box-shadow .18s,background .18s!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:4px!important;
+    height:36px!important;
+    padding:0 8px!important;
+    background:#EEF1F7!important;
+    border:1.5px solid #CDD2DE!important;
+    border-radius:8px!important;
+    min-width:0!important;
+    transition:border-color .15s,box-shadow .15s!important;
   }
   .qcbar-item--unset{
     border-color:#D4AF37!important;
-    background:rgba(212,175,55,0.06)!important;
+    background:rgba(212,175,55,0.08)!important;
     animation:qcPulse .65s ease-in-out 2!important;
   }
   @keyframes qcPulse{
     0%,100%{box-shadow:none;}
     50%{box-shadow:0 0 0 3px rgba(212,175,55,0.30);}
   }
-  .qcbar-lbl{font-family:"Exo 2",sans-serif!important;font-size:.60rem!important;font-weight:700!important;color:#3D4F66!important;white-space:nowrap!important;letter-spacing:.04em!important;text-transform:uppercase!important;}
-  .qcbar-btns{display:flex!important;gap:4px!important;align-items:center!important;}
+  .qcbar-lbl{
+    font-family:"Exo 2",sans-serif!important;
+    font-size:.65rem!important;
+    font-weight:700!important;
+    color:#3D4F66!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    letter-spacing:.03em!important;
+    text-transform:uppercase!important;
+    flex:1!important;
+    min-width:0!important;
+    line-height:1!important;
+  }
+  .qcbar-btns{
+    display:flex!important;
+    gap:3px!important;
+    align-items:center!important;
+    flex-shrink:0!important;
+  }
 
-  /* QC buttons */
-  .qb{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;border-radius:6px!important;border:1.5px solid #CDD2DE!important;background:#EEF1F7!important;color:#8090A8!important;font-size:.80rem!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:all .15s!important;padding:0!important;}
-  .qb:hover{border-color:#8090A8!important;background:#E2E6EF!important;}
-  .qb.tick.on{background:#16A34A!important;border-color:#16A34A!important;color:#fff!important;box-shadow:0 0 0 3px rgba(22,163,74,.22),0 0 12px rgba(22,163,74,.55)!important;}
-  .qb.cross.on{background:#DC2626!important;border-color:#DC2626!important;color:#fff!important;box-shadow:0 0 0 3px rgba(220,38,38,.20),0 0 12px rgba(220,38,38,.52)!important;}
+  /* QC ✓/✗ buttons — compact, ~1/3 height of current 28px → ~10px visible, 18px touch */
+  .qb{
+    width:18px!important;height:18px!important;
+    min-width:18px!important;min-height:18px!important;
+    border-radius:4px!important;
+    border:1.5px solid #CDD2DE!important;
+    background:#fff!important;
+    color:#8090A8!important;
+    font-size:.50rem!important;
+    line-height:1!important;
+    cursor:pointer!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    transition:all .13s!important;
+    padding:0!important;
+  }
+  .qb:hover{border-color:#8090A8!important;background:#EEF1F7!important;}
+  .qb.tick.on{
+    background:#16A34A!important;border-color:#16A34A!important;color:#fff!important;
+    box-shadow:0 0 0 2px rgba(22,163,74,.20),0 0 8px rgba(22,163,74,.45)!important;
+  }
+  .qb.cross.on{
+    background:#DC2626!important;border-color:#DC2626!important;color:#fff!important;
+    box-shadow:0 0 0 2px rgba(220,38,38,.18),0 0 8px rgba(220,38,38,.42)!important;
+  }
 
-  /* Spec dropdown — constrain panel so scrollbar is always visible */
-  #spec + .ks-wrap .ks-panel{max-height:170px!important;}
-  #spec + .ks-wrap .ks-list{max-height:120px!important;}
+  /* ── ig-qc: QC cell wrapper — aligns with .ig in fg grid ── */
+  .ig-qc{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;min-width:0!important;}
 
-  /* Dropdowns that open near the bottom of the form — open upward */
-  .ks-wrap.open-up .ks-panel{top:auto!important;bottom:calc(100% + 3px)!important;transform:translateY(5px)!important;}
-  .ks-wrap.open-up.open .ks-panel{transform:translateY(0)!important;}
+  /* ── Result panel: explicit height:auto and overflow:visible everywhere ── */
+  .result-panel,.rpanel-inner,.rcontent{
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    position:static!important;
+  }
+  .result-panel{display:flex!important;flex-direction:column!important;}
 
   /* KS dropdowns */
   .ks-trigger{height:36px!important;font-family:"Exo 2",sans-serif!important;font-size:.78rem!important;font-weight:500!important;color:#1E2D3D!important;background:#EEF1F7!important;border:1.5px solid #CDD2DE!important;border-radius:8px!important;}
@@ -3099,7 +3140,12 @@
   .ks-wrap.open .ks-trigger,.ks-trigger:focus{border-color:#1A2B4C!important;box-shadow:0 0 0 3px rgba(26,43,76,.10)!important;background:#fff!important;outline:none!important;}
   .ks-trigger.ks-err{border-color:#C0392B!important;background:#FEF2F2!important;}
   .ks-trigger::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;}
-  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:9999!important;}
+  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:99999!important;overflow:hidden!important;}
+  .ks-list{max-height:192px!important;overflow-y:scroll!important;overflow-x:hidden!important;direction:ltr!important;scrollbar-width:thin!important;scrollbar-color:rgba(26,43,76,.38) #F4F6FA!important;}
+  .ks-list::-webkit-scrollbar{width:6px!important;display:block!important;}
+  .ks-list::-webkit-scrollbar-track{background:#F4F6FA!important;}
+  .ks-list::-webkit-scrollbar-thumb{background:rgba(26,43,76,.38)!important;border-radius:3px!important;}
+  .ks-list::-webkit-scrollbar-thumb:hover{background:#1A2B4C!important;}
   .ks-search{font-size:.80rem!important;background:#F4F6FA!important;border-bottom:1px solid #E2E6EE!important;color:#1E2D3D!important;padding:0 .7rem!important;height:36px!important;}
   .ks-opt{font-size:.76rem!important;color:#1E2D3D!important;padding:.38rem .7rem!important;}
   .ks-opt:hover,.ks-opt:focus{background:#EEF1F7!important;color:#1A2B4C!important;}
@@ -3466,31 +3512,17 @@
   .sk-metric-card:nth-child(2) { animation-delay:.20s; }
   .sk-metric-card:nth-child(3) { animation-delay:.40s; }
 
-  /* ══════════════════════════════════════════════════════════════
-     PRE-SCROLL PEEK — result panel subtly visible below fold
-  ══════════════════════════════════════════════════════════════ */
+  /* Result panel — full height, no inner scroll */
   @media(min-width:901px){
     .layout { align-items: start; }
     .result-panel {
-      position: sticky;
-      top: 18px;
-      /* Tall enough that its bottom peeks below the fold naturally */
-      min-height: calc(100vh - 110px);
-      max-height: calc(100vh - 18px);
-      overflow-y: auto;
+      position: static !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
     }
-    /* Subtle gradient hint at bottom edge to signal "more below" */
-    .result-panel::after {
-      content: '';
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 32px;
-      background: linear-gradient(to top, rgba(255,255,255,0.9), transparent);
-      pointer-events: none;
-      display: block;
-    }
+    .result-panel::after { display: none; }
   }
 
   </style>
@@ -3560,10 +3592,7 @@
         <div class="ht"><span class="htd"></span>GCC‑spec intelligence</div>
         <div class="ht"><span class="htd"></span>Free</div>
       </div>
-      <button class="hero-btn" onclick="scrollToForm()" aria-label="Get a free car valuation">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4" opacity=".6"/><path d="M8 4.5v3.5l2.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        Get Free Valuation
-      </button>
+
     </div>
   </div>
 </div>
@@ -3715,38 +3744,46 @@
 
         </div><!-- /fg -->
 
-        <!-- 4 Yes/No toggle cards — centered row, one ✓/✗ selection each -->
+        <!-- 4 Yes/No toggle cells — match input cell height, label+buttons horizontal -->
         <div class="qcbar" role="group" aria-label="Additional details">
 
-          <div class="qcbar-item">
-            <span class="qcbar-lbl">Warranty</span>
-            <div class="qcbar-btns">
-              <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty Yes">✓</button>
-              <button class="qb cross" onclick="setYN('warranty','no',this)" aria-label="Warranty No">✗</button>
+          <div class="ig-qc">
+            <div class="qcbar-item">
+              <span class="qcbar-lbl">Warranty</span>
+              <div class="qcbar-btns">
+                <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty Yes">✓</button>
+                <button class="qb cross" onclick="setYN('warranty','no',this)" aria-label="Warranty No">✗</button>
+              </div>
             </div>
           </div>
 
-          <div class="qcbar-item">
-            <span class="qcbar-lbl">Single Owner</span>
-            <div class="qcbar-btns">
-              <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
-              <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single Owner No">✗</button>
+          <div class="ig-qc">
+            <div class="qcbar-item">
+              <span class="qcbar-lbl">Single Owner</span>
+              <div class="qcbar-btns">
+                <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
+                <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single Owner No">✗</button>
+              </div>
             </div>
           </div>
 
-          <div class="qcbar-item">
-            <span class="qcbar-lbl">Svc. History</span>
-            <div class="qcbar-btns">
-              <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
-              <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
+          <div class="ig-qc">
+            <div class="qcbar-item">
+              <span class="qcbar-lbl">Svc. History</span>
+              <div class="qcbar-btns">
+                <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
+                <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
+              </div>
             </div>
           </div>
 
-          <div class="qcbar-item">
-            <span class="qcbar-lbl">Accident</span>
-            <div class="qcbar-btns">
-              <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
-              <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
+          <div class="ig-qc">
+            <div class="qcbar-item">
+              <span class="qcbar-lbl">Accident</span>
+              <div class="qcbar-btns">
+                <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
+                <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
+              </div>
             </div>
           </div>
 
@@ -4070,7 +4107,7 @@
 </div>
 
 <!-- Floating back-to-inputs (mobile) -->
-<button class="back-to-inputs" id="backToInputs" onclick="scrollToForm()">↑ Inputs</button>
+<button class="back-to-inputs" id="backToInputs" onclick="g('formCard').scrollIntoView({behavior:'smooth'})">↑ Inputs</button>
 
 <!-- MOBILE OVERLAY -->
 <div class="mob-overlay" id="mobOverlay" onclick="closeMobResult()"></div>
@@ -4324,10 +4361,12 @@ function onModelChange(){
 /* ── QUICK CHECK ────────────────────────────────────────── */
 function setYN(key,val,btn){
   qs[key]=val;
-  btn.closest('.qcbar-item').querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
+  const item=btn.closest('.qcbar-item');
+  if(item){
+    item.querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
+    item.classList.remove('qcbar-item--unset');
+  }
   btn.classList.add('on');
-  // Remove unselected highlight if any
-  btn.closest('.qcbar-item').classList.remove('qcbar-item--unset');
 }
 
 /* ── SHOW STATE ─────────────────────────────────────────── */
@@ -5000,8 +5039,7 @@ async function checkCarPrice(){
 
   // Highlight any QC pairs that haven't been answered yet
   const qcKeys=['warranty','singleOwner','fsh','accident'];
-  const qcItems=document.querySelectorAll('.qcbar-item');
-  let qcMissing=false;
+  const qcItems=document.querySelectorAll('.qcbar-item');  let qcMissing=false;
   qcKeys.forEach((key,i)=>{
     const item=qcItems[i];
     if(!item)return;
@@ -5398,15 +5436,7 @@ function printValuation(){
   </body></html>`);
   w.document.close();
 }
-/* ── SCROLL TO FORM ─────────────────────────────────────── */
-function scrollToForm(){
-  g('formCard').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{
-    const brandWrap=_ksMap.get(g('brand'));
-    const trig=brandWrap?.querySelector('.ks-trigger');
-    (trig||g('brand')).focus();
-  },420);
-}
+/* scrollToForm removed — hero button removed */
 
 /* ── STICKY NAV ─────────────────────────────────────────── */
 new IntersectionObserver(([e])=>{
@@ -5524,14 +5554,7 @@ function _ksMakeWrap(sel){
 }
 
 function _ksOpenPanel(wrap,sel,srch,list){
-  /* Decide direction — open upward if not enough room below */
-  const rect=wrap.getBoundingClientRect();
-  const panelH=320;
-  if(window.innerHeight-rect.bottom<panelH){
-    wrap.classList.add('open-up');
-  }else{
-    wrap.classList.remove('open-up');
-  }
+  wrap.classList.remove('open-up');
   wrap.classList.add('open');
   wrap.querySelector('.ks-trigger').setAttribute('aria-expanded','true');
   srch.value='';
@@ -5546,6 +5569,19 @@ function _ksClose(wrap){
 function _ksCloseAll(){
   _ksMap.forEach(w=>_ksClose(w));
   _ksCloseModal();
+}
+
+/* ── ALPHANUMERIC SORT — numbers first (0-9 asc, years desc), then A-Z ── */
+function _ksSort(opts, id){
+  return [...opts].sort((a,b)=>{
+    const av=a.textContent.trim(), bv=b.textContent.trim();
+    const an=Number(av), bn=Number(bv);
+    const aIsNum=av!==''&&!isNaN(an), bIsNum=bv!==''&&!isNaN(bn);
+    if(aIsNum&&bIsNum) return id==='year'?bn-an:an-bn; // years newest-first, other nums ascending
+    if(aIsNum) return -1; // numbers before text
+    if(bIsNum) return 1;
+    return av.localeCompare(bv,'en',{sensitivity:'base',numeric:true});
+  });
 }
 
 /* Draw options list with sections and highlighting */
@@ -5567,7 +5603,7 @@ function _ksDrawList(sel,list,q){
       const pop=allOpts.filter(o=>KS_POPULAR.includes(o.value));
       if(pop.length){
         _ksSecLabel(list,'Popular in UAE 🇦🇪');
-        pop.forEach(o=>_ksAddOpt(list,sel,o,''));
+        _ksSort(pop,sel.id).forEach(o=>_ksAddOpt(list,sel,o,''));
         _ksDivider(list);
         _ksSecLabel(list,'All Brands');
       }
@@ -5583,7 +5619,7 @@ function _ksDrawList(sel,list,q){
     }
   }
 
-  filtered.forEach(o=>_ksAddOpt(list,sel,o,q_));
+  _ksSort(filtered,sel.id).forEach(o=>_ksAddOpt(list,sel,o,q_));
 }
 
 function _ksSecLabel(list,text){
