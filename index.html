@@ -1397,9 +1397,12 @@
       .ks-trigger { height: 34px !important; font-size: 0.82rem !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.20) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
       .ks-trigger.ks-filled { border-color: var(--gold-bdr) !important; }
       .ks-wrap.open .ks-trigger { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; }
-      /* Tablet panel — inline dropdown (no full-screen), contained within component layout.
-         position:fixed ensures panel escapes any stacking context and always renders above form fields. */
-      .ks-panel { background: #fff !important; border: 1px solid var(--border) !important; box-shadow: 0 8px 24px rgba(10,37,64,0.16) !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; right: 0 !important; top: auto !important; }
+      /* Tablet panel — absolute positioning works since form-card is static+overflow:visible.
+         JS _ksPositionPanel still handles viewport-edge detection and opens downward. */
+      .ks-panel { background: #fff !important; border: 1.5px solid var(--accent-line) !important; box-shadow: 0 8px 28px rgba(10,37,64,0.18), 0 2px 8px rgba(0,0,0,0.06) !important; z-index: 999999 !important; position: absolute !important; border-radius: var(--r-md) !important; top: calc(100% + 3px) !important; left: 0 !important; right: 0 !important; bottom: auto !important; }
+      /* Ensure 6-item list with right-side scrollbar on tablet */
+      .ks-list { max-height: 192px !important; overflow-y: scroll !important; scrollbar-width: thin !important; }
+      .ks-list::-webkit-scrollbar { width: 6px !important; display: block !important; }
 
       .ig .prefix-wrap .prefix-lbl { color: rgba(255,255,255,0.36); font-size: 0.72rem; }
       .asking-field-wrap .prefix-lbl { color: var(--gold) !important; }
@@ -1574,10 +1577,21 @@
         box-shadow: none !important;
         z-index: 50;
         display: flex; flex-direction: column;
-        overflow-y: auto;
+        overflow: visible;
         transform: translateX(0);
         transition: transform 0.34s cubic-bezier(0.16,1,0.3,1), opacity 0.3s, scale 0.3s !important;
         will-change: transform;
+      }
+      /* Inner scroll wrapper for form content */
+      .form-card > .form-header,
+      .form-card > .form-body,
+      .form-card > .ffoot {
+        flex-shrink: 0;
+      }
+      .form-card > .form-body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
       }
       .form-card.mob-card-behind {
         transform: scale(0.93) translateX(-5%);
@@ -1671,13 +1685,14 @@
       .ks-trigger { height: 34px !important; font-size: 15px !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.18) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
       .ks-trigger.ks-filled { border-color: var(--gold-bdr) !important; }
       .ks-wrap.open .ks-trigger { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; }
-      /* Mobile panel — must escape overflow-y:auto on form-card.
-         Use position:fixed anchored to trigger rect via JS (_ksPositionPanel). */
-      .ks-panel { background: #fff !important; border: 1px solid var(--border) !important; box-shadow: 0 8px 24px rgba(10,37,64,0.16) !important; z-index: 999999 !important; max-width: 100% !important; width: 100% !important; visibility: hidden; opacity: 0; pointer-events: none;
-        position: fixed !important; left: 0 !important; right: 0 !important; top: auto !important;
-      }
-      .ks-wrap.open .ks-panel { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
-      /* Suppress full-screen mobile modal — use inline fixed panel instead */
+      /* Mobile panel — absolute positioning since form-card is static+overflow:visible.
+         Opens downward directly under trigger, 6 items visible with right scrollbar. */
+      .ks-panel { background: #fff !important; border: 1.5px solid #D0D5E0 !important; box-shadow: 0 8px 28px rgba(10,37,64,0.18), 0 2px 8px rgba(0,0,0,0.06) !important; z-index: 999999 !important; position: absolute !important; border-radius: 10px !important; top: calc(100% + 3px) !important; left: 0 !important; right: 0 !important; bottom: auto !important; width: 100% !important; }
+      .ks-wrap.open .ks-panel { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; transform: translateY(0) !important; }
+      /* Ensure 6-item list with right-side scrollbar on mobile */
+      .ks-list { max-height: 192px !important; overflow-y: scroll !important; scrollbar-width: thin !important; }
+      .ks-list::-webkit-scrollbar { width: 6px !important; display: block !important; }
+      /* Suppress full-screen mobile modal — use inline panel instead */
       .ks-overlay { display: none !important; }
 
       .ig .prefix-wrap .prefix-lbl { color: rgba(255,255,255,0.35); }
@@ -2189,8 +2204,8 @@
        ROUNDED CORNERS — form-card clips to radius; result-panel expands freely
     ══════════════════════════════════════════════════════════ */
 
-    /* Form card clips to its border-radius; result panel is open */
-    .form-card  { border-radius: 16px !important; overflow: clip !important; }
+    /* Form card must NOT clip — dropdown panels must escape it */
+    .form-card  { border-radius: 16px !important; overflow: visible !important; }
     .result-panel { border-radius: 16px !important; overflow: visible !important; height: auto !important; }
 
     /* Form inner edge elements must match the card radius */
@@ -2209,7 +2224,7 @@
 
     /* Mobile-specific corner fix */
     @media(max-width:600px){
-      .form-card  { border-radius: 14px !important; overflow: clip !important; }
+      .form-card  { border-radius: 14px !important; overflow: visible !important; }
       .result-panel { border-radius: 14px !important; overflow: visible !important; }
       .form-header   { border-radius: 14px 14px 0 0 !important; }
       .ffoot         { border-radius: 0 0 14px 14px !important; }
@@ -2219,7 +2234,7 @@
 
     /* Tablet-specific corner fix */
     @media(min-width:601px) and (max-width:900px){
-      .form-card  { border-radius: 16px !important; overflow: clip !important; }
+      .form-card  { border-radius: 16px !important; overflow: visible !important; }
       .result-panel { border-radius: 16px !important; overflow: visible !important; }
     }
 
@@ -5457,9 +5472,9 @@ let _ksActiveSel=null; // which select is open in mobile modal
 // Mobile full-screen sheet is suppressed via CSS (.ks-overlay { display:none }) and JS.
 const _ksIsMob=()=>false; // Always use inline panel — never open full-screen modal
 
-/* On mobile/tablet the form-card may have overflow:auto which clips absolute children.
-   _ksPositionPanel() measures the trigger and sets the panel to position:fixed
-   so it escapes the clipping context but still aligns with the trigger cell. */
+/* On mobile/tablet the panel uses position:absolute relative to .ks-wrap.
+   _ksPositionPanel() detects viewport-edge cases and can flip to open upward if needed.
+   It does NOT need to set left/width since CSS handles those (left:0, right:0 = trigger width). */
 function _ksPositionPanel(wrap){
   if(window.innerWidth > 900) return; // desktop uses CSS row-based positioning only
   const trig = wrap.querySelector('.ks-trigger');
@@ -5471,20 +5486,23 @@ function _ksPositionPanel(wrap){
   const panelNeeded = 192 + 40; // max-height list + search row
   const openUp = spaceBelow < panelNeeded && spaceAbove > spaceBelow;
 
-  panel.style.left  = rect.left + 'px';
-  panel.style.width = rect.width + 'px';
-  panel.style.right = 'auto';
+  // Reset any inline styles from previous opens
+  panel.style.left   = '';
+  panel.style.width  = '';
+  panel.style.right  = '';
+  panel.style.top    = '';
+  panel.style.bottom = '';
 
   const list = panel.querySelector('.ks-list');
 
   if(openUp){
     panel.style.top    = 'auto';
-    panel.style.bottom = (window.innerHeight - rect.top + 3) + 'px';
-    if(list) list.style.maxHeight = Math.max(80, Math.min(192, spaceAbove - 40)) + 'px';
+    panel.style.bottom = 'calc(100% + 3px)';
+    if(list) list.style.maxHeight = Math.max(80, Math.min(192, spaceAbove - 44)) + 'px';
   } else {
-    panel.style.top    = (rect.bottom + 3) + 'px';
+    panel.style.top    = 'calc(100% + 3px)';
     panel.style.bottom = 'auto';
-    if(list) list.style.maxHeight = Math.max(80, Math.min(192, spaceBelow - 40)) + 'px';
+    if(list) list.style.maxHeight = Math.max(80, Math.min(192, spaceBelow - 44)) + 'px';
   }
 }
 
