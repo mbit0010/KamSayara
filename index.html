@@ -5195,86 +5195,184 @@ function displayValuationResult(data){
   stopLoad();
   const resultContainer = g('rcontent');
   if(!resultContainer) return;
-
-  // Log raw response so field names are visible in DevTools console
   console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
 
-  // Normalise field names — API may use different keys
-  const avgPrice = data.averagePrice || data.estimatedPrice || data.price
-                || data.marketValue || data.valuation || data.mid
-                || data.medianPrice || data.recommendedPrice || 0;
-  const lowPrice  = data.lowPrice  || data.minPrice || data.low  || data.min  || null;
-  const highPrice = data.highPrice || data.maxPrice || data.high || data.max  || null;
+  // ── Normalise all fields ──────────────────────────────────
+  const sticker      = data.stickerPrice    || data.averagePrice || 0;
+  const handshake    = data.handshakePrice  || Math.round(sticker * 0.95) || 0;
+  const negotiation  = data.negotiationPrice|| Math.round(handshake * 0.93) || 0;
+  const minP         = data.minMarket       || data.lowPrice  || Math.round(sticker * 0.88) || 0;
+  const maxP         = data.maxMarket       || data.highPrice || Math.round(sticker * 1.12) || 0;
+  const isEstimate   = data.isEstimate ?? true;
+  const listingsCount= data.listingsFound   || 0;
+  const source       = data.source          || (isEstimate ? 'AI Estimate' : 'Live Market Data');
+  const confidence   = data.confidenceScore || (isEstimate ? 30 : 75);
+  const demand       = data.demandScore     || 55;
+  const cacheInfo    = data.cached ? ` · cached ${data.cacheAge||''} ago` : '';
+  const rta          = data.rtaFees         || { inspection:170, registration:420, transfer:350, insurance:0, total:940 };
+  const depr         = data.depreciation    || [];
+  const redFlags     = data.redFlags        || [];
+  const avr          = data.avr             || {};
+  const script       = data.hagglingScript  || '';
+  const sourceLinks  = data.sourceLinks     || [];
+  const cmp          = data.comparisonToAsking || null;
+  const notes        = data.valuationNotes  || '';
+  const yr           = data.year            || new Date().getFullYear();
 
-  const isEstimate = data.isEstimate ?? (!data.listingsFound && !data.listingsCount);
-  const listingsCount = data.listingsFound || data.listingsCount || data.count || 0;
-  const source = data.source || (isEstimate ? 'AI Estimate' : 'Live Market Data');
-  const cacheInfo = data.cached ? ` (cached ${data.cacheAge || ''} ago)` : '';
+  // ── Helper: colour bar ────────────────────────────────────
+  const bar = (pct, colour) =>
+    `<div style="background:#E5E7EB;border-radius:99px;height:8px;overflow:hidden;margin-top:4px;">
+       <div style="background:${colour};height:100%;width:${Math.min(100,pct)}%;border-radius:99px;transition:width 1s;"></div>
+     </div>`;
 
-  // Normalise comparisonToAsking — may also be at data.dealAnalysis or data.priceComparison
-  const cmp = data.comparisonToAsking || data.dealAnalysis || data.priceComparison || null;
+  // ── Verdict badge colour ──────────────────────────────────
+  const verdictStyle = !cmp ? '' :
+    cmp.verdict==='Good Deal'  ? 'background:#D1FAE5;border:1px solid #6EE7B7;color:#065F46;' :
+    cmp.verdict==='Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;color:#991B1B;' :
+    'background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;';
 
   resultContainer.innerHTML = `
-<div style="padding: 20px;">
-  <div style="background: linear-gradient(135deg, #0A2540 0%, #1A3A5C 100%); border-radius: 16px; padding: 24px 20px; text-align: center; margin-bottom: 16px;">
-    <div style="font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px;">
-      ${isEstimate ? 'ESTIMATED MARKET VALUE' : 'LIVE UAE MARKET VALUE'}
+<div style="padding:16px;font-family:'Exo 2',sans-serif;">
+
+  <!-- ① HEADER: live vs estimate badge + main price -->
+  <div style="background:linear-gradient(135deg,#0A2540,#1A3A5C);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;">
+    <div style="font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">
+      ${isEstimate ? '⚠️ AI ESTIMATE' : '✅ LIVE UAE MARKET VALUE'}
     </div>
-    <div id="priceMain" style="font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 800; color: #D4AF37; margin-bottom: 8px;">
-      AED ${avgPrice ? avgPrice.toLocaleString() : '—'}
-    </div>
-    ${lowPrice && highPrice ? `<div style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">Range: AED ${lowPrice.toLocaleString()} – AED ${highPrice.toLocaleString()}</div>` : ''}
-    ${listingsCount > 0 ? `<div style="margin-top: 12px;"><span style="font-size: 0.6rem; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px;">📊 ${listingsCount} live listings${cacheInfo}</span></div>` : ''}
-    <div style="margin-top: 12px; font-size: 0.65rem; color: ${isEstimate ? '#FCA5A5' : '#4ADE80'};">
-      ${isEstimate ? '⚠️ AI estimate — not based on live listings' : `✓ Based on ${listingsCount || 'current'} UAE listings from today`}
-    </div>
-    <div style="margin-top: 4px; font-size: 0.55rem; color: rgba(255,255,255,0.35);">Source: ${source}</div>
+    <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-bottom:10px;">${source}${cacheInfo}</div>
+    <div style="font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:2px;">STICKER / LISTING PRICE</div>
+    <div id="priceMain" style="font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:900;color:#D4AF37;line-height:1;">AED ${sticker.toLocaleString()}</div>
+    ${minP&&maxP ? `<div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:4px;">Market range: AED ${minP.toLocaleString()} – AED ${maxP.toLocaleString()}</div>` : ''}
+    ${listingsCount>0 ? `<div style="margin-top:8px;"><span style="font-size:0.55rem;background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:99px;color:rgba(255,255,255,0.7);">📊 ${listingsCount} live listings analysed</span></div>` : ''}
   </div>
 
-  ${cmp ? `
-  <div style="border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; text-align: center;
-    ${cmp.verdict === 'Good Deal' ? 'background:#D1FAE5;border:1px solid #6EE7B7;' :
-      cmp.verdict === 'Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;' :
-      'background:#FEF3C7;border:1px solid #FCD34D;'}">
-    <div style="font-size:0.85rem;font-weight:800;
-      ${cmp.verdict === 'Good Deal' ? 'color:#065F46;' :
-        cmp.verdict === 'Overpriced' ? 'color:#991B1B;' : 'color:#92400E;'}">
-      ${cmp.verdict}
+  <!-- ② NEGOTIATION PRICES -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+    <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#166534;margin-bottom:4px;">🤝 HANDSHAKE PRICE</div>
+      <div style="font-size:1.1rem;font-weight:800;color:#15803D;">AED ${handshake.toLocaleString()}</div>
+      <div style="font-size:0.55rem;color:#4ADE80;margin-top:2px;">Realistic closing price</div>
     </div>
-    <div style="font-size:0.7rem;color:#555;">
-      ${cmp.verdict === 'Good Deal'
-        ? `AED ${Math.abs(cmp.difference).toLocaleString()} below market average`
-        : cmp.verdict === 'Overpriced'
-          ? `AED ${cmp.difference.toLocaleString()} above market average`
-          : 'At market price'}
+    <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#1E40AF;margin-bottom:4px;">💬 OPEN WITH</div>
+      <div style="font-size:1.1rem;font-weight:800;color:#1D4ED8;">AED ${negotiation.toLocaleString()}</div>
+      <div style="font-size:0.55rem;color:#60A5FA;margin-top:2px;">Your opening offer</div>
+    </div>
+  </div>
+
+  <!-- ③ ASKING PRICE VERDICT -->
+  ${cmp ? `<div style="${verdictStyle}border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:center;">
+    <div style="font-size:0.85rem;font-weight:800;">${cmp.verdict}</div>
+    <div style="font-size:0.68rem;margin-top:3px;">
+      ${cmp.verdict==='Good Deal' ? `AED ${Math.abs(cmp.difference).toLocaleString()} below market average` :
+        cmp.verdict==='Overpriced' ? `AED ${cmp.difference.toLocaleString()} above market average` : 'Right at market average'}
     </div>
   </div>` : ''}
 
-  <div style="background:#F8FAFC;border-radius:12px;padding:14px;margin-bottom:16px;border-left:3px solid #D4AF37;">
-    <div style="font-size:0.7rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;">📌 HOW THIS PRICE WAS CALCULATED</div>
-    <div style="font-size:0.68rem;color:#475569;line-height:1.6;">
-      ${isEstimate
-        ? '🤖 Gemini searched UAE classified sites but found no listings today. Claude estimated this price from UAE market knowledge, depreciation rates, and spec premiums.'
-        : `🔍 Gemini scraped <strong>${listingsCount} live listings</strong> from Dubizzle, YallaMotor and other UAE sites. Claude then analysed those listings, filtered outliers, and adjusted for your car's mileage and condition.`}
-      ${data.valuationNotes ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #E2E8F0;color:#334155;font-style:italic;">"${data.valuationNotes}"</div>` : ''}
-      ${data.geminiData ? `<div style="margin-top:6px;font-size:0.6rem;color:#94A3B8;">Data: ${data.geminiData}</div>` : ''}
+  <!-- ④ CONFIDENCE + DEMAND BARS -->
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Data Confidence</div>
+        ${bar(confidence,'#3B82F6')}
+        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${confidence}%</div>
+      </div>
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Market Demand</div>
+        ${bar(demand,'#F59E0B')}
+        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${demand}%</div>
+      </div>
     </div>
   </div>
 
-  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-    <button onclick="window.open('https://dubizzle.com','_blank')" style="padding:10px 18px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;">🔍 Check Dubizzle</button>
-    <button onclick="window.open('https://yallamotor.com','_blank')" style="padding:10px 18px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;">🚗 Check YallaMotor</button>
-    <button onclick="resetForm()" style="padding:10px 18px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;">↺ New Search</button>
+  <!-- ⑤ RTA FEES + TOTAL COST -->
+  <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🏛️ UAE Ownership Costs (2026)</div>
+    <table style="width:100%;border-collapse:collapse;font-size:0.64rem;color:#1A2B4C;">
+      <tr><td style="padding:2px 0;">RTA Inspection</td><td style="text-align:right;">AED ${(rta.inspection||170).toLocaleString()}</td></tr>
+      <tr><td style="padding:2px 0;">Vehicle Registration</td><td style="text-align:right;">AED ${(rta.registration||420).toLocaleString()}</td></tr>
+      <tr><td style="padding:2px 0;">Ownership Transfer</td><td style="text-align:right;">AED ${(rta.transfer||350).toLocaleString()}</td></tr>
+      ${rta.insurance ? `<tr><td style="padding:2px 0;">Insurance (~2.5%/yr)</td><td style="text-align:right;">AED ${rta.insurance.toLocaleString()}</td></tr>` : ''}
+      <tr style="border-top:1px solid #FDE68A;font-weight:800;">
+        <td style="padding-top:4px;">Total First-Year Cost</td>
+        <td style="text-align:right;color:#D97706;">AED ${(handshake + (rta.total||940)).toLocaleString()}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ⑥ 3-YEAR DEPRECIATION -->
+  ${depr.length>=3 ? `
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">📉 3-Year Resale Forecast</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;">
+      ${[yr+1,yr+2,yr+3].map((y,i)=>`
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:8px;">
+        <div style="font-size:0.55rem;color:#94A3B8;">${y}</div>
+        <div style="font-size:0.8rem;font-weight:800;color:#1A2B4C;">AED ${(depr[i]||0).toLocaleString()}</div>
+        <div style="font-size:0.52rem;color:#EF4444;">−AED ${(handshake-(depr[i]||0)).toLocaleString()}</div>
+      </div>`).join('')}
+    </div>
+  </div>` : ''}
+
+  <!-- ⑦ AVR: ADVANTAGE / VALUE / REVIEW -->
+  ${(avr.advantage||avr.value||avr.review) ? `
+  <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#166534;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🎯 Expert Analysis</div>
+    ${avr.advantage ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> ${avr.advantage}</div>` : ''}
+    ${avr.value     ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> ${avr.value}</div>` : ''}
+    ${avr.review    ? `<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> ${avr.review}</div>` : ''}
+  </div>` : ''}
+
+  <!-- ⑧ HAGGLING SCRIPT -->
+  ${script ? `
+  <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1E40AF;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🗣️ Say This to the Seller</div>
+    <div style="font-size:0.72rem;color:#1D4ED8;font-style:italic;line-height:1.5;">${script}</div>
+  </div>` : ''}
+
+  <!-- ⑨ RED FLAGS -->
+  ${redFlags.length ? `
+  <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#991B1B;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">⚠️ Red Flags</div>
+    ${redFlags.map(f=>`<div style="font-size:0.65rem;color:#7F1D1D;margin-bottom:3px;">• ${f}</div>`).join('')}
+  </div>` : ''}
+
+  <!-- ⑩ LIVE SOURCE LINKS -->
+  ${sourceLinks.length ? `
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🔗 Live Sources Used</div>
+    ${sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener"
+      style="display:block;font-size:0.63rem;color:#008577;margin-bottom:3px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+      ↗ ${l.title||l.url}</a>`).join('')}
+  </div>` : ''}
+
+  <!-- ⑪ HOW CALCULATED -->
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;border-left:3px solid #D4AF37;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:5px;">📌 How This Was Calculated</div>
+    <div style="font-size:0.63rem;color:#475569;line-height:1.6;">
+      ${isEstimate
+        ? '🤖 No live listings found today. Claude estimated from UAE market knowledge, depreciation rates, and spec premiums.'
+        : `🔍 Live UAE listings were found and analysed. Claude filtered outliers and adjusted for mileage, condition, and spec.`}
+      ${notes ? `<div style="margin-top:6px;font-style:italic;color:#334155;">"${notes}"</div>` : ''}
+    </div>
+  </div>
+
+  <!-- ⑫ ACTION BUTTONS -->
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+    <button onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')"
+      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🔍 Dubizzle</button>
+    <button onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')"
+      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🚗 YallaMotor</button>
+    <button onclick="resetForm()"
+      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">↺ New Search</button>
   </div>
 </div>`;
 
   showState('content');
 
-  // Animate price count-up
+  // Animate price count-up on sticker price
   const priceEl = g('priceMain');
-  if(priceEl && avgPrice){
-    animateCountUp(priceEl, avgPrice);
-  }
+  if(priceEl && sticker){ animateCountUp(priceEl, sticker); }
 
   // Scroll result into view
   setTimeout(()=>{
