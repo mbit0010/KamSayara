@@ -4322,6 +4322,19 @@ function blockNonNumeric(e){
 
 const API='https://kamsayara-api.mbit0010.workers.dev';
 const qs={warranty:null,singleOwner:null,fsh:null,accident:null};
+
+/* ── DEVICE TOKEN (rate limiting) ─────────────────────────── */
+function _getDeviceToken(){
+  try{
+    let t=localStorage.getItem('ks_device_token');
+    if(!t){
+      t='dt_'+(Date.now().toString(36))+'_'+(Math.random().toString(36).slice(2,10));
+      localStorage.setItem('ks_device_token',t);
+    }
+    return t;
+  }catch{return 'dt_fallback_'+Math.random().toString(36).slice(2);}
+}
+const _deviceToken=_getDeviceToken();
 const isMobile=()=>window.innerWidth<=600;
 
 /* ── HELPERS ──────────────────────────────────────────────── */
@@ -5116,10 +5129,11 @@ async function checkCarPrice(){
     owners:g('owners')?.value||'',
     warrantyStatus:g('warrantySel')?.value||'',
     emirate:g('emirate')?.value||'',
-    finance:g('finance')?.value||''
+    finance:g('finance')?.value||'',
+    deviceToken:_deviceToken
   });
 
-  // Try /api/valuation first, fall back to /api/professional-valuation
+  // Direct call to /api/valuation — no dead fallback
   async function tryFetch(endpoint){
     const controller = new AbortController();
     const timeoutId = setTimeout(()=>controller.abort(), 55000);
@@ -5139,17 +5153,7 @@ async function checkCarPrice(){
   }
 
   try{
-    let response;
-    try{
-      response = await tryFetch('/api/valuation');
-      // If endpoint not found, fall back
-      if(response.status === 404){
-        response = await tryFetch('/api/professional-valuation');
-      }
-    }catch(fetchErr){
-      // Network / CORS failure on first endpoint — try the other
-      response = await tryFetch('/api/professional-valuation');
-    }
+    const response = await tryFetch('/api/valuation');
 
     if(!response.ok){
       let errDetail = '';
@@ -5158,6 +5162,37 @@ async function checkCarPrice(){
     }
     const data = await response.json();
     if(data.error) throw new Error(data.error);
+
+    // ── RATE LIMIT — friendly human message ─────────────────
+    if(data.rateLimited){
+      stopLoad();
+      const resetHr = data.resetsIn || 'a few hours';
+      g('rcontent').innerHTML=`
+      <div style="padding:32px 24px;text-align:center;font-family:'Exo 2',sans-serif;">
+        <div style="font-size:2.6rem;margin-bottom:14px;">🚗☕</div>
+        <div style="font-size:1rem;font-weight:800;color:#1A2B4C;margin-bottom:10px;letter-spacing:0.01em;">You've been busy today!</div>
+        <p style="font-size:0.80rem;color:#4A5568;line-height:1.75;max-width:300px;margin:0 auto 8px;">
+          You've used all <strong>10 free valuations</strong> for today — that's a lot of car shopping! 🎉
+        </p>
+        <p style="font-size:0.78rem;color:#718096;line-height:1.7;max-width:300px;margin:0 auto 22px;">
+          Your quota resets in <strong>${resetHr}</strong>. Come back then and we'll have fresh live market data ready and waiting for you.
+        </p>
+        <div style="background:linear-gradient(135deg,rgba(0,133,119,0.07),rgba(0,168,150,0.05));border:1px solid rgba(0,133,119,0.18);border-radius:12px;padding:14px 18px;max-width:280px;margin:0 auto 22px;">
+          <div style="font-size:0.68rem;font-weight:700;color:#008577;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">💡 In the meantime</div>
+          <div style="font-size:0.73rem;color:#4A5568;line-height:1.6;">Scroll up to review your earlier valuations, or share KamSayara with a friend who needs a car price check!</div>
+        </div>
+        <button onclick="resetForm()"
+          style="background:linear-gradient(135deg,#008577,#006B60);color:#fff;border:none;border-radius:10px;
+                 padding:11px 28px;font-family:'Exo 2',sans-serif;font-size:0.80rem;font-weight:800;
+                 letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+                 box-shadow:0 4px 14px rgba(0,133,119,0.3);">↺ Start Fresh</button>
+      </div>`;
+      showState('content');
+      if(btn) btn.disabled=false;
+      updateReadiness();
+      return;
+    }
+
     displayValuationResult(data);
 
   }catch(error){
