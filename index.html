@@ -4256,21 +4256,27 @@ function restoreValuation(idx){
     const hist=JSON.parse(localStorage.getItem('ks_hist')||'[]');
     const data=hist[idx];
     if(!data)return;
+
+    const restoreFields=()=>{
+      // Wait two frames: first for options to render, second for ksRefresh to finish
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        if(data.model)setVal(g('model'),data.model);
+        ['year','spec','condition','colour','body','seller','service'].forEach(id=>{
+          if(data[id])setVal(g(id),data[id]);
+        });
+        ['trim','mileage','asking'].forEach(id=>{
+          if(data[id]){g(id).value=data[id];markFilled(g(id));}
+        });
+        _ksMap.forEach((_w,sel)=>ksSync(sel));
+        updateReadiness();
+      }));
+    };
+
     if(data.brand){
       g('brand').value=data.brand;markFilled(g('brand'));
       populateModels();
     }
-    requestAnimationFrame(()=>{
-      if(data.model)setVal(g('model'),data.model);
-      ['year','spec','condition','colour','body','seller','service'].forEach(id=>{
-        if(data[id])setVal(g(id),data[id]);
-      });
-      ['trim','mileage','asking'].forEach(id=>{
-        if(data[id]){g(id).value=data[id];markFilled(g(id));}
-      });
-      _ksMap.forEach((_w,sel)=>ksSync(sel));
-      updateReadiness();
-    });
+    restoreFields();
   }catch(e){}
 }
 
