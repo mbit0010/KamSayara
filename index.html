@@ -4639,7 +4639,7 @@ function buildWhySection(r,brand,model,year,mileage){
   const low=r.lowPrice||0;
   const high=r.highPrice||0;
   const avg=r.averagePrice||0;
-  const comp=r.comparablesFound||0;
+  const comp=r.listingsFound||0;
   const ai=r.ai||null;
 
   // Build context sentence from real data
@@ -4872,7 +4872,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const avg=r.averagePrice||0;
   const low=r.lowPrice||0;
   const high=r.highPrice||0;
-  const comp=r.comparablesFound||0;
+  const comp=r.listingsFound||0;
   const askN=asking?parseInt(asking):null;
   const ai=r.ai||null;
   const mkt=r.marketability||null;
@@ -4998,7 +4998,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="rpt-acc-bar-wrap"><div class="rpt-acc-bar" id="cbarFill" style="width:0%"></div></div>
       <span class="rpt-acc-pct">${conf}%</span>
     </div>
-    ${comp>0?`<p class="rpt-acc-note">Based on ${comp} comparable UAE listings${r.fromCache?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</p>`:''}</div>`;
+    ${comp>0?`<p class="rpt-acc-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</p>`:''}</div>`;
 
   return`<div class="rpt-wrap r-card">
   <div class="rpt-header">
@@ -5256,7 +5256,7 @@ function displayValuationResult(data){
   const confidence   = data.confidenceScore || (isEstimate ? 30 : 75);
   const demand       = data.demandScore     || 55;
   const cacheInfo    = data.cached ? ` · cached ${data.cacheAge||''} ago` : '';
-  const rta          = data.rtaFees         || { inspection:170, registration:420, transfer:350, insurance:0, total:940 };
+  const rta          = data.rtaFees         || (()=>{ const ins=0; return { inspection:170, registration:420, transfer:350, insurance:ins, total:170+420+350+ins }; })();
   const depr         = data.depreciation    || [];
   const redFlags     = data.redFlags        || [];
   const avr          = data.avr             || {};
