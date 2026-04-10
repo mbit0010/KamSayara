@@ -4697,7 +4697,6 @@ function generateRef(){
 }
 
 /* ── HELPERS ─────────────────────────────────────────────── */
-function g(id){return document.getElementById(id);}
 
 function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPrice){
   const adj=[];
@@ -5405,12 +5404,12 @@ function displayValuationResult(data){
     const bgColour = isOverpriced ? '#FFF7ED' : '#F0FDF4';
     const borderColour = isOverpriced ? '#FED7AA' : '#BBF7D0';
     const titleColour = isOverpriced ? '#9A3412' : '#166534';
-    return \`<div style="background:\${bgColour};border:1px solid \${borderColour};border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:\${titleColour};margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">\${isOverpriced ? '⚠️ Expert Analysis' : '🎯 Expert Analysis'}</div>
-    \${avr.advantage ? \`<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> \${avr.advantage}</div>\` : ''}
-    \${avr.value     ? \`<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> \${avr.value}</div>\` : ''}
-    \${reviewText    ? \`<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> \${reviewText}</div>\` : ''}
-  </div>\`;
+    return `<div style="background:${bgColour};border:1px solid ${borderColour};border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:${titleColour};margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">${isOverpriced ? '⚠️ Expert Analysis' : '🎯 Expert Analysis'}</div>
+    ${avr.advantage ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> ${avr.advantage}</div>` : ''}
+    ${avr.value     ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> ${avr.value}</div>` : ''}
+    ${reviewText    ? `<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> ${reviewText}</div>` : ''}
+  </div>`;
   })() : ''}
 
   <!-- ⑧ HAGGLING SCRIPT -->
