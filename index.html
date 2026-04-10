@@ -4720,13 +4720,13 @@ function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPr
   else if(conditionVal==='Good')      adj.push({name:'Good Condition',amount:r(avgPrice*.015),positive:true});
   else if(conditionVal==='Fair')      adj.push({name:'Fair Condition',amount:r(avgPrice*.03),positive:false});
   else if(conditionVal==='Poor')      adj.push({name:'Poor Condition',amount:r(avgPrice*.08),positive:false});
-  if(svc==='Full Agency'||svc==='Agency') adj.push({name:'Agency Service History',amount:r(avgPrice*.035),positive:true});
-  else if(svc==='Non-Agency') adj.push({name:'Non-Agency Service',amount:r(avgPrice*.02),positive:false});
+  if(svc==='Full Agency'||svc==='Agency'||qs.fsh===true) adj.push({name:'Full Service History',amount:r(avgPrice*.035),positive:true});
+  else if(qs.fsh===false||svc==='Non-Agency') adj.push({name:'No Service History',amount:r(avgPrice*.02),positive:false});
   if(acc==='minor') adj.push({name:'Minor Accident History',amount:r(avgPrice*.06),positive:false});
   if(acc==='major') adj.push({name:'Major Accident History',amount:r(avgPrice*.14),positive:false});
-  if(own==='1')     adj.push({name:'Single Owner',amount:r(avgPrice*.025),positive:true});
-  if(own==='3'||own==='4+') adj.push({name:'Multiple Owners',amount:r(avgPrice*.03),positive:false});
-  if(war==='active')   adj.push({name:'Active Warranty',amount:r(avgPrice*.03),positive:true});
+  if(own==='1'||qs.singleOwner===true)  adj.push({name:'Single Owner',amount:r(avgPrice*.025),positive:true});
+  if(own==='3'||own==='4+'||qs.singleOwner===false) adj.push({name:'Multiple Owners',amount:r(avgPrice*.03),positive:false});
+  if(war==='active'||qs.warranty===true)  adj.push({name:'Active Warranty',amount:r(avgPrice*.03),positive:true});
   if(war==='extended') adj.push({name:'Extended Warranty',amount:r(avgPrice*.02),positive:true});
   adj.sort((a,b)=>b.amount-a.amount);
   return adj.slice(0,6);
@@ -4774,16 +4774,23 @@ function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,
       :diff>0?`At AED ${askN.toLocaleString()}, the seller is asking AED ${Math.abs(saving).toLocaleString()} (${pct}%) above the market average of AED ${avg.toLocaleString()}.`
       :`At AED ${askN.toLocaleString()}, this is right at market average — fair for both sides.`)
     :`The fair market value for this ${cn} in the UAE is AED ${avg.toLocaleString()}.`;
+  const hasFSH     = qs.fsh === true;
+  const noFSH      = qs.fsh === false;
+  const hasWarranty= qs.warranty === true;
+  const isSingleOwner = qs.singleOwner === true || ownersVal === '1';
+  const multiOwner    = qs.singleOwner === false || ownersVal === '3' || ownersVal === '4+';
   const pros=[],cons=[];
-  if(isGCC)       pros.push('GCC spec is the preferred choice in the UAE');
-  if(mileageLow)  pros.push(`${mileageNum.toLocaleString()} km is below average for a ${age}-year-old car`);
-  if(agency)      pros.push('agency service history adds trust and resale value');
-  if(goodColour)  pros.push(`${colourVal} resells fast in the UAE market`);
-  if(ownersVal==='1') pros.push('single ownership is a strong confidence signal');
+  if(isGCC)        pros.push('GCC spec is the preferred choice in the UAE');
+  if(mileageLow)   pros.push(`${mileageNum.toLocaleString()} km is below average for a ${age}-year-old car`);
+  if(agency||hasFSH) pros.push('full service history adds trust and resale value');
+  if(goodColour)   pros.push(`${colourVal} resells fast in the UAE market`);
+  if(isSingleOwner) pros.push('single ownership is a strong confidence signal');
+  if(hasWarranty)  pros.push('active warranty reduces buyer risk');
   if(conditionVal==='Excellent'||conditionVal==='Very Good') pros.push(`${conditionVal.toLowerCase()} condition supports the asking price`);
-  if(hasAccident) cons.push(`${accidentVal} accident history is a negotiation lever and a resale risk`);
-  if(ownersVal==='3'||ownersVal==='4+') cons.push('multiple previous owners can affect buyer confidence');
-  if(!isGCC)      cons.push('non-GCC spec limits your local resale audience');
+  if(hasAccident)  cons.push(`${accidentVal} accident history is a negotiation lever and a resale risk`);
+  if(multiOwner)   cons.push('multiple previous owners can affect buyer confidence');
+  if(!isGCC)       cons.push('non-GCC spec limits your local resale audience');
+  if(noFSH)        cons.push('no service history — harder to verify maintenance records');
   if(mileageNum>expected*1.5) cons.push(`${mileageNum.toLocaleString()} km is high for this age`);
   let para=pc+' ';
   if(pros.length) para+=`The positives: ${pros.slice(0,3).join(', ')}. `;
@@ -4804,19 +4811,19 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
   const isGCC=specVal==='GCC'||specVal==='GCC Spec';
   if(isGCC) green.push('GCC specification — preferred in UAE market');
   if(['White','Pearl White','Silver','Gray','Black','Midnight Black'].includes(colourVal)) green.push(`${colourVal} — high-demand resale colour`);
-  if(serviceVal==='Full Agency'||serviceVal==='Agency') green.push('Agency service history — highest trust level');
+  if(serviceVal==='Full Agency'||serviceVal==='Agency'||qs.fsh===true) green.push('Full service history — highest trust level');
   if(mileageNum>0&&mileageNum<exp*.65) green.push(`${mileageNum.toLocaleString()} km — below average for age`);
-  if(ownersVal==='1') green.push('Single owner — commands premium at resale');
+  if(ownersVal==='1'||qs.singleOwner===true) green.push('Single owner — commands premium at resale');
   if(conditionVal==='Excellent') green.push('Excellent condition — top bracket justified');
-  if(warrantyVal==='active')   green.push('Active warranty — reduces buyer risk');
+  if(warrantyVal==='active'||qs.warranty===true) green.push('Active warranty — reduces buyer risk');
   if(warrantyVal==='extended') green.push('Extended warranty — added peace of mind');
   if(!isGCC) red.push('Non-GCC spec — smaller UAE buyer pool');
   if(mileageNum>exp*1.5) red.push(`${mileageNum.toLocaleString()} km — above expected mileage`);
   if(accidentVal==='minor') red.push('Minor accident on record — disclose and negotiate');
   if(accidentVal==='major') red.push('Major accident history — significant value impact');
-  if(ownersVal==='3'||ownersVal==='4+') red.push('Multiple owners — affects confidence and resale');
+  if(ownersVal==='3'||ownersVal==='4+'||qs.singleOwner===false) red.push('Multiple owners — affects confidence and resale');
   if(conditionVal==='Fair'||conditionVal==='Poor') red.push(`${conditionVal} condition — price must reflect repair costs`);
-  if(serviceVal==='Non-Agency'||serviceVal==='Unknown') red.push('No agency records — history harder to verify');
+  if(qs.fsh===false||(serviceVal==='Non-Agency'||serviceVal==='Unknown')) red.push('No full service history — maintenance harder to verify');
   return{green:green.slice(0,5),red:red.slice(0,4)};
 }
 
@@ -4840,7 +4847,10 @@ function buildNegoGuide(askN,avg,conditionVal,accidentVal){
   const diff=(askN-avg)/avg;
   const cf=conditionVal==='Fair'?.03:conditionVal==='Poor'?.06:0;
   const af=accidentVal==='major'?.10:accidentVal==='minor'?.05:0;
-  const disc=cf+af+(diff>0?diff*.5:0);
+  // No FSH and no warranty each add 1% negotiation room
+  const fshDisc  = qs.fsh===false?.01:0;
+  const warDisc  = qs.warranty===false?.01:0;
+  const disc=cf+af+fshDisc+warDisc+(diff>0?diff*.5:0);
   const offer=Math.round(askN*(1-Math.min(disc,.15))/500)*500;
   const close=Math.round(askN*(1-Math.min(disc,.10)*.5)/500)*500;
   const walk =Math.round(avg*1.08/500)*500;
@@ -4848,6 +4858,8 @@ function buildNegoGuide(askN,avg,conditionVal,accidentVal){
   let tactic='';
   if(accidentVal==='major') tactic='The accident history is your primary leverage — request a full inspection report and use it to justify a significant reduction.';
   else if(accidentVal==='minor') tactic='Point to the minor accident record as justification for your counter-offer. Ask for the repair documentation.';
+  else if(qs.fsh===false&&qs.warranty===false) tactic='No service history and no warranty — use both gaps to push for a lower price. Offer to split the cost of an independent inspection.';
+  else if(qs.fsh===false) tactic='Missing service history is a legitimate negotiation point. Request a discount or ask the seller to obtain records before closing.';
   else if(diff>.10) tactic=`This is priced above market. Lead with the AED ${avg.toLocaleString()} market benchmark and work down from there.`;
   else if(diff>.02) tactic='There is modest room to negotiate. Use mileage or condition as your reason for a counter-offer.';
   else tactic='Already close to or below market — a token 2–3% counter-offer is reasonable without risking the deal.';
@@ -4930,6 +4942,10 @@ function buildResult(r,brand,model,year,mileage,asking){
       accVal&&accVal!=='none'?['Accident',accVal]:null,
       ownVal?['Owners',ownVal]:null,warVal?['Warranty',warVal]:null,
       emirVal?['Emirate',emirVal]:null,finVal?['Payment',finVal]:null,
+      qs.fsh!==null?['Full Service History',qs.fsh?'Yes':'No']:null,
+      qs.singleOwner!==null?['Single Owner',qs.singleOwner?'Yes':'No']:null,
+      qs.warranty!==null?['Has Warranty',qs.warranty?'Yes':'No']:null,
+      qs.accident!==null?['Accident Declared',qs.accident?'Yes':'No']:null,
       askN?['Asking Price','AED '+askN.toLocaleString()]:null,
     ].filter(Boolean),
   };
