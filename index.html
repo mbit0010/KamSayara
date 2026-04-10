@@ -4827,17 +4827,26 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
   return{green:green.slice(0,5),red:red.slice(0,4)};
 }
 
-function buildDeprTable(avg,carYear){
+function buildDeprTable(handshake,carYear,brandName,mileageKm){
+  // Depreciation always calculated from handshake price (realistic closing price)
+  // Rates are brand-aware; luxury + high mileage accelerates post-warranty drop
   const cy=new Date().getFullYear();
+  const luxBrands=['BMW','Mercedes-Benz','Audi','Porsche','Land Rover','Lexus','Volvo','Cadillac','Infiniti'];
+  const solidBrands=['Toyota','Lexus','Honda','Nissan','Mitsubishi','Mazda'];
+  const isLux=luxBrands.includes(brandName||'');
+  const isSolid=solidBrands.includes(brandName||'');
+  const highMileage=(mileageKm||0)>65000;
+  let base=isLux?0.14:isSolid?0.09:0.12;
+  if(isLux&&highMileage) base=0.18; // warranty/service pack expired zone
   const age=Math.max(0,cy-carYear);
-  const base=age<=2?.15:age<=5?.12:age<=8?.08:.05;
+  if(age<=2) base=isLux?0.16:0.12;  // steeper first-year drop for near-new cars
   const rows=[];
-  let val=avg;
+  let val=handshake;
+  const startVal=handshake;
   for(let y=1;y<=3;y++){
-    const rate=base*Math.pow(.88,y-1);
-    const loss=Math.round(val*rate/500)*500;
-    val=val-loss;
-    rows.push({year:cy+y,rate:Math.round(rate*100),endVal:val,cumLoss:avg-val,pct:Math.round(((avg-val)/avg)*100)});
+    const rate=base*Math.pow(0.90,y-1); // rate flattens ~10% each year
+    val=Math.round(val*(1-rate)/500)*500;
+    rows.push({year:cy+y,rate:Math.round(rate*100),endVal:val,cumLoss:startVal-val,pct:Math.round(((startVal-val)/startVal)*100)});
   }
   return rows;
 }
@@ -4869,11 +4878,15 @@ function buildNegoGuide(askN,avg,conditionVal,accidentVal){
 function buildOwnershipCost(price,deprAmt,carYear){
   const cy=new Date().getFullYear();
   const age=cy-carYear;
-  const ins=Math.round(price*.035/100)*100;
-  const reg=age<=5?650:450;
+  // Insurance: 2.5% comprehensive for 2024+ cars, flat AED 1,200 third-party for older
+  const ins = carYear >= 2024
+    ? Math.round(price * 0.025 / 100) * 100
+    : 1200;
+  // Maintenance shown separately — NOT in the first-year ownership cost total
   const maint=Math.round(price*.015/500)*500;
-  const total=deprAmt+ins+reg+maint;
-  return{ins,reg,maint,total,fuelEst:900};
+  // First-year cost = RTA fees + insurance ONLY (no car value, no depreciation)
+  const rtaOnly = 170 + 420 + 350 + ins;
+  return{ins,maint,rtaOnly,deprAmt,fuelEst:900};
 }
 
 function confPctToPos(conf){return Math.max(5,Math.min(95,conf));}
@@ -4953,7 +4966,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
   const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,colourVal,svcVal,ai);
   const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,colourVal,svcVal,accVal,ownVal,warVal);
-  const deprRows=buildDeprTable(avg,carYear);
+  const deprRows=buildDeprTable(avg,carYear,brand,km);
   const nego=buildNegoGuide(askN,avg,condVal,accVal);
   const cost=buildOwnershipCost(askN||avg,deprAmt,carYear);
 
@@ -4992,11 +5005,13 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Cost
   const costSec=`<div class="rpt-section"><div class="rpt-section-title">First Year Cost Estimate</div>
     <table class="rpt-cost-table">
-      <tr><td>Depreciation (12 months)</td><td>−AED ${cost.total-cost.ins-cost.reg-cost.maint<=0?deprAmt.toLocaleString():deprAmt.toLocaleString()}</td></tr>
-      <tr><td>Insurance (est. 3.5% of value)</td><td>−AED ${cost.ins.toLocaleString()}</td></tr>
-      <tr><td>RTA Registration</td><td>−AED ${cost.reg.toLocaleString()}</td></tr>
-      <tr><td>Maintenance (est.)</td><td>−AED ${cost.maint.toLocaleString()}</td></tr>
-      <tr class="total"><td><strong>Total non-fuel cost</strong></td><td><strong>−AED ${cost.total.toLocaleString()}</strong></td></tr>
+      <tr><td>RTA Inspection</td><td>−AED 170</td></tr>
+      <tr><td>Vehicle Registration</td><td>−AED 420</td></tr>
+      <tr><td>Ownership Transfer</td><td>−AED 350</td></tr>
+      <tr><td>${carYear>=2024?'Insurance (2.5% comprehensive)':'Insurance (3rd party, pre-2024)'}</td><td>−AED ${cost.ins.toLocaleString()}</td></tr>
+      <tr class="total"><td><strong>Total First-Year Fees</strong></td><td><strong>−AED ${cost.rtaOnly.toLocaleString()}</strong></td></tr>
+      <tr style="opacity:0.6"><td>Est. Depreciation (yr 1)</td><td>−AED ${deprAmt.toLocaleString()}</td></tr>
+      <tr style="opacity:0.6"><td>Est. Maintenance</td><td>−AED ${cost.maint.toLocaleString()}</td></tr>
     </table>
     <p class="rpt-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</p></div>`;
 
@@ -5338,7 +5353,7 @@ function displayValuationResult(data){
       <div>
         <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Data Confidence</div>
         ${bar(confidence,'#3B82F6')}
-        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${confidence}%</div>
+        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${Math.min(85,Math.max(60,confidence))}%</div>
       </div>
       <div>
         <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Market Demand</div>
@@ -5350,17 +5365,18 @@ function displayValuationResult(data){
 
   <!-- ⑤ RTA FEES + TOTAL COST -->
   <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🏛️ UAE Ownership Costs (2026)</div>
+    <div style="font-size:0.65rem;font-weight:800;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🏛️ UAE First-Year Fees (2026)</div>
     <table style="width:100%;border-collapse:collapse;font-size:0.64rem;color:#1A2B4C;">
       <tr><td style="padding:2px 0;">RTA Inspection</td><td style="text-align:right;">AED ${(rta.inspection||170).toLocaleString()}</td></tr>
       <tr><td style="padding:2px 0;">Vehicle Registration</td><td style="text-align:right;">AED ${(rta.registration||420).toLocaleString()}</td></tr>
       <tr><td style="padding:2px 0;">Ownership Transfer</td><td style="text-align:right;">AED ${(rta.transfer||350).toLocaleString()}</td></tr>
-      ${rta.insurance ? `<tr><td style="padding:2px 0;">Insurance (~2.5%/yr)</td><td style="text-align:right;">AED ${rta.insurance.toLocaleString()}</td></tr>` : ''}
+      <tr><td style="padding:2px 0;">${yr >= 2024 ? 'Insurance (2.5% comprehensive)' : 'Insurance (3rd party, pre-2024)'}</td><td style="text-align:right;">AED ${(rta.insurance||1200).toLocaleString()}</td></tr>
       <tr style="border-top:1px solid #FDE68A;font-weight:800;">
-        <td style="padding-top:4px;">Total First-Year Cost</td>
-        <td style="text-align:right;color:#D97706;">AED ${(handshake + (rta.total||940)).toLocaleString()}</td>
+        <td style="padding-top:4px;">Total First-Year Fees</td>
+        <td style="text-align:right;color:#D97706;">AED ${(rta.total||940).toLocaleString()}</td>
       </tr>
     </table>
+    <p style="font-size:0.55rem;color:#92400E;margin-top:5px;">Fees only — car purchase price not included. Verify insurance with your broker.</p>
   </div>
 
   <!-- ⑥ 3-YEAR DEPRECIATION -->
@@ -5372,19 +5388,30 @@ function displayValuationResult(data){
       <div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:8px;">
         <div style="font-size:0.55rem;color:#94A3B8;">${y}</div>
         <div style="font-size:0.8rem;font-weight:800;color:#1A2B4C;">AED ${(depr[i]||0).toLocaleString()}</div>
-        <div style="font-size:0.52rem;color:#EF4444;">−AED ${(handshake-(depr[i]||0)).toLocaleString()}</div>
+        <div style="font-size:0.52rem;color:#EF4444;">−AED ${(handshake-(depr[i]||0)>0?(handshake-(depr[i]||0)).toLocaleString():'0')}</div>
+        <div style="font-size:0.48rem;color:#94A3B8;">from handshake</div>
       </div>`).join('')}
     </div>
+    <p style="font-size:0.55rem;color:#64748B;margin-top:6px;">Cumulative loss from handshake price (AED ${handshake.toLocaleString()}). Luxury + high-mileage vehicles depreciate faster.</p>
   </div>` : ''}
 
   <!-- ⑦ AVR: ADVANTAGE / VALUE / REVIEW -->
-  ${(avr.advantage||avr.value||avr.review) ? `
-  <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#166534;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🎯 Expert Analysis</div>
-    ${avr.advantage ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> ${avr.advantage}</div>` : ''}
-    ${avr.value     ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> ${avr.value}</div>` : ''}
-    ${avr.review    ? `<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> ${avr.review}</div>` : ''}
-  </div>` : ''}
+  ${(avr.advantage||avr.value||avr.review) ? (() => {
+    // Consistency guard: if overpriced, override any "fair value" language in review
+    const isOverpriced = cmp && (cmp.verdict === 'Overpriced' || cmp.verdict === 'Significantly Overpriced');
+    const reviewText = isOverpriced && avr.review && /fair.value|good.value|fairly.priced|market.rate/i.test(avr.review)
+      ? avr.review.replace(/fair.value|good.value|fairly.priced|market.rate/gi, 'priced above market') + ' Note: asking price exceeds market average.'
+      : avr.review;
+    const bgColour = isOverpriced ? '#FFF7ED' : '#F0FDF4';
+    const borderColour = isOverpriced ? '#FED7AA' : '#BBF7D0';
+    const titleColour = isOverpriced ? '#9A3412' : '#166534';
+    return \`<div style="background:\${bgColour};border:1px solid \${borderColour};border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:\${titleColour};margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">\${isOverpriced ? '⚠️ Expert Analysis' : '🎯 Expert Analysis'}</div>
+    \${avr.advantage ? \`<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> \${avr.advantage}</div>\` : ''}
+    \${avr.value     ? \`<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> \${avr.value}</div>\` : ''}
+    \${reviewText    ? \`<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> \${reviewText}</div>\` : ''}
+  </div>\`;
+  })() : ''}
 
   <!-- ⑧ HAGGLING SCRIPT -->
   ${script ? `
