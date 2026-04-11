@@ -128,6 +128,11 @@
       text-align:center;
     }
     .hero-tag em{color:#E8D060;font-style:normal;}
+    .hero-sub-line{
+      font-size:.78rem;color:rgba(255,255,255,0.65);letter-spacing:.08em;
+      animation:hIn .75s .08s var(--ease) both;margin-top:-4px;margin-bottom:2px;
+      font-weight:500;
+    }
     .hero-trust{
       display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
       animation:hIn .75s .12s var(--ease) both;
@@ -3638,6 +3643,504 @@
     .qcbar-lbl { font-size: clamp(0.58rem, 1.3vw, 0.65rem) !important; }
   }
 
+  /* ═══════════════════════════════════════════════════════════════════
+     PRICE INTELLIGENCE REPORT — Premium UI (v2 — polished)
+  ═══════════════════════════════════════════════════════════════════ */
+
+  .pir-wrap {
+    font-family: "Exo 2", sans-serif;
+    background: #fff;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    border: 1px solid #CDD4E0;
+    box-shadow: 0 2px 12px rgba(10,25,50,0.06), 0 8px 32px rgba(10,25,50,0.07);
+    animation: fIn .42s var(--ease) both;
+  }
+
+  /* ── REPORT HEADER ── */
+  .pir-header {
+    background: linear-gradient(145deg, #08111F 0%, #0F1E38 30%, #172E54 65%, #0D1E3A 100%);
+    padding: 20px 22px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* fine diagonal grid pattern */
+  .pir-header::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      repeating-linear-gradient(115deg, transparent 0, transparent 52px, rgba(255,255,255,0.016) 52px, rgba(255,255,255,0.016) 53px),
+      repeating-linear-gradient(25deg,  transparent 0, transparent 52px, rgba(255,255,255,0.010) 52px, rgba(255,255,255,0.010) 53px);
+  }
+  /* gold accent bar at bottom */
+  .pir-header::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, transparent 0%, #C49A2A 15%, #F0D060 50%, #C49A2A 85%, transparent 100%);
+  }
+  .pir-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative; z-index: 2;
+  }
+  .pir-title-block { flex: 1; min-width: 0; }
+  .pir-eyebrow {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .55rem; font-weight: 800; letter-spacing: .22em;
+    text-transform: uppercase; color: rgba(212,175,55,0.82);
+    margin-bottom: 5px;
+  }
+  .pir-main-title {
+    font-family: "Exo 2", sans-serif;
+    font-size: clamp(1.05rem, 2.8vw, 1.42rem);
+    font-weight: 800; color: #fff;
+    letter-spacing: -.01em; line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .pir-sub {
+    font-size: .62rem; color: rgba(255,255,255,0.42);
+    letter-spacing: .06em;
+  }
+  .pir-ref-block {
+    text-align: right; flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,175,55,0.18);
+    border-radius: 8px;
+    padding: 7px 11px;
+  }
+  .pir-ref-code {
+    font-family: "Orbitron", sans-serif;
+    font-size: .7rem; font-weight: 700;
+    color: rgba(212,175,55,0.9);
+    letter-spacing: .08em;
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+  .pir-ref-note {
+    font-size: .5rem; color: rgba(255,255,255,0.32);
+    letter-spacing: .05em; white-space: nowrap;
+  }
+
+  /* ── VEHICLE IDENTITY BLOCK ── */
+  .pir-vehicle-block {
+    display: grid;
+    grid-template-columns: minmax(110px, 28%) 1fr;
+    border-bottom: 1px solid #E8EBF3;
+    background: linear-gradient(135deg, #F8F9FC 0%, #F2F4FA 100%);
+  }
+  .pir-vehicle-img {
+    position: relative;
+    background: linear-gradient(160deg, #EEF1F8 0%, #E4E8F2 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px 12px;
+    border-right: 1px solid #DDE2EE;
+    min-height: 110px; overflow: hidden;
+  }
+  /* subtle radial glow behind car */
+  .pir-vehicle-img::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 60%, rgba(26,43,76,0.06) 0%, transparent 70%);
+  }
+  .pir-vehicle-img img {
+    width: 100%; max-height: 92px;
+    object-fit: contain; object-position: bottom center;
+    filter: drop-shadow(0 6px 16px rgba(10,25,50,0.22));
+    display: block; position: relative; z-index: 1;
+  }
+  .pir-img-fallback {
+    display: none; align-items: center; justify-content: center;
+    width: 100%; height: 80px; position: relative; z-index: 1;
+  }
+  .pir-img-fallback svg { width: 82px; height: 44px; }
+  .pir-colour-chip {
+    position: absolute; bottom: 9px; right: 9px;
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.92);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.22);
+    z-index: 2;
+  }
+  .pir-vehicle-info {
+    padding: 15px 17px;
+    display: flex; flex-direction: column; gap: 7px;
+    justify-content: center;
+  }
+  .pir-vehicle-name {
+    font-size: clamp(.88rem, 2.4vw, 1.08rem);
+    font-weight: 800; color: #152040; line-height: 1.2;
+    letter-spacing: -.01em;
+  }
+  .pir-vehicle-meta {
+    font-size: .72rem; color: #3D4E6A; font-weight: 600;
+    letter-spacing: .01em; line-height: 1.4;
+  }
+  .pir-vehicle-details {
+    display: flex; flex-direction: column; gap: 3px;
+    font-size: .67rem; color: #607090; line-height: 1.45;
+    padding-top: 5px;
+    border-top: 1px solid #DDE2EE;
+  }
+  .pir-vehicle-details span { display: block; }
+
+  /* ── VERDICT RIBBON ── */
+  .pir-verdict-ribbon {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 20px; border-bottom: 1px solid #E8EBF3;
+  }
+  .pir-verdict-ribbon.pir-verdict-good {
+    background: linear-gradient(90deg, rgba(22,163,74,0.07) 0%, rgba(22,163,74,0.01) 100%);
+    border-left: 3px solid #16A34A;
+  }
+  .pir-verdict-ribbon.pir-verdict-warn {
+    background: linear-gradient(90deg, rgba(217,119,6,0.07) 0%, rgba(217,119,6,0.01) 100%);
+    border-left: 3px solid #D97706;
+  }
+  .pir-verdict-ribbon.pir-verdict-bad {
+    background: linear-gradient(90deg, rgba(220,38,38,0.07) 0%, rgba(220,38,38,0.01) 100%);
+    border-left: 3px solid #DC2626;
+  }
+  .pir-verdict-ribbon.pir-verdict-neu {
+    background: linear-gradient(90deg, rgba(21,32,64,0.05) 0%, rgba(21,32,64,0.01) 100%);
+    border-left: 3px solid #3D5280;
+  }
+  .pir-verdict-badge-wrap { flex-shrink: 0; padding-top: 2px; }
+  .pir-verdict-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 99px;
+    font-size: .58rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .pir-verdict-good .pir-verdict-pill { background: rgba(22,163,74,0.1); color: #15803D; border: 1px solid rgba(22,163,74,0.28); }
+  .pir-verdict-warn .pir-verdict-pill { background: rgba(217,119,6,0.1); color: #B45309; border: 1px solid rgba(217,119,6,0.28); }
+  .pir-verdict-bad  .pir-verdict-pill { background: rgba(220,38,38,0.1); color: #B91C1C; border: 1px solid rgba(220,38,38,0.28); }
+  .pir-verdict-neu  .pir-verdict-pill { background: rgba(21,32,64,0.07); color: #3D5280; border: 1px solid rgba(21,32,64,0.18); }
+  .pir-verdict-text {
+    font-size: .77rem; color: #2D3F5C; line-height: 1.65; flex: 1;
+  }
+
+  /* ── PRICE INTELLIGENCE CORE GRID ── */
+  .pir-price-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid #E8EBF3;
+    background: #fff;
+  }
+  .pir-price-cell {
+    padding: 17px 15px 15px;
+    border-right: 1px solid #E8EBF3;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .pir-price-cell:last-child { border-right: none; }
+  .pir-cell-label {
+    font-size: .52rem; font-weight: 800; letter-spacing: .16em;
+    text-transform: uppercase; color: #8A9AB8;
+    margin-bottom: 1px;
+  }
+
+  /* FMV amount */
+  .pir-fmv-amount {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(.98rem, 3.2vw, 1.42rem);
+    font-weight: 700; color: #0F1E38;
+    letter-spacing: -.025em; line-height: 1.08;
+  }
+  .pir-fmv-range {
+    font-size: .58rem; color: #8A9AB8; line-height: 1.3; margin-top: 1px;
+  }
+  /* deal pill */
+  .pir-deal-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 99px;
+    font-size: .57rem; font-weight: 700; letter-spacing: .05em;
+    width: fit-content; margin-top: 3px;
+  }
+  .pir-deal-pill::before {
+    content: ''; width: 6px; height: 6px; flex-shrink: 0;
+    border-radius: 50%; background: currentColor; opacity: .65;
+  }
+  .pir-deal-good    { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
+  .pir-deal-warn    { background: #FFFBEB; color: #92400E; border: 1px solid #FCD34D; }
+  .pir-deal-bad     { background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; }
+  .pir-deal-neutral { background: #F8FAFC; color: #475569; border: 1px solid #CBD5E1; }
+  /* delta vs asking */
+  .pir-delta-pos { display: flex; align-items: baseline; gap: 5px; font-size: .65rem; font-weight: 700; color: #15803D; }
+  .pir-delta-neg { display: flex; align-items: baseline; gap: 5px; font-size: .65rem; font-weight: 700; color: #991B1B; }
+  .pir-delta-pct { font-size: .55rem; font-weight: 600; opacity: .72; }
+
+  /* Market position bar */
+  .pir-pos-track-wrap { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .pir-pos-labels { display: flex; justify-content: space-between; font-size: .49rem; color: #A8B8CC; margin-bottom: 1px; }
+  .pir-pos-track {
+    position: relative; height: 7px;
+    background: linear-gradient(90deg, #22C55E 0%, #EAB308 48%, #EF4444 100%);
+    border-radius: 99px; overflow: visible;
+  }
+  .pir-pos-fill { display: none; }
+  .pir-pos-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
+  .pir-pos-marker-dot {
+    width: 15px; height: 15px; border-radius: 50%;
+    background: #0F1E38; border: 2.5px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .pir-pos-tooltip {
+    position: absolute; bottom: 19px; left: 50%; transform: translateX(-50%);
+    background: #0F1E38; color: #fff;
+    font-size: .51rem; font-weight: 700; padding: 2px 7px; border-radius: 5px;
+    white-space: nowrap; pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .pir-pos-tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 4px solid transparent; border-top-color: #0F1E38;
+  }
+  .pir-pos-ends { display: flex; justify-content: space-between; font-size: .49rem; color: #A8B8CC; margin-top: 2px; }
+  .pir-pos-note { font-size: .58rem; color: #008577; font-weight: 700; line-height: 1.3; margin-top: 2px; }
+
+  /* Confidence ring */
+  .pir-conf-ring-wrap { display: flex; justify-content: center; margin: 3px 0 2px; }
+  .pir-conf-ring { width: 60px; height: 60px; }
+  .pir-conf-label { font-size: .6rem; font-weight: 700; color: #3D4E6A; text-align: center; }
+  .pir-conf-note { font-size: .52rem; color: #8A9AB8; text-align: center; line-height: 1.3; }
+
+  /* ── ANALYSIS BLOCK ── */
+  .pir-analysis-block {
+    padding: 15px 20px 14px; border-bottom: 1px solid #E8EBF3;
+    background: linear-gradient(135deg, #F8F9FC 0%, #F5F7FB 100%);
+  }
+  .pir-analysis-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: .52rem; font-weight: 800; letter-spacing: .16em;
+    text-transform: uppercase; color: #008577;
+    margin-bottom: 7px;
+  }
+  .pir-analysis-text {
+    font-size: .79rem; color: #2D3F5C; line-height: 1.7;
+  }
+
+  /* ── GENERIC SECTION ── */
+  .pir-section {
+    padding: 15px 20px 14px; border-bottom: 1px solid #E8EBF3;
+  }
+  .pir-section:last-of-type { border-bottom: none; }
+  .pir-section-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .54rem; font-weight: 800; letter-spacing: .15em;
+    text-transform: uppercase; color: #152040;
+    margin-bottom: 11px;
+  }
+
+  /* ── VALUE ADJUSTMENTS ── */
+  .pir-adjustments { display: flex; flex-direction: column; }
+  .pir-adj-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid #F0F3FA;
+    font-size: .76rem;
+  }
+  .pir-adj-row:last-child { border-bottom: none; }
+  .pir-adj-name { color: #2D3F5C; }
+  .pir-adj-val { font-weight: 700; white-space: nowrap; font-size: .74rem; }
+  .pir-adj-val.pos { color: #15803D; }
+  .pir-adj-val.neg { color: #991B1B; }
+
+  /* ── CHECKLIST FLAGS ── */
+  .pir-checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  @media(max-width: 440px) { .pir-checklist-grid { grid-template-columns: 1fr; } }
+  .pir-flag {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 8px 11px; border-radius: 9px;
+    font-size: .73rem; color: #2D3F5C; line-height: 1.45;
+  }
+  .pir-flag-green { background: #F0FDF4; border: 1px solid #86EFAC; }
+  .pir-flag-red   { background: #FEF2F2; border: 1px solid #FCA5A5; }
+  .pir-flag-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .pir-flag-dot-green { background: #22C55E; }
+  .pir-flag-dot-red   { background: #EF4444; }
+
+  /* ── NEGOTIATION GUIDE ── */
+  .pir-nego-row {
+    display: flex; align-items: stretch; gap: 7px;
+    margin-bottom: 11px;
+  }
+  .pir-nego-card {
+    flex: 1; min-width: 0;
+    background: #F8FAFC; border: 1px solid #DDE4EE;
+    border-radius: 10px; padding: 11px 10px; text-align: center;
+    transition: border-color .15s;
+  }
+  .pir-nego-open {
+    background: linear-gradient(135deg, #FFFDE7, #FFF9C4);
+    border-color: #F6CC3E;
+    box-shadow: 0 2px 8px rgba(212,175,55,0.12);
+  }
+  .pir-nego-walk {
+    background: linear-gradient(135deg, #FEF2F2, #FDE8E8);
+    border-color: #FCA5A5;
+  }
+  .pir-nego-arrow {
+    color: #C8D4E4; font-size: 1.1rem; flex-shrink: 0;
+    display: flex; align-items: center; padding-bottom: 8px;
+  }
+  .pir-nego-card-label {
+    font-size: .52rem; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; color: #7A8FA8; margin-bottom: 5px;
+  }
+  .pir-nego-card-val {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(.78rem, 2vw, .92rem); font-weight: 700; color: #0F1E38;
+  }
+  .pir-nego-card-val.warn { color: #92400E; }
+  .pir-nego-tactic {
+    font-size: .75rem; color: #2D3F5C; line-height: 1.65;
+    padding: 10px 13px; border-radius: 9px;
+    background: #FAFBFD; border: 1px solid #DDE4EE;
+    border-left: 3px solid #D4AF37;
+  }
+
+  /* ── TIME TO SELL ── */
+  .pir-tts-grid { display: flex; flex-direction: column; }
+  .pir-tts-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid #F0F3FA; font-size: .76rem;
+  }
+  .pir-tts-row:last-child { border-bottom: none; }
+  .pir-tts-highlight {
+    background: rgba(212,175,55,0.06); padding: 7px 12px;
+    border-radius: 8px; border: 1px solid rgba(212,175,55,0.24);
+    margin-top: 5px; border-bottom: none !important;
+  }
+  .pir-tts-lbl { color: #2D3F5C; }
+  .pir-tts-val { font-weight: 700; color: #0F1E38; white-space: nowrap; }
+  .pir-tts-fast   { color: #15803D !important; }
+  .pir-tts-medium { color: #92400E !important; }
+  .pir-tts-slow   { color: #991B1B !important; }
+  .pir-tts-insight {
+    margin-top: 9px; font-size: .72rem; color: #4A5E7A;
+    line-height: 1.55; font-style: italic;
+    padding-top: 8px; border-top: 1px solid #F0F3FA;
+  }
+
+  /* ── FIRST YEAR COSTS ── */
+  .pir-cost-list { display: flex; flex-direction: column; }
+  .pir-cost-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid #F0F3FA;
+    font-size: .76rem; color: #2D3F5C;
+  }
+  .pir-cost-row:last-child { border-bottom: none; }
+  .pir-cost-total {
+    font-weight: 800; color: #0F1E38;
+    padding: 9px 0 8px; margin: 2px 0;
+    border-top: 1.5px solid #0F1E38;
+    border-bottom: 1.5px solid #0F1E38;
+    font-size: .79rem;
+  }
+  .pir-cost-dim { opacity: .5; font-size: .72rem; }
+  .pir-cost-neg { color: #991B1B; font-weight: 700; }
+  .pir-cost-note { margin-top: 9px; font-size: .65rem; color: #7A8FA8; line-height: 1.55; }
+
+  /* ── 3-YEAR DEPRECIATION ── */
+  .pir-depr-list { display: flex; flex-direction: column; }
+  .pir-depr-header {
+    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.6fr;
+    padding: 0 0 7px; border-bottom: 1.5px solid #DDE4EE;
+    font-size: .54rem; font-weight: 800; letter-spacing: .09em;
+    text-transform: uppercase; color: #7A8FA8;
+  }
+  .pir-depr-header span:not(:first-child) { text-align: right; }
+  .pir-depr-row {
+    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.6fr;
+    padding: 8px 0; border-bottom: 1px solid #F0F3FA; font-size: .76rem;
+  }
+  .pir-depr-row:last-child { border-bottom: none; }
+  .pir-depr-year  { color: #0F1E38; font-weight: 700; }
+  .pir-depr-rate  { color: #7A8FA8; text-align: right; }
+  .pir-depr-val   { color: #0F1E38; font-weight: 600; text-align: right; }
+  .pir-depr-loss  { color: #991B1B; font-weight: 700; text-align: right; }
+
+  /* ── KEY VALUE FACTORS (AI) ── */
+  .pir-factors-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 9px; }
+  .pir-factor-item {
+    display: flex; align-items: flex-start; gap: 9px;
+    font-size: .76rem; color: #2D3F5C; line-height: 1.5;
+  }
+  .pir-factor-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #008577; flex-shrink: 0; margin-top: 6px;
+  }
+  .pir-ai-advice {
+    font-size: .76rem; color: #2D3F5C; line-height: 1.65;
+    padding: 10px 14px; border-radius: 9px;
+    background: #F5F8F7; border: 1px solid #C8DDD9;
+    border-left: 3px solid #008577;
+  }
+
+  /* ── DATA ACCURACY FOOTER ── */
+  .pir-footer-accuracy {
+    padding: 13px 20px; background: #F2F5FA;
+    border-top: 1px solid #DDE4EE;
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .pir-footer-conf { display: flex; align-items: center; gap: 9px; }
+  .pir-footer-conf-lbl {
+    font-size: .54rem; font-weight: 800; letter-spacing: .12em;
+    text-transform: uppercase; color: #7A8FA8; white-space: nowrap; flex-shrink: 0;
+  }
+  .pir-footer-bar-wrap {
+    flex: 1; height: 4px; background: #DDE4EE;
+    border-radius: 99px; overflow: hidden;
+  }
+  .pir-footer-bar {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #EF4444 0%, #EAB308 50%, #22C55E 100%);
+    transition: width .9s var(--ease);
+  }
+  .pir-footer-conf-pct {
+    font-size: .64rem; font-weight: 800; color: #0F1E38;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .pir-footer-note { font-size: .58rem; color: #8A9AB8; line-height: 1.4; }
+  .pir-footer-ref {
+    font-size: .52rem; color: #A8B8CC; letter-spacing: .05em;
+    font-family: "Exo 2", sans-serif;
+    padding-top: 4px; border-top: 1px solid #DDE4EE;
+  }
+
+  /* ── PIR PRINT ── */
+  @media print {
+    .pir-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .pir-price-grid, .pir-checklist-grid { page-break-inside: avoid; }
+  }
+
+  /* ── PIR RESPONSIVE ── */
+  @media(max-width: 600px) {
+    .pir-price-grid { grid-template-columns: 1fr 1fr; }
+    .pir-price-cell.pir-conf-cell { grid-column: 1 / -1; border-right: none; border-top: 1px solid #E8EBF3; }
+    .pir-vehicle-block { grid-template-columns: 105px 1fr; }
+    .pir-vehicle-img { min-height: 95px; padding: 12px 8px; }
+    .pir-header { padding: 15px 15px 14px; }
+    .pir-ref-block { padding: 5px 9px; }
+    .pir-section, .pir-analysis-block, .pir-footer-accuracy { padding: 13px 15px; }
+    .pir-verdict-ribbon { padding: 11px 15px; }
+    .pir-nego-row { gap: 5px; }
+    .pir-nego-card { padding: 9px 7px; }
+    .pir-nego-card-val { font-size: .78rem; }
+    .pir-nego-arrow { font-size: .9rem; }
+  }
+  @media(max-width: 400px) {
+    .pir-price-grid { grid-template-columns: 1fr; }
+    .pir-price-cell { border-right: none; border-bottom: 1px solid #E8EBF3; }
+    .pir-price-cell:last-child { border-bottom: none; }
+    .pir-vehicle-block { grid-template-columns: 90px 1fr; }
+    .pir-depr-header, .pir-depr-row { grid-template-columns: 1fr 1fr 1.4fr; }
+    .pir-depr-row .pir-depr-rate,
+    .pir-depr-header span:nth-child(2) { display: none; }
+    .pir-nego-row { flex-wrap: wrap; }
+    .pir-nego-arrow { display: none; }
+    .pir-nego-card { flex: 1 1 calc(50% - 10px); min-width: 80px; }
+  }
+
   </style>
 <body>
 
@@ -3698,7 +4201,8 @@
       </div>
     </nav>
     <div class="hero-hl">
-      <p class="hero-tag">Live UAE Car Values,<br><em>No Guessing.</em></p>
+      <p class="hero-tag">Price Intelligence<br><em>Report</em></p>
+      <p class="hero-sub-line">Smart estimate using current UAE market data</p>
       <div class="hero-trust">
         <div class="ht"><span class="htd"></span>50,000+ real UAE listings</div>
         <div class="ht"><span class="htd"></span>Live</div>
@@ -4698,22 +5202,20 @@ function toggleWhy(){
 
 /* ── REFERENCE NUMBER ───────────────────────────────────── */
 function generateRef(){
-  // Sequential counter starting at 11
-  let n=11;
-  try{n=parseInt(localStorage.getItem('ks_ref_n')||'10')+1;}catch{}
-  try{localStorage.setItem('ks_ref_n',n);}catch{}
+  // Sequential counter starting at 235, increments globally on every button click
+  let n=235;
+  try{const stored=parseInt(localStorage.getItem('pir_ref_n'));if(!isNaN(stored)&&stored>=235){n=stored+1;}else{n=235;}}catch{}
+  try{localStorage.setItem('pir_ref_n',n);}catch{}
 
   const now=new Date();
-  const hh=String(now.getHours()).padStart(2,'0');
-  const mm=String(now.getMinutes()).padStart(2,'0');
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const dd=String(now.getDate()).padStart(2,'0');
-  const mon=months[now.getMonth()];
+  const mm=String(now.getMonth()+1).padStart(2,'0');
   const yyyy=now.getFullYear();
+  const dateStr=`${dd}${mm}${yyyy}`;
 
   return{
-    num:11,
-    label:"Ref. #11-2309030426",
+    num:n,
+    label:`${dateStr}-${n}`,
   };
 }
 
@@ -4911,6 +5413,20 @@ function buildOwnershipCost(price,deprAmt,carYear){
 
 function confPctToPos(conf){return Math.max(5,Math.min(95,conf));}
 
+/* ── PIR COLOUR HEX HELPER ──────────────────────────────── */
+function _pirColourHex(name){
+  const map={
+    'White':'#F5F5F0','Pearl White':'#F0EFE8','Black':'#1A1A1A','Midnight Black':'#0D0D0D',
+    'Silver':'#B0B4B8','Gray':'#808080','Dark Gray':'#4A4A4A','Blue':'#2563EB',
+    'Dark Blue':'#1E3A8A','Light Blue':'#60A5FA','Red':'#DC2626','Maroon':'#7F1D1D',
+    'Burgundy':'#6B2131','Gold':'#D4AF37','Champagne':'#C8A87A','Bronze':'#A0714F',
+    'Beige':'#D4C5A9','Cream':'#FFFDD0','Sand':'#C2B280','Brown':'#6F4E37',
+    'Green':'#16A34A','Dark Green':'#14532D','Orange':'#EA580C','Yellow':'#EAB308',
+    'Purple':'#7C3AED','Other':'#9CA3AF'
+  };
+  return map[name]||'#9CA3AF';
+}
+
 /* ── BUILD RESULT HTML ──────────────────────────────────── */
 function buildResult(r,brand,model,year,mileage,asking){
   const conf=Math.round((r.confidence||0)*100);
@@ -5009,8 +5525,8 @@ function buildResult(r,brand,model,year,mileage,asking){
   // AI factors
   const aiSec=ai?.key_factors?.length?`<div class="rpt-section r-ai-section"><div class="rpt-section-title">Key Value Factors</div><div class="rpt-ai-factors">${ai.key_factors.map(f=>`<div class="rpt-ai-factor">${f}</div>`).join('')}</div>${ai.advice?`<p class="rpt-ai-text" style="margin-top:10px">${ai.advice}</p>`:''}</div>`:'';
 
-  // Flags
-  const allF=[...gF.map(f=>`<div class="rpt-flag green"><div class="rpt-flag-dot"></div>${f}</div>`),...rF.map(f=>`<div class="rpt-flag red"><div class="rpt-flag-dot"></div>${f}</div>`)];
+  // Flags — pir-flag classes for new PIR layout
+  const allF=[...gF.map(f=>`<div class="pir-flag pir-flag-green"><span class="pir-flag-dot pir-flag-dot-green"></span><span>${f}</span></div>`),...rF.map(f=>`<div class="pir-flag pir-flag-red"><span class="pir-flag-dot pir-flag-dot-red"></span><span>${f}</span></div>`)];
   const flagSec=allF.length?`<div class="rpt-section"><div class="rpt-section-title">Buyer's Checklist</div><div class="rpt-flags-grid">${allF.join('')}</div></div>`:'';
 
   // Negotiation
@@ -5051,67 +5567,283 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>
     ${comp>0?`<p class="rpt-acc-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</p>`:''}</div>`;
 
-  return`<div class="rpt-wrap r-card">
-  <div class="rpt-header">
-    <div class="rpt-header-top">
-      <a class="rpt-hdr-logo" href="#"><span class="rpt-hdr-icon"><svg viewBox="0 0 20 20"><path d="M10 2L2 18h7l1-4 1 4h7z"/></svg></span><span class="rpt-hdr-kam">Kam</span><span class="rpt-hdr-say">Sayara</span></a>
-      <span class="rpt-hdr-ref">${ref.label}</span>
-    </div>
-    <div class="rpt-header-body">
-      <div class="rpt-header-info">
-        <h1 class="rpt-vehicle-title">${year} ${brand}${model?' '+model:''} – ${specVal} Spec</h1>
-        <p class="rpt-vehicle-sub">${colourVal?'Color: '+colourVal+' | ':''}Mileage: ${kmFmt} km${emirVal?' | '+emirVal:''}</p>
+  // ── Price Intelligence Report — build vehicle identity prose ──
+  const bodyStr   = g('body')?.value||'';
+  const ownersStr = g('owners')?.value||'';
+  const accSel    = g('accidentSel')?.value||'none';
+  const warSel    = g('warrantySel')?.value||'';
+  const svcDisplay= svcVal||'Not Available';
+  const condDisplay=condVal||'—';
+  const sellerDisplay=sellerVal||'—';
+  const singleOwnerDisplay=qs.singleOwner===true?'Yes':qs.singleOwner===false?'No':'—';
+  const accidentDisplay=accSel==='none'||!accSel?'No':(accSel.charAt(0).toUpperCase()+accSel.slice(1)+' accident');
+  const warrantyDisplay=warSel==='active'||qs.warranty===true?'Active':warSel==='extended'?'Extended':qs.warranty===false?'No':'—';
+  const serviceDisplay=svcVal==='Full Agency'||svcVal==='Agency'?svcVal:svcVal||'Not Available';
+  const bodyDisplay=bodyStr||'Sedan';
+  const specDisplay=specVal||'GCC Spec';
+  const colourDisplay=colourVal||'—';
+  const trimDisplay=g('trim')?.value||'';
+
+  // Vehicle identity line 1: Make Model Year Trim KM • Spec • Body • Colour
+  const identLine1Parts=[`${brand} ${model||''}`.trim(),year,trimDisplay].filter(Boolean);
+  const identLine2Parts=[`${kmFmt} km`,specDisplay,bodyDisplay,colourDisplay].filter(s=>s&&s!=='—');
+  const identLine3Parts=[`Condition: ${condDisplay}`,`Seller: ${sellerDisplay||'—'}`].filter(Boolean);
+  const identLine4Parts=[`Service History: ${serviceDisplay}`,`Warranty: ${warrantyDisplay}`].filter(Boolean);
+  const identLine5Parts=[`Single Owner: ${singleOwnerDisplay}`,`Accident: ${accidentDisplay}`].filter(Boolean);
+
+  // Market position text
+  const positionPct=posPct!==null?(100-posPct):null;
+  const mktPositionText=positionPct!==null?`Top ${positionPct}% of comparable listings`:'Market reference established';
+
+  // Trend icon for depreciation
+  const deprIcon=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4l5 6 5-6" stroke="#C0392B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  // FMV delta vs asking
+  let deltaHtml='';
+  if(askN&&avg){
+    const delta=avg-askN;
+    const deltaPct=Math.round(Math.abs(delta)/avg*100);
+    if(Math.abs(delta)>500){
+      const sign=delta>0?'+':'−';
+      const cls=delta>0?'pir-delta-pos':'pir-delta-neg';
+      deltaHtml=`<div class="${cls}"><span>${sign}AED ${Math.abs(delta).toLocaleString()}</span><span class="pir-delta-pct">${deltaPct}% vs asking</span></div>`;
+    }
+  }
+
+  // Confidence ring width
+  const confWidth=Math.max(5,Math.min(95,conf));
+
+  return`<div class="pir-wrap">
+
+  <!-- ① REPORT HEADER -->
+  <div class="pir-header">
+    <div class="pir-header-top">
+      <div class="pir-title-block">
+        <div class="pir-eyebrow">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="rgba(212,175,55,0.8)" stroke-width="1"/><circle cx="5" cy="5" r="1.8" fill="rgba(212,175,55,0.9)"/></svg>
+          UAE Car Market
+        </div>
+        <div class="pir-main-title">Price Intelligence Report</div>
+        <div class="pir-sub">Smart estimate using current UAE market data</div>
       </div>
-      <div class="rpt-car-img-wrap">
-        <img class="rpt-car-img" src="${imgUrl}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="${year} ${brand}">
-        <div class="rpt-car-placeholder"><span class="rpt-car-ph-k">K</span></div>
+      <div class="pir-ref-block">
+        <div class="pir-ref-code">${ref.label}</div>
+        <div class="pir-ref-note">Based on live UAE market data</div>
       </div>
     </div>
   </div>
-  <div class="rpt-verdict">
-    <span class="rpt-verdict-badge ${vk}">${vl}</span>
-    <div class="rpt-buddy-para">${para}</div>
-  </div>
-  <div class="rpt-body">
-    <div class="rpt-left r-price-section">
-      <div class="rpt-col-title">Market Dynamics</div>
-      <div class="rpt-conf-area">
-        <div class="rpt-conf-top"><span class="rpt-conf-lbl">Confidence</span><span class="rpt-conf-pct-badge">${conf}%</span></div>
-        <div class="rpt-conf-bar"><div class="rpt-conf-needle" style="left:${confPctToPos(conf)}%"></div></div>
-        <div class="rpt-conf-ends"><span>Low</span><span class="rpt-conf-mid">${confLabel}</span><span>High</span></div>
+
+  <!-- ② VEHICLE IDENTITY -->
+  <div class="pir-vehicle-block">
+    <div class="pir-vehicle-img">
+      <img src="${imgUrl}" alt="${year} ${brand} ${model||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="pir-img-fallback">
+        <svg viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 28 L12 16 Q14 13 18 13 L28 11 Q32 10 35 12 L50 14 Q55 14 58 17 L67 22 Q70 23 70 26 L70 28 Q70 30 68 30 L60 30 Q58 34 54 34 Q50 34 48 30 L26 30 Q24 34 20 34 Q16 34 14 30 L7 30 Q5 30 5 28Z" fill="rgba(26,43,76,0.12)" stroke="rgba(26,43,76,0.3)" stroke-width="1"/>
+          <circle cx="20" cy="31" r="4" fill="rgba(26,43,76,0.2)" stroke="rgba(26,43,76,0.4)" stroke-width="1"/>
+          <circle cx="54" cy="31" r="4" fill="rgba(26,43,76,0.2)" stroke="rgba(26,43,76,0.4)" stroke-width="1"/>
+        </svg>
       </div>
-      <div class="rpt-slider-wrapper">
-        <div class="rpt-slider-area">
-          <div class="rpt-slider-bubble" style="left:${starPct}%">AED ${offerPx.toLocaleString()}</div>
-          <div class="rpt-slider-star" style="left:${starPct}%">★</div>
-          <div class="rpt-slider-track"></div>
-          <div class="rpt-slider-ends"><span>AED ${sliderLow.toLocaleString()}</span><span>AED ${sldrHigh.toLocaleString()}</span></div>
-          <div class="rpt-slider-offer-lbl" style="left:${starPct}%">Current Offer<br>AED ${offerPx.toLocaleString()}</div>
+      ${colourDisplay&&colourDisplay!=='—'?`<div class="pir-colour-chip" style="background:${_pirColourHex(colourDisplay)}"></div>`:''}
+    </div>
+    <div class="pir-vehicle-info">
+      <div class="pir-vehicle-name">${brand} ${model||''} ${year}${trimDisplay?' '+trimDisplay:''}</div>
+      <div class="pir-vehicle-meta">${identLine2Parts.join(' • ')}</div>
+      <div class="pir-vehicle-details">
+        <span>${identLine3Parts.join(' &nbsp;·&nbsp; ')}</span>
+        <span>${identLine4Parts.join(' &nbsp;·&nbsp; ')}</span>
+        <span>${identLine5Parts.join(' &nbsp;·&nbsp; ')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ MARKET VERDICT RIBBON -->
+  <div class="pir-verdict-ribbon pir-verdict-${vk}">
+    <div class="pir-verdict-badge-wrap">
+      <span class="pir-verdict-pill">${vl}</span>
+    </div>
+    <div class="pir-verdict-text">${para}</div>
+  </div>
+
+  <!-- ④ PRICE INTELLIGENCE CORE — 3-col grid -->
+  <div class="pir-price-grid">
+
+    <!-- FMV -->
+    <div class="pir-price-cell pir-fmv-cell">
+      <div class="pir-cell-label">Fair Market Value</div>
+      <div class="pir-fmv-amount" id="priceMain">AED 0</div>
+      <div class="pir-fmv-range">Range: AED ${(low||Math.round(avg*.88)).toLocaleString()} – ${(high||Math.round(avg*1.12)).toLocaleString()}</div>
+      ${dealInfo?`<div class="pir-deal-pill pir-deal-${dealInfo.cls}">${dealInfo.label}</div>`:''}
+      ${deltaHtml}
+    </div>
+
+    <!-- Market Position Bar -->
+    <div class="pir-price-cell pir-pos-cell">
+      <div class="pir-cell-label">Market Position</div>
+      <div class="pir-pos-track-wrap">
+        <div class="pir-pos-labels"><span>Low</span><span>High</span></div>
+        <div class="pir-pos-track">
+          <div class="pir-pos-fill" style="width:${starPct}%"></div>
+          <div class="pir-pos-marker" style="left:${starPct}%">
+            <div class="pir-pos-marker-dot"></div>
+            <div class="pir-pos-tooltip">AED ${offerPx.toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="pir-pos-ends">
+          <span>AED ${sliderLow.toLocaleString()}</span>
+          <span>AED ${sldrHigh.toLocaleString()}</span>
         </div>
       </div>
-      <div class="rpt-analysis">${analysisText}${posPct!==null?' Placing this vehicle in the top '+(100-posPct)+'% of priced entries.':''}</div>
-      ${adjItems.length?`<div class="r-bar-section" style="margin-top:0"><div class="rpt-cond-title">Condition Snapshot</div><table class="rpt-cond-table">${adjItems.map(a=>`<tr><td class="rpt-cond-name">${a.name}</td><td class="rpt-cond-amt ${a.positive?'pos':'neg'}">${a.positive?'+':'−'}AED ${a.amount.toLocaleString()}</td></tr>`).join('')}</table></div>`:''}
+      <div class="pir-pos-note">${mktPositionText}</div>
     </div>
-    <div class="rpt-right r-vs-section">
-      <div>
-        <div class="rpt-fmv-lbl">Fair Market Value</div>
-        <div class="rpt-fmv-price" id="priceMain">AED 0</div>
-        ${dealInfo?`<span class="rpt-deal-badge ${dealInfo.cls}">${dealInfo.label}</span>`:''}
+
+    <!-- Data Confidence -->
+    <div class="pir-price-cell pir-conf-cell">
+      <div class="pir-cell-label">Data Confidence</div>
+      <div class="pir-conf-ring-wrap">
+        <svg viewBox="0 0 64 64" class="pir-conf-ring">
+          <circle cx="32" cy="32" r="26" fill="none" stroke="#eef0f4" stroke-width="6"/>
+          <circle cx="32" cy="32" r="26" fill="none" stroke="${conf>=75?'#1A8C6B':conf>=50?'#B8780A':'#C0392B'}" stroke-width="6"
+            stroke-dasharray="${(confWidth/100)*163.4} 163.4"
+            stroke-dashoffset="40.9" stroke-linecap="round"/>
+          <text x="32" y="36" text-anchor="middle" font-family="'Exo 2',sans-serif" font-size="13" font-weight="800" fill="#1A2B4C">${conf}%</text>
+        </svg>
       </div>
-      ${askN?`<div><div class="rpt-chart-wrap">
-        <div class="rpt-bar-group"><span class="rpt-bar-price">AED ${askN.toLocaleString()}</span><div class="rpt-bar navy" style="height:${askBarH}px"></div><span class="rpt-bar-name">Asking Price</span></div>
-        <div class="rpt-bar-group"><span class="rpt-bar-price">AED ${avg.toLocaleString()}</span><div class="rpt-bar gold" style="height:${avgBarH}px"></div><span class="rpt-bar-name">Fair Market Value</span></div>
-      </div><div class="rpt-chart-baseline"></div></div>`:''}
-      <div class="rpt-depr">
-        <div class="rpt-depr-lbl">Depreciation after 12 months</div>
-        <div class="rpt-depr-val">
-          <div class="rpt-depr-arrow"><svg viewBox="0 0 12 12" fill="none"><path d="M2 3l4 6 4-6" stroke="#1A2B4C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <span class="rpt-depr-num">−AED ${deprAmt.toLocaleString()}</span>
-        </div>
+      <div class="pir-conf-label">${confLabel}</div>
+      ${comp>0?`<div class="pir-conf-note">${comp} comparable listings</div>`:''}
+    </div>
+
+  </div>
+
+  <!-- ⑤ ANALYSIS TEXT -->
+  <div class="pir-analysis-block">
+    <div class="pir-analysis-label">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="var(--accent)" stroke-width="1.2"/><path d="M3 6h6M3 4h4M3 8h5" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round"/></svg>
+      Market Analysis
+    </div>
+    <p class="pir-analysis-text">${analysisText}${posPct!==null?' This vehicle sits in the '+mktPositionText.toLowerCase()+'.':''}</p>
+  </div>
+
+  <!-- ⑥ CONDITION SNAPSHOT -->
+  ${adjItems.length?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L8 5h4.5L9 7.5l1.5 4L6.5 9 3 11.5l1.5-4L1 5H5.5z" stroke="#D4AF37" stroke-width="1.2" stroke-linejoin="round"/></svg>
+      Value Adjustments
+    </div>
+    <div class="pir-adjustments">
+      ${adjItems.map(a=>`<div class="pir-adj-row">
+        <span class="pir-adj-name">${a.name}</span>
+        <span class="pir-adj-val ${a.positive?'pos':'neg'}">${a.positive?'+':'−'} AED ${a.amount.toLocaleString()}</span>
+      </div>`).join('')}
+    </div>
+  </div>`:''}
+
+  <!-- ⑦ BUYER'S CHECKLIST -->
+  ${allF.length?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3 3 6-6" stroke="#1A8C6B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Buyer's Checklist
+    </div>
+    <div class="pir-checklist-grid">
+      ${allF.join('')}
+    </div>
+  </div>`:''}
+
+  <!-- ⑧ NEGOTIATION GUIDE -->
+  ${nego?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 9l2-7h6l2 7" stroke="#1A2B4C" stroke-width="1.2" stroke-linecap="round"/><path d="M1 9h11" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Negotiation Guide
+    </div>
+    <div class="pir-nego-row">
+      <div class="pir-nego-card pir-nego-open">
+        <div class="pir-nego-card-label">Open With</div>
+        <div class="pir-nego-card-val">AED ${nego.offer.toLocaleString()}</div>
       </div>
+      <div class="pir-nego-arrow">→</div>
+      <div class="pir-nego-card">
+        <div class="pir-nego-card-label">Target Close</div>
+        <div class="pir-nego-card-val">AED ${nego.close.toLocaleString()}</div>
+      </div>
+      <div class="pir-nego-arrow">→</div>
+      <div class="pir-nego-card pir-nego-walk">
+        <div class="pir-nego-card-label">Walk Away At</div>
+        <div class="pir-nego-card-val warn">AED ${nego.walk.toLocaleString()}</div>
+      </div>
+    </div>
+    <div class="pir-nego-tactic">${nego.tactic}</div>
+  </div>`:''}
+
+  <!-- ⑨ TIME TO SELL -->
+  ${mktSec?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M6.5 4v2.5l2 1.5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Time to Sell
+    </div>
+    ${mkt?`<div class="pir-tts-grid">
+      ${mkt.days_at_market>0?`<div class="pir-tts-row"><span class="pir-tts-lbl">At market value</span><span class="pir-tts-val pir-tts-${dCls(mkt.days_at_market)}">~${mkt.days_at_market} days</span></div>`:''}
+      ${askN&&mkt.days_at_asking>0&&mkt.days_at_asking!==mkt.days_at_market?`<div class="pir-tts-row"><span class="pir-tts-lbl">At asking price</span><span class="pir-tts-val pir-tts-${dCls(mkt.days_at_asking)}">~${mkt.days_at_asking} days</span></div>`:''}
+      ${mkt.recommended_price>0&&askN&&mkt.recommended_price<askN?`<div class="pir-tts-row pir-tts-highlight"><span class="pir-tts-lbl">⚡ Optimal price (14-day sale)</span><span class="pir-tts-val">AED ${mkt.recommended_price.toLocaleString()}</span></div>`:''}
+    </div>${mkt.insight?`<div class="pir-tts-insight">${mkt.insight}</div>`:''}`:''}</div>`:''}
+
+  <!-- ⑩ FIRST YEAR COSTS -->
+  <div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="3" width="11" height="8" rx="1.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M4 3V2a2.5 2.5 0 015 0v1" stroke="#D4AF37" stroke-width="1.2"/></svg>
+      First Year Cost Estimate
+    </div>
+    <div class="pir-cost-list">
+      <div class="pir-cost-row"><span>RTA Inspection</span><span class="pir-cost-neg">−AED 170</span></div>
+      <div class="pir-cost-row"><span>Vehicle Registration</span><span class="pir-cost-neg">−AED 420</span></div>
+      <div class="pir-cost-row"><span>Ownership Transfer</span><span class="pir-cost-neg">−AED 350</span></div>
+      <div class="pir-cost-row"><span>${carYear>=2024?'Insurance (2.5% comprehensive)':'Insurance (3rd party)'}</span><span class="pir-cost-neg">−AED ${cost.ins.toLocaleString()}</span></div>
+      <div class="pir-cost-row pir-cost-total"><span>Total First-Year Fees</span><span class="pir-cost-neg">−AED ${cost.rtaOnly.toLocaleString()}</span></div>
+      <div class="pir-cost-row pir-cost-dim"><span>Est. Depreciation (yr 1)</span><span>−AED ${deprAmt.toLocaleString()}</span></div>
+      <div class="pir-cost-row pir-cost-dim"><span>Est. Maintenance</span><span>−AED ${cost.maint.toLocaleString()}</span></div>
+    </div>
+    <div class="pir-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</div>
+  </div>
+
+  <!-- ⑪ 3-YEAR VALUE PROJECTION -->
+  <div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 10L4 6l3 2 3-5 2 2" stroke="#1A2B4C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      3-Year Value Projection
+    </div>
+    <div class="pir-depr-list">
+      <div class="pir-depr-header"><span>Year End</span><span>Annual Rate</span><span>Est. Value</span><span>Total Loss</span></div>
+      ${deprRows.map(row=>`<div class="pir-depr-row">
+        <span class="pir-depr-year">${row.year}</span>
+        <span class="pir-depr-rate">${row.rate}%</span>
+        <span class="pir-depr-val">AED ${row.endVal.toLocaleString()}</span>
+        <span class="pir-depr-loss">−AED ${row.cumLoss.toLocaleString()}</span>
+      </div>`).join('')}
     </div>
   </div>
-  ${flagSec}${negoSec}${mktSec}${costSec}${deprSec}${aiSec}${accSec}
+
+  <!-- ⑫ KEY VALUE FACTORS (AI) -->
+  ${ai?.key_factors?.length?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5C4 1.5 2 3.5 2 6s1.5 3.5 2 4l1 1.5h3L9 10c.5-.5 2-1.5 2-4s-2-4.5-4.5-4.5z" stroke="#1A2B4C" stroke-width="1.1"/><path d="M4.5 11.5h4" stroke="#D4AF37" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Key Value Factors
+    </div>
+    <div class="pir-factors-list">
+      ${ai.key_factors.map(f=>`<div class="pir-factor-item"><span class="pir-factor-dot"></span><span>${f}</span></div>`).join('')}
+    </div>
+    ${ai.advice?`<div class="pir-ai-advice">${ai.advice}</div>`:''}
+  </div>`:''}
+
+  <!-- ⑬ DATA ACCURACY FOOTER -->
+  <div class="pir-footer-accuracy">
+    <div class="pir-footer-conf">
+      <span class="pir-footer-conf-lbl">Confidence</span>
+      <div class="pir-footer-bar-wrap"><div class="pir-footer-bar" style="width:${conf}%"></div></div>
+      <span class="pir-footer-conf-pct">${conf}%</span>
+    </div>
+    ${comp>0?`<div class="pir-footer-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</div>`:''}
+    <div class="pir-footer-ref">${ref.label} &nbsp;|&nbsp; Based on live UAE market data</div>
+  </div>
+
 </div>`;
 }
 async function checkCarPrice(){
