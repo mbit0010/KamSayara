@@ -4107,6 +4107,285 @@
     padding-top: 4px; border-top: 1px solid #DDE4EE;
   }
 
+  /* ── PRICE SUMMARY (PRIMARY FOCUS) ── */
+  .pir-ps-wrap {
+    border-bottom: 1px solid #E8EBF3;
+    background: linear-gradient(180deg, #F8FAFD 0%, #fff 100%);
+  }
+
+  /* Hero — Handshake price */
+  .pir-ps-hero {
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid #EEF1F8;
+    display: flex; align-items: flex-start; gap: 14px;
+    flex-wrap: wrap;
+  }
+  .pir-ps-hero-label {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .54rem; font-weight: 800; letter-spacing: .18em;
+    text-transform: uppercase; color: #7A8FA8;
+    padding-top: 10px; flex-basis: 100%;
+    margin-bottom: -4px;
+  }
+  .pir-ps-hero-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #008577; flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(0,133,119,0.18);
+  }
+  .pir-ps-micro {
+    font-size: .5rem; font-weight: 600; color: #A8B8CC;
+    letter-spacing: .1em; text-transform: uppercase; margin-left: 3px;
+  }
+  .pir-ps-hero-amount {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 700; color: #0F1E38;
+    letter-spacing: -.03em; line-height: 1;
+    flex: 1; min-width: 0;
+  }
+  .pir-ps-hero-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 13px; border-radius: 99px;
+    font-size: .62rem; font-weight: 800; letter-spacing: .06em;
+    align-self: flex-end; margin-bottom: 4px; flex-shrink: 0;
+  }
+  .pir-ps-hero-badge::before {
+    content: ''; width: 7px; height: 7px; flex-shrink: 0;
+    border-radius: 50%; background: currentColor; opacity: .6;
+  }
+
+  /* Three secondary cards */
+  .pir-ps-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: none;
+  }
+  .pir-ps-card {
+    padding: 14px 16px;
+    border-right: 1px solid #EEF1F8;
+    display: flex; flex-direction: column; gap: 5px;
+    background: #fff;
+  }
+  .pir-ps-card:last-child { border-right: none; }
+  .pir-ps-card-nego {
+    background: linear-gradient(160deg, #FFFDE7 0%, #FFF9C4 100%);
+    border-left: 2px solid #F6CC3E;
+  }
+  .pir-ps-card-range { background: #FAFBFD; }
+  .pir-ps-card-top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+  }
+  .pir-ps-card-label {
+    font-size: .54rem; font-weight: 800; letter-spacing: .14em;
+    text-transform: uppercase; color: #4A5E7A;
+  }
+  .pir-ps-card-def {
+    font-size: .48rem; font-weight: 600; color: #A8B8CC;
+    letter-spacing: .06em; white-space: nowrap;
+  }
+  .pir-ps-card-val {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(.88rem, 2.5vw, 1.15rem);
+    font-weight: 700; color: #0F1E38;
+    letter-spacing: -.02em; line-height: 1.1;
+  }
+  .pir-ps-card-aed {
+    font-family: "Exo 2", sans-serif;
+    font-size: .52rem; font-weight: 700; color: #8A9AB8;
+    letter-spacing: .06em; margin-left: 3px; vertical-align: super;
+  }
+  .pir-ps-card-na { color: #B0BBC8; font-size: .8rem !important; font-family: "Exo 2", sans-serif !important; }
+  .pir-ps-card-delta {
+    font-size: .58rem; font-weight: 700; line-height: 1.3;
+  }
+  .pir-ps-delta-over   { color: #991B1B; }
+  .pir-ps-delta-under  { color: #15803D; }
+  .pir-ps-delta-tactic { color: #92400E; }
+  .pir-ps-delta-spread { color: #7A8FA8; }
+
+  /* Market Range card */
+  .pir-ps-range-vals {
+    display: flex; align-items: center; gap: 5px;
+    font-family: "Exo 2", sans-serif;
+    font-size: .7rem; font-weight: 700; color: #0F1E38;
+    flex-wrap: wrap;
+  }
+  .pir-ps-range-min { color: #15803D; }
+  .pir-ps-range-max { color: #991B1B; }
+  .pir-ps-range-arrow { color: #C8D4E4; font-size: .75rem; flex-shrink: 0; }
+
+  /* Micro legend */
+  .pir-ps-legend {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 8px 22px 10px;
+    font-size: .52rem; color: #A8B8CC; line-height: 1.4;
+    border-top: 1px solid #EEF1F8;
+    background: #FAFBFD;
+  }
+  .pir-ps-legend strong { color: #6A7E9A; }
+  .pir-ps-legend-sep { color: #DDE4EE; }
+
+  /* ── MARKET POSITION VISUAL ── */
+  .pir-mp-wrap {
+    padding: 17px 22px 18px;
+    border-bottom: 1px solid #E8EBF3;
+    background: #fff;
+  }
+  .pir-mp-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; gap: 10px;
+  }
+  .pir-mp-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .54rem; font-weight: 800; letter-spacing: .15em;
+    text-transform: uppercase; color: #152040;
+  }
+  .pir-mp-conf {
+    display: flex; align-items: center; gap: 8px;
+    font-size: .52rem; color: #8A9AB8; font-weight: 600;
+  }
+  .pir-mp-conf-bar-wrap {
+    width: 52px; height: 4px; background: #DDE4EE;
+    border-radius: 99px; overflow: hidden; flex-shrink: 0;
+  }
+  .pir-mp-conf-bar {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #EF4444, #EAB308 50%, #22C55E);
+    transition: width .8s var(--ease);
+  }
+
+  /* Label row above the bar */
+  .pir-mp-bar-labels { position: relative; height: 40px; margin-bottom: 2px; }
+  .pir-mp-label {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 1px; pointer-events: none;
+  }
+  .pir-mp-label-val {
+    font-family: "Exo 2", sans-serif;
+    font-size: .6rem; font-weight: 800; white-space: nowrap;
+    padding: 2px 6px; border-radius: 4px; line-height: 1.3;
+  }
+  .pir-mp-label-name {
+    font-size: .48rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .pir-mp-label-stem {
+    width: 1.5px; height: 8px; border-radius: 1px;
+  }
+
+  /* Handshake label — teal */
+  .pir-mp-label-handshake .pir-mp-label-val { background: rgba(0,133,119,0.1); color: #008577; }
+  .pir-mp-label-handshake .pir-mp-label-name { color: #008577; }
+  .pir-mp-stem-handshake { background: #008577; }
+
+  /* Sticker label — navy */
+  .pir-mp-label-sticker .pir-mp-label-val { background: rgba(15,30,56,0.08); color: #0F1E38; }
+  .pir-mp-label-sticker .pir-mp-label-name { color: #3D5280; }
+  .pir-mp-stem-sticker { background: #3D5280; }
+
+  /* Nego label — amber */
+  .pir-mp-label-nego .pir-mp-label-val { background: rgba(217,119,6,0.1); color: #92400E; }
+  .pir-mp-label-nego .pir-mp-label-name { color: #92400E; }
+  .pir-mp-stem-nego { background: #D97706; }
+
+  /* The bar track */
+  .pir-mp-bar-track {
+    position: relative; height: 10px;
+    border-radius: 99px; overflow: visible;
+    background: #EEF1F8;
+    margin-bottom: 6px;
+  }
+  .pir-mp-bar-fill {
+    position: absolute; inset: 0; border-radius: 99px;
+    background: linear-gradient(90deg,
+      #22C55E  0%,
+      #86EFAC 20%,
+      #FDE68A 50%,
+      #FCA5A5 80%,
+      #EF4444 100%);
+    opacity: .75;
+  }
+
+  /* Markers */
+  .pir-mp-marker {
+    position: absolute; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+  .pir-mp-marker-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+  }
+  .pir-mp-dot-nego   { background: #D97706; }
+  .pir-mp-dot-sticker { background: #3D5280; }
+
+  /* Car icon marker — handshake */
+  .pir-mp-car-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 18px;
+    background: #0F1E38; border-radius: 5px;
+    border: 2px solid #fff;
+    box-shadow: 0 3px 10px rgba(15,30,56,0.38);
+    padding: 2px 3px;
+  }
+  .pir-mp-car-icon svg { width: 28px; height: 14px; }
+
+  /* Endpoints */
+  .pir-mp-bar-ends {
+    display: flex; justify-content: space-between;
+    font-size: .55rem; color: #A8B8CC; font-weight: 600;
+    padding-top: 4px;
+  }
+
+  /* Legend row */
+  .pir-mp-legend {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 14px; flex-wrap: wrap;
+  }
+  .pir-mp-leg-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: .56rem; font-weight: 700; color: #6A7E9A;
+    letter-spacing: .04em;
+  }
+  .pir-mp-leg-car {
+    width: 22px; height: 11px;
+    background: #0F1E38; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1px 2px; flex-shrink: 0;
+  }
+  .pir-mp-leg-car svg { width: 100%; height: 100%; }
+  .pir-mp-leg-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0; border: 1.5px solid rgba(255,255,255,0.8);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  }
+  .pir-mp-dot-sticker-leg { background: #3D5280; }
+  .pir-mp-dot-nego-leg    { background: #D97706; }
+
+  /* Responsive */
+  @media(max-width: 600px) {
+    .pir-ps-hero { padding: 16px 16px 12px; }
+    .pir-ps-hero-amount { font-size: clamp(1.5rem, 7vw, 2rem); }
+    .pir-ps-cards { grid-template-columns: 1fr 1fr; }
+    .pir-ps-card-range { grid-column: 1 / -1; border-right: none; border-top: 1px solid #EEF1F8; }
+    .pir-ps-legend { padding: 7px 16px 9px; gap: 6px; }
+    .pir-mp-wrap { padding: 14px 16px 15px; }
+    .pir-mp-label-val { font-size: .54rem; }
+    .pir-mp-label-name { font-size: .44rem; }
+    .pir-mp-bar-labels { height: 36px; }
+  }
+  @media(max-width: 400px) {
+    .pir-ps-cards { grid-template-columns: 1fr; }
+    .pir-ps-card { border-right: none; border-bottom: 1px solid #EEF1F8; }
+    .pir-ps-card:last-child { border-bottom: none; }
+    .pir-ps-card-range { grid-column: auto; border-top: none; }
+    .pir-mp-label-sticker,
+    .pir-mp-marker-sticker { display: none; }
+  }
+
   /* ── PIR PRINT ── */
   @media print {
     .pir-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -5613,6 +5892,23 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Confidence ring width
   const confWidth=Math.max(5,Math.min(95,conf));
 
+  // ── PRICE SUMMARY computed values ──────────────────────────────
+  // Handshake = fair deal close price (avg adjusted for condition/accident)
+  const condAdj = condVal==='Excellent'?.02:condVal==='Very Good'?.01:condVal==='Fair'?-.02:condVal==='Poor'?-.05:0;
+  const accAdj  = (accVal==='minor'||qs.accident===true)?-.04:(accVal==='major')?-.08:0;
+  const handshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
+  // Sticker = asking price (if provided) or null
+  const stickerPrice = askN||null;
+  // Negotiation = smart entry point: slightly below lower end of range
+  const rangeMin = low||Math.round(avg*.82);
+  const rangeMax = high||Math.round(avg*1.18);
+  const negoEntry = nego ? nego.offer : Math.round(rangeMin*.97/500)*500;
+  // Market position % for the bar — based on handshake vs full range
+  const pirRng = rangeMax - rangeMin;
+  const handshakePct = pirRng>0 ? Math.max(3,Math.min(97,Math.round(((handshake-rangeMin)/pirRng)*100))) : 50;
+  const stickerPct   = stickerPrice&&pirRng>0 ? Math.max(3,Math.min(97,Math.round(((stickerPrice-rangeMin)/pirRng)*100))) : null;
+  const negoPct      = pirRng>0 ? Math.max(3,Math.min(97,Math.round(((negoEntry-rangeMin)/pirRng)*100))) : 20;
+
   return`<div class="pir-wrap">
 
   <!-- ① REPORT HEADER -->
@@ -5665,57 +5961,180 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="pir-verdict-text">${para}</div>
   </div>
 
-  <!-- ④ PRICE INTELLIGENCE CORE — 3-col grid -->
-  <div class="pir-price-grid">
+  <!-- ④ PRICE SUMMARY — PRIMARY FOCUS -->
+  <div class="pir-ps-wrap">
 
-    <!-- FMV -->
-    <div class="pir-price-cell pir-fmv-cell">
-      <div class="pir-cell-label">Fair Market Value</div>
-      <div class="pir-fmv-amount" id="priceMain">AED 0</div>
-      <div class="pir-fmv-range">Range: AED ${(low||Math.round(avg*.88)).toLocaleString()} – ${(high||Math.round(avg*1.12)).toLocaleString()}</div>
-      ${dealInfo?`<div class="pir-deal-pill pir-deal-${dealInfo.cls}">${dealInfo.label}</div>`:''}
-      ${deltaHtml}
+    <!-- Handshake price — dominant -->
+    <div class="pir-ps-hero">
+      <div class="pir-ps-hero-label">
+        <span class="pir-ps-hero-dot"></span>
+        Handshake Price
+        <span class="pir-ps-micro">Fair deal · AI-estimated</span>
+      </div>
+      <div class="pir-ps-hero-amount" id="priceMain">AED 0</div>
+      ${dealInfo?`<div class="pir-ps-hero-badge pir-deal-${dealInfo.cls}">${dealInfo.label}</div>`:''}
     </div>
 
-    <!-- Market Position Bar -->
-    <div class="pir-price-cell pir-pos-cell">
-      <div class="pir-cell-label">Market Position</div>
-      <div class="pir-pos-track-wrap">
-        <div class="pir-pos-labels"><span>Low</span><span>High</span></div>
-        <div class="pir-pos-track">
-          <div class="pir-pos-fill" style="width:${starPct}%"></div>
-          <div class="pir-pos-marker" style="left:${starPct}%">
-            <div class="pir-pos-marker-dot"></div>
-            <div class="pir-pos-tooltip">AED ${offerPx.toLocaleString()}</div>
+    <!-- Three secondary price cards -->
+    <div class="pir-ps-cards">
+
+      <!-- Sticker Price -->
+      <div class="pir-ps-card">
+        <div class="pir-ps-card-top">
+          <span class="pir-ps-card-label">Sticker Price</span>
+          <span class="pir-ps-card-def">Seller asking</span>
+        </div>
+        ${stickerPrice
+          ? `<div class="pir-ps-card-val">${stickerPrice.toLocaleString()}<span class="pir-ps-card-aed">AED</span></div>`
+          : `<div class="pir-ps-card-val pir-ps-card-na">Not provided</div>`
+        }
+        ${stickerPrice&&avg?(()=>{
+          const d=stickerPrice-handshake;
+          const pct=Math.round(Math.abs(d)/handshake*100);
+          if(pct<1) return '';
+          return d>0
+            ? `<div class="pir-ps-card-delta pir-ps-delta-over">+${pct}% above fair value</div>`
+            : `<div class="pir-ps-card-delta pir-ps-delta-under">${pct}% below fair value</div>`;
+        })():''}
+      </div>
+
+      <!-- Negotiation Price -->
+      <div class="pir-ps-card pir-ps-card-nego">
+        <div class="pir-ps-card-top">
+          <span class="pir-ps-card-label">Negotiation Price</span>
+          <span class="pir-ps-card-def">Smart entry</span>
+        </div>
+        <div class="pir-ps-card-val">${negoEntry.toLocaleString()}<span class="pir-ps-card-aed">AED</span></div>
+        ${nego?`<div class="pir-ps-card-delta pir-ps-delta-tactic">${nego.room}% room to negotiate</div>`:''}
+      </div>
+
+      <!-- Market Range -->
+      <div class="pir-ps-card pir-ps-card-range">
+        <div class="pir-ps-card-top">
+          <span class="pir-ps-card-label">Market Range</span>
+          <span class="pir-ps-card-def">Min → Max</span>
+        </div>
+        <div class="pir-ps-range-vals">
+          <span class="pir-ps-range-min">AED ${rangeMin.toLocaleString()}</span>
+          <span class="pir-ps-range-arrow">→</span>
+          <span class="pir-ps-range-max">AED ${rangeMax.toLocaleString()}</span>
+        </div>
+        <div class="pir-ps-card-delta pir-ps-delta-spread">
+          Spread: AED ${(rangeMax-rangeMin).toLocaleString()}
+        </div>
+      </div>
+
+    </div><!-- /pir-ps-cards -->
+
+    <!-- Micro legend -->
+    <div class="pir-ps-legend">
+      <span><strong>Handshake:</strong> AI-estimated fair closing price</span>
+      <span class="pir-ps-legend-sep">·</span>
+      <span><strong>Sticker:</strong> Seller's listed asking price</span>
+      <span class="pir-ps-legend-sep">·</span>
+      <span><strong>Negotiation:</strong> Smart opening offer</span>
+    </div>
+
+  </div><!-- /pir-ps-wrap -->
+
+  <!-- ⑤ MARKET POSITION VISUAL -->
+  <div class="pir-mp-wrap">
+    <div class="pir-mp-header">
+      <div class="pir-mp-title">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M9 3.5l3 3-3 3" stroke="#8A9AB8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Market Position
+      </div>
+      <div class="pir-mp-conf">
+        <div class="pir-mp-conf-bar-wrap"><div class="pir-mp-conf-bar" style="width:${conf}%"></div></div>
+        <span>${conf}% confidence · ${comp>0?comp+' listings':'estimated'}</span>
+      </div>
+    </div>
+
+    <!-- The bar -->
+    <div class="pir-mp-bar-area">
+      <!-- Price labels above bar -->
+      <div class="pir-mp-bar-labels" style="position:relative;height:38px;margin-bottom:4px;">
+
+        ${stickerPct!==null?`
+        <div class="pir-mp-label pir-mp-label-sticker" style="left:${stickerPct}%">
+          <div class="pir-mp-label-val">AED ${stickerPrice.toLocaleString()}</div>
+          <div class="pir-mp-label-name">Sticker</div>
+          <div class="pir-mp-label-stem pir-mp-stem-sticker"></div>
+        </div>`:``}
+
+        <div class="pir-mp-label pir-mp-label-handshake" style="left:${handshakePct}%">
+          <div class="pir-mp-label-val">AED ${handshake.toLocaleString()}</div>
+          <div class="pir-mp-label-name">Handshake</div>
+          <div class="pir-mp-label-stem pir-mp-stem-handshake"></div>
+        </div>
+
+        <div class="pir-mp-label pir-mp-label-nego" style="left:${negoPct}%">
+          <div class="pir-mp-label-val">AED ${negoEntry.toLocaleString()}</div>
+          <div class="pir-mp-label-name">Negotiation</div>
+          <div class="pir-mp-label-stem pir-mp-stem-nego"></div>
+        </div>
+
+      </div><!-- /pir-mp-bar-labels -->
+
+      <!-- The range bar itself -->
+      <div class="pir-mp-bar-track">
+        <!-- Coloured gradient fill -->
+        <div class="pir-mp-bar-fill"></div>
+
+        <!-- Negotiation marker — leftmost dot -->
+        <div class="pir-mp-marker pir-mp-marker-nego" style="left:${negoPct}%">
+          <div class="pir-mp-marker-dot pir-mp-dot-nego"></div>
+        </div>
+
+        <!-- Handshake marker — car icon -->
+        <div class="pir-mp-marker pir-mp-marker-handshake" style="left:${handshakePct}%">
+          <div class="pir-mp-car-icon">
+            <svg viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 9 L4.5 4.5 Q5.5 3 7 3 L10 2.5 Q12 2 13 3 L19 3.5 Q21.5 3.5 22.5 5 L25.5 8 Q26.5 8.5 26.5 9.5 L26.5 10.5 Q26.5 11 26 11 L23.5 11 Q23 12.5 21.5 12.5 Q20 12.5 19.5 11 L8.5 11 Q8 12.5 6.5 12.5 Q5 12.5 4.5 11 L2.5 11 Q2 11 2 10.5 Z"
+                fill="#0F1E38" stroke="rgba(255,255,255,0.2)" stroke-width=".5"/>
+              <circle cx="6.5" cy="11.8" r="1.8" fill="#0F1E38" stroke="white" stroke-width=".8"/>
+              <circle cx="21.5" cy="11.8" r="1.8" fill="#0F1E38" stroke="white" stroke-width=".8"/>
+              <rect x="7.5" y="3.5" width="5" height="3.5" rx="1" fill="rgba(196,213,240,0.55)" stroke="rgba(100,150,220,0.3)" stroke-width=".5"/>
+              <rect x="14" y="3.5" width="5.5" height="3.5" rx="1" fill="rgba(196,213,240,0.55)" stroke="rgba(100,150,220,0.3)" stroke-width=".5"/>
+            </svg>
           </div>
         </div>
-        <div class="pir-pos-ends">
-          <span>AED ${sliderLow.toLocaleString()}</span>
-          <span>AED ${sldrHigh.toLocaleString()}</span>
+
+        ${stickerPct!==null?`
+        <!-- Sticker marker — circle dot -->
+        <div class="pir-mp-marker pir-mp-marker-sticker" style="left:${stickerPct}%">
+          <div class="pir-mp-marker-dot pir-mp-dot-sticker"></div>
+        </div>`:``}
+
+      </div><!-- /pir-mp-bar-track -->
+
+      <!-- Range endpoints -->
+      <div class="pir-mp-bar-ends">
+        <span>AED ${rangeMin.toLocaleString()}</span>
+        <span>AED ${rangeMax.toLocaleString()}</span>
+      </div>
+
+    </div><!-- /pir-mp-bar-area -->
+
+    <!-- Legend row -->
+    <div class="pir-mp-legend">
+      <div class="pir-mp-leg-item">
+        <div class="pir-mp-leg-car">
+          <svg viewBox="0 0 16 8" fill="none"><path d="M1 5L2.5 2.5Q3 1.5 4 1.5L6 1Q7 .8 7.5 1.5L11 1.5Q12.5 1.5 13 2.5L15 4.5Q15.5 5 15.5 5.5V6Q15.5 6.5 14.5 6.5H13Q12.8 7.5 12 7.5Q11.2 7.5 11 6.5H5Q4.8 7.5 4 7.5Q3.2 7.5 3 6.5H1.5Q1 6.5 1 6Z" fill="#0F1E38"/></svg>
         </div>
+        <span>Handshake</span>
       </div>
-      <div class="pir-pos-note">${mktPositionText}</div>
+      <div class="pir-mp-leg-item">
+        <div class="pir-mp-leg-dot pir-mp-dot-sticker-leg"></div>
+        <span>Sticker${stickerPrice?'':' (none)'}</span>
+      </div>
+      <div class="pir-mp-leg-item">
+        <div class="pir-mp-leg-dot pir-mp-dot-nego-leg"></div>
+        <span>Negotiation</span>
+      </div>
     </div>
 
-    <!-- Data Confidence -->
-    <div class="pir-price-cell pir-conf-cell">
-      <div class="pir-cell-label">Data Confidence</div>
-      <div class="pir-conf-ring-wrap">
-        <svg viewBox="0 0 64 64" class="pir-conf-ring">
-          <circle cx="32" cy="32" r="26" fill="none" stroke="#eef0f4" stroke-width="6"/>
-          <circle cx="32" cy="32" r="26" fill="none" stroke="${conf>=75?'#1A8C6B':conf>=50?'#B8780A':'#C0392B'}" stroke-width="6"
-            stroke-dasharray="${(confWidth/100)*163.4} 163.4"
-            stroke-dashoffset="40.9" stroke-linecap="round"/>
-          <text x="32" y="36" text-anchor="middle" font-family="'Exo 2',sans-serif" font-size="13" font-weight="800" fill="#1A2B4C">${conf}%</text>
-        </svg>
-      </div>
-      <div class="pir-conf-label">${confLabel}</div>
-      ${comp>0?`<div class="pir-conf-note">${comp} comparable listings</div>`:''}
-    </div>
-
-  </div>
-
-  <!-- ⑤ ANALYSIS TEXT -->
+  </div><!-- /pir-mp-wrap -->
   <div class="pir-analysis-block">
     <div class="pir-analysis-label">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="var(--accent)" stroke-width="1.2"/><path d="M3 6h6M3 4h4M3 8h5" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round"/></svg>
