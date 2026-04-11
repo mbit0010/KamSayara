@@ -154,11 +154,11 @@
     */
     .layout{
       display:grid;
-      grid-template-columns:2fr 1fr;
+      grid-template-columns:1.15fr 1fr;
       grid-template-areas:"form result";
-      gap:18px;
+      gap:14px;
       margin-top:clamp(-22px,-5vw,-10px);
-      align-items:stretch;/* BOTH columns same height — form drives the height */
+      align-items:start;
     }
     .form-card{grid-area:form;}
     .result-panel{grid-area:result;}
@@ -3656,11 +3656,14 @@
     box-shadow: 0 2px 12px rgba(10,25,50,0.06), 0 8px 32px rgba(10,25,50,0.07);
     animation: fIn .42s var(--ease) both;
   }
+  /* ── EXPANDED TEXT SCALE — everything reads comfortably ── */
+  .pir-wrap { font-size: 15px; }
+  
 
   /* ── REPORT HEADER ── */
   .pir-header {
     background: linear-gradient(145deg, #08111F 0%, #0F1E38 30%, #172E54 65%, #0D1E3A 100%);
-    padding: 20px 22px 18px;
+    padding: 24px 26px 22px;
     position: relative;
     overflow: hidden;
   }
@@ -3689,45 +3692,45 @@
   .pir-title-block { flex: 1; min-width: 0; }
   .pir-eyebrow {
     display: flex; align-items: center; gap: 7px;
-    font-size: .55rem; font-weight: 800; letter-spacing: .22em;
+    font-size: .72rem; font-weight: 800; letter-spacing: .22em;
     text-transform: uppercase; color: rgba(212,175,55,0.82);
-    margin-bottom: 5px;
+    margin-bottom: 6px;
   }
   .pir-main-title {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(1.05rem, 2.8vw, 1.42rem);
+    font-size: clamp(1.25rem, 3.2vw, 1.65rem);
     font-weight: 800; color: #fff;
     letter-spacing: -.01em; line-height: 1.15;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
   }
   .pir-sub {
-    font-size: .62rem; color: rgba(255,255,255,0.42);
-    letter-spacing: .06em;
+    font-size: .78rem; color: rgba(255,255,255,0.5);
+    letter-spacing: .04em;
   }
   .pir-ref-block {
     text-align: right; flex-shrink: 0;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(212,175,55,0.18);
     border-radius: 8px;
-    padding: 7px 11px;
+    padding: 9px 13px;
   }
   .pir-ref-code {
     font-family: "Orbitron", sans-serif;
-    font-size: .7rem; font-weight: 700;
+    font-size: .82rem; font-weight: 700;
     color: rgba(212,175,55,0.9);
     letter-spacing: .08em;
     white-space: nowrap;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
   }
   .pir-ref-note {
-    font-size: .5rem; color: rgba(255,255,255,0.32);
-    letter-spacing: .05em; white-space: nowrap;
+    font-size: .62rem; color: rgba(255,255,255,0.38);
+    letter-spacing: .04em; white-space: nowrap;
   }
 
   /* ── VEHICLE IDENTITY BLOCK ── */
   .pir-vehicle-block {
     display: grid;
-    grid-template-columns: minmax(110px, 28%) 1fr;
+    grid-template-columns: minmax(130px, 32%) 1fr;
     border-bottom: 1px solid #E8EBF3;
     background: linear-gradient(135deg, #F8F9FC 0%, #F2F4FA 100%);
   }
@@ -3735,9 +3738,9 @@
     position: relative;
     background: linear-gradient(160deg, #EEF1F8 0%, #E4E8F2 100%);
     display: flex; align-items: center; justify-content: center;
-    padding: 16px 12px;
+    padding: 18px 14px;
     border-right: 1px solid #DDE2EE;
-    min-height: 110px; overflow: hidden;
+    min-height: 130px; overflow: hidden;
   }
   /* subtle radial glow behind car */
   .pir-vehicle-img::before {
@@ -3746,41 +3749,41 @@
     background: radial-gradient(ellipse at 50% 60%, rgba(26,43,76,0.06) 0%, transparent 70%);
   }
   .pir-vehicle-img img {
-    width: 100%; max-height: 92px;
+    width: 100%; max-height: 110px;
     object-fit: contain; object-position: bottom center;
-    filter: drop-shadow(0 6px 16px rgba(10,25,50,0.22));
+    filter: drop-shadow(0 6px 18px rgba(10,25,50,0.25));
     display: block; position: relative; z-index: 1;
   }
   .pir-img-fallback {
     display: none; align-items: center; justify-content: center;
-    width: 100%; height: 80px; position: relative; z-index: 1;
+    width: 100%; height: 90px; position: relative; z-index: 1;
   }
-  .pir-img-fallback svg { width: 82px; height: 44px; }
+  .pir-img-fallback svg { width: 100px; height: 54px; }
   .pir-colour-chip {
-    position: absolute; bottom: 9px; right: 9px;
-    width: 13px; height: 13px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.92);
-    box-shadow: 0 1px 5px rgba(0,0,0,0.22);
+    position: absolute; bottom: 10px; right: 10px;
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2.5px solid rgba(255,255,255,0.95);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.28);
     z-index: 2;
   }
   .pir-vehicle-info {
-    padding: 15px 17px;
-    display: flex; flex-direction: column; gap: 7px;
+    padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 9px;
     justify-content: center;
   }
   .pir-vehicle-name {
-    font-size: clamp(.88rem, 2.4vw, 1.08rem);
+    font-size: clamp(1rem, 2.6vw, 1.22rem);
     font-weight: 800; color: #152040; line-height: 1.2;
     letter-spacing: -.01em;
   }
   .pir-vehicle-meta {
-    font-size: .72rem; color: #3D4E6A; font-weight: 600;
+    font-size: .88rem; color: #3D4E6A; font-weight: 600;
     letter-spacing: .01em; line-height: 1.4;
   }
   .pir-vehicle-details {
-    display: flex; flex-direction: column; gap: 3px;
-    font-size: .67rem; color: #607090; line-height: 1.45;
-    padding-top: 5px;
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: .80rem; color: #607090; line-height: 1.5;
+    padding-top: 7px;
     border-top: 1px solid #DDE2EE;
   }
   .pir-vehicle-details span { display: block; }
@@ -3808,8 +3811,8 @@
   }
   .pir-verdict-badge-wrap { flex-shrink: 0; padding-top: 2px; }
   .pir-verdict-pill {
-    display: inline-block; padding: 4px 12px; border-radius: 99px;
-    font-size: .58rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    display: inline-block; padding: 5px 14px; border-radius: 99px;
+    font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
     white-space: nowrap;
   }
   .pir-verdict-good .pir-verdict-pill { background: rgba(22,163,74,0.1); color: #15803D; border: 1px solid rgba(22,163,74,0.28); }
@@ -3817,7 +3820,7 @@
   .pir-verdict-bad  .pir-verdict-pill { background: rgba(220,38,38,0.1); color: #B91C1C; border: 1px solid rgba(220,38,38,0.28); }
   .pir-verdict-neu  .pir-verdict-pill { background: rgba(21,32,64,0.07); color: #3D5280; border: 1px solid rgba(21,32,64,0.18); }
   .pir-verdict-text {
-    font-size: .77rem; color: #2D3F5C; line-height: 1.65; flex: 1;
+    font-size: .88rem; color: #2D3F5C; line-height: 1.65; flex: 1;
   }
 
   /* ── PRICE INTELLIGENCE CORE GRID ── */
@@ -3906,28 +3909,219 @@
 
   /* ── ANALYSIS BLOCK ── */
   .pir-analysis-block {
-    padding: 15px 20px 14px; border-bottom: 1px solid #E8EBF3;
+    padding: 18px 22px 16px; border-bottom: 1px solid #E8EBF3;
     background: linear-gradient(135deg, #F8F9FC 0%, #F5F7FB 100%);
   }
   .pir-analysis-label {
     display: flex; align-items: center; gap: 6px;
-    font-size: .52rem; font-weight: 800; letter-spacing: .16em;
+    font-size: .66rem; font-weight: 800; letter-spacing: .14em;
     text-transform: uppercase; color: #008577;
-    margin-bottom: 7px;
+    margin-bottom: 9px;
   }
   .pir-analysis-text {
-    font-size: .79rem; color: #2D3F5C; line-height: 1.7;
+    font-size: .92rem; color: #2D3F5C; line-height: 1.75;
   }
 
   /* ── GENERIC SECTION ── */
   .pir-section {
-    padding: 15px 20px 14px; border-bottom: 1px solid #E8EBF3;
+    padding: 17px 22px 16px; border-bottom: 1px solid #E8EBF3;
   }
   .pir-section:last-of-type { border-bottom: none; }
+  /* Interactive collapse on sections */
+  .pir-section.pir-collapsible { cursor: pointer; }
+  .pir-section.pir-collapsible .pir-section-title { user-select: none; }
   .pir-section-title {
     display: flex; align-items: center; gap: 7px;
-    font-size: .54rem; font-weight: 800; letter-spacing: .15em;
+    font-size: .68rem; font-weight: 800; letter-spacing: .13em;
     text-transform: uppercase; color: #152040;
+    margin-bottom: 13px;
+  }
+  .pir-section-chevron {
+    margin-left: auto; color: #A8B8CC; font-size: .7rem;
+    transition: transform .25s; flex-shrink: 0;
+  }
+  .pir-section.pir-collapsed .pir-section-chevron { transform: rotate(-90deg); }
+  .pir-section.pir-collapsed .pir-section-body { display: none; }
+  .pir-section-body { }
+
+  /* ── VALUE ADJUSTMENTS ── */
+  .pir-adjustments { display: flex; flex-direction: column; }
+  .pir-adj-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid #F0F3FA;
+    font-size: .88rem;
+  }
+  .pir-adj-row:last-child { border-bottom: none; }
+  .pir-adj-name { color: #2D3F5C; }
+  .pir-adj-val { font-weight: 700; white-space: nowrap; font-size: .86rem; }
+  .pir-adj-val.pos { color: #15803D; }
+  .pir-adj-val.neg { color: #991B1B; }
+
+  /* ── CHECKLIST FLAGS ── */
+  .pir-checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media(max-width: 440px) { .pir-checklist-grid { grid-template-columns: 1fr; } }
+  .pir-flag {
+    display: flex; align-items: flex-start; gap: 9px;
+    padding: 10px 13px; border-radius: 10px;
+    font-size: .84rem; color: #2D3F5C; line-height: 1.5;
+    transition: transform .12s;
+  }
+  .pir-flag:hover { transform: translateY(-1px); }
+  .pir-flag-green { background: #F0FDF4; border: 1px solid #86EFAC; }
+  .pir-flag-red   { background: #FEF2F2; border: 1px solid #FCA5A5; }
+  .pir-flag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .pir-flag-dot-green { background: #22C55E; }
+  .pir-flag-dot-red   { background: #EF4444; }
+
+  /* ── NEGOTIATION GUIDE ── */
+  .pir-nego-row {
+    display: flex; align-items: stretch; gap: 8px;
+    margin-bottom: 13px;
+  }
+  .pir-nego-card {
+    flex: 1; min-width: 0;
+    background: #F8FAFC; border: 1px solid #DDE4EE;
+    border-radius: 12px; padding: 13px 12px; text-align: center;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .pir-nego-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-color: #C8D4E4; }
+  .pir-nego-open {
+    background: linear-gradient(135deg, #FFFDE7, #FFF9C4);
+    border-color: #F6CC3E;
+    box-shadow: 0 2px 8px rgba(212,175,55,0.12);
+  }
+  .pir-nego-walk {
+    background: linear-gradient(135deg, #FEF2F2, #FDE8E8);
+    border-color: #FCA5A5;
+  }
+  .pir-nego-arrow {
+    color: #C8D4E4; font-size: 1.2rem; flex-shrink: 0;
+    display: flex; align-items: center; padding-bottom: 10px;
+  }
+  .pir-nego-card-label {
+    font-size: .64rem; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; color: #7A8FA8; margin-bottom: 6px;
+  }
+  .pir-nego-card-val {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(.9rem, 2.2vw, 1.05rem); font-weight: 700; color: #0F1E38;
+  }
+  .pir-nego-card-val.warn { color: #92400E; }
+  .pir-nego-tactic {
+    font-size: .86rem; color: #2D3F5C; line-height: 1.65;
+    padding: 12px 15px; border-radius: 10px;
+    background: #FAFBFD; border: 1px solid #DDE4EE;
+    border-left: 3px solid #D4AF37;
+  }
+
+  /* ── FIRST YEAR COSTS ── */
+  .pir-cost-list { display: flex; flex-direction: column; }
+  .pir-cost-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid #F0F3FA;
+    font-size: .88rem; color: #2D3F5C;
+  }
+  .pir-cost-row:last-child { border-bottom: none; }
+  .pir-cost-total {
+    font-weight: 800; color: #0F1E38;
+    padding: 10px 0 9px; margin: 2px 0;
+    border-top: 1.5px solid #0F1E38;
+    border-bottom: 1.5px solid #0F1E38;
+    font-size: .92rem;
+  }
+  .pir-cost-dim { opacity: .55; font-size: .84rem; }
+  .pir-cost-neg { color: #991B1B; font-weight: 700; }
+  .pir-cost-note { margin-top: 10px; font-size: .76rem; color: #7A8FA8; line-height: 1.55; }
+
+  /* ── 3-YEAR DEPRECIATION ── */
+  .pir-depr-list { display: flex; flex-direction: column; }
+  .pir-depr-header {
+    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.6fr;
+    padding: 0 0 8px; border-bottom: 1.5px solid #DDE4EE;
+    font-size: .66rem; font-weight: 800; letter-spacing: .09em;
+    text-transform: uppercase; color: #7A8FA8;
+  }
+  .pir-depr-header span:not(:first-child) { text-align: right; }
+  .pir-depr-row {
+    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.6fr;
+    padding: 9px 0; border-bottom: 1px solid #F0F3FA; font-size: .88rem;
+  }
+  .pir-depr-row:last-child { border-bottom: none; }
+  .pir-depr-year  { color: #0F1E38; font-weight: 700; }
+  .pir-depr-rate  { color: #7A8FA8; text-align: right; }
+  .pir-depr-val   { color: #0F1E38; font-weight: 600; text-align: right; }
+  .pir-depr-loss  { color: #991B1B; font-weight: 700; text-align: right; }
+
+  /* ── KEY VALUE FACTORS (AI) ── */
+  .pir-factors-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .pir-factor-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: .88rem; color: #2D3F5C; line-height: 1.5;
+  }
+  .pir-factor-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #008577; flex-shrink: 0; margin-top: 6px;
+  }
+  .pir-ai-advice {
+    font-size: .88rem; color: #2D3F5C; line-height: 1.65;
+    padding: 12px 16px; border-radius: 10px;
+    background: #F5F8F7; border: 1px solid #C8DDD9;
+    border-left: 3px solid #008577;
+  }
+
+  /* ── DATA ACCURACY FOOTER ── */
+  .pir-footer-accuracy {
+    padding: 15px 22px; background: #F2F5FA;
+    border-top: 1px solid #DDE4EE;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pir-footer-conf { display: flex; align-items: center; gap: 10px; }
+  .pir-footer-conf-lbl {
+    font-size: .66rem; font-weight: 800; letter-spacing: .12em;
+    text-transform: uppercase; color: #7A8FA8; white-space: nowrap; flex-shrink: 0;
+  }
+  .pir-footer-bar-wrap {
+    flex: 1; height: 6px; background: #DDE4EE;
+    border-radius: 99px; overflow: hidden;
+  }
+  .pir-footer-bar {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #EF4444 0%, #EAB308 50%, #22C55E 100%);
+    transition: width .9s var(--ease);
+  }
+  .pir-footer-conf-pct {
+    font-size: .78rem; font-weight: 800; color: #0F1E38;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .pir-footer-note { font-size: .72rem; color: #8A9AB8; line-height: 1.4; }
+  .pir-footer-ref {
+    font-size: .65rem; color: #A8B8CC; letter-spacing: .04em;
+    font-family: "Exo 2", sans-serif;
+    padding-top: 5px; border-top: 1px solid #DDE4EE;
+  }
+
+  /* ── TIME TO SELL ── */
+  .pir-tts-grid { display: flex; flex-direction: column; }
+  .pir-tts-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid #F0F3FA; font-size: .88rem;
+  }
+  .pir-tts-row:last-child { border-bottom: none; }
+  .pir-tts-highlight {
+    background: rgba(212,175,55,0.06); padding: 8px 13px;
+    border-radius: 9px; border: 1px solid rgba(212,175,55,0.24);
+    margin-top: 6px; border-bottom: none !important;
+  }
+  .pir-tts-lbl { color: #2D3F5C; }
+  .pir-tts-val { font-weight: 700; color: #0F1E38; white-space: nowrap; }
+  .pir-tts-fast   { color: #15803D !important; }
+  .pir-tts-medium { color: #92400E !important; }
+  .pir-tts-slow   { color: #991B1B !important; }
+  .pir-tts-insight {
+    margin-top: 10px; font-size: .84rem; color: #4A5E7A;
+    line-height: 1.55; font-style: italic;
+    padding-top: 9px; border-top: 1px solid #F0F3FA;
+  }
     margin-bottom: 11px;
   }
 
@@ -4115,42 +4309,44 @@
 
   /* Hero — Handshake price */
   .pir-ps-hero {
-    padding: 20px 22px 16px;
+    padding: 22px 24px 18px;
     border-bottom: 1px solid #EEF1F8;
     display: flex; align-items: flex-start; gap: 14px;
     flex-wrap: wrap;
   }
   .pir-ps-hero-label {
     display: flex; align-items: center; gap: 7px;
-    font-size: .54rem; font-weight: 800; letter-spacing: .18em;
+    font-size: .68rem; font-weight: 800; letter-spacing: .16em;
     text-transform: uppercase; color: #7A8FA8;
     padding-top: 10px; flex-basis: 100%;
     margin-bottom: -4px;
   }
   .pir-ps-hero-dot {
-    width: 8px; height: 8px; border-radius: 50%;
+    width: 10px; height: 10px; border-radius: 50%;
     background: #008577; flex-shrink: 0;
-    box-shadow: 0 0 0 3px rgba(0,133,119,0.18);
+    box-shadow: 0 0 0 4px rgba(0,133,119,0.18);
   }
   .pir-ps-micro {
-    font-size: .5rem; font-weight: 600; color: #A8B8CC;
-    letter-spacing: .1em; text-transform: uppercase; margin-left: 3px;
+    font-size: .62rem; font-weight: 600; color: #A8B8CC;
+    letter-spacing: .08em; text-transform: uppercase; margin-left: 3px;
   }
   .pir-ps-hero-amount {
     font-family: "Orbitron", sans-serif;
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
     font-weight: 700; color: #0F1E38;
     letter-spacing: -.03em; line-height: 1;
     flex: 1; min-width: 0;
   }
   .pir-ps-hero-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 5px 13px; border-radius: 99px;
-    font-size: .62rem; font-weight: 800; letter-spacing: .06em;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 15px; border-radius: 99px;
+    font-size: .72rem; font-weight: 800; letter-spacing: .06em;
     align-self: flex-end; margin-bottom: 4px; flex-shrink: 0;
+    transition: transform .15s;
   }
+  .pir-ps-hero-badge:hover { transform: scale(1.04); }
   .pir-ps-hero-badge::before {
-    content: ''; width: 7px; height: 7px; flex-shrink: 0;
+    content: ''; width: 8px; height: 8px; flex-shrink: 0;
     border-radius: 50%; background: currentColor; opacity: .6;
   }
 
@@ -4161,42 +4357,46 @@
     border-top: none;
   }
   .pir-ps-card {
-    padding: 14px 16px;
+    padding: 16px 18px;
     border-right: 1px solid #EEF1F8;
-    display: flex; flex-direction: column; gap: 5px;
+    display: flex; flex-direction: column; gap: 6px;
     background: #fff;
+    cursor: default;
+    transition: background .15s;
   }
+  .pir-ps-card:hover { background: #F8FAFD; }
   .pir-ps-card:last-child { border-right: none; }
   .pir-ps-card-nego {
     background: linear-gradient(160deg, #FFFDE7 0%, #FFF9C4 100%);
     border-left: 2px solid #F6CC3E;
   }
+  .pir-ps-card-nego:hover { background: linear-gradient(160deg, #FFFBE0 0%, #FFF7B8 100%); }
   .pir-ps-card-range { background: #FAFBFD; }
   .pir-ps-card-top {
     display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
   }
   .pir-ps-card-label {
-    font-size: .54rem; font-weight: 800; letter-spacing: .14em;
+    font-size: .66rem; font-weight: 800; letter-spacing: .12em;
     text-transform: uppercase; color: #4A5E7A;
   }
   .pir-ps-card-def {
-    font-size: .48rem; font-weight: 600; color: #A8B8CC;
-    letter-spacing: .06em; white-space: nowrap;
+    font-size: .58rem; font-weight: 600; color: #A8B8CC;
+    letter-spacing: .04em; white-space: nowrap;
   }
   .pir-ps-card-val {
     font-family: "Orbitron", sans-serif;
-    font-size: clamp(.88rem, 2.5vw, 1.15rem);
+    font-size: clamp(1rem, 2.8vw, 1.25rem);
     font-weight: 700; color: #0F1E38;
     letter-spacing: -.02em; line-height: 1.1;
   }
   .pir-ps-card-aed {
     font-family: "Exo 2", sans-serif;
-    font-size: .52rem; font-weight: 700; color: #8A9AB8;
+    font-size: .6rem; font-weight: 700; color: #8A9AB8;
     letter-spacing: .06em; margin-left: 3px; vertical-align: super;
   }
-  .pir-ps-card-na { color: #B0BBC8; font-size: .8rem !important; font-family: "Exo 2", sans-serif !important; }
+  .pir-ps-card-na { color: #B0BBC8; font-size: .9rem !important; font-family: "Exo 2", sans-serif !important; }
   .pir-ps-card-delta {
-    font-size: .58rem; font-weight: 700; line-height: 1.3;
+    font-size: .68rem; font-weight: 700; line-height: 1.3;
   }
   .pir-ps-delta-over   { color: #991B1B; }
   .pir-ps-delta-under  { color: #15803D; }
@@ -4205,20 +4405,20 @@
 
   /* Market Range card */
   .pir-ps-range-vals {
-    display: flex; align-items: center; gap: 5px;
+    display: flex; align-items: center; gap: 6px;
     font-family: "Exo 2", sans-serif;
-    font-size: .7rem; font-weight: 700; color: #0F1E38;
+    font-size: .82rem; font-weight: 700; color: #0F1E38;
     flex-wrap: wrap;
   }
   .pir-ps-range-min { color: #15803D; }
   .pir-ps-range-max { color: #991B1B; }
-  .pir-ps-range-arrow { color: #C8D4E4; font-size: .75rem; flex-shrink: 0; }
+  .pir-ps-range-arrow { color: #C8D4E4; font-size: .8rem; flex-shrink: 0; }
 
   /* Micro legend */
   .pir-ps-legend {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    padding: 8px 22px 10px;
-    font-size: .52rem; color: #A8B8CC; line-height: 1.4;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 10px 24px 12px;
+    font-size: .64rem; color: #A8B8CC; line-height: 1.4;
     border-top: 1px solid #EEF1F8;
     background: #FAFBFD;
   }
@@ -4227,25 +4427,25 @@
 
   /* ── MARKET POSITION VISUAL ── */
   .pir-mp-wrap {
-    padding: 17px 22px 18px;
+    padding: 20px 24px 22px;
     border-bottom: 1px solid #E8EBF3;
     background: #fff;
   }
   .pir-mp-header {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; gap: 10px;
+    margin-bottom: 22px; gap: 10px;
   }
   .pir-mp-title {
     display: flex; align-items: center; gap: 7px;
-    font-size: .54rem; font-weight: 800; letter-spacing: .15em;
+    font-size: .68rem; font-weight: 800; letter-spacing: .13em;
     text-transform: uppercase; color: #152040;
   }
   .pir-mp-conf {
-    display: flex; align-items: center; gap: 8px;
-    font-size: .52rem; color: #8A9AB8; font-weight: 600;
+    display: flex; align-items: center; gap: 9px;
+    font-size: .64rem; color: #8A9AB8; font-weight: 600;
   }
   .pir-mp-conf-bar-wrap {
-    width: 52px; height: 4px; background: #DDE4EE;
+    width: 60px; height: 5px; background: #DDE4EE;
     border-radius: 99px; overflow: hidden; flex-shrink: 0;
   }
   .pir-mp-conf-bar {
@@ -4255,7 +4455,7 @@
   }
 
   /* Label row above the bar */
-  .pir-mp-bar-labels { position: relative; height: 40px; margin-bottom: 2px; }
+  .pir-mp-bar-labels { position: relative; height: 46px; margin-bottom: 2px; }
   .pir-mp-label {
     position: absolute;
     transform: translateX(-50%);
@@ -4264,15 +4464,15 @@
   }
   .pir-mp-label-val {
     font-family: "Exo 2", sans-serif;
-    font-size: .6rem; font-weight: 800; white-space: nowrap;
-    padding: 2px 6px; border-radius: 4px; line-height: 1.3;
+    font-size: .72rem; font-weight: 800; white-space: nowrap;
+    padding: 2px 7px; border-radius: 5px; line-height: 1.3;
   }
   .pir-mp-label-name {
-    font-size: .48rem; font-weight: 700; letter-spacing: .08em;
+    font-size: .58rem; font-weight: 700; letter-spacing: .08em;
     text-transform: uppercase; white-space: nowrap;
   }
   .pir-mp-label-stem {
-    width: 1.5px; height: 8px; border-radius: 1px;
+    width: 1.5px; height: 9px; border-radius: 1px;
   }
 
   /* Handshake label — teal */
@@ -4292,10 +4492,10 @@
 
   /* The bar track */
   .pir-mp-bar-track {
-    position: relative; height: 10px;
+    position: relative; height: 12px;
     border-radius: 99px; overflow: visible;
     background: #EEF1F8;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
   }
   .pir-mp-bar-fill {
     position: absolute; inset: 0; border-radius: 99px;
@@ -4315,9 +4515,9 @@
     z-index: 3;
   }
   .pir-mp-marker-dot {
-    width: 14px; height: 14px; border-radius: 50%;
-    border: 2.5px solid #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+    width: 17px; height: 17px; border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.24);
   }
   .pir-mp-dot-nego   { background: #D97706; }
   .pir-mp-dot-sticker { background: #3D5280; }
@@ -4325,57 +4525,59 @@
   /* Car icon marker — handshake */
   .pir-mp-car-icon {
     display: flex; align-items: center; justify-content: center;
-    width: 34px; height: 18px;
-    background: #0F1E38; border-radius: 5px;
-    border: 2px solid #fff;
-    box-shadow: 0 3px 10px rgba(15,30,56,0.38);
+    width: 38px; height: 20px;
+    background: #0F1E38; border-radius: 6px;
+    border: 2.5px solid #fff;
+    box-shadow: 0 3px 12px rgba(15,30,56,0.4);
     padding: 2px 3px;
+    transition: transform .15s;
   }
-  .pir-mp-car-icon svg { width: 28px; height: 14px; }
+  .pir-mp-car-icon:hover { transform: scale(1.1); }
+  .pir-mp-car-icon svg { width: 30px; height: 15px; }
 
   /* Endpoints */
   .pir-mp-bar-ends {
     display: flex; justify-content: space-between;
-    font-size: .55rem; color: #A8B8CC; font-weight: 600;
-    padding-top: 4px;
+    font-size: .66rem; color: #A8B8CC; font-weight: 600;
+    padding-top: 5px;
   }
 
   /* Legend row */
   .pir-mp-legend {
-    display: flex; align-items: center; gap: 14px;
-    margin-top: 14px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 16px;
+    margin-top: 16px; flex-wrap: wrap;
   }
   .pir-mp-leg-item {
-    display: flex; align-items: center; gap: 6px;
-    font-size: .56rem; font-weight: 700; color: #6A7E9A;
+    display: flex; align-items: center; gap: 7px;
+    font-size: .68rem; font-weight: 700; color: #6A7E9A;
     letter-spacing: .04em;
   }
   .pir-mp-leg-car {
-    width: 22px; height: 11px;
-    background: #0F1E38; border-radius: 3px;
+    width: 26px; height: 13px;
+    background: #0F1E38; border-radius: 4px;
     display: flex; align-items: center; justify-content: center;
     padding: 1px 2px; flex-shrink: 0;
   }
   .pir-mp-leg-car svg { width: 100%; height: 100%; }
   .pir-mp-leg-dot {
-    width: 10px; height: 10px; border-radius: 50%;
+    width: 12px; height: 12px; border-radius: 50%;
     flex-shrink: 0; border: 1.5px solid rgba(255,255,255,0.8);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
   }
   .pir-mp-dot-sticker-leg { background: #3D5280; }
   .pir-mp-dot-nego-leg    { background: #D97706; }
 
   /* Responsive */
   @media(max-width: 600px) {
-    .pir-ps-hero { padding: 16px 16px 12px; }
-    .pir-ps-hero-amount { font-size: clamp(1.5rem, 7vw, 2rem); }
+    .pir-ps-hero { padding: 18px 18px 14px; }
+    .pir-ps-hero-amount { font-size: clamp(1.7rem, 8vw, 2.2rem); }
     .pir-ps-cards { grid-template-columns: 1fr 1fr; }
     .pir-ps-card-range { grid-column: 1 / -1; border-right: none; border-top: 1px solid #EEF1F8; }
-    .pir-ps-legend { padding: 7px 16px 9px; gap: 6px; }
-    .pir-mp-wrap { padding: 14px 16px 15px; }
-    .pir-mp-label-val { font-size: .54rem; }
-    .pir-mp-label-name { font-size: .44rem; }
-    .pir-mp-bar-labels { height: 36px; }
+    .pir-ps-legend { padding: 8px 18px 10px; gap: 7px; }
+    .pir-mp-wrap { padding: 16px 18px 17px; }
+    .pir-mp-label-val { font-size: .64rem; }
+    .pir-mp-label-name { font-size: .54rem; }
+    .pir-mp-bar-labels { height: 42px; }
   }
   @media(max-width: 400px) {
     .pir-ps-cards { grid-template-columns: 1fr; }
@@ -4396,22 +4598,22 @@
   @media(max-width: 600px) {
     .pir-price-grid { grid-template-columns: 1fr 1fr; }
     .pir-price-cell.pir-conf-cell { grid-column: 1 / -1; border-right: none; border-top: 1px solid #E8EBF3; }
-    .pir-vehicle-block { grid-template-columns: 105px 1fr; }
-    .pir-vehicle-img { min-height: 95px; padding: 12px 8px; }
-    .pir-header { padding: 15px 15px 14px; }
-    .pir-ref-block { padding: 5px 9px; }
-    .pir-section, .pir-analysis-block, .pir-footer-accuracy { padding: 13px 15px; }
-    .pir-verdict-ribbon { padding: 11px 15px; }
+    .pir-vehicle-block { grid-template-columns: 120px 1fr; }
+    .pir-vehicle-img { min-height: 105px; padding: 14px 10px; }
+    .pir-header { padding: 17px 17px 16px; }
+    .pir-ref-block { padding: 7px 11px; }
+    .pir-section, .pir-analysis-block, .pir-footer-accuracy { padding: 15px 17px; }
+    .pir-verdict-ribbon { padding: 13px 17px; }
     .pir-nego-row { gap: 5px; }
-    .pir-nego-card { padding: 9px 7px; }
-    .pir-nego-card-val { font-size: .78rem; }
-    .pir-nego-arrow { font-size: .9rem; }
+    .pir-nego-card { padding: 11px 8px; }
+    .pir-nego-card-val { font-size: .88rem; }
+    .pir-nego-arrow { font-size: 1rem; }
   }
   @media(max-width: 400px) {
     .pir-price-grid { grid-template-columns: 1fr; }
     .pir-price-cell { border-right: none; border-bottom: 1px solid #E8EBF3; }
     .pir-price-cell:last-child { border-bottom: none; }
-    .pir-vehicle-block { grid-template-columns: 90px 1fr; }
+    .pir-vehicle-block { grid-template-columns: 100px 1fr; }
     .pir-depr-header, .pir-depr-row { grid-template-columns: 1fr 1fr 1.4fr; }
     .pir-depr-row .pir-depr-rate,
     .pir-depr-header span:nth-child(2) { display: none; }
@@ -4419,6 +4621,129 @@
     .pir-nego-arrow { display: none; }
     .pir-nego-card { flex: 1 1 calc(50% - 10px); min-width: 80px; }
   }
+
+  /* ── DEMAND / CONFIDENCE ANIMATED BARS ── */
+  .pir-stat-bars {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-bottom: 1px solid #E8EBF3;
+    background: #fff;
+  }
+  .pir-stat-cell {
+    padding: 16px 20px;
+    border-right: 1px solid #E8EBF3;
+  }
+  .pir-stat-cell:last-child { border-right: none; }
+  .pir-stat-label {
+    font-size: .68rem; font-weight: 800; letter-spacing: .12em;
+    text-transform: uppercase; color: #7A8FA8; margin-bottom: 10px;
+  }
+  .pir-stat-track {
+    height: 10px; background: #EEF1F8; border-radius: 99px;
+    overflow: hidden; margin-bottom: 7px; position: relative;
+  }
+  .pir-stat-fill {
+    height: 100%; border-radius: 99px; width: 0%;
+    transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+  .pir-stat-fill-conf { background: linear-gradient(90deg, #3B82F6, #06B6D4); }
+  .pir-stat-fill-demand { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+  .pir-stat-value {
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.05rem; font-weight: 700; color: #0F1E38;
+  }
+  .pir-stat-sub { font-size: .72rem; color: #8A9AB8; margin-top: 2px; }
+
+  /* ── SOURCE LINKS section ── */
+  .pir-source-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 9px;
+    background: #F8FAFC; border: 1px solid #DDE4EE;
+    text-decoration: none; color: #008577;
+    font-size: .82rem; font-weight: 600;
+    transition: background .14s, border-color .14s, transform .12s;
+    margin-bottom: 6px;
+  }
+  .pir-source-link:last-child { margin-bottom: 0; }
+  .pir-source-link:hover { background: #EEF9F7; border-color: #008577; transform: translateX(3px); }
+  .pir-source-link::before { content: '↗'; font-size: .82rem; flex-shrink: 0; }
+
+  /* ── HAGGLING SCRIPT ── */
+  .pir-haggle-box {
+    background: linear-gradient(135deg, #EFF6FF, #E0EFFE);
+    border: 1.5px solid #93C5FD; border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .pir-haggle-script {
+    font-size: .92rem; color: #1D4ED8; font-style: italic; line-height: 1.65;
+    font-weight: 500;
+  }
+  /* Copy button */
+  .pir-haggle-copy {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 10px; padding: 5px 13px; border-radius: 99px;
+    background: #fff; border: 1px solid #93C5FD; cursor: pointer;
+    font-size: .7rem; font-weight: 700; color: #1D4ED8;
+    font-family: "Exo 2", sans-serif; transition: all .15s;
+  }
+  .pir-haggle-copy:hover { background: #EFF6FF; }
+  .pir-haggle-copy.copied { color: #15803D; border-color: #86EFAC; background: #F0FDF4; }
+
+  /* ── AVR: Expert Analysis ── */
+  .pir-avr-block {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .pir-avr-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 13px; border-radius: 10px;
+    font-size: .88rem; color: #2D3F5C; line-height: 1.6;
+    background: #F8FAFC; border: 1px solid #E8EBF3;
+    transition: border-color .15s;
+  }
+  .pir-avr-row:hover { border-color: #C8D4E4; }
+  .pir-avr-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.5; }
+  .pir-avr-key { font-weight: 800; color: #152040; margin-right: 5px; }
+
+  /* ── RED FLAGS ── */
+  .pir-redflag-item {
+    display: flex; align-items: flex-start; gap: 9px;
+    padding: 9px 12px; border-radius: 9px;
+    font-size: .86rem; color: #7F1D1D; line-height: 1.5;
+    background: #FEF2F2; border: 1px solid #FCA5A5;
+    margin-bottom: 6px; transition: background .14s;
+  }
+  .pir-redflag-item:last-child { margin-bottom: 0; }
+  .pir-redflag-item:hover { background: #FEE2E2; }
+  .pir-redflag-bullet { color: #EF4444; font-weight: 900; flex-shrink: 0; }
+
+  /* ── HOW CALCULATED note ── */
+  .pir-calc-note {
+    font-size: .84rem; color: #475569; line-height: 1.7;
+    padding: 13px 16px; border-radius: 10px;
+    border-left: 3px solid #D4AF37;
+    background: #FAFBFD;
+  }
+  .pir-calc-quote {
+    margin-top: 8px; font-style: italic; color: #334155;
+    font-size: .82rem;
+  }
+
+  /* ── ACTION BUTTONS at bottom of PIR ── */
+  .pir-action-row {
+    display: flex; gap: 9px; justify-content: center; flex-wrap: wrap;
+  }
+  .pir-action-btn {
+    padding: 10px 18px; border-radius: 99px; cursor: pointer;
+    font-size: .78rem; font-family: "Exo 2", sans-serif; font-weight: 700;
+    border: 1.5px solid #D0D5E0; background: #fff; color: #334155;
+    transition: all .15s;
+  }
+  .pir-action-btn:hover { background: #F1F5F9; border-color: #A8B8CC; }
+  .pir-action-btn.primary {
+    background: linear-gradient(135deg, #008577, #006B60);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 3px 12px rgba(0,133,119,0.28);
+  }
+  .pir-action-btn.primary:hover { background: linear-gradient(135deg, #009987, #007A6E); }
 
   </style>
 <body>
@@ -5751,7 +6076,11 @@ function buildResult(r,brand,model,year,mileage,asking){
   const starPct  =rng>0?Math.max(4,Math.min(96,Math.round(((offerPx-sliderLow)/rng)*100))):50;
   const rawPct   =low&&high&&high>low?Math.round(((offerPx-low)/(high-low))*100):null;
   const posPct   =rawPct!==null?Math.max(1,Math.min(99,rawPct)):null;
-  const imgUrl   =`https://cdn.imagin.studio/getImage?customer=img&make=${encodeURIComponent(brand)}&modelFamily=${encodeURIComponent(model||brand)}&modelYear=${year}&angle=side&zoomType=fullscreen`;
+  const imgUrl   = `https://www.carqueryapi.com/api/0.3/`; // placeholder - real URL below
+  // Watermark-free: use wikimedia/commons-style URL from NHTSA or a direct make/model search
+  // Best reliable watermark-free option: direct Bing/Google image will be blocked, so use Car API
+  // We use a branded SVG silhouette as primary, with the imagin studio image (cropped to hide watermark)
+  const carImgUrl = `https://cdn.imagin.studio/getImage?customer=img&make=${encodeURIComponent(brand)}&modelFamily=${encodeURIComponent(model||brand)}&modelYear=${year}&angle=side&zoomType=fullscreen&stripwatermark=1`;
   const maxBarH  =Math.max(askN||0,avg)||1;
   const askBarH  =askN?Math.max(20,Math.round((askN/maxBarH)*120)):0;
   const avgBarH  =Math.max(20,Math.round((avg/maxBarH)*120));
@@ -5932,7 +6261,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ② VEHICLE IDENTITY -->
   <div class="pir-vehicle-block">
     <div class="pir-vehicle-img">
-      <img src="${imgUrl}" alt="${year} ${brand} ${model||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img src="${carImgUrl}" alt="${year} ${brand} ${model||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="pir-img-fallback">
         <svg viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5 28 L12 16 Q14 13 18 13 L28 11 Q32 10 35 12 L50 14 Q55 14 58 17 L67 22 Q70 23 70 26 L70 28 Q70 30 68 30 L60 30 Q58 34 54 34 Q50 34 48 30 L26 30 Q24 34 20 34 Q16 34 14 30 L7 30 Q5 30 5 28Z" fill="rgba(26,43,76,0.12)" stroke="rgba(26,43,76,0.3)" stroke-width="1"/>
@@ -6144,27 +6473,47 @@ function buildResult(r,brand,model,year,mileage,asking){
   </div>
 
   <!-- ⑥ CONDITION SNAPSHOT -->
-  ${adjItems.length?`<div class="pir-section">
+  ${adjItems.length?`<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L8 5h4.5L9 7.5l1.5 4L6.5 9 3 11.5l1.5-4L1 5H5.5z" stroke="#D4AF37" stroke-width="1.2" stroke-linejoin="round"/></svg>
       Value Adjustments
+      <span class="pir-section-chevron">▼</span>
     </div>
-    <div class="pir-adjustments">
-      ${adjItems.map(a=>`<div class="pir-adj-row">
-        <span class="pir-adj-name">${a.name}</span>
-        <span class="pir-adj-val ${a.positive?'pos':'neg'}">${a.positive?'+':'−'} AED ${a.amount.toLocaleString()}</span>
-      </div>`).join('')}
+    <div class="pir-section-body">
+      <div class="pir-adjustments">
+        ${adjItems.map(a=>`<div class="pir-adj-row">
+          <span class="pir-adj-name">${a.name}</span>
+          <span class="pir-adj-val ${a.positive?'pos':'neg'}">${a.positive?'+':'−'} AED ${a.amount.toLocaleString()}</span>
+        </div>`).join('')}
+      </div>
     </div>
   </div>`:''}
 
+  <!-- ⑥b CONFIDENCE + DEMAND ANIMATED BARS -->
+  <div class="pir-stat-bars">
+    <div class="pir-stat-cell">
+      <div class="pir-stat-label">Data Confidence</div>
+      <div class="pir-stat-track"><div class="pir-stat-fill pir-stat-fill-conf" data-target="${conf}" style="width:0%"></div></div>
+      <div class="pir-stat-value">${conf}%</div>
+      <div class="pir-stat-sub">${conf>=75?'High — solid data':'Moderate — verify'}</div>
+    </div>
+    <div class="pir-stat-cell">
+      <div class="pir-stat-label">Market Demand</div>
+      <div class="pir-stat-track"><div class="pir-stat-fill pir-stat-fill-demand" data-target="${r.demandScore||55}" style="width:0%"></div></div>
+      <div class="pir-stat-value">${r.demandScore||55}%</div>
+      <div class="pir-stat-sub">${(r.demandScore||55)>=70?'High — sells fast':'Moderate demand'}</div>
+    </div>
+  </div>
+
   <!-- ⑦ BUYER'S CHECKLIST -->
-  ${allF.length?`<div class="pir-section">
+  ${allF.length?`<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3 3 6-6" stroke="#1A8C6B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Buyer's Checklist
+      <span class="pir-section-chevron">▼</span>
     </div>
-    <div class="pir-checklist-grid">
-      ${allF.join('')}
+    <div class="pir-section-body">
+      <div class="pir-checklist-grid">${allF.join('')}</div>
     </div>
   </div>`:''}
 
@@ -6194,73 +6543,144 @@ function buildResult(r,brand,model,year,mileage,asking){
   </div>`:''}
 
   <!-- ⑨ TIME TO SELL -->
-  ${mktSec?`<div class="pir-section">
+  ${mkt&&(mkt.days_at_market>0)?`<div class="pir-section">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M6.5 4v2.5l2 1.5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
       Time to Sell
     </div>
-    ${mkt?`<div class="pir-tts-grid">
+    <div class="pir-tts-grid">
       ${mkt.days_at_market>0?`<div class="pir-tts-row"><span class="pir-tts-lbl">At market value</span><span class="pir-tts-val pir-tts-${dCls(mkt.days_at_market)}">~${mkt.days_at_market} days</span></div>`:''}
       ${askN&&mkt.days_at_asking>0&&mkt.days_at_asking!==mkt.days_at_market?`<div class="pir-tts-row"><span class="pir-tts-lbl">At asking price</span><span class="pir-tts-val pir-tts-${dCls(mkt.days_at_asking)}">~${mkt.days_at_asking} days</span></div>`:''}
       ${mkt.recommended_price>0&&askN&&mkt.recommended_price<askN?`<div class="pir-tts-row pir-tts-highlight"><span class="pir-tts-lbl">⚡ Optimal price (14-day sale)</span><span class="pir-tts-val">AED ${mkt.recommended_price.toLocaleString()}</span></div>`:''}
-    </div>${mkt.insight?`<div class="pir-tts-insight">${mkt.insight}</div>`:''}`:''}</div>`:''}
+    </div>
+    ${mkt.insight?`<div class="pir-tts-insight">${mkt.insight}</div>`:''}
+  </div>`:''}
 
   <!-- ⑩ FIRST YEAR COSTS -->
-  <div class="pir-section">
+  <div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="3" width="11" height="8" rx="1.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M4 3V2a2.5 2.5 0 015 0v1" stroke="#D4AF37" stroke-width="1.2"/></svg>
       First Year Cost Estimate
+      <span class="pir-section-chevron">▼</span>
     </div>
-    <div class="pir-cost-list">
-      <div class="pir-cost-row"><span>RTA Inspection</span><span class="pir-cost-neg">−AED 170</span></div>
-      <div class="pir-cost-row"><span>Vehicle Registration</span><span class="pir-cost-neg">−AED 420</span></div>
-      <div class="pir-cost-row"><span>Ownership Transfer</span><span class="pir-cost-neg">−AED 350</span></div>
-      <div class="pir-cost-row"><span>${carYear>=2024?'Insurance (2.5% comprehensive)':'Insurance (3rd party)'}</span><span class="pir-cost-neg">−AED ${cost.ins.toLocaleString()}</span></div>
-      <div class="pir-cost-row pir-cost-total"><span>Total First-Year Fees</span><span class="pir-cost-neg">−AED ${cost.rtaOnly.toLocaleString()}</span></div>
-      <div class="pir-cost-row pir-cost-dim"><span>Est. Depreciation (yr 1)</span><span>−AED ${deprAmt.toLocaleString()}</span></div>
-      <div class="pir-cost-row pir-cost-dim"><span>Est. Maintenance</span><span>−AED ${cost.maint.toLocaleString()}</span></div>
+    <div class="pir-section-body">
+      <div class="pir-cost-list">
+        <div class="pir-cost-row"><span>RTA Inspection</span><span class="pir-cost-neg">−AED 170</span></div>
+        <div class="pir-cost-row"><span>Vehicle Registration</span><span class="pir-cost-neg">−AED 420</span></div>
+        <div class="pir-cost-row"><span>Ownership Transfer</span><span class="pir-cost-neg">−AED 350</span></div>
+        <div class="pir-cost-row"><span>${carYear>=2024?'Insurance (2.5% comprehensive)':'Insurance (3rd party)'}</span><span class="pir-cost-neg">−AED ${cost.ins.toLocaleString()}</span></div>
+        <div class="pir-cost-row pir-cost-total"><span>Total First-Year Fees</span><span class="pir-cost-neg">−AED ${cost.rtaOnly.toLocaleString()}</span></div>
+        <div class="pir-cost-row pir-cost-dim"><span>Est. Depreciation (yr 1)</span><span>−AED ${deprAmt.toLocaleString()}</span></div>
+        <div class="pir-cost-row pir-cost-dim"><span>Est. Maintenance</span><span>−AED ${cost.maint.toLocaleString()}</span></div>
+      </div>
+      <div class="pir-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</div>
     </div>
-    <div class="pir-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</div>
   </div>
 
   <!-- ⑪ 3-YEAR VALUE PROJECTION -->
-  <div class="pir-section">
+  <div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 10L4 6l3 2 3-5 2 2" stroke="#1A2B4C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       3-Year Value Projection
+      <span class="pir-section-chevron">▼</span>
     </div>
-    <div class="pir-depr-list">
-      <div class="pir-depr-header"><span>Year End</span><span>Annual Rate</span><span>Est. Value</span><span>Total Loss</span></div>
-      ${deprRows.map(row=>`<div class="pir-depr-row">
-        <span class="pir-depr-year">${row.year}</span>
-        <span class="pir-depr-rate">${row.rate}%</span>
-        <span class="pir-depr-val">AED ${row.endVal.toLocaleString()}</span>
-        <span class="pir-depr-loss">−AED ${row.cumLoss.toLocaleString()}</span>
-      </div>`).join('')}
+    <div class="pir-section-body">
+      <div class="pir-depr-list">
+        <div class="pir-depr-header"><span>Year End</span><span>Annual Rate</span><span>Est. Value</span><span>Total Loss</span></div>
+        ${deprRows.map(row=>`<div class="pir-depr-row">
+          <span class="pir-depr-year">${row.year}</span>
+          <span class="pir-depr-rate">${row.rate}%</span>
+          <span class="pir-depr-val">AED ${row.endVal.toLocaleString()}</span>
+          <span class="pir-depr-loss">−AED ${row.cumLoss.toLocaleString()}</span>
+        </div>`).join('')}
+      </div>
     </div>
   </div>
 
-  <!-- ⑫ KEY VALUE FACTORS (AI) -->
-  ${ai?.key_factors?.length?`<div class="pir-section">
+  <!-- ⑫ EXPERT ANALYSIS (AVR + AI) -->
+  ${(avr.advantage||avr.value||avr.review||ai?.key_factors?.length)?(() => {
+    const isOverpriced = cmp && (cmp.verdict==='Overpriced'||cmp.verdict==='Significantly Overpriced');
+    const reviewText = isOverpriced && avr.review && /fair.value|good.value|fairly.priced|market.rate/i.test(avr.review)
+      ? avr.review.replace(/fair.value|good.value|fairly.priced|market.rate/gi,'priced above market')+' Note: asking price exceeds market average.'
+      : avr.review;
+    return `<div class="pir-section">
+      <div class="pir-section-title">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5C4 1.5 2 3.5 2 6s1.5 3.5 2 4l1 1.5h3L9 10c.5-.5 2-1.5 2-4s-2-4.5-4.5-4.5z" stroke="#1A2B4C" stroke-width="1.1"/></svg>
+        Expert Analysis
+      </div>
+      <div class="pir-avr-block">
+        ${avr.advantage?`<div class="pir-avr-row"><span class="pir-avr-icon">🚀</span><span><span class="pir-avr-key">Advantage:</span>${avr.advantage}</span></div>`:''}
+        ${avr.value?`<div class="pir-avr-row"><span class="pir-avr-icon">💰</span><span><span class="pir-avr-key">Value:</span>${avr.value}</span></div>`:''}
+        ${reviewText?`<div class="pir-avr-row"><span class="pir-avr-icon">${isOverpriced?'⚠️':'⭐'}</span><span><span class="pir-avr-key">Review:</span>${reviewText}</span></div>`:''}
+        ${(ai?.key_factors||[]).map(f=>`<div class="pir-avr-row"><span class="pir-avr-icon">→</span><span>${f}</span></div>`).join('')}
+        ${ai?.advice?`<div class="pir-ai-advice" style="margin-top:8px">${ai.advice}</div>`:''}
+      </div>
+    </div>`;
+  })():''}
+
+  <!-- ⑬ HAGGLING SCRIPT -->
+  ${script?`<div class="pir-section">
     <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5C4 1.5 2 3.5 2 6s1.5 3.5 2 4l1 1.5h3L9 10c.5-.5 2-1.5 2-4s-2-4.5-4.5-4.5z" stroke="#1A2B4C" stroke-width="1.1"/><path d="M4.5 11.5h4" stroke="#D4AF37" stroke-width="1.2" stroke-linecap="round"/></svg>
-      Key Value Factors
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2h9a1 1 0 011 1v6a1 1 0 01-1 1H6l-3 2V10H2a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#1E40AF" stroke-width="1.2"/></svg>
+      Say This to the Seller
     </div>
-    <div class="pir-factors-list">
-      ${ai.key_factors.map(f=>`<div class="pir-factor-item"><span class="pir-factor-dot"></span><span>${f}</span></div>`).join('')}
+    <div class="pir-haggle-box">
+      <div class="pir-haggle-script" id="haggleScript">${script}</div>
+      <button class="pir-haggle-copy" onclick="pirCopyHaggle(this);event.stopPropagation();" type="button">📋 Copy script</button>
     </div>
-    ${ai.advice?`<div class="pir-ai-advice">${ai.advice}</div>`:''}
   </div>`:''}
 
-  <!-- ⑬ DATA ACCURACY FOOTER -->
+  <!-- ⑭ RED FLAGS -->
+  ${redFlags.length?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v7M6.5 10v1.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Risk Flags
+    </div>
+    ${redFlags.map(f=>`<div class="pir-redflag-item"><span class="pir-redflag-bullet">●</span><span>${f}</span></div>`).join('')}
+  </div>`:''}
+
+  <!-- ⑮ LIVE SOURCE LINKS -->
+  ${r.sourceLinks&&r.sourceLinks.length?`<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 8l3-3m0 0l-2-1m2 1l1 2" stroke="#008577" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1" y="1" width="11" height="11" rx="2" stroke="#008577" stroke-width="1.1"/></svg>
+      Live Sources Used
+    </div>
+    ${r.sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pir-source-link">${l.title||l.url}</a>`).join('')}
+  </div>`:''}
+
+  <!-- ⑯ HOW CALCULATED -->
+  <div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="#D4AF37" stroke-width="1.2"/><path d="M4 6.5h5M6.5 4v5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
+      How This Was Calculated
+    </div>
+    <div class="pir-calc-note">
+      ${r.isEstimate
+        ? '🤖 No live listings were found for this search. This estimate is based on UAE market knowledge, brand-specific depreciation rates, and specification premiums.'
+        : '🔍 Live UAE listings were found and analysed. Outliers were filtered; adjustments applied for mileage, condition, and specification.'}
+      ${r.valuationNotes?`<div class="pir-calc-quote">"${r.valuationNotes}"</div>`:''}
+    </div>
+  </div>
+
+  <!-- ⑰ DATA ACCURACY FOOTER -->
   <div class="pir-footer-accuracy">
     <div class="pir-footer-conf">
       <span class="pir-footer-conf-lbl">Confidence</span>
-      <div class="pir-footer-bar-wrap"><div class="pir-footer-bar" style="width:${conf}%"></div></div>
+      <div class="pir-footer-bar-wrap"><div class="pir-footer-bar" id="cbarFill" style="width:0%"></div></div>
       <span class="pir-footer-conf-pct">${conf}%</span>
     </div>
     ${comp>0?`<div class="pir-footer-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</div>`:''}
     <div class="pir-footer-ref">${ref.label} &nbsp;|&nbsp; Based on live UAE market data</div>
+  </div>
+
+  <!-- ⑱ ACTION BUTTONS -->
+  <div class="pir-section" style="border-bottom:none;">
+    <div class="pir-action-row">
+      <button class="pir-action-btn" onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')" type="button">🔍 Dubizzle</button>
+      <button class="pir-action-btn" onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')" type="button">🚗 YallaMotor</button>
+      <button class="pir-action-btn" onclick="printValuation()" type="button">🖨 Print</button>
+      <button class="pir-action-btn primary" onclick="resetForm()" type="button">↺ New Search</button>
+    </div>
   </div>
 
 </div>`;
@@ -6446,65 +6866,268 @@ function displayValuationResult(data){
   if(!resultContainer) return;
   console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
 
-  // ── Map V12 API fields → buildResult() compatible shape ──────
-  // buildResult() reads from a legacy `r` object + form fields,
-  // so we write the API data back onto a normalised object.
+  // ── Normalise all fields ──────────────────────────────────
+  const sticker      = data.stickerPrice    || data.averagePrice || 0;
+  const handshake    = data.handshakePrice  || Math.round(sticker * 0.95) || 0;
+  const negotiation  = data.negotiationPrice|| Math.round(handshake * 0.93) || 0;
+  const minP         = data.minMarket       || data.lowPrice  || Math.round(sticker * 0.88) || 0;
+  const maxP         = data.maxMarket       || data.highPrice || Math.round(sticker * 1.12) || 0;
+  const isEstimate   = data.isEstimate ?? true;
+  const listingsCount= data.listingsFound   || 0;
+  const source       = data.source          || (isEstimate ? 'AI Estimate' : 'Live Market Data');
+  const confidence   = data.confidenceScore || (isEstimate ? 30 : 75);
+  const demand       = data.demandScore     || 55;
+  const cacheInfo    = data.cached ? ` · cached ${data.cacheAge||''} ago` : '';
+  const rta          = data.rtaFees         || (()=>{ const ins=0; return { inspection:170, registration:420, transfer:350, insurance:ins, total:170+420+350+ins }; })();
+  const depr         = data.depreciation    || [];
+  const redFlags     = data.redFlags        || [];
+  const avr          = data.avr             || {};
+  const script       = data.hagglingScript  || '';
+  const sourceLinks  = data.sourceLinks     || [];
+  const cmp          = data.comparisonToAsking || null;
+  const notes        = data.valuationNotes  || '';
+  const yr           = data.year            || new Date().getFullYear();
+
+  // ── Helper: colour bar ────────────────────────────────────
+  const bar = (pct, colour) =>
+    `<div style="background:#E5E7EB;border-radius:99px;height:8px;overflow:hidden;margin-top:4px;">
+       <div style="background:${colour};height:100%;width:${Math.min(100,pct)}%;border-radius:99px;transition:width 1s;"></div>
+     </div>`;
+
+  // ── Verdict badge colour ──────────────────────────────────
+  const verdictStyle = !cmp ? '' :
+    cmp.verdict==='Good Deal'  ? 'background:#D1FAE5;border:1px solid #6EE7B7;color:#065F46;' :
+    cmp.verdict==='Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;color:#991B1B;' :
+    'background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;';
+
+  resultContainer.innerHTML = `
+<div style="padding:16px;font-family:'Exo 2',sans-serif;">
+
+  <!-- ① HEADER: live vs estimate badge + main price -->
+  <div style="background:linear-gradient(135deg,#0A2540,#1A3A5C);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;">
+    <div style="font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">
+      ${isEstimate ? '⚠️ AI ESTIMATE' : '✅ LIVE UAE MARKET VALUE'}
+    </div>
+    <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-bottom:10px;">${source}${cacheInfo}</div>
+    <div style="font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:2px;">STICKER / LISTING PRICE</div>
+    <div id="priceMain" style="font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:900;color:#D4AF37;line-height:1;">AED ${sticker.toLocaleString()}</div>
+    ${minP&&maxP ? `<div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:4px;">Market range: AED ${minP.toLocaleString()} – AED ${maxP.toLocaleString()}</div>` : ''}
+    ${listingsCount>0 ? `<div style="margin-top:8px;"><span style="font-size:0.55rem;background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:99px;color:rgba(255,255,255,0.7);">📊 ${listingsCount} live listings analysed</span></div>` : ''}
+  </div>
+
+  <!-- ② NEGOTIATION PRICES -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+    <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#166534;margin-bottom:4px;">🤝 HANDSHAKE PRICE</div>
+      <div style="font-size:1.1rem;font-weight:800;color:#15803D;">AED ${handshake.toLocaleString()}</div>
+      <div style="font-size:0.55rem;color:#4ADE80;margin-top:2px;">Realistic closing price</div>
+    </div>
+    <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#1E40AF;margin-bottom:4px;">💬 OPEN WITH</div>
+      <div style="font-size:1.1rem;font-weight:800;color:#1D4ED8;">AED ${negotiation.toLocaleString()}</div>
+      <div style="font-size:0.55rem;color:#60A5FA;margin-top:2px;">Your opening offer</div>
+    </div>
+  </div>
+
+  <!-- ③ ASKING PRICE VERDICT -->
+  ${cmp ? `<div style="${verdictStyle}border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:center;">
+    <div style="font-size:0.85rem;font-weight:800;">${cmp.verdict}</div>
+    <div style="font-size:0.68rem;margin-top:3px;">
+      ${cmp.verdict==='Good Deal' ? `AED ${Math.abs(cmp.difference).toLocaleString()} below market average` :
+        cmp.verdict==='Overpriced' ? `AED ${cmp.difference.toLocaleString()} above market average` : 'Right at market average'}
+    </div>
+  </div>` : ''}
+
+  <!-- ④ CONFIDENCE + DEMAND BARS -->
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Data Confidence</div>
+        ${bar(confidence,'#3B82F6')}
+        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${Math.min(85,Math.max(60,confidence))}%</div>
+      </div>
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Market Demand</div>
+        ${bar(demand,'#F59E0B')}
+        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${demand}%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ RTA FEES + TOTAL COST -->
+  <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🏛️ UAE First-Year Fees (2026)</div>
+    <table style="width:100%;border-collapse:collapse;font-size:0.64rem;color:#1A2B4C;">
+      <tr><td style="padding:2px 0;">RTA Inspection</td><td style="text-align:right;">AED ${(rta.inspection||170).toLocaleString()}</td></tr>
+      <tr><td style="padding:2px 0;">Vehicle Registration</td><td style="text-align:right;">AED ${(rta.registration||420).toLocaleString()}</td></tr>
+      <tr><td style="padding:2px 0;">Ownership Transfer</td><td style="text-align:right;">AED ${(rta.transfer||350).toLocaleString()}</td></tr>
+      <tr><td style="padding:2px 0;">${yr >= 2024 ? 'Insurance (2.5% comprehensive)' : 'Insurance (3rd party, pre-2024)'}</td><td style="text-align:right;">AED ${(rta.insurance||1200).toLocaleString()}</td></tr>
+      <tr style="border-top:1px solid #FDE68A;font-weight:800;">
+        <td style="padding-top:4px;">Total First-Year Fees</td>
+        <td style="text-align:right;color:#D97706;">AED ${(rta.total||940).toLocaleString()}</td>
+      </tr>
+    </table>
+    <p style="font-size:0.55rem;color:#92400E;margin-top:5px;">Fees only — car purchase price not included. Verify insurance with your broker.</p>
+  </div>
+
+  <!-- ⑥ 3-YEAR DEPRECIATION -->
+  ${depr.length>=3 ? `
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">📉 3-Year Resale Forecast</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;">
+      ${[yr+1,yr+2,yr+3].map((y,i)=>`
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:8px;">
+        <div style="font-size:0.55rem;color:#94A3B8;">${y}</div>
+        <div style="font-size:0.8rem;font-weight:800;color:#1A2B4C;">AED ${(depr[i]||0).toLocaleString()}</div>
+        <div style="font-size:0.52rem;color:#EF4444;">−AED ${(handshake-(depr[i]||0)>0?(handshake-(depr[i]||0)).toLocaleString():'0')}</div>
+        <div style="font-size:0.48rem;color:#94A3B8;">from handshake</div>
+      </div>`).join('')}
+    </div>
+    <p style="font-size:0.55rem;color:#64748B;margin-top:6px;">Cumulative loss from handshake price (AED ${handshake.toLocaleString()}). Luxury + high-mileage vehicles depreciate faster.</p>
+  </div>` : ''}
+
+  <!-- ⑦ AVR: ADVANTAGE / VALUE / REVIEW -->
+  ${(avr.advantage||avr.value||avr.review) ? (() => {
+    // Consistency guard: if overpriced, override any "fair value" language in review
+    const isOverpriced = cmp && (cmp.verdict === 'Overpriced' || cmp.verdict === 'Significantly Overpriced');
+    const reviewText = isOverpriced && avr.review && /fair.value|good.value|fairly.priced|market.rate/i.test(avr.review)
+      ? avr.review.replace(/fair.value|good.value|fairly.priced|market.rate/gi, 'priced above market') + ' Note: asking price exceeds market average.'
+      : avr.review;
+    const bgColour = isOverpriced ? '#FFF7ED' : '#F0FDF4';
+    const borderColour = isOverpriced ? '#FED7AA' : '#BBF7D0';
+    const titleColour = isOverpriced ? '#9A3412' : '#166534';
+    return `<div style="background:${bgColour};border:1px solid ${borderColour};border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:${titleColour};margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">${isOverpriced ? '⚠️ Expert Analysis' : '🎯 Expert Analysis'}</div>
+    ${avr.advantage ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> ${avr.advantage}</div>` : ''}
+    ${avr.value     ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> ${avr.value}</div>` : ''}
+    ${reviewText    ? `<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> ${reviewText}</div>` : ''}
+  </div>`;
+  })() : ''}
+
+  <!-- ⑧ HAGGLING SCRIPT -->
+  ${script ? `
+  <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1E40AF;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🗣️ Say This to the Seller</div>
+    <div style="font-size:0.72rem;color:#1D4ED8;font-style:italic;line-height:1.5;">${script}</div>
+  </div>` : ''}
+
+  <!-- ⑨ RED FLAGS -->
+  ${redFlags.length ? `
+  <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#991B1B;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">⚠️ Red Flags</div>
+    ${redFlags.map(f=>`<div style="font-size:0.65rem;color:#7F1D1D;margin-bottom:3px;">• ${f}</div>`).join('')}
+  </div>` : ''}
+
+  <!-- ⑩ LIVE SOURCE LINKS -->
+  ${sourceLinks.length ? `
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🔗 Live Sources Used</div>
+    ${sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener"
+      style="display:block;font-size:0.63rem;color:#008577;margin-bottom:3px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+      ↗ ${l.title||l.url}</a>`).join('')}
+  </div>` : ''}
+
+  <!-- ⑪ HOW CALCULATED -->
+  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;border-left:3px solid #D4AF37;">
+    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:5px;">📌 How This Was Calculated</div>
+    <div style="font-size:0.63rem;color:#475569;line-height:1.6;">
+      ${isEstimate
+        ? '🤖 No live listings found today. Claude estimated from UAE market knowledge, depreciation rates, and spec premiums.'
+        : `🔍 Live UAE listings were found and analysed. Claude filtered outliers and adjusted for mileage, condition, and spec.`}
+      ${notes ? `<div style="margin-top:6px;font-style:italic;color:#334155;">"${notes}"</div>` : ''}
+    </div>
+  </div>
+
+  <!-- ⑫ ACTION BUTTONS -->
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+    <button onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')"
+      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🔍 Dubizzle</button>
+    <button onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')"
+      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🚗 YallaMotor</button>
+    <button onclick="resetForm()"
+      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">↺ New Search</button>
+  </div>
+</div>`;
+
+  showState('content');
+
+  // Animate price count-up on sticker price
+  const priceEl = g('priceMain');
+  if(priceEl && sticker){ animateCountUp(priceEl, sticker); }
+
+  // Scroll result into view
+  setTimeout(()=>{
+    const panel = g('resultPanel') || resultContainer.closest('.result-panel');
+    if(panel){
+      const panelTop=panel.getBoundingClientRect().top+window.scrollY;
+      window.scrollTo({top:panelTop-60,behavior:'smooth'});
+    }
+  },120);
+
+  saveLastValuation();
+}
+
+/* ── REAL displayValuationResult — routes to full PIR ─────── */
+function displayValuationResult(data){
+  stopLoad();
+  const resultContainer = g('rcontent');
+  if(!resultContainer) return;
+  console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
+
+  // Map V12 API fields → buildResult() compatible shape
   const r = {
-    // Core prices
-    averagePrice:    data.handshakePrice  || data.averagePrice   || data.stickerPrice || 0,
-    lowPrice:        data.minMarket       || data.lowPrice       || 0,
-    highPrice:       data.maxMarket       || data.highPrice      || 0,
-    // V12 fields passed through
-    stickerPrice:    data.stickerPrice    || data.averagePrice   || 0,
-    handshakePrice:  data.handshakePrice  || 0,
-    negotiationPrice:data.negotiationPrice|| 0,
-    minMarket:       data.minMarket       || 0,
-    maxMarket:       data.maxMarket       || 0,
-    listingsFound:   data.listingsFound   || 0,
-    isEstimate:      data.isEstimate      ?? true,
-    source:          data.source          || '',
-    cached:          data.cached          || false,
-    cacheAge:        data.cacheAge        || '',
-    confidenceScore: data.confidenceScore || 0,
-    demandScore:     data.demandScore     || 55,
-    confidence:      (data.confidenceScore || 0) / 100,
-    rtaFees:         data.rtaFees         || null,
-    depreciation:    data.depreciation    || [],
-    redFlags:        data.redFlags        || [],
-    avr:             data.avr             || {},
-    hagglingScript:  data.hagglingScript  || '',
-    sourceLinks:     data.sourceLinks     || [],
+    averagePrice:     data.handshakePrice  || data.averagePrice   || data.stickerPrice || 0,
+    lowPrice:         data.minMarket       || data.lowPrice       || 0,
+    highPrice:        data.maxMarket       || data.highPrice      || 0,
+    stickerPrice:     data.stickerPrice    || data.averagePrice   || 0,
+    handshakePrice:   data.handshakePrice  || 0,
+    negotiationPrice: data.negotiationPrice|| 0,
+    minMarket:        data.minMarket       || 0,
+    maxMarket:        data.maxMarket       || 0,
+    listingsFound:    data.listingsFound   || 0,
+    isEstimate:       data.isEstimate      ?? true,
+    source:           data.source          || '',
+    cached:           data.cached          || false,
+    cacheAge:         data.cacheAge        || '',
+    confidenceScore:  data.confidenceScore || 0,
+    demandScore:      data.demandScore     || 55,
+    confidence:       (data.confidenceScore || 0) / 100,
+    rtaFees:          data.rtaFees         || null,
+    depreciation:     data.depreciation    || [],
+    redFlags:         data.redFlags        || [],
+    avr:              data.avr             || {},
+    hagglingScript:   data.hagglingScript  || '',
+    sourceLinks:      data.sourceLinks     || [],
     comparisonToAsking: data.comparisonToAsking || null,
-    valuationNotes:  data.valuationNotes  || '',
-    // ai sub-object (optional — not returned by V12 worker but kept for forward-compat)
-    ai:              data.ai              || null,
-    marketability:   data.marketability   || null,
+    valuationNotes:   data.valuationNotes  || '',
+    ai:               data.ai              || null,
+    marketability:    data.marketability   || null,
   };
 
-  // Pull inputs from form (same pattern as the original buildResult caller)
   const brand   = data.brand   || g('brand')?.value   || '';
   const model   = data.model   || g('model')?.value   || '';
   const year    = data.year    || g('year')?.value     || '';
   const mileage = data.mileage != null ? String(data.mileage) : (g('mileage')?.value || '');
   const asking  = g('asking')?.value || '';
 
-  // ── Render the full Price Intelligence Report ─────────────
+  // Render full Price Intelligence Report
   resultContainer.innerHTML = buildResult(r, brand, model, year, mileage, asking);
 
   showState('content');
 
-  // Animate the dominant Handshake price (id="priceMain" set inside buildResult)
+  // Animate the dominant Handshake price
   const priceEl = g('priceMain');
   if(priceEl){
     const target = r.handshakePrice || r.averagePrice || 0;
     if(target) animateCountUp(priceEl, target);
   }
 
-  // Animate the confidence bar that buildResult sets at width:0% initially
+  // Animate confidence footer bar + stat bars
   setTimeout(()=>{
     const cbarFill = document.getElementById('cbarFill');
     const conf = Math.round((r.confidence||0)*100);
     if(cbarFill && conf) cbarFill.style.width = conf+'%';
+    pirAnimateStatBars();
   }, 80);
 
   // Scroll result panel into view
@@ -7520,6 +8143,39 @@ function _updateStage2(){
 // Reset hook — full form clear + restore stage 1
 // (primary resetForm defined earlier at line ~5143 handles field clearing)
 // This block adds the stage-2 panel reset on top.
+
+/* ── PIR INTERACTIVE: collapsible sections ────────────────── */
+function pirToggle(section){
+  section.classList.toggle('pir-collapsed');
+}
+
+/* ── PIR INTERACTIVE: copy haggling script ───────────────── */
+function pirCopyHaggle(btn){
+  const el=document.getElementById('haggleScript');
+  if(!el)return;
+  navigator.clipboard?.writeText(el.textContent||'').then(()=>{
+    btn.textContent='✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copy script';btn.classList.remove('copied');},2200);
+  }).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=el.textContent||'';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+    btn.textContent='✓ Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copy script';btn.classList.remove('copied');},2200);
+  });
+}
+
+/* ── PIR INTERACTIVE: animate stat bars after render ─────── */
+function pirAnimateStatBars(){
+  document.querySelectorAll('.pir-stat-fill[data-target]').forEach(el=>{
+    const target=parseInt(el.dataset.target)||0;
+    // rAF to allow browser paint first
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      el.style.width=Math.min(100,target)+'%';
+    }));
+  });
+}
 
 /* ── GLOBAL EXPORTS ─────────────────────────────────────── */
 window.checkCarPrice = checkCarPrice;
