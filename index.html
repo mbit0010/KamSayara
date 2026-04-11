@@ -187,6 +187,15 @@
     }
     @keyframes cardIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
 
+    /* ── RESULT PANEL: match form height, clean idle/load ─── */
+    .layout{ align-items:stretch; }
+    .result-panel{ align-self:stretch; min-height:0; }
+    /* rpanel-inner stretches to fill */
+    .rpanel-inner{ flex:1; display:flex; flex-direction:column; }
+    /* Idle + loading: fill panel, centred, no borders or backgrounds */
+    .rph{ flex:1; border:none!important; box-shadow:none!important; background:transparent!important; }
+    .rld{ flex:1; border:none!important; box-shadow:none!important; background:transparent!important; padding:32px 20px; }
+
     .form-body{padding:6px 14px 6px;flex:1;}
 
     /* ── SECTION LABELS ─────────────────────────────────────── */
@@ -1119,7 +1128,8 @@
         z-index: 10;
       }
 
-      /* ── RIGHT: White Output Panel — scrollable ── */
+      /* ── RIGHT: White Output Panel — same height as form card ── */
+      .layout { align-items: stretch !important; }
       .result-panel {
         grid-area: result;
         background: var(--panel-bg) !important;
@@ -1128,12 +1138,16 @@
         border-left: 1px solid var(--border);
         box-shadow: var(--card-shadow-deep);
         min-height: 0;
+        align-self: stretch;
         overflow: visible;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
       }
-      .rpanel-inner { flex: 1; }
+      .rpanel-inner { flex: 1; display: flex; flex-direction: column; }
+      /* Idle + loading fill the panel cleanly, centred, no box */
+      .rph  { flex: 1; border: none !important; background: transparent !important; box-shadow: none !important; }
+      .rld  { flex: 1; border: none !important; background: transparent !important; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 20px; }
 
       /* ── FORM HEADER ── */
       .form-header {
@@ -3428,9 +3442,9 @@
 
   /* ── Named step progress track ── */
   .rld-steps-wrap {
-    background: rgba(0,133,119,0.04);
-    border: 1px solid rgba(0,133,119,0.14);
-    border-radius: 12px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
     padding: 20px 22px;
   }
   .rld-steps-header {
@@ -5084,6 +5098,88 @@
     }
     .rld-step-item.done{opacity:.55;}
 
+    
+    /* ── REPORT TABS ─────────────────────────────────────── */
+    .pir-tabs-nav{
+      display:flex;gap:6px;padding:12px 16px 0;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(to bottom,#FAFAF7,#F6F4EF);
+    }
+    .pir-tnav-btn{
+      display:flex;align-items:center;gap:6px;
+      padding:.45rem 1.1rem;border:1.5px solid transparent;
+      border-radius:8px 8px 0 0;border-bottom:none;
+      font-family:"Exo 2",sans-serif;font-size:.72rem;font-weight:700;
+      letter-spacing:.04em;cursor:pointer;
+      color:var(--muted);background:transparent;
+      transition:all .2s;position:relative;bottom:-1px;
+    }
+    .pir-tnav-btn:hover{color:var(--accent);background:rgba(0,133,119,0.05);}
+    .pir-tnav-btn.pir-tnav-active{
+      color:var(--accent);background:#fff;
+      border-color:var(--border);border-bottom-color:#fff;
+    }
+    .pir-tab-panel{animation:fIn .28s var(--ease) both;}
+
+    /* ── SVG GAUGE RINGS ─────────────────────────────────── */
+    .pir-gauge-wrap{display:flex;gap:12px;margin:10px 0;}
+    .pir-gauge{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;}
+    .pir-gauge svg{overflow:visible;}
+    .pir-gauge-track{stroke:rgba(0,0,0,0.07);fill:none;stroke-linecap:round;}
+    .pir-gauge-fill{fill:none;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(0.34,1.1,0.64,1);}
+    .pir-gauge-val{font-family:"Orbitron",sans-serif;font-size:.9rem;font-weight:800;}
+    .pir-gauge-lbl{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+    .pir-gauge-sub{font-size:.6rem;color:var(--muted);font-weight:500;}
+
+    /* ── PRICE COUNT-UP ──────────────────────────────────── */
+    .pir-ps-hero-amount{
+      font-family:"Orbitron",sans-serif;
+      font-size:clamp(1.6rem,5vw,2.6rem);
+      font-weight:900;color:var(--accent);
+      letter-spacing:-.02em;line-height:1;
+      animation:priceReveal .6s .2s var(--ease) both;
+    }
+    @keyframes priceReveal{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:none;}}
+
+    /* ── MARKET POSITION BAR (interactive) ───────────────── */
+    .pir-mp2-bar-wrap{position:relative;height:12px;border-radius:6px;
+      background:linear-gradient(90deg,#EF4444 0%,#F59E0B 35%,#22C55E 65%,#22C55E 100%);
+      margin:28px 0 20px;cursor:crosshair;}
+    .pir-mp2-bar-wrap:hover .pir-mp-tooltip{opacity:1;}
+    .pir-mp-tooltip{position:absolute;top:-30px;transform:translateX(-50%);
+      background:rgba(10,15,30,0.88);color:#fff;font-size:.58rem;font-weight:700;
+      padding:3px 7px;border-radius:5px;pointer-events:none;
+      opacity:0;transition:opacity .15s;white-space:nowrap;}
+
+    /* ── VERDICT RIBBON (enhanced) ───────────────────────── */
+    .pir-verdict-ribbon{
+      border-radius:10px;padding:13px 15px;margin:0 0 2px;
+      display:flex;align-items:flex-start;gap:10px;
+    }
+    .pir-verdict-strong-buy,.pir-verdict-buy{background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border:1.5px solid #86EFAC;}
+    .pir-verdict-fair{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FCD34D;}
+    .pir-verdict-overpriced,.pir-verdict-caution{background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border:1.5px solid #FDBA74;}
+    .pir-verdict-high-risk{background:linear-gradient(135deg,#FFF5F5,#FFE4E4);border:1.5px solid #FCA5A5;}
+    .pir-verdict-neu{background:linear-gradient(135deg,#F8FAFC,#F1F5F9);border:1.5px solid #CBD5E1;}
+
+    /* ── COLLAPSIBLE SECTIONS ────────────────────────────── */
+    .pir-collapsible-hdr{
+      display:flex;align-items:center;justify-content:space-between;
+      cursor:pointer;user-select:none;padding:10px 0;
+    }
+    .pir-collapsible-hdr:hover .pir-collapse-ico{color:var(--accent);}
+    .pir-collapse-ico{font-size:.8rem;color:var(--muted);transition:transform .2s;}
+    .pir-collapsible-hdr.open .pir-collapse-ico{transform:rotate(180deg);}
+    .pir-collapsible-body{overflow:hidden;transition:max-height .3s ease;}
+
+    /* ── DEAL SCORE METER ────────────────────────────────── */
+    .pir-deal-meter{display:flex;align-items:center;gap:8px;margin:6px 0;}
+    .pir-deal-meter-track{flex:1;height:6px;border-radius:3px;
+      background:linear-gradient(90deg,#22C55E,#F59E0B,#EF4444);position:relative;overflow:hidden;}
+    .pir-deal-meter-cursor{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;
+      background:#fff;border:2px solid;box-shadow:0 1px 4px rgba(0,0,0,0.25);
+      transition:left 1s cubic-bezier(0.34,1.2,0.64,1);}
+
     </style>
 <body>
 
@@ -5557,7 +5653,6 @@
   </div>
 
   <p class="disc"><span id="contact" style="display:block;visibility:hidden;height:0"></span>Price estimates are based on live market data. Prices vary by location (Dubai, Sharjah, Abu Dhabi), condition, and negotiation. Not a guaranteed sale price.</p>
-</div>
 
 <!-- Floating back-to-inputs (mobile) -->
 <button class="back-to-inputs" id="backToInputs" onclick="g('formCard').scrollIntoView({behavior:'smooth'})">↑ Inputs</button>
@@ -5814,6 +5909,12 @@ function populateModels(){
   if(b&&BM[b])BM[b].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;s.appendChild(o);});
   markFilled(g('brand'));
   ksSync(g('brand'));
+  // Reset trim dropdown when brand changes (model not yet chosen)
+  populateTrims(b, '');
+  // Reset body type to unset when brand changes
+  g('body').value='';
+  markFilled(g('body'));
+  ksSync(g('body'));
   // refresh model ks-dropdown with new options
   requestAnimationFrame(()=>{
     ksRefresh(s);
@@ -5824,8 +5925,58 @@ function populateModels(){
 function onModelChange(){
   markFilled(g('model'));
   const b=g('brand').value,m=g('model').value;
-  if(b&&m){const bg=guessBody(b,m);if(bg)setVal(g('body'),bg);}
+  if(b&&m){
+    const bg=guessBody(b,m);
+    if(bg){
+      setVal(g('body'),bg);
+      markFilled(g('body'));
+      ksSync(g('body'));
+    }
+    populateTrims(b,m);
+  }
   updateReadiness();
+}
+
+/* ── TRIM MAP: brand+model → trims ──────────────────────── */
+const TRIM_MAP={
+Toyota:{'Camry':['XLE','SE','LE','TRD','XSE','Hybrid LE','Hybrid SE','Hybrid XSE','Hybrid XLE'],'Corolla':['CE','LE','SE','XLE','XSE','Hybrid LE'],'Corolla Cross':['L','LE','XLE','Hybrid'],'Land Cruiser':['GX','GXR','VX','VXR','EX','ZX'],'Land Cruiser 300':['GX','GXR','VX','VXR','ZX'],'Prado':['EX','GX','GXR','TX','TXL','VX','VXL'],'Fortuner':['EX','EXR','GX','GXR','VX','VXR','SR5','4x2','4x4'],'RAV4':['LE','XLE','XSE','Adventure','TRD Off-Road','Limited','Hybrid LE','Hybrid XSE'],'Hilux':['SR','SR5','SR5+','TRD','Workmate','Rogue','4x2','4x4'],'Yaris':['E','G','E CVT','G CVT'],'Yaris Cross':['LE','GLE'],'Rush':['EX','G','GX'],'Avanza':['E','G'],'Hiace':['GL','Standard Roof','High Roof','Commuter'],'Prius':['L','LE','XLE','Hybrid'],'Supra':['3.0','A91'],'C-HR':['LE','XLE','Limited'],'Sequoia':['SR5','Limited','Platinum','TRD Pro'],'Tundra':['SR','SR5','Limited','Platinum','1794 Edition','TRD Pro'],'Tacoma':['SR','SR5','TRD Sport','TRD Off-Road','Limited','TRD Pro'],'FJ Cruiser':['Base','Trail Teams'],'4Runner':['SR5','TRD Sport','TRD Off-Road','Limited','TRD Pro']},
+Nissan:{'Patrol':['SE','LE','XE','Platinum','Nismo','Safari','V6','V8'],'Patrol Safari':['SE','LE'],'Altima':['S','SV','SL','SR','Platinum'],'Sunny':['S','SV'],'X-Trail':['S','SV','SL','Platinum'],'Kicks':['S','SV','SR','Platinum'],'Sentra':['S','SV','SR'],'Murano':['S','SV','SL','Platinum'],'Navara':['S','SV','SL','Pro-4X'],'Tiida':['S','SV','SL'],'Juke':['S','SV','SL'],'Armada':['SV','SL','Platinum'],'GT-R':['Premium','Track Edition','NISMO'],'350Z':['Base','Touring','Nismo'],'370Z':['Base','Sport','Touring','Nismo']},
+Honda:{'Civic':['LX','Sport','EX','Touring','Si','Type R'],'Accord':['LX','Sport','EX-L','Touring','Hybrid'],'CR-V':['LX','EX','EX-L','Touring','Sport','Hybrid'],'HR-V':['LX','Sport','EX','EX-L'],'Pilot':['Sport','EX-L','TrailSport','Elite'],'City':['LX','EX','VX','RS'],'BR-V':['S','V','RS'],'Odyssey':['LX','EX','EX-L','Touring','Elite'],'Passport':['Sport','EX-L','TrailSport','Elite']},
+BMW:{'3 Series':['318i','320i','330i','M340i','320d'],'5 Series':['520i','528i','530i','540i','M550i','520d'],'7 Series':['730i','740i','750i','760i','M760i'],'X3':['sDrive20i','xDrive20i','xDrive30i','M40i'],'X5':['xDrive30i','xDrive40i','M50i','xDrive45e'],'X6':['xDrive30i','xDrive40i','M50i'],'X7':['xDrive40i','xDrive50i','M60i'],'M3':['Competition','CS'],'M4':['Competition','CS','Convertible'],'M5':['Competition'],'1 Series':['118i','120i','M135i'],'2 Series':['218i','220i','230i','M240i'],'4 Series':['420i','430i','440i','M440i']},
+'Mercedes-Benz':{'C-Class':['C180','C200','C250','C300','C43 AMG','C63 AMG'],'E-Class':['E200','E250','E300','E350','E53 AMG','E63 AMG'],'S-Class':['S350','S400','S450','S500','S580','S63 AMG','Maybach'],'GLE':['GLE300d','GLE350','GLE450','GLE53 AMG','GLE63 AMG'],'GLS':['GLS350d','GLS450','GLS600 Maybach'],'G-Class':['G400d','G500','G63 AMG'],'GLC':['GLC200','GLC250','GLC300','GLC43 AMG','GLC63 AMG'],'CLA':['CLA200','CLA250','CLA35 AMG','CLA45 AMG'],'A-Class':['A180','A200','A250','A35 AMG','A45 AMG'],'GLA':['GLA200','GLA250','GLA35 AMG'],'GLB':['GLB200','GLB250','GLB35 AMG']},
+Lexus:{'LX':['LX570','LX600'],'GX':['GX460'],'RX':['RX300','RX350','RX350L','RX450h'],'ES':['ES250','ES300h','ES350'],'IS':['IS200t','IS250','IS300','IS350','IS500'],'LS':['LS350','LS500','LS500h'],'NX':['NX200t','NX250','NX300h','NX350'],'UX':['UX200','UX250h'],'LC':['LC500','LC500h'],'RC':['RC300','RC350','RC F']},
+Audi:{'A4':['35 TFSI','40 TFSI','45 TFSI','S4'],'A6':['40 TFSI','45 TFSI','50 TDI','S6'],'A8':['50 TDI','55 TFSI','60 TFSI','S8'],'Q3':['35 TFSI','40 TFSI','45 TFSI'],'Q5':['35 TFSI','40 TFSI','45 TFSI','SQ5'],'Q7':['45 TFSI','55 TFSI','SQ7'],'Q8':['50 TDI','55 TFSI','SQ8','RS Q8'],'A3':['30 TFSI','35 TFSI','40 TFSI','S3'],'A5':['35 TFSI','40 TFSI','45 TFSI','S5','RS5'],'A7':['45 TFSI','55 TFSI','S7','RS7']},
+Porsche:{'911':['Carrera','Carrera S','Carrera 4S','Targa 4S','Turbo','Turbo S','GT3','GT3 RS'],'Cayenne':['Cayenne','S','GTS','Turbo','Turbo GT','e-Hybrid'],'Macan':['Macan','S','GTS','Turbo'],'Panamera':['4S','GTS','Turbo','Turbo S','e-Hybrid'],'Taycan':['RWD','4S','GTS','Turbo','Turbo S'],'718 Boxster':['Base','S','GTS','Spyder'],'718 Cayman':['Base','S','GTS','GT4']},
+'Land Rover':{'Range Rover':['HSE','Autobiography','SV','P400','P530'],'Range Rover Sport':['S','SE','HSE','Dynamic','SVR','P400','P510'],'Range Rover Evoque':['S','SE','R-Dynamic','HSE'],'Range Rover Velar':['S','SE','R-Dynamic','HSE'],'Defender':['S','SE','HSE','X','V8','90','110','130'],'Discovery':['S','SE','HSE','R-Dynamic'],'Discovery Sport':['S','SE','R-Dynamic','HSE']},
+Jeep:{'Grand Cherokee':['Laredo','Limited','Overland','Summit','Trailhawk','SRT','Trackhawk'],'Grand Cherokee L':['Laredo','Limited','Overland','Summit','Trailhawk'],'Wrangler':['Sport','Sahara','Rubicon','Unlimited','4xe'],'Cherokee':['Sport','Latitude','Trailhawk','Overland','Limited'],'Compass':['Sport','Latitude','Trailhawk','Overland','Limited'],'Renegade':['Sport','Latitude','Trailhawk','Limited'],'Grand Wagoneer':['Base','Series II','Series III']},
+Chevrolet:{'Tahoe':['LS','LT','RST','Z71','Premier','High Country'],'Suburban':['LS','LT','RST','Z71','Premier','High Country'],'Silverado 1500':['WT','Custom','LT','RST','LTZ','High Country'],'Traverse':['LS','LT','RS','Premier','High Country'],'Malibu':['L','LS','LT','Premier'],'Camaro':['LS','LT','RS','SS','ZL1'],'Blazer':['L','LT','RS','Premier'],'Equinox':['L','LS','LT','RS','Premier'],'Colorado':['WT','LT','Z71','LTZ','ZR2'],'TrailBlazer':['L','LS','LT','RS','ACTIV']},
+GMC:{'Yukon':['SLE','SLT','AT4','Denali','Denali Ultimate'],'Yukon XL':['SLE','SLT','AT4','Denali','Denali Ultimate'],'Sierra 1500':['Regular','SLE','SLT','AT4','Denali'],'Terrain':['SLE','SLT','AT4','Denali'],'Acadia':['SLE','SLT','AT4','Denali'],'Canyon':['Base','Elevation','AT4','Denali']},
+Dodge:{'Charger':['SXT','GT','R/T','Scat Pack','Hellcat','Hellcat Redeye'],'Challenger':['SXT','GT','R/T','Scat Pack','Hellcat','Hellcat Redeye'],'Durango':['SXT','GT','R/T','Citadel','SRT 392','Hellcat'],'Journey':['SE','SXT','Crossroad','GT']},
+Ford:{'Explorer':['Base','XLT','ST','Limited','Platinum','King Ranch'],'F-150':['XL','XLT','Lariat','King Ranch','Platinum','Limited','Raptor'],'Ranger':['XL','XLT','Sport','Lariat','Raptor'],'Mustang':['EcoBoost','GT','Mach 1','Shelby GT350','Shelby GT500'],'Bronco':['Base','Big Bend','Outer Banks','Badlands','Wildtrak','Raptor'],'Edge':['SE','SEL','Titanium','ST'],'Expedition':['XL','XLT','Limited','King Ranch','Platinum','Max'],'Escape':['S','SE','SEL','Titanium']},
+Hyundai:{'Tucson':['GL','GLS','Latitude','Ultimate','N Line'],'Santa Fe':['GL','GLS','Premium','Ultimate','Calligraphy'],'Elantra':['SE','SEL','N Line','Limited','N'],'Sonata':['SE','SEL','N Line','Limited'],'Palisade':['SE','SEL','Limited','Calligraphy'],'Creta':['Smart','Modern','Premium'],'Kona':['SE','SEL','N Line','Limited'],'Ioniq 5':['Standard','Long Range','N'],'Ioniq 6':['Standard','Long Range'],'Staria':['Smart','Premium']},
+Kia:{'Sportage':['LX','EX','SX','SX Prestige','X-Line'],'Sorento':['LX','S','EX','SX','SX Prestige','X-Line'],'Telluride':['LX','S','EX','SX','SX-P','X-Pro','X-Line'],'Carnival':['LX','EX','SX','SX Prestige'],'K5':['LX','EX','GT-Line','EX+','GT'],'Cerato':['L','M','EX','EX+'],'EV6':['Standard','Long Range','GT'],'Seltos':['LX','EX','SX'],'Niro':['LX','EX','SX Touring','EV'],'Stinger':['GT','GT2','GT-Line']},
+Mitsubishi:{'Pajero':['GLS','GXR','Exceed','Platinum Edition'],'Pajero Sport':['GLX','GLS','GT'],'Outlander':['ES','LE','SE','SEL','GT'],'ASX':['GLX','GLS'],'Eclipse Cross':['ES','LE','SE','SEL'],'Lancer':['GLX','GLS','Evolution'],'L200':['GLX','GLS','GT'],'Montero':['GLS','GXR']},
+Mazda:{'CX-5':['Sport','Touring','Carbon Edition','Grand Touring','Signature'],'CX-9':['Sport','Touring','Carbon Edition','Grand Touring','Signature'],'CX-3':['Sport','Touring','Grand Touring'],'3':['Sport','Select','Preferred','Premium','Turbo'],'6':['Sport','Touring','Carbon Edition','Grand Touring','Signature'],'MX-5':['Sport','Club','Grand Touring'],'CX-30':['Select','Preferred','Premium','Turbo']},
+Volkswagen:{'Golf':['S','SE','SEL','R-Line','GTI','R'],'Tiguan':['S','SE','SEL','R-Line','R'],'Passat':['S','SE','SEL','R-Line'],'Teramont':['S','SE','SEL'],'Touareg':['SE','SEL','R-Line','Executive'],'Jetta':['S','SE','SEL','R-Line','GLI'],'Polo':['Comfortline','Highline','R-Line'],'T-Roc':['Style','R-Line','R']},
+Subaru:{'Forester':['Base','Premium','Sport','Limited','Touring'],'Outback':['Base','Premium','Limited','Touring','Wilderness'],'Crosstrek':['Base','Premium','Sport','Limited'],'WRX':['Base','Premium','Limited','GT'],'Impreza':['Base','Premium','Sport','Limited'],'BRZ':['Premium','Limited']},
+Volvo:{'XC90':['Momentum','R-Design','Inscription','T5','T6','T8','Ultimate'],'XC60':['Momentum','R-Design','Inscription','T5','T6','T8','Ultimate'],'XC40':['Momentum','R-Design','Inscription','Recharge','Ultimate'],'S90':['Momentum','R-Design','Inscription'],'S60':['Momentum','R-Design','Inscription','Polestar'],'V60':['Momentum','R-Design','Inscription']},
+Infiniti:{'QX80':['Luxe','Premium Select','Sensory','Autograph'],'QX60':['Pure','Luxe','Sensory','Autograph'],'QX50':['Pure','Luxe','Sensory','Autograph'],'Q50':['Pure','Luxe','Red Sport 400','Sensory'],'Q60':['Pure','Luxe','Red Sport 400','Sensory'],'QX70':['Base','Sport','Limited']},
+Cadillac:{'Escalade':['Luxury','Premium Luxury','Sport','Platinum','ESV'],'XT5':['Luxury','Premium Luxury','Sport','Platinum'],'XT6':['Luxury','Premium Luxury','Sport','Platinum'],'CT5':['Luxury','Premium Luxury','Sport','V-Series'],'CT4':['Luxury','Premium Luxury','Sport','V-Series']},
+};
+
+function populateTrims(brand,model){
+  const sel=g('trim');
+  if(!sel)return;
+  const prev=sel.value;
+  sel.innerHTML='<option value="">Select…</option>';
+  const trims=(TRIM_MAP[brand]||{})[model]||[];
+  const list=trims.length?[...trims,'Other']:['Base','Sport','GLX','GX','EX','Limited','Premium','SE','LE','XLE','Platinum','Other'];
+  list.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+  if(prev&&[...sel.options].some(o=>o.value===prev))sel.value=prev;
+  else sel.value='';
+  markFilled(sel);
+  ksSync(sel);
+  ksRefresh(sel);
 }
 
 /* ── QUICK CHECK ────────────────────────────────────────── */
@@ -6498,6 +6649,21 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>
   </div>
 
+  <!-- TAB NAV -->
+  <div class="pir-tabs-nav">
+    <button class="pir-tnav-btn pir-tnav-active" id="pirTabBtn1" onclick="pirSwitchTab(1)" type="button">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6.5h5M6.5 4v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Verdict
+    </button>
+    <button class="pir-tnav-btn" id="pirTabBtn2" onclick="pirSwitchTab(2)" type="button">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M2 6.5h9M2 9.5h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Full Analysis
+    </button>
+  </div>
+
+  <!-- TAB 1: VERDICT (default) -->
+  <div class="pir-tab-panel" id="pirTabVerdict">
+
   <!-- ③ MARKET VERDICT RIBBON -->
   <div class="pir-verdict-ribbon pir-verdict-${vk}">
     <div class="pir-verdict-badge-wrap">
@@ -6790,6 +6956,11 @@ function buildResult(r,brand,model,year,mileage,asking){
       }
     })()}
   </div>
+
+  </div><!-- /pir-tab-verdict -->
+
+  <!-- TAB 2: FULL ANALYSIS -->
+  <div class="pir-tab-panel" id="pirTabAnalysis" style="display:none">
 
   <!-- ⑨ MARKET INSIGHT SUMMARY — merged, concise, powerful -->
   <div class="pir-insight-wrap">
@@ -7673,7 +7844,8 @@ function buildResult(r,brand,model,year,mileage,asking){
   </div>`;
   })()}
 
-</div>`;
+  </div><!-- /pir-tab-analysis -->
+</div><!-- /pir-wrap -->`;
 }
 async function checkCarPrice(){
   const brand = g('brand')?.value;
@@ -7687,6 +7859,7 @@ async function checkCarPrice(){
   // Validate required fields
   let bad = false;
   if(!brand){showErr('brand','Select a brand');bad=true;}
+  if(!model){showErr('model','Select a model');bad=true;}
   if(!year){showErr('year','Select a year');bad=true;}
   if(!mileage){showErr('mileage','Enter mileage');bad=true;}
   if(bad){document.querySelector('.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
@@ -7950,6 +8123,23 @@ function displayValuationResult(data){
 
   saveLastValuation();
   activateShareStrip();
+  // Animate gauges and price count-up after DOM renders
+  requestAnimationFrame(()=>{
+    const confPct=Math.round((r.confidenceScore||r.confidence||0)*100)||60,demPct=Math.round(r.demandScore||55);
+    const confCol=confPct>=70?'#22C55E':confPct>=40?'#F59E0B':'#EF4444';
+    const demCol =demPct>=70?'#22C55E':demPct>=40?'#F59E0B':'#EF4444';
+    pirDrawGauge('confGaugeFill',confPct,confCol);
+    pirDrawGauge('demGaugeFill',demPct,demCol);
+    const priceEl=document.getElementById('priceMain');
+    if(priceEl) pirCountUp(priceEl,r.handshakePrice||r.averagePrice||0);
+    // Animate footer confidence bar
+    setTimeout(()=>{const b=document.getElementById('cbarFill');if(b)b.style.width=confPct+'%';},400);
+    // Expand all collapsibles on load
+    document.querySelectorAll('.pir-collapsible-body').forEach(b=>{
+      b.style.maxHeight=b.scrollHeight+'px';
+      b.previousElementSibling?.classList.add('open');
+    });
+  });
 }
 
 /* ── MOBILE BOTTOM SHEET / CARD STACK (no-op in unified layout) ── */
@@ -9015,6 +9205,67 @@ function pirAnimateStatBars(){
 window.checkCarPrice = checkCarPrice;
 window.resetForm = resetForm;
 window.displayValuationResult = displayValuationResult;
+
+/* ── TAB SWITCHER ──────────────────────────────────────── */
+function pirSwitchTab(n){
+  const v=document.getElementById('pirTabVerdict');
+  const a=document.getElementById('pirTabAnalysis');
+  const b1=document.getElementById('pirTabBtn1');
+  const b2=document.getElementById('pirTabBtn2');
+  if(!v||!a)return;
+  if(n===1){
+    v.style.display='';a.style.display='none';
+    b1&&b1.classList.add('pir-tnav-active');
+    b2&&b2.classList.remove('pir-tnav-active');
+  }else{
+    v.style.display='none';a.style.display='';
+    b2&&b2.classList.add('pir-tnav-active');
+    b1&&b1.classList.remove('pir-tnav-active');
+  }
+}
+
+/* ── PRICE COUNT-UP ────────────────────────────────────── */
+function pirCountUp(el,target,dur=900){
+  if(!el)return;
+  const start=performance.now();
+  const fmt=n=>'AED '+Math.round(n).toLocaleString();
+  el.textContent=fmt(0);
+  function frame(now){
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=fmt(target*ease);
+    if(p<1)requestAnimationFrame(frame);
+    else el.textContent=fmt(target);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ── GAUGE RINGS ───────────────────────────────────────── */
+function pirDrawGauge(svgId,pct,colour){
+  const svg=document.getElementById(svgId);if(!svg)return;
+  const r=34,c=2*Math.PI*r,fill=svg.querySelector('.pir-gauge-fill');
+  if(!fill)return;
+  fill.style.stroke=colour;
+  fill.style.strokeDasharray=c;
+  fill.style.strokeDashoffset=c;
+  setTimeout(()=>{fill.style.strokeDashoffset=c*(1-pct/100);},80);
+}
+
+/* ── COLLAPSIBLE ───────────────────────────────────────── */
+function pirToggle(id){
+  const body=document.getElementById(id);
+  const hdr=body?.previousElementSibling;
+  if(!body)return;
+  const open=body.style.maxHeight&&body.style.maxHeight!=='0px';
+  body.style.maxHeight=open?'0px':body.scrollHeight+'px';
+  hdr?.classList.toggle('open',!open);
+}
+function pirCollExpand(id){
+  const body=document.getElementById(id);
+  if(!body)return;
+  body.style.maxHeight=body.scrollHeight+'px';
+  body.previousElementSibling?.classList.add('open');
+}
 
 /* ── BOOT ───────────────────────────────────────────────── */
 initBrands();initYears();
