@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>KamSayara – Real UAE Car Valuation</title>
-  <meta name="description" content="Get an instant, accurate UAE car valuation based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi.">
+  <title>KamSayara – UAE Car Price Intelligence</title>
+  <meta name="description" content="Get an instant, accurate UAE car price intelligence report based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:title" content="KamSayara – Real UAE Car Valuation">
-  <meta property="og:description" content="Instant free car valuation based on live UAE market data. Know your car\'s real price in under 30 seconds.">
+  <meta property="og:title" content="KamSayara – UAE Car Price Intelligence">
+  <meta property="og:description" content="Instant free price intelligence report based on live UAE market data. Know the real market price in under 30 seconds.">
   <meta property="og:type" content="website">
   <meta name="robots" content="index, follow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,49 +97,50 @@
       background:linear-gradient(155deg,#FFFDF5 0%,#FFF8E4 55%,#FFFBEE 100%);
       clip-path:ellipse(58% 100% at 50% 100%);
     }
-    .hero-inner{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 20px 52px;}
+    .hero-inner{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 clamp(16px,3vw,32px) clamp(48px,7vw,80px);box-sizing:border-box;width:100%;}
 
     /* hero nav — centered brand + links */
-    .hnav{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;gap:12px;}
+    .hnav{display:flex;align-items:center;justify-content:space-between;padding:clamp(14px,2.5vw,22px) 0 clamp(10px,2vw,18px);gap:8px;min-width:0;}
     .wm{display:flex;flex-direction:column;gap:2px;text-decoration:none;flex-shrink:0;}
     .wm-name{display:flex;align-items:baseline;}
-    .wm-kam{font-family:"Orbitron",sans-serif;font-size:clamp(1.5rem,4vw,2rem);font-weight:900;color:#E8D060;letter-spacing:-.01em;text-shadow:0 2px 18px rgba(0,0,0,0.3);}
-    .wm-sep{font-size:1.1rem;color:rgba(232,208,96,0.3);margin:0 3px;}
-    .wm-say{font-family:"Orbitron",sans-serif;font-size:.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:.16em;text-transform:uppercase;}
-    .wm-sub{font-size:.55rem;color:rgba(255,255,255,0.55);letter-spacing:.18em;text-transform:uppercase;}
-    .hnav-links{display:flex;align-items:center;gap:2px;margin-left:auto;}
+    .wm-kam{font-family:"Orbitron",sans-serif;font-size:clamp(1.1rem,3.2vw,1.85rem);font-weight:900;color:#E8D060;letter-spacing:-.01em;text-shadow:0 2px 18px rgba(0,0,0,0.3);white-space:nowrap;}
+    .wm-sep{font-size:clamp(.7rem,1.8vw,1.1rem);color:rgba(232,208,96,0.3);margin:0 2px;}
+    .wm-say{font-family:"Orbitron",sans-serif;font-size:clamp(.62rem,1.6vw,.88rem);font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;}
+    .wm-sub{font-size:clamp(.5rem,.9vw,.6rem);color:rgba(255,255,255,0.5);letter-spacing:.14em;text-transform:uppercase;}
+    .hnav-links{display:flex;align-items:center;gap:0;margin-left:auto;flex-shrink:1;min-width:0;}
     .hnav-link{
-      font-family:"Exo 2",sans-serif;font-size:.7rem;font-weight:600;
-      letter-spacing:.07em;text-transform:uppercase;
+      font-family:"Exo 2",sans-serif;font-size:clamp(.65rem,1.05vw,.78rem);font-weight:600;
+      letter-spacing:.05em;text-transform:uppercase;
       color:rgba(255,255,255,0.75);text-decoration:none;
-      padding:.25rem .75rem;border-radius:99px;border:1px solid transparent;
+      padding:.28rem clamp(.5rem,1vw,.78rem);border-radius:99px;border:1px solid transparent;
       transition:all .18s;white-space:nowrap;
     }
     .hnav-link:hover{color:rgba(255,255,255,0.88);border-color:rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);}
 
     /* hero headline — fully centred, no button */
-    .hero-hl{text-align:center;padding:0 0 8px;display:flex;flex-direction:column;align-items:center;gap:12px;}
+    .hero-hl{text-align:center;padding:clamp(8px,1.5vw,16px) 0 clamp(8px,2vw,18px);display:flex;flex-direction:column;align-items:center;gap:clamp(10px,1.5vw,16px);}
     .hero-tag{
       font-family:"Exo 2",sans-serif;
-      font-size:clamp(1.65rem,4.5vw,2.8rem);
-      font-weight:700;color:#fff;line-height:1.2;margin-bottom:0;
+      font-size:clamp(1.55rem,4.2vw,2.9rem);
+      font-weight:700;color:#fff;line-height:1.15;margin:0;
       text-shadow:0 2px 18px rgba(0,0,0,0.22);letter-spacing:.01em;
       animation:hIn .75s var(--ease) both;
       text-align:center;
     }
     .hero-tag em{color:#E8D060;font-style:normal;}
     .hero-sub-line{
-      font-size:.78rem;color:rgba(255,255,255,0.65);letter-spacing:.08em;
-      animation:hIn .75s .08s var(--ease) both;margin-top:-4px;margin-bottom:2px;
+      font-size:clamp(.82rem,1.5vw,1rem);color:rgba(255,255,255,0.65);letter-spacing:.06em;
+      animation:hIn .75s .08s var(--ease) both;margin:0;
       font-weight:500;
     }
     .hero-trust{
-      display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
+      display:flex;align-items:center;justify-content:center;
+      gap:clamp(10px,2.2vw,22px);flex-wrap:nowrap;
       animation:hIn .75s .12s var(--ease) both;
-      margin-bottom:0;
+      width:100%;
     }
-    .ht{display:flex;align-items:center;gap:5px;font-size:.74rem;color:rgba(255,255,255,0.78);letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
-    .htd{width:5px;height:5px;border-radius:50%;background:rgba(232,208,96,0.6);}
+    .ht{display:flex;align-items:center;gap:6px;font-size:clamp(.72rem,1.1vw,.88rem);color:rgba(255,255,255,0.85);letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,0.3);white-space:nowrap;}
+    .htd{width:6px;height:6px;border-radius:50%;background:rgba(232,208,96,0.7);flex-shrink:0;}
     /* hero-btn CSS removed — button deleted */
     @keyframes hIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
@@ -1554,8 +1555,8 @@
       .mob-hero-say  { font-family:"Orbitron",sans-serif; font-size: 0.55rem; font-weight: 700; color: rgba(255,255,255,0.60); letter-spacing: 0.16em; text-transform: uppercase; }
       .mob-hero-tag  { font-size: 0.7rem; color: rgba(255,255,255,0.78); font-weight: 600; margin-bottom: 5px; }
       .mob-hero-tag em { color: var(--gold-lt); font-style: normal; }
-      .mob-hero-trust { display: flex; gap: 10px; flex-wrap: wrap; }
-      .mob-ht  { font-size: 0.6rem; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 4px; }
+      .mob-hero-trust { display: flex; gap: clamp(6px,1.8vw,14px); flex-wrap: nowrap; align-items: center; justify-content: center; width: 100%; }
+      .mob-ht  { font-size: clamp(.52rem,.65rem + .2vw,.65rem); color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
       .mob-htd { width: 4px; height: 4px; border-radius: 50%; background: var(--gold-bdr); flex-shrink: 0; }
 
       /* Tab bar */
@@ -3000,12 +3001,7 @@
     .rpt-ai-factor::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%; background: #D4AF37; }
 
     /* Accuracy row */
-    .rpt-acc-row { display: flex; align-items: center; gap: 8px; }
-    .rpt-acc-lbl { font-size: .62rem; color: #8C7D68; white-space: nowrap; min-width: 70px; }
-    .rpt-acc-bar-wrap { flex: 1; height: 5px; background: #dee3eb; border-radius: 99px; overflow: hidden; }
-    .rpt-acc-bar { height: 100%; background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71); border-radius: 99px; transition: width 1s cubic-bezier(0.16,1,0.3,1); }
-    .rpt-acc-pct { font-size: .64rem; font-weight: 700; color: #1A2B4C; white-space: nowrap; min-width: 32px; text-align: right; }
-    .rpt-acc-note { font-size: .6rem; color: #8C7D68; margin-top: 7px; }
+
 
     /* Responsive */
     @media(max-width:640px){
@@ -3689,7 +3685,7 @@
     gap: 14px;
     position: relative; z-index: 2;
   }
-  .pir-title-block { flex: 1; min-width: 0; }
+  .pir-title-block { flex: 1; min-width: 0; overflow: hidden; }
   .pir-eyebrow {
     display: flex; align-items: center; gap: 7px;
     font-size: .72rem; font-weight: 800; letter-spacing: .22em;
@@ -3698,17 +3694,18 @@
   }
   .pir-main-title {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+    font-size: clamp(.95rem, 2.8vw, 1.65rem);
     font-weight: 800; color: #fff;
     letter-spacing: -.01em; line-height: 1.15;
     margin-bottom: 5px;
+    white-space: nowrap;
   }
   .pir-sub {
     font-size: .78rem; color: rgba(255,255,255,0.5);
     letter-spacing: .04em;
   }
   .pir-ref-block {
-    text-align: right; flex-shrink: 0;
+    text-align: right; flex-shrink: 1;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(212,175,55,0.18);
     border-radius: 8px;
@@ -4118,11 +4115,9 @@
   .pir-tts-medium { color: #92400E !important; }
   .pir-tts-slow   { color: #991B1B !important; }
   .pir-tts-insight {
-    margin-top: 10px; font-size: .84rem; color: #4A5E7A;
+    margin-top: 10px; margin-bottom: 11px; font-size: .84rem; color: #4A5E7A;
     line-height: 1.55; font-style: italic;
     padding-top: 9px; border-top: 1px solid #F0F3FA;
-  }
-    margin-bottom: 11px;
   }
 
   /* ── VALUE ADJUSTMENTS ── */
@@ -4745,7 +4740,351 @@
   }
   .pir-action-btn.primary:hover { background: linear-gradient(135deg, #009987, #007A6E); }
 
-  </style>
+  /* ═══════════════════════════════════════════════════════
+     MARKET POSITION V2 — clean minimal range bar
+  ═══════════════════════════════════════════════════════ */
+  .pir-mp-wrap { padding:22px 24px 20px; border-bottom:1px solid #E8EBF3; background:#FAFBFD; }
+  .pir-mp-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .pir-mp-title {
+    display:flex; align-items:center; gap:7px;
+    font-size:.72rem; font-weight:800; letter-spacing:.13em;
+    text-transform:uppercase; color:#152040;
+  }
+  .pir-mp-badge-source {
+    font-size:.66rem; font-weight:600; color:#8A9AB8;
+    background:#EEF1F8; border-radius:99px; padding:3px 10px;
+  }
+  /* Label pins above bar */
+  .pir-mp2-label-row { position:relative; height:46px; }
+  .pir-mp2-pin {
+    position:absolute; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:0px;
+    pointer-events:none;
+  }
+  .pir-mp2-pin-price {
+    font-family:"Exo 2",sans-serif; font-size:.74rem; font-weight:800;
+    white-space:nowrap; padding:3px 8px; border-radius:6px; line-height:1.3;
+  }
+  .pir-mp2-pin-name {
+    font-size:.56rem; font-weight:700; letter-spacing:.07em;
+    text-transform:uppercase; white-space:nowrap;
+  }
+  .pir-mp2-pin-hand .pir-mp2-pin-price { background:rgba(0,133,119,.1); color:#006B60; }
+  .pir-mp2-pin-hand .pir-mp2-pin-name  { color:#008577; }
+  .pir-mp2-pin-nego .pir-mp2-pin-price { background:rgba(217,119,6,.09); color:#92400E; }
+  .pir-mp2-pin-nego .pir-mp2-pin-name  { color:#D97706; }
+  .pir-mp2-pin-stick .pir-mp2-pin-price { background:rgba(15,30,56,.07); color:#0F1E38; }
+  .pir-mp2-pin-stick .pir-mp2-pin-name  { color:#3D5280; }
+  /* Connector stems */
+  .pir-mp2-stem-row { position:relative; height:8px; }
+  .pir-mp2-stem {
+    position:absolute; top:0; bottom:0; width:1.5px;
+    border-radius:1px; transform:translateX(-50%);
+  }
+  .pir-mp2-stem-hand  { background:#008577; }
+  .pir-mp2-stem-nego  { background:#D97706; }
+  .pir-mp2-stem-stick { background:#3D5280; }
+  /* Track */
+  .pir-mp2-track {
+    position:relative; height:14px; border-radius:99px; overflow:visible;
+    margin-bottom:10px; background:#EEF1F8;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .pir-mp2-fill {
+    position:absolute; inset:0; border-radius:99px;
+    background:linear-gradient(90deg,#22C55E 0%,#4ADE80 18%,#FDE68A 45%,#EAB308 55%,#FCA5A5 78%,#EF4444 100%);
+    opacity:.65;
+  }
+  /* Dots */
+  .pir-mp2-dot {
+    position:absolute; top:50%; transform:translate(-50%,-50%);
+    width:18px; height:18px; border-radius:50%;
+    border:3px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,0.22);
+    z-index:4; transition:transform .15s;
+  }
+  .pir-mp2-dot:hover { transform:translate(-50%,-50%) scale(1.25); }
+  .pir-mp2-dot-nego  { background:#D97706; }
+  .pir-mp2-dot-stick { background:#3D5280; }
+  /* Car marker */
+  .pir-mp2-car {
+    position:absolute; top:50%; transform:translate(-50%,-50%);
+    width:44px; height:22px; z-index:5;
+    filter:drop-shadow(0 3px 8px rgba(15,30,56,0.38));
+    transition:transform .15s; cursor:default;
+  }
+  .pir-mp2-car:hover { transform:translate(-50%,-50%) scale(1.1) translateY(-2px); }
+  .pir-mp2-car svg { width:44px; height:22px; }
+  /* Endpoints */
+  .pir-mp2-ends { display:flex; justify-content:space-between; align-items:center; margin-top:3px; }
+  .pir-mp2-end-label {
+    display:flex; align-items:center; gap:6px;
+    font-size:.72rem; font-weight:700; color:#4A5E7A;
+  }
+  .pir-mp2-end-right { flex-direction:row-reverse; }
+  .pir-mp2-end-tag {
+    font-size:.56rem; font-weight:800; letter-spacing:.1em;
+    text-transform:uppercase; padding:2px 7px; border-radius:99px;
+  }
+  .pir-mp2-end-min { background:rgba(34,197,94,.12); color:#15803D; }
+  .pir-mp2-end-max { background:rgba(239,68,68,.12); color:#991B1B; }
+  /* Legend */
+  .pir-mp2-legend {
+    display:flex; align-items:center; gap:18px;
+    margin-top:14px; padding-top:12px;
+    border-top:1px solid #EEF1F8; flex-wrap:wrap;
+  }
+  .pir-mp2-leg { display:flex; align-items:center; gap:7px; font-size:.7rem; font-weight:600; color:#6A7E9A; }
+  .pir-mp2-leg-car { width:22px; height:11px; background:#0F1E38; border-radius:3px; flex-shrink:0; }
+  .pir-mp2-leg-dot {
+    width:11px; height:11px; border-radius:50%; flex-shrink:0;
+    border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.18);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     DEAL EVALUATION BADGE
+  ═══════════════════════════════════════════════════════ */
+  .pir-deal-eval { padding:14px 24px; border-bottom:1px solid #E8EBF3; background:#fff; }
+  .pir-de-row {
+    display:flex; align-items:center; gap:14px;
+    padding:14px 18px; border-radius:14px; border:1.5px solid transparent;
+    transition:box-shadow .15s;
+  }
+  .pir-de-row:hover { box-shadow:0 4px 16px rgba(0,0,0,0.07); }
+  .pir-de-good    { background:linear-gradient(135deg,#F0FDF4,#DCFCE7); border-color:#86EFAC; }
+  .pir-de-fair    { background:linear-gradient(135deg,#FEFCE8,#FEF9C3); border-color:#FDE047; }
+  .pir-de-over    { background:linear-gradient(135deg,#FEF2F2,#FEE2E2); border-color:#FCA5A5; }
+  .pir-de-neutral { background:#F8FAFC; border-color:#DDE4EE; }
+  .pir-de-icon    { font-size:1.6rem; flex-shrink:0; line-height:1; }
+  .pir-de-body    { flex:1; min-width:0; }
+  .pir-de-verdict { font-size:1rem; font-weight:800; color:#0F1E38; letter-spacing:-.01em; margin-bottom:4px; }
+  .pir-de-sub     { font-size:.82rem; color:#4A5E7A; line-height:1.55; }
+  .pir-de-sub strong { color:#0F1E38; }
+  .pir-de-pct {
+    font-family:"Orbitron",sans-serif; font-size:1.05rem; font-weight:700;
+    flex-shrink:0; padding:6px 14px; border-radius:10px; letter-spacing:-.01em;
+  }
+  .pir-de-pct-good { background:rgba(22,163,74,.12); color:#15803D; }
+  .pir-de-pct-fair { background:rgba(234,179,8,.14);  color:#92400E; }
+  .pir-de-pct-over { background:rgba(220,38,38,.12);  color:#991B1B; }
+
+  /* ═══════════════════════════════════════════════════════
+     MARKET SIGNALS — gradient bars red→yellow→green
+  ═══════════════════════════════════════════════════════ */
+  .pir-signals { padding:18px 24px 22px; border-bottom:1px solid #E8EBF3; background:#fff; }
+  .pir-signals-title {
+    font-size:.72rem; font-weight:800; letter-spacing:.13em;
+    text-transform:uppercase; color:#152040; margin-bottom:18px;
+  }
+  .pir-signal-row { margin-bottom:18px; }
+  .pir-signal-row:last-child { margin-bottom:0; }
+  .pir-signal-label {
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:8px;
+  }
+  .pir-signal-name { font-size:.84rem; font-weight:700; color:#2D3F5C; }
+  .pir-signal-pct  { font-size:.84rem; font-weight:800; color:#0F1E38; }
+  .pir-signal-track {
+    position:relative; height:13px; background:#EEF1F8; border-radius:99px;
+    overflow:visible; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom:5px;
+  }
+  .pir-signal-fill-ryg {
+    position:absolute; top:0; left:0; bottom:0; border-radius:99px;
+    background:linear-gradient(90deg,#EF4444 0%,#F97316 25%,#EAB308 50%,#84CC16 75%,#22C55E 100%);
+    width:0%; transition:width 1.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .pir-signal-thumb {
+    position:absolute; top:50%; left:0%;
+    transform:translate(-50%,-50%);
+    width:21px; height:21px; border-radius:50%;
+    background:#fff; border:3px solid #0F1E38;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2); z-index:3;
+    transition:left 1.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .pir-signal-tier {
+    font-size:.7rem; font-weight:700; color:#8A9AB8;
+    letter-spacing:.04em; text-align:right;
+  }
+  /* Mobile tweaks for new sections */
+  @media(max-width:600px){
+    .pir-mp-wrap,.pir-deal-eval,.pir-signals { padding:16px 16px; }
+    .pir-mp2-pin-price { font-size:.66rem; }
+    .pir-mp2-pin-name  { font-size:.5rem; }
+    .pir-de-row { padding:12px 14px; gap:10px; }
+    .pir-de-verdict { font-size:.92rem; }
+    .pir-de-pct { font-size:.88rem; padding:5px 10px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     RECOMMENDATION LINE
+  ═══════════════════════════════════════════════════════ */
+  .pir-rec-line {
+    display:flex; align-items:flex-start; gap:14px;
+    padding:16px 24px 18px; border-bottom:1px solid #E8EBF3;
+    background:linear-gradient(135deg,#F8FAFD 0%,#EEF4FF 100%);
+    border-left:4px solid #008577;
+  }
+  .pir-rec-icon { font-size:1.55rem; flex-shrink:0; line-height:1; margin-top:2px; }
+  .pir-rec-body { flex:1; min-width:0; }
+  .pir-rec-action {
+    font-size:.95rem; font-weight:800; color:#0F1E38;
+    letter-spacing:-.01em; margin-bottom:5px;
+  }
+  .pir-rec-reason {
+    font-size:.84rem; color:#3D4E6A; line-height:1.65;
+  }
+  .pir-rec-reason strong { color:#0F1E38; }
+
+  /* ═══════════════════════════════════════════════════════
+     MARKET INSIGHT SUMMARY
+  ═══════════════════════════════════════════════════════ */
+  .pir-insight-wrap {
+    padding:18px 24px 20px; border-bottom:1px solid #E8EBF3;
+    background:#fff;
+  }
+  .pir-insight-header {
+    display:flex; align-items:center; gap:8px;
+    font-size:.72rem; font-weight:800; letter-spacing:.13em;
+    text-transform:uppercase; color:#008577; margin-bottom:11px;
+  }
+  .pir-insight-para {
+    font-size:.9rem; color:#2D3F5C; line-height:1.75;
+    margin-bottom:14px;
+  }
+  /* Key value factor bullets */
+  .pir-insight-factors {
+    display:flex; flex-direction:column; gap:9px; margin-bottom:16px;
+  }
+  .pir-insight-bullet {
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:.86rem; color:#2D3F5C; line-height:1.55;
+    padding:9px 13px; border-radius:9px;
+    background:#F8FAFC; border:1px solid #E8EBF3;
+  }
+  .pir-insight-bullet strong { color:#0F1E38; }
+  .pir-insight-icon { font-size:1rem; flex-shrink:0; line-height:1.5; }
+  /* Buyer/Seller tips */
+  .pir-insight-tips {
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+  @media(max-width:500px){ .pir-insight-tips { grid-template-columns:1fr; } }
+  .pir-insight-tip {
+    border-radius:11px; padding:12px 14px;
+    border:1.5px solid transparent;
+  }
+  .pir-tip-buyer {
+    background:linear-gradient(135deg,#EFF6FF,#E0EFFE);
+    border-color:#93C5FD;
+  }
+  .pir-tip-seller {
+    background:linear-gradient(135deg,#F0FDF4,#DCFCE7);
+    border-color:#86EFAC;
+  }
+  .pir-tip-label {
+    font-size:.66rem; font-weight:800; letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:6px;
+  }
+  .pir-tip-buyer .pir-tip-label { color:#1E40AF; }
+  .pir-tip-seller .pir-tip-label { color:#15803D; }
+  .pir-tip-text { font-size:.82rem; color:#2D3F5C; line-height:1.6; }
+
+  /* ═══════════════════════════════════════════════════════
+     VALUE ADJUSTMENT BREAKDOWN
+  ═══════════════════════════════════════════════════════ */
+  .pir-vab-wrap {
+    padding:18px 24px 22px; border-bottom:1px solid #E8EBF3;
+    background:#FAFBFD;
+  }
+  .pir-vab-header {
+    display:flex; align-items:center; gap:8px;
+    font-size:.72rem; font-weight:800; letter-spacing:.13em;
+    text-transform:uppercase; color:#0F1E38; margin-bottom:14px;
+  }
+  /* Base market value */
+  .pir-vab-base {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:11px 14px; border-radius:10px;
+    background:#fff; border:1.5px solid #DDE4EE;
+    margin-bottom:5px;
+  }
+  .pir-vab-base-label { font-size:.84rem; font-weight:700; color:#2D3F5C; }
+  .pir-vab-base-val   { font-family:"Orbitron",sans-serif; font-size:.95rem; font-weight:700; color:#0F1E38; }
+  .pir-vab-base-note  { font-size:.72rem; color:#8A9AB8; margin-bottom:14px; padding:0 2px; }
+  /* Adjustment groups */
+  .pir-vab-group { margin-bottom:12px; }
+  .pir-vab-group-label {
+    display:flex; align-items:center; gap:7px;
+    font-size:.68rem; font-weight:800; letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:7px;
+  }
+  .pir-vab-pos-label { color:#15803D; }
+  .pir-vab-neg-label { color:#991B1B; }
+  .pir-vab-group-total { margin-left:auto; font-size:.78rem; font-weight:800; }
+  .pir-vab-pos-total { color:#15803D; }
+  .pir-vab-neg-total { color:#991B1B; }
+  /* Rows */
+  .pir-vab-row {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; padding:8px 12px; border-radius:8px; margin-bottom:5px;
+    border:1px solid transparent; transition:border-color .13s;
+  }
+  .pir-vab-row:last-child { margin-bottom:0; }
+  .pir-vab-row:hover { border-color:#DDE4EE; }
+  .pir-vab-pos { background:rgba(240,253,244,0.7); }
+  .pir-vab-neg { background:rgba(254,242,242,0.7); }
+  .pir-vab-row-left { display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .pir-vab-row-label  { font-size:.83rem; font-weight:700; color:#152040; }
+  .pir-vab-row-reason { font-size:.72rem; color:#8A9AB8; line-height:1.3; }
+  .pir-vab-row-amt    { font-size:.85rem; font-weight:800; flex-shrink:0; white-space:nowrap; }
+  .pir-vab-pos-amt    { color:#15803D; }
+  .pir-vab-neg-amt    { color:#991B1B; }
+  /* Net result */
+  .pir-vab-net {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; padding:13px 14px; border-radius:12px; margin-top:14px;
+    background:linear-gradient(135deg,#0F1E38,#1A3058);
+    border:1.5px solid rgba(212,175,55,0.28);
+  }
+  .pir-vab-net-left { display:flex; flex-direction:column; gap:3px; }
+  .pir-vab-net-label {
+    font-size:.66rem; font-weight:800; letter-spacing:.12em;
+    text-transform:uppercase; color:rgba(212,175,55,0.88);
+  }
+  .pir-vab-net-calc { font-size:.72rem; color:rgba(255,255,255,0.42); line-height:1.3; }
+  .pir-vab-net-val {
+    font-family:"Orbitron",sans-serif; font-size:1.2rem; font-weight:700;
+    color:#E8D060; letter-spacing:-.02em; flex-shrink:0;
+  }
+  @media(max-width:600px){
+    .pir-rec-line,.pir-insight-wrap,.pir-vab-wrap { padding:15px 16px 17px; }
+    .pir-insight-tips { grid-template-columns:1fr; }
+    .pir-vab-net-val { font-size:1rem; }
+  }
+
+  
+    /* ── IDLE PANEL (Stage 1) ─────────────────────────────────── */
+    .rph-idle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 20px 24px;height:100%;min-height:240px;}
+    .rph-idle-car{display:flex;flex-direction:column;align-items:center;gap:0;}
+    .rph-car-svg{width:min(260px,88%);animation:carFloat 3.2s ease-in-out infinite;}
+    @keyframes carFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+    .rph-idle-road{width:min(220px,80%);height:4px;margin-top:4px;overflow:hidden;border-radius:2px;background:rgba(0,133,119,0.08);}
+    .rph-road-line{height:100%;width:40%;background:linear-gradient(90deg,transparent,rgba(196,154,42,0.4),transparent);animation:roadSlide 1.8s linear infinite;}
+    @keyframes roadSlide{from{transform:translateX(-100%);}to{transform:translateX(350%)}}
+    .rph-idle-label{font-size:.82rem;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;text-align:center;}
+    .rph-idle-hint{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);background:var(--accent-soft);border:1px solid var(--accent-line);padding:.38rem .8rem;border-radius:99px;}
+    .rph-idle-hint strong{color:var(--accent);font-weight:700;}
+
+    /* ── STEP REVEAL — line by line ───────────────────────────── */
+    .rld-step-item{
+      opacity:0;transform:translateX(-10px);
+      transition:opacity .35s ease, transform .35s ease;
+    }
+    .rld-step-item.active,.rld-step-item.done{
+      opacity:1;transform:translateX(0);
+    }
+    .rld-step-item.done{opacity:.55;}
+
+    </style>
 <body>
 
 <!-- STICKY NAV -->
@@ -4771,9 +5110,8 @@
     </div>
     <div class="mob-hero-tag">Live UAE Car Values, <em>No Guessing.</em></div>
     <div class="mob-hero-trust">
-      <span class="mob-ht"><span class="mob-htd"></span>50,000+ listings</span>
+      <span class="mob-ht"><span class="mob-htd"></span>50,000+ real UAE listings</span>
       <span class="mob-ht"><span class="mob-htd"></span>Live</span>
-      <span class="mob-ht"><span class="mob-htd"></span>GCC-spec</span>
       <span class="mob-ht"><span class="mob-htd"></span>Free</span>
     </div>
   </div>
@@ -4783,9 +5121,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
       Vehicle Info
     </button>
-    <button class="mob-tab" id="tabResult" onclick="switchMobCard('result')" aria-label="Valuation" disabled>
+    <button class="mob-tab" id="tabResult" onclick="switchMobCard('result')" aria-label="Price Report" disabled>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      Valuation
+      Price Report
     </button>
   </div>
 </div>
@@ -4805,12 +5143,11 @@
       </div>
     </nav>
     <div class="hero-hl">
-      <p class="hero-tag">Price Intelligence<br><em>Report</em></p>
+      <p class="hero-tag">Price Intelligence <em>Report</em></p>
       <p class="hero-sub-line">Smart estimate using current UAE market data</p>
       <div class="hero-trust">
         <div class="ht"><span class="htd"></span>50,000+ real UAE listings</div>
         <div class="ht"><span class="htd"></span>Live</div>
-        <div class="ht"><span class="htd"></span>GCC‑spec intelligence</div>
         <div class="ht"><span class="htd"></span>Free</div>
       </div>
 
@@ -4848,7 +5185,7 @@
 
           <div class="ig">
             <label for="year">Year <span class="rq">*</span></label>
-            <select id="year" onchange="markFilled(this)" aria-required="true"><option value="">Select…</option></select>
+            <select id="year" onchange="markFilled(this);updateReadiness()" aria-required="true"><option value="">Select…</option></select>
             <span class="errmsg" id="err-year">Select a year</span>
           </div>
 
@@ -4875,7 +5212,7 @@
             <label for="mileage">Mileage <span class="rq">*</span></label>
             <div class="prefix-wrap">
               <span class="prefix-lbl">KM</span>
-              <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this)" onkeydown="blockNonNumeric(event)" aria-required="true">
+              <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this);updateReadiness()" onkeydown="blockNonNumeric(event)" aria-required="true">
             </div>
             <span class="errmsg" id="err-mileage">Enter mileage</span>
           </div>
@@ -4965,7 +5302,15 @@
 
         </div><!-- /fg -->
 
-        <!-- 4 Yes/No toggle cells — match input cell height, label+buttons horizontal -->
+        <!-- Hidden selects retained for JS logic — not displayed -->
+        <div style="display:none" aria-hidden="true">
+          <select id="accidentSel"><option value="none">None</option><option value="minor">Minor</option><option value="major">Major</option></select>
+          <select id="warrantySel"><option value="">Unknown</option><option value="active">Active</option><option value="extended">Extended</option><option value="expired">Expired</option></select>
+          <select id="owners"><option value="">Unknown</option><option value="1">1 Owner</option><option value="2">2 Owners</option><option value="3">3 Owners</option><option value="4+">4+ Owners</option></select>
+          <select id="emirate"><option value="">Any</option><option value="Dubai">Dubai</option><option value="Abu Dhabi">Abu Dhabi</option><option value="Sharjah">Sharjah</option><option value="Ajman">Ajman</option><option value="Ras Al Khaimah">RAK</option><option value="Fujairah">Fujairah</option><option value="Umm Al Quwain">UAQ</option></select>
+          <select id="finance"><option value="">Select</option><option value="Cash">Cash</option><option value="Bank Finance">Bank Finance</option><option value="Dealer Finance">Dealer Finance</option><option value="Lease">Lease</option></select>
+          <select id="purpose"><option value="buying">Buyer</option><option value="selling">Seller</option><option value="research">Researching</option></select>
+        </div>
         <div class="qcbar" role="group" aria-label="Additional details">
 
           <div class="ig-qc">
@@ -5016,9 +5361,9 @@
         <div class="ffoot-hint" id="formHint">Fill <strong>Brand, Year &amp; Mileage</strong> to unlock</div>
         <div class="ffoot-btns">
           <button class="btn-reset" onclick="resetForm()" aria-label="Reset form">↺ Reset</button>
-          <button class="btn-go" id="btnCheck" onclick="checkCarPrice()" disabled aria-label="Get Valuation">
+          <button class="btn-go" id="btnCheck" onclick="checkCarPrice()" disabled aria-label="Get Price Report">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 3v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/></svg>
-            <span>Get Valuation</span>
+            <span>Get Price Report</span>
           </button>
         </div>
       </div>
@@ -5040,106 +5385,45 @@
 
           <!-- Stage 1: Feature Grid + Methodology (shown on landing) -->
           <div class="rph-stage1" id="rphStage1">
-
-            <div class="rph-s1-eyebrow">How the Engine Works</div>
-
-            <!-- 3-pillar feature grid -->
-            <div class="rph-feat-grid">
-
-              <div class="rph-feat-card">
-                <div class="rph-feat-ico">
-                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Isometric data tower -->
-                    <polygon points="24,6 40,15 40,33 24,42 8,33 8,15" fill="rgba(0,133,119,0.08)" stroke="rgba(0,133,119,0.35)" stroke-width="1.2"/>
-                    <polygon points="24,6 40,15 24,24 8,15" fill="rgba(0,133,119,0.14)" stroke="rgba(0,133,119,0.30)" stroke-width="1"/>
-                    <polygon points="40,15 40,33 24,42 24,24" fill="rgba(0,133,119,0.06)" stroke="rgba(0,133,119,0.20)" stroke-width="1"/>
-                    <polygon points="8,15 24,24 24,42 8,33" fill="rgba(0,133,119,0.10)" stroke="rgba(0,133,119,0.22)" stroke-width="1"/>
-                    <circle cx="24" cy="24" r="4" fill="rgba(0,168,150,0.8)"/>
-                    <line x1="24" y1="20" x2="24" y2="8" stroke="rgba(0,133,119,0.5)" stroke-width="1.2" stroke-dasharray="2 2"/>
-                    <circle cx="24" cy="7" r="2" fill="rgba(196,154,42,0.9)"/>
-                  </svg>
-                </div>
-                <div class="rph-feat-name">Real-Time UAE Data</div>
-                <div class="rph-feat-desc">50,000+ live listings scanned across Dubai, Sharjah &amp; Abu Dhabi</div>
-              </div>
-
-              <div class="rph-feat-card">
-                <div class="rph-feat-ico">
-                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Isometric liquidity bars -->
-                    <rect x="8" y="28" width="8" height="12" rx="1.5" fill="rgba(0,133,119,0.12)" stroke="rgba(0,133,119,0.32)" stroke-width="1.1"/>
-                    <rect x="20" y="20" width="8" height="20" rx="1.5" fill="rgba(0,133,119,0.18)" stroke="rgba(0,133,119,0.38)" stroke-width="1.1"/>
-                    <rect x="32" y="12" width="8" height="28" rx="1.5" fill="rgba(0,133,119,0.26)" stroke="rgba(0,133,119,0.45)" stroke-width="1.1"/>
-                    <path d="M8 26 L20 18 L32 10" stroke="rgba(196,154,42,0.75)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
-                    <circle cx="8" cy="26" r="2" fill="rgba(196,154,42,0.85)"/>
-                    <circle cx="20" cy="18" r="2" fill="rgba(196,154,42,0.85)"/>
-                    <circle cx="32" cy="10" r="2" fill="rgba(196,154,42,0.85)"/>
-                  </svg>
-                </div>
-                <div class="rph-feat-name">Liquidity Analysis</div>
-                <div class="rph-feat-desc">Demand velocity, days-to-sell, and GCC market absorption rates</div>
-              </div>
-
-              <div class="rph-feat-card">
-                <div class="rph-feat-ico">
-                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Isometric brain/logic cube -->
-                    <polygon points="24,8 40,17 40,31 24,40 8,31 8,17" fill="rgba(0,133,119,0.07)" stroke="rgba(0,133,119,0.28)" stroke-width="1.2"/>
-                    <polygon points="24,8 40,17 24,26 8,17" fill="rgba(0,133,119,0.13)" stroke="rgba(0,133,119,0.28)" stroke-width="1"/>
-                    <polygon points="40,17 40,31 24,40 24,26" fill="rgba(0,133,119,0.05)" stroke="rgba(0,133,119,0.18)" stroke-width="1"/>
-                    <!-- circuit lines -->
-                    <line x1="16" y1="17" x2="24" y2="20" stroke="rgba(196,154,42,0.6)" stroke-width="1" stroke-linecap="round"/>
-                    <line x1="32" y1="17" x2="24" y2="20" stroke="rgba(196,154,42,0.6)" stroke-width="1" stroke-linecap="round"/>
-                    <line x1="24" y1="20" x2="24" y2="28" stroke="rgba(196,154,42,0.6)" stroke-width="1" stroke-linecap="round"/>
-                    <circle cx="24" cy="20" r="2.5" fill="rgba(196,154,42,0.9)"/>
-                    <circle cx="16" cy="17" r="1.5" fill="rgba(0,133,119,0.7)"/>
-                    <circle cx="32" cy="17" r="1.5" fill="rgba(0,133,119,0.7)"/>
-                    <circle cx="24" cy="28" r="1.5" fill="rgba(0,133,119,0.7)"/>
-                  </svg>
-                </div>
-                <div class="rph-feat-name">Expert Human Logic</div>
-                <div class="rph-feat-desc">GCC spec premiums, regional demand curves &amp; depreciation logic</div>
-              </div>
-
-            </div><!-- /rph-feat-grid -->
-
-            <!-- Methodology funnel -->
-            <div class="rph-method">
-              <div class="rph-method-step">
-                <div class="rph-mstep-ico">
-                  <svg viewBox="0 0 28 28" fill="none"><rect x="4" y="8" width="20" height="14" rx="3" fill="rgba(10,37,64,0.08)" stroke="rgba(10,37,64,0.25)" stroke-width="1.1"/><path d="M8 12h4M8 16h8" stroke="rgba(10,37,64,0.35)" stroke-width="1" stroke-linecap="round"/><circle cx="20" cy="10" r="3" fill="rgba(196,154,42,0.85)"/></svg>
-                </div>
-                <div class="rph-mstep-lbl">Your Car Details</div>
-              </div>
-              <div class="rph-method-arrow">→</div>
-              <div class="rph-method-step">
-                <div class="rph-mstep-ico rph-mstep-ico--funnel">
-                  <svg viewBox="0 0 28 28" fill="none"><path d="M6 8h16l-6 8v6l-4-2v-4L6 8z" fill="rgba(0,133,119,0.12)" stroke="rgba(0,133,119,0.4)" stroke-width="1.1" stroke-linejoin="round"/><circle cx="22" cy="8" r="2" fill="rgba(0,133,119,0.7)"/><circle cx="14" cy="8" r="2" fill="rgba(0,133,119,0.5)"/><circle cx="6" cy="8" r="2" fill="rgba(0,133,119,0.5)"/></svg>
-                </div>
-                <div class="rph-mstep-lbl">Market Data Funnel</div>
-              </div>
-              <div class="rph-method-arrow">→</div>
-              <div class="rph-method-step">
-                <div class="rph-mstep-ico rph-mstep-ico--price">
-                  <svg viewBox="0 0 28 28" fill="none"><rect x="4" y="6" width="20" height="16" rx="3" fill="rgba(196,154,42,0.1)" stroke="rgba(196,154,42,0.45)" stroke-width="1.1"/><text x="14" y="17" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="7" font-weight="700" fill="rgba(196,154,42,0.9)">AED</text></svg>
-                </div>
-                <div class="rph-mstep-lbl">Real Valuation</div>
-              </div>
-            </div><!-- /rph-method -->
-
-            <!-- Trust bar -->
-            <div class="rph-trust-bar">
-              <div class="rph-trust-lbl">Data sourced from</div>
-              <div class="rph-trust-sources">
-                <span class="rph-src-pill">dubizzle</span>
-                <span class="rph-src-pill">Yalla Motor</span>
-                <span class="rph-src-pill">OpenSooq</span>
-                <span class="rph-src-pill">Motory</span>
-                <span class="rph-src-pill">GCC Classifieds</span>
+          <div class="rph-idle">
+            <div class="rph-idle-car" aria-hidden="true">
+              <svg class="rph-car-svg" viewBox="0 0 260 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Body -->
+                <path d="M28 72 L38 48 Q48 30 72 28 L130 24 L178 24 Q202 24 218 42 L238 72 L240 80 Q240 90 230 90 L200 90 Q192 100 180 100 Q168 100 160 90 L96 90 Q88 100 76 100 Q64 100 56 90 L26 90 Q20 90 20 80 Z" fill="rgba(0,133,119,0.10)" stroke="rgba(0,133,119,0.35)" stroke-width="1.8"/>
+                <!-- Windshield -->
+                <path d="M80 28 L70 56 L188 56 L178 28 Z" fill="rgba(0,133,119,0.07)" stroke="rgba(0,133,119,0.2)" stroke-width="1.2"/>
+                <!-- Side windows -->
+                <path d="M72 28 L80 28 L70 56 L60 56 Z" fill="rgba(0,133,119,0.05)" stroke="rgba(0,133,119,0.15)" stroke-width="1"/>
+                <path d="M178 28 L188 28 L198 56 L188 56 Z" fill="rgba(0,133,119,0.05)" stroke="rgba(0,133,119,0.15)" stroke-width="1"/>
+                <!-- A/B pillars -->
+                <line x1="80" y1="28" x2="70" y2="56" stroke="rgba(0,133,119,0.25)" stroke-width="1.5"/>
+                <line x1="130" y1="24" x2="130" y2="56" stroke="rgba(0,133,119,0.2)" stroke-width="1.2"/>
+                <line x1="178" y1="28" x2="188" y2="56" stroke="rgba(0,133,119,0.25)" stroke-width="1.5"/>
+                <!-- Wheels -->
+                <circle cx="76" cy="90" r="16" fill="rgba(26,22,16,0.08)" stroke="rgba(0,133,119,0.4)" stroke-width="2"/>
+                <circle cx="76" cy="90" r="9" fill="none" stroke="rgba(196,154,42,0.5)" stroke-width="1.5"/>
+                <circle cx="76" cy="90" r="3" fill="rgba(196,154,42,0.7)"/>
+                <circle cx="180" cy="90" r="16" fill="rgba(26,22,16,0.08)" stroke="rgba(0,133,119,0.4)" stroke-width="2"/>
+                <circle cx="180" cy="90" r="9" fill="none" stroke="rgba(196,154,42,0.5)" stroke-width="1.5"/>
+                <circle cx="180" cy="90" r="3" fill="rgba(196,154,42,0.7)"/>
+                <!-- Headlights -->
+                <rect x="234" y="64" width="10" height="6" rx="2" fill="rgba(232,208,96,0.6)" stroke="rgba(196,154,42,0.4)" stroke-width="1"/>
+                <!-- Tail lights -->
+                <rect x="17" y="64" width="8" height="6" rx="2" fill="rgba(192,57,43,0.35)" stroke="rgba(192,57,43,0.3)" stroke-width="1"/>
+                <!-- Door line -->
+                <path d="M70 60 L188 60" stroke="rgba(0,133,119,0.18)" stroke-width="1" stroke-dasharray="3 3"/>
+              </svg>
+              <div class="rph-idle-road" aria-hidden="true">
+                <div class="rph-road-line"></div>
               </div>
             </div>
-
-          </div><!-- /rph-stage1 -->
+            <div class="rph-idle-label">Enter your car details to get your Price Report</div>
+            <div class="rph-idle-hint">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2v5l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
+              Fill the form and hit <strong>Get Price Report</strong>
+            </div>
+          </div>
+        </div><!-- /rph-stage1 -->
 
           <!-- Stage 2: Live-Sync (shown when user starts interacting) -->
           <div class="rph-stage2" id="rphStage2" style="display:none" aria-live="polite">
@@ -5162,7 +5446,7 @@
 
             <div class="rph-s2-cta-hint" id="rphCtaHint" style="display:none">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v5l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
-              Ready — hit <strong>Get Valuation</strong>
+              Ready — hit <strong>Get Price Report</strong>
             </div>
 
           </div><!-- /rph-stage2 -->
@@ -5171,12 +5455,12 @@
 
 
         <!-- ── Loading state — Intellectual Entertainment ───── -->
-        <div class="rld" id="rld" style="display:none" role="status" aria-label="Fetching valuation">
+        <div class="rld" id="rld" style="display:none" role="status" aria-label="Fetching price report">
 
           <!-- Named step progress track -->
           <div class="rld-steps-wrap">
             <div class="rld-steps-header">
-              <span class="rld-steps-eyebrow">Processing your valuation</span>
+              <span class="rld-steps-eyebrow">Analysing market data</span>
               <span class="rld-steps-pct" id="rldPct">0%</span>
             </div>
             <div class="rld-master-bar">
@@ -5208,57 +5492,22 @@
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
                 </span>
-                <span class="rld-step-lbl">Applying expert human valuation logic…</span>
+                <span class="rld-step-lbl">Applying market intelligence and pricing logic…</span>
                 <span class="rld-step-state"></span>
               </li>
               <li class="rld-step-item" id="lstep4">
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg>
                 </span>
-                <span class="rld-step-lbl">Compiling your personalised report…</span>
+                <span class="rld-step-lbl">Compiling the Price Intelligence Report…</span>
                 <span class="rld-step-state"></span>
               </li>
             </ol>
           </div>
 
-          <!-- Did You Know fact rotator -->
-          <div class="rld-fact-wrap" id="rldFactWrap">
-            <div class="rld-fact-label">Did You Know?</div>
-            <div class="rld-fact-text" id="rldFactText"></div>
-            <div class="rld-fact-dots" id="rldFactDots">
-              <span class="rld-fdot active"></span>
-              <span class="rld-fdot"></span>
-              <span class="rld-fdot"></span>
-            </div>
           </div>
 
-          <!-- Skeleton UI — mimics the result layout -->
-          <div class="rld-skeleton" id="rldSkeleton" aria-hidden="true">
-            <div class="sk-section sk-price-section">
-              <div class="sk-line sk-line--xs sk-line--60"></div>
-              <div class="sk-line sk-line--xl sk-line--75" style="margin:8px 0 4px"></div>
-              <div class="sk-line sk-line--sm sk-line--45"></div>
-              <div class="sk-badges">
-                <div class="sk-badge"></div>
-                <div class="sk-badge"></div>
-                <div class="sk-badge"></div>
-              </div>
-            </div>
-            <div class="sk-section sk-metrics-section">
-              <div class="sk-line sk-line--xs sk-line--40" style="margin-bottom:8px"></div>
-              <div class="sk-metric-row">
-                <div class="sk-metric-card"></div>
-                <div class="sk-metric-card"></div>
-                <div class="sk-metric-card"></div>
-              </div>
-            </div>
-            <div class="sk-section sk-analysis-section">
-              <div class="sk-line sk-line--xs sk-line--35" style="margin-bottom:8px"></div>
-              <div class="sk-line sk-line--sm sk-line--100"></div>
-              <div class="sk-line sk-line--sm sk-line--88" style="margin-top:5px"></div>
-              <div class="sk-line sk-line--sm sk-line--72" style="margin-top:5px"></div>
-            </div>
-          </div>
+
 
         </div>
 
@@ -5307,7 +5556,7 @@
     </div>
   </div>
 
-  <p class="disc"><span id="contact" style="display:block;visibility:hidden;height:0"></span>Valuations are market estimates. Prices vary by location (Dubai, Sharjah, Abu Dhabi), condition, and negotiation. Not a guaranteed sale price.</p>
+  <p class="disc"><span id="contact" style="display:block;visibility:hidden;height:0"></span>Price estimates are based on live market data. Prices vary by location (Dubai, Sharjah, Abu Dhabi), condition, and negotiation. Not a guaranteed sale price.</p>
 </div>
 
 <!-- Floating back-to-inputs (mobile) -->
@@ -5320,19 +5569,30 @@
 <div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
   <!-- Mobile result header strip — matches hero strip style -->
   <div class="mob-result-header">
-    <div class="mob-result-header-title">UAE Market Valuation</div>
+    <div class="mob-result-header-title">UAE Market Price Report</div>
     <span class="mob-ref" id="mobRef"></span>
   </div>
   <div class="mob-toast-handle">
-    <span class="mob-toast-title">Valuation Result</span>
+    <span class="mob-toast-title">Price Report</span>
     <span class="mob-ref" id="mobRefOld"></span>
     <button class="mob-toast-close" onclick="closeMobResult()" aria-label="Close">✕</button>
   </div>
   <div class="mob-toast-body" id="mobBody">
-    <div class="rld" id="mobLoad" style="display:none" role="status">
-      <div class="spinner"></div>
-      <p id="mobLoadMsg" style="font-size:0.95rem;font-weight:700;">Processing your valuation…</p>
-      <p class="rld-step" id="mobLoadStep" style="font-size:0.82rem;"></p>
+    <div class="rld" id="mobLoad" style="display:none" role="status" aria-label="Fetching price report">
+      <div class="rld-steps-wrap">
+        <div class="rld-steps-header">
+          <span class="rld-steps-eyebrow">Analysing market data</span>
+          <span class="rld-steps-pct" id="mobRldPct">0%</span>
+        </div>
+        <div class="rld-master-bar"><div class="rld-master-fill" id="mobRldFill"></div></div>
+        <ol class="rld-step-list" id="mobRldStepList">
+          <li class="rld-step-item" id="mlstep0"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg></span><span class="rld-step-lbl">Fetching live UAE auction &amp; listing data…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep1"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="rld-step-lbl">Adjusting for current UAE market liquidity…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep2"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rld-step-lbl" id="mlstep2lbl">Calculating depreciation curves &amp; GCC premiums…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep3"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Applying market intelligence and pricing logic…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep4"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Compiling the Price Intelligence Report…</span><span class="rld-step-state"></span></li>
+        </ol>
+      </div>
     </div>
     <div id="mobContent"></div>
   </div>
@@ -5340,7 +5600,7 @@
 
 <script>
 /* ── DATA ─────────────────────────────────────────────────── */
-const BM={"Acura":["CDX","ILX","Integra","MDX","NSX","RDX","RLX","TLX","ZDX"],"Alfa Romeo":["147","156","159","166","Brera","Giulia","Giulietta","GTV","MiTo","Spider","Stelvio","Tonale"],"Aston Martin":["DB11","DB12","DBS","DBX","Rapide","Vantage","Virage"],"Audi":["A1","A2","A3","A4","A5","A6","A7","A8","e-tron","e-tron GT","Q2","Q3","Q4 e-tron","Q5","Q7","Q8","R8","RS3","RS4","RS5","RS6","RS7","RS Q3","RS Q8","S3","S4","S5","S6","S7","S8","SQ5","SQ7","SQ8","TT","TTS"],"Bentley":["Bentayga","Continental GT","Flying Spur","Mulsanne"],"BMW":["1 Series","2 Series","3 Series","4 Series","5 Series","6 Series","7 Series","8 Series","i3","i4","i5","i7","iX","iX1","iX3","M2","M3","M4","M5","M8","X1","X2","X3","X4","X5","X6","X7","XM","Z4"],"BYD":["Atto 3","Han","Seal","Song","Tang","Yuan Plus"],"Cadillac":["CT4","CT5","Escalade","Escalade ESV","Lyriq","XT4","XT5","XT6"],"Chery":["Arrizo 5","Arrizo 6","Arrizo 8","Tiggo 4","Tiggo 7","Tiggo 8"],"Chevrolet":["Blazer","Camaro","Captiva","Colorado","Corvette","Equinox","Malibu","Silverado","Sonic","Spark","Suburban","Tahoe","TrailBlazer","Traverse"],"Chrysler":["300","Pacifica","Voyager"],"Citroën":["Berlingo","C3","C4","C5 Aircross","DS3","DS5"],"Dacia":["Duster","Logan","Sandero","Spring"],"Dodge":["Challenger","Charger","Dart","Durango","RAM 1500","Viper"],"Ferrari":["296","488","812","California","F8","GTC4Lusso","Portofino","Purosangue","Roma","SF90"],"Fiat":["124 Spider","500","500X","Bravo","Linea","Punto","Tipo"],"Ford":["Bronco","Edge","Escape","Expedition","Explorer","F-150","F-250","F-350","Fiesta","Focus","Fusion","Kuga","Maverick","Mondeo","Mustang","Mustang Mach-E","Puma","Ranger","S-Max","Taurus"],"GAC":["GA4","GA6","GS3","GS4","GS5","GS8"],"Geely":["Azkarra","Coolray","Emgrand","Tugella"],"Genesis":["G70","G80","G90","GV70","GV80"],"GMC":["Acadia","Canyon","Sierra","Yukon","Yukon XL"],"Honda":["Accord","City","Civic","CR-V","e:NS1","HR-V","Jazz","Odyssey","Pilot","Ridgeline"],"Hummer":["EV Pickup","EV SUV","H1","H2","H3"],"Hyundai":["Accent","Atos","Creta","Elantra","i10","i20","i30","Ioniq 5","Ioniq 6","Kona","Palisade","Santa Cruz","Santa Fe","Sonata","Staria","Tucson","Veloster"],"Infiniti":["Q50","Q60","Q70","QX50","QX55","QX60","QX80"],"Isuzu":["D-Max","MU-X","Trooper"],"Jaguar":["E-Pace","F-Pace","F-Type","I-Pace","XE","XF","XJ"],"Jeep":["Cherokee","Compass","Gladiator","Grand Cherokee","Grand Wagoneer","Renegade","Wrangler"],"Kia":["Carnival","Ceed","EV6","EV9","K5","Niro","Picanto","Seltos","Sorento","Soul","Sportage","Stinger","Telluride"],"Lamborghini":["Aventador","Huracán","Urus"],"Land Rover":["Defender","Discovery","Discovery Sport","Freelander","Range Rover","Range Rover Evoque","Range Rover Sport","Range Rover Velar"],"Lexus":["ES","GS","GX","IS","LC","LS","LX","NX","RC","RX","UX"],"Lincoln":["Aviator","Corsair","MKZ","Navigator","Nautilus"],"Lotus":["Emira","Evija","Evora","Exige"],"Maserati":["Ghibli","GranTurismo","Grecale","Levante","MC20","Quattroporte"],"Mazda":["2","3","5","6","CX-3","CX-30","CX-5","CX-60","CX-9","MX-5","MX-30"],"McLaren":["570S","600LT","720S","765LT","Artura","GT","Senna"],"Mercedes-Benz":["A-Class","B-Class","C-Class","CLA","CLE","CLS","E-Class","EQA","EQB","EQC","EQE","EQS","G-Class","GLA","GLB","GLC","GLE","GLS","GT","Maybach GLS","Maybach S-Class","S-Class","SL","SLC","V-Class"],"MG":["5","6","HS","RX5","RX8","ZS","ZS EV"],"MINI":["Clubman","Convertible","Countryman","Coupe","Hatch","Paceman","Roadster"],"Mitsubishi":["ASX","Eclipse Cross","Galant","L200","Lancer","Outlander","Pajero","Pajero Sport"],"Nissan":["370Z","Altima","Armada","Juke","Kicks","Leaf","Maxima","Micra","Murano","Navara","Patrol","Patrol Safari","Qashqai","Rogue","Sentra","Sunny","Terra","Tiida","X-Trail"],"Peugeot":["2008","208","3008","308","408","508","Partner","Rifter"],"Porsche":["718","911","Cayenne","Macan","Panamera","Taycan"],"RAM":["1500","2500","3500","ProMaster"],"Renault":["Captur","Clio","Duster","Kadjar","Koleos","Megane","Scenic","Symbol","Zoe"],"Rolls-Royce":["Cullinan","Dawn","Ghost","Phantom","Spectre","Wraith"],"SEAT":["Arona","Ateca","Ibiza","Leon","Tarraco"],"Skoda":["Fabia","Kamiq","Karoq","Kodiaq","Octavia","Scala","Superb"],"Subaru":["BRZ","Crosstrek","Forester","Impreza","Legacy","Outback","WRX"],"Suzuki":["Alto","Baleno","Ciaz","Celerio","Ertiga","Jimny","S-Presso","Swift","Vitara"],"Tesla":["Cybertruck","Model 3","Model S","Model X","Model Y","Roadster"],"Toyota":["4Runner","Avalon","Avanza","C-HR","Camry","Corolla","Corolla Cross","FJ Cruiser","Fortuner","Hiace","Highlander","Hilux","Land Cruiser","Land Cruiser 70","Land Cruiser 200","Land Cruiser 300","Prado","Previa","Prius","RAV4","Rush","Sequoia","Sienna","Supra","Tacoma","Tundra","Venza","Yaris"],"Volkswagen":["Amarok","Arteon","Caddy","Golf","ID.3","ID.4","Jetta","Multivan","Passat","Polo","Sharan","T-Cross","T-Roc","Taigo","Teramont","Tiguan","Touareg","Touran","Transporter","Up"],"Volvo":["C40","S60","S90","V60","V90","XC40","XC60","XC90"],"XPENG":["G3","G6","G9","P5","P7"]};
+const BM={"Acura":["CDX","ILX","Integra","MDX","MDX Sport Hybrid","NSX","RDX","RLX","TLX","ZDX"],"Alfa Romeo":["147","156","159","164","166","Brera","Giulia","Giulietta","GT","GTA","GTV","MiTo","Spider","Stelvio","Tonale"],"Aston Martin":["DB7","DB9","DB11","DB12","DBS","DBS Superleggera","DBX","DBX707","Rapide","Vantage","Virage"],"Audi":["A1","A2","A3","A4","A4 Allroad","A5","A6","A6 Allroad","A7","A8","e-tron","e-tron GT","e-tron S","Q2","Q3","Q3 Sportback","Q4 e-tron","Q5","Q5 Sportback","Q7","Q8","Q8 e-tron","R8","RS3","RS4","RS5","RS6","RS7","RS Q3","RS Q8","S3","S4","S5","S6","S7","S8","SQ2","SQ5","SQ7","SQ8","TT","TT RS","TTS"],"Bentley":["Bentayga","Bentayga EWB","Continental GT","Continental GTC","Flying Spur","Mulsanne"],"BMW":["1 Series","2 Series","3 Series","3 Series GT","4 Series","5 Series","6 Series","6 Series GT","7 Series","8 Series","i3","i4","i5","i7","i8","iX","iX1","iX2","iX3","M2","M3","M4","M5","M6","M8","X1","X2","X3","X3 M","X4","X4 M","X5","X5 M","X6","X6 M","X7","XM","Z3","Z4"],"BYD":["Atto 3","Dolphin","Han","Seal","Seal U","Song","Song Plus","Tang","Yuan Plus"],"Cadillac":["ATS","CT4","CT5","CT6","CTS","Escalade","Escalade ESV","Lyriq","SRX","STS","XT4","XT5","XT6"],"Chery":["Arrizo 5","Arrizo 6","Arrizo 8","Tiggo 2","Tiggo 4","Tiggo 7","Tiggo 7 Pro","Tiggo 8","Tiggo 8 Pro"],"Chevrolet":["Aveo","Blazer","Blazer EV","Camaro","Captiva","Colorado","Corvette","Cruze","Equinox","Express","Impala","Malibu","Silverado 1500","Silverado 2500HD","Silverado 3500HD","Sonic","Spark","SS","Suburban","Tahoe","TrailBlazer","Traverse","Trax"],"Chrysler":["200","300","300C","Aspen","Pacifica","Voyager"],"Citroën":["Berlingo","C1","C2","C3","C3 Aircross","C4","C4 Cactus","C5","C5 Aircross","C5 X","C6","C8","DS3","DS4","DS5","SpaceTourer"],"Dacia":["Duster","Jogger","Logan","Lodgy","Sandero","Spring"],"Daewoo":["Espero","Kalos","Lacetti","Lanos","Leganza","Matiz","Nubira","Tacuma"],"Dodge":["Challenger","Charger","Dakota","Dart","Durango","Grand Caravan","Hornet","Journey","Nitro","RAM 1500","Viper"],"Ferrari":["296 GTS","296 GTB","458","488","488 GTB","488 Pista","812 Competizione","812 GTS","812 Superfast","California","California T","F12","F430","F8 Spider","F8 Tributo","GTC4Lusso","LaFerrari","Portofino","Portofino M","Purosangue","Roma","SF90 Spider","SF90 Stradale"],"Fiat":["124 Spider","500","500L","500X","Bravo","Doblo","Ducato","Freemont","Grande Punto","Linea","Panda","Punto","Qubo","Sedici","Tipo","Uno"],"Ford":["Bronco","Bronco Sport","Ecosport","Edge","Escape","Everest","Expedition","Explorer","F-150","F-150 Lightning","F-250","F-350","Fiesta","Flex","Focus","Fusion","Galaxy","Galaxy","Kuga","Maverick","Mondeo","Mustang","Mustang Mach-E","Puma","Ranger","S-Max","Taurus","Territory","Tourneo"],"GAC":["GA4","GA6","GN8","GS3","GS4","GS5","GS8","Trumpchi M6"],"Geely":["Azkarra","Atlas","Coolray","Emgrand","Monjaro","Okavango","Preface","Tugella"],"Genesis":["G70","G80","G90","GV70","GV80","GV80 Coupe"],"GMC":["Acadia","Canyon","Envoy","Jimmy","Safari","Sierra 1500","Sierra 2500HD","Sierra 3500HD","Terrain","Yukon","Yukon XL"],"Great Wall":["Haval H2","Haval H6","Haval H9","Ora Good Cat","Poer","Wingle"],"Honda":["Accord","Amaze","BR-V","City","City Hatchback","Civic","CR-V","e:NS1","e:NY1","HR-V","Insight","Jazz","Legend","Odyssey","Passport","Pilot","Ridgeline","WR-V"],"Hummer":["EV Pickup","EV SUV","H1","H2","H3","H3T"],"Hyundai":["Accent","Atos","Avante","Azera","Bayon","Creta","Elantra","Genesis","Getz","Grandeur","i10","i20","i30","i40","i45","Ioniq","Ioniq 5","Ioniq 5 N","Ioniq 6","Kona","Kona Electric","Nexo","Palisade","Santa Cruz","Santa Fe","Santa Fe Hybrid","Sonata","Staria","Terracan","Tucson","Tucson Hybrid","Veloster","Venue"],"Infiniti":["EX","FX","G37","JX","Q30","Q40","Q50","Q60","Q70","QX30","QX50","QX55","QX60","QX70","QX80"],"Isuzu":["D-Max","MU-7","MU-X","Trooper","VehiCROSS"],"JAC":["J7","JS4","JS6","Refine S3","Refine S5","T6","T8"],"Jaguar":["E-Pace","F-Pace","F-Type","I-Pace","S-Type","X-Type","XE","XF","XJ","XK"],"Jeep":["Cherokee","Compass","Gladiator","Grand Cherokee","Grand Cherokee 4xe","Grand Cherokee L","Grand Wagoneer","Patriot","Renegade","Wrangler","Wrangler 4xe"],"Kia":["Carnival","Ceed","Cerato","EV6","EV9","K5","Niro","Niro EV","Optima","Picanto","ProCeed","Rio","Seltos","Sorento","Soul","Sportage","Stinger","Stonic","Telluride","Xceed"],"Lamborghini":["Aventador","Aventador S","Huracán","Huracán EVO","Huracán STO","Revuelto","Urus","Urus Performante","Urus S"],"Land Rover":["Defender","Defender 90","Defender 110","Defender 130","Discovery","Discovery Sport","Freelander","LR2","LR4","Range Rover","Range Rover Evoque","Range Rover Sport","Range Rover Velar","Series III"],"Lexus":["CT","ES","GS","GS F","GX","IS","IS F","LC","LC Convertible","LS","LX","NX","RC","RC F","RX","RX L","UX"],"Lincoln":["Aviator","Corsair","Mark LT","MKC","MKS","MKT","MKX","MKZ","Navigator","Navigator L","Nautilus"],"Lotus":["Eletre","Emira","Evija","Evora","Exige","Exige Cup"],"Mahindra":["Bolero","Marazzo","Scorpio","Thar","TUV300","XUV300","XUV400","XUV500","XUV700"],"Maserati":["Ghibli","GranCabrio","GranTurismo","Grecale","Levante","MC20","Quattroporte"],"Mazda":["2","3","5","6","626","CX-3","CX-30","CX-5","CX-50","CX-60","CX-9","MX-30","MX-5","MX-5 RF","RX-7","RX-8"],"McLaren":["570GT","570S","600LT","650S","675LT","720S","720S Spider","750S","765LT","Artura","GT","P1","Senna"],"Mercedes-Benz":["A-Class","A 35 AMG","A 45 AMG","B-Class","C-Class","C 43 AMG","C 63 AMG","CLA","CLA 35 AMG","CLA 45 AMG","CLE","CLS","E-Class","E 53 AMG","E 63 AMG","EQA","EQB","EQC","EQE","EQE SUV","EQS","EQS SUV","G-Class","G 63 AMG","GLA","GLB","GLC","GLC Coupe","GLE","GLE Coupe","GLS","GT","GT 4-Door","Maybach GLS","Maybach S-Class","S-Class","S 500","S 580","S 63 AMG","SL","SLC","V-Class","Vito"],"MG":["3","5","6","HS","Marvel R","RX5","RX8","ZS","ZS EV"],"MINI":["Clubman","Convertible","Countryman","Coupe","Hatch","Paceman","Roadster"],"Mitsubishi":["ASX","Eclipse Cross","Galant","L200","Lancer","Lancer Evolution","Montero","Outlander","Outlander PHEV","Pajero","Pajero Mini","Pajero Sport","Space Star","Xpander"],"Nissan":["350Z","370Z","400Z","Altima","Armada","Ariya","Frontier","GT-R","Juke","Kicks","Leaf","Maxima","Micra","Murano","Navara","Patrol","Patrol Safari","Qashqai","Rogue","Sentra","Sunny","Terra","Tiida","Titan","X-Trail"],"OMODA":["5","C5"],"Peugeot":["108","2008","206","207","208","3008","301","306","307","308","408","4008","5008","508","Expert","Partner","Rifter","Traveller"],"Porsche":["718 Boxster","718 Cayman","911","911 GT3","911 GT3 RS","911 Turbo","911 Turbo S","Cayenne","Cayenne Coupe","Macan","Panamera","Taycan","Taycan Cross Turismo"],"RAM":["1500","2500","3500","ProMaster","ProMaster City"],"Renault":["Arkana","Captur","Clio","Duster","Espace","Kadjar","Koleos","Laguna","Logan","Master","Megane","Sandero","Scenic","Symbol","Trafic","Triber","Zoe"],"Rolls-Royce":["Black Badge Ghost","Cullinan","Cullinan Black Badge","Dawn","Ghost","Phantom","Phantom EWB","Silver Shadow","Silver Spirit","Spectre","Wraith"],"SEAT":["Arona","Ateca","Ibiza","Leon","Tarraco"],"Skoda":["Fabia","Kamiq","Karoq","Kodiaq","Octavia","Rapid","Scala","Superb","Yeti"],"Subaru":["Ascent","BRZ","Crosstrek","Forester","Impreza","Legacy","Levorg","Outback","Solterra","WRX","WRX STI","XV"],"Suzuki":["Alto","Baleno","Ciaz","Celerio","Ertiga","Grand Vitara","Jimny","Kizashi","S-Presso","Swift","SX4","Vitara","XL7"],"Tesla":["Cybertruck","Model 3","Model S","Model X","Model Y","Roadster"],"TOGG":["T10X","T10F"],"Toyota":["4Runner","Avalon","Avanza","Aygo","C-HR","Camry","Camry Hybrid","Corolla","Corolla Altis","Corolla Cross","Corolla Cross Hybrid","Crown","Crown Hybrid","FJ Cruiser","Fortuner","GR86","GR Corolla","GR Supra","GR Yaris","Hiace","Highlander","Hilux","Land Cruiser","Land Cruiser 70 Series","Land Cruiser 200","Land Cruiser 300","Prado","Previa","Prius","Prius Prime","RAV4","RAV4 Hybrid","Rush","Sequoia","Sienna","Supra","Tacoma","Tundra","Venza","Vios","Yaris","Yaris Cross"],"Volkswagen":["Amarok","Arteon","Beetle","Caddy","Golf","Golf GTI","Golf R","ID.3","ID.4","ID.5","ID.6","ID.7","Jetta","Multivan","Passat","Passat CC","Phaeton","Polo","Scirocco","Sharan","T-Cross","T-Roc","Taigo","Teramont","Tiguan","Tiguan Allspace","Touareg","Touran","Transporter","Up"],"Volvo":["C30","C40","C70","S40","S60","S80","S90","V40","V50","V60","V90","XC40","XC40 Recharge","XC60","XC70","XC90"],"XPENG":["G3","G6","G9","P5","P7","X9"],"Zeekr":["001","007","009","X"]};
 
 const BODY_HINTS=[
   [/suv|x[1-9]|cx|qx|gx|gls|gle|glb|gla|glc|xt[456]|xc|xq|q[2-9]|qashqai|kuga|escape|tucson|sorento|telluride|palisade|highlander|4runner|fortuner|prado|defender|discovery|freelander|range rover|evoque|velar|sport|tahoe|suburban|yukon|escalade|acadia|traverse|pilot|cr-v|hrv|rav4|duster|tiguan|teramont|touareg|kodiaq|karoq|kamiq|forester|outback|crosstrek|outlander|pajero|asx|vitara|jimny|juke|kicks|rogue|murano|armada|terra|creta|seltos|staria|ioniq 5|ioniq 6|atto|tang|yuan|hs|rx5|rx8|zs|gv[78]|g[vq]|sx4|stelvio|tonale|grecale|levante|urus|cayenne|macan|bentayga|cullinan|dbx|purosangue|blazer|equinox|captiva|trailblazer|grand cherokee|wrangler|compass|renegade|grand wagoneer|bronco|expedition|explorer|f-pace|e-pace|i-pace|niro|soul/i,'SUV'],
@@ -5522,7 +5782,7 @@ function updateReadiness(){
   g('btnCheck').disabled=!ok;
   const hint=g('formHint');
   if(ok){
-    hint.innerHTML='Ready — <strong>get your valuation</strong>';
+    hint.innerHTML='Ready — <strong>get your price report</strong>';
     hint.classList.add('ready-hint');
     g('btnCheck').classList.add('ready');
   }else{
@@ -5558,12 +5818,14 @@ function populateModels(){
   requestAnimationFrame(()=>{
     ksRefresh(s);
     window.scrollTo({top:sy,behavior:'instant'});
+    updateReadiness();
   });
 }
 function onModelChange(){
   markFilled(g('model'));
   const b=g('brand').value,m=g('model').value;
   if(b&&m){const bg=guessBody(b,m);if(bg)setVal(g('body'),bg);}
+  updateReadiness();
 }
 
 /* ── QUICK CHECK ────────────────────────────────────────── */
@@ -5598,7 +5860,7 @@ function showState(st,mobile=false){
 /* ── UAE MARKET FACTS — Did You Know rotator ─────────────── */
 const UAE_FACTS = [
   'White and Silver cars hold up to 5% more resale value in the GCC due to heat reflection and high local demand.',
-  'Full service history at an authorised dealer can increase your car\'s valuation by up to 12% vs. non-agency service.',
+  'Full service history at an authorised dealer can increase a vehicle\'s market price by up to 12% vs. non-agency service.',
   'GCC-specification cars typically command an AED 5,000–15,000 premium over American or European imports in UAE.',
   'Single-owner vehicles sell 30% faster on UAE platforms — ownership history is the #1 trust signal for buyers.',
   'Dubizzle data shows accident-free cars receive 40% more enquiries in the first 48 hours of listing.',
@@ -5624,17 +5886,15 @@ function buildLoadSteps(mobile){
 }
 
 function _setStep(idx){
-  const steps = document.querySelectorAll('.rld-step-item');
-  steps.forEach((el,i)=>{
+  // Drive both desktop and mobile step lists
+  document.querySelectorAll('.rld-step-item').forEach((el,i)=>{
     el.classList.remove('active','done');
     if(i < idx)  el.classList.add('done');
     if(i === idx) el.classList.add('active');
   });
   const pct = LOAD_STEPS_DEF[Math.min(idx, LOAD_STEPS_DEF.length-1)].pct;
-  const fill = document.getElementById('rldMasterFill');
-  const pctEl= document.getElementById('rldPct');
-  if(fill)  fill.style.width = pct+'%';
-  if(pctEl) pctEl.textContent = pct+'%';
+  ['rldMasterFill','mobRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
+  ['rldPct','mobRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pct+'%';});
 }
 
 function _rotateFact(idx){
@@ -5657,12 +5917,11 @@ function startLoad(mobile=false){
   const model   = (document.getElementById('model')||{}).value||'';
   const year    = (document.getElementById('year')||{}).value||'';
   const mileage = (document.getElementById('mileage')||{}).value;
-  const carLabel= [year,brand,model].filter(Boolean).join(' ')||'your car';
-  const lbl2 = document.getElementById('lstep2lbl');
-  if(lbl2){
-    const km = mileage ? parseInt(mileage).toLocaleString()+' km ' : '';
-    lbl2.textContent = `Calculating depreciation for ${km}${carLabel}…`;
-  }
+  const carLabel= [year,brand,model].filter(Boolean).join(' ')||'this vehicle';
+  ['lstep2lbl','mlstep2lbl'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){const km=mileage?parseInt(mileage).toLocaleString()+' km ':'';el.textContent=`Calculating depreciation for ${km}${carLabel}…`;}
+  });
 
   /* reset steps */
   _stepIdx=0;
@@ -5700,10 +5959,8 @@ function stopLoad(){
   _stepTimer=null;
 
   /* mark all steps done */
-  const fill=document.getElementById('rldMasterFill');
-  const pctEl=document.getElementById('rldPct');
-  if(fill)  fill.style.width='100%';
-  if(pctEl) pctEl.textContent='100%';
+  ['rldMasterFill','mobRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width='100%';});
+  ['rldPct','mobRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='100%';});
   document.querySelectorAll('.rld-step-item').forEach(el=>{
     el.classList.remove('active'); el.classList.add('done');
   });
@@ -5805,22 +6062,16 @@ function toggleWhy(){
 }
 
 /* ── REFERENCE NUMBER ───────────────────────────────────── */
-function generateRef(){
-  // Sequential counter starting at 235, increments globally on every button click
-  let n=235;
-  try{const stored=parseInt(localStorage.getItem('pir_ref_n'));if(!isNaN(stored)&&stored>=235){n=stored+1;}else{n=235;}}catch{}
-  try{localStorage.setItem('pir_ref_n',n);}catch{}
-
+function generateRef(serverRef){
+  // Prefer server-generated ref (authoritative, logged in KV).
+  // Fallback: timestamp + random — no localStorage, always unique.
+  if(serverRef) return { label: serverRef };
   const now=new Date();
   const dd=String(now.getDate()).padStart(2,'0');
   const mm=String(now.getMonth()+1).padStart(2,'0');
   const yyyy=now.getFullYear();
-  const dateStr=`${dd}${mm}${yyyy}`;
-
-  return{
-    num:n,
-    label:`${dateStr}-${n}`,
-  };
+  const rand=Math.random().toString(36).slice(2,6).toUpperCase();
+  return{ label:`KS-${dd}${mm}${yyyy}-${rand}` };
 }
 
 /* ── HELPERS ─────────────────────────────────────────────── */
@@ -6001,13 +6252,11 @@ function buildNegoGuide(askN,avg,conditionVal,accidentVal){
   return{offer,close,walk,room,tactic};
 }
 
-function buildOwnershipCost(price,deprAmt,carYear){
-  const cy=new Date().getFullYear();
-  const age=cy-carYear;
-  // Insurance: 2.5% comprehensive for 2024+ cars, flat AED 1,200 third-party for older
-  const ins = carYear >= 2024
-    ? Math.round(price * 0.025 / 100) * 100
-    : 1200;
+function buildOwnershipCost(price,deprAmt,carYear,rtaFees){
+  // Use API-computed insurance when available; fall back to local formula
+  const ins = rtaFees?.insurance != null
+    ? rtaFees.insurance
+    : (carYear >= 2024 ? Math.round(price * 0.025 / 100) * 100 : 1200);
   // Maintenance shown separately — NOT in the first-year ownership cost total
   const maint=Math.round(price*.015/500)*500;
   // First-year cost = RTA fees + insurance ONLY (no car value, no depreciation)
@@ -6041,8 +6290,11 @@ function buildResult(r,brand,model,year,mileage,asking){
   const askN=asking?parseInt(asking):null;
   const ai=r.ai||null;
   const mkt=r.marketability||null;
+  const avr    = r.avr                || {};
+  const cmp    = r.comparisonToAsking || null;
+  const script = r.hagglingScript     || '';
 
-  const ref=generateRef();
+  const ref=generateRef(r.ref||null);
   const refEl=document.getElementById('resultRef');
   if(refEl){refEl.textContent=ref.label;refEl.classList.add('on');}
   const mobRefEl=document.getElementById('mobRef');
@@ -6076,10 +6328,6 @@ function buildResult(r,brand,model,year,mileage,asking){
   const starPct  =rng>0?Math.max(4,Math.min(96,Math.round(((offerPx-sliderLow)/rng)*100))):50;
   const rawPct   =low&&high&&high>low?Math.round(((offerPx-low)/(high-low))*100):null;
   const posPct   =rawPct!==null?Math.max(1,Math.min(99,rawPct)):null;
-  const imgUrl   = `https://www.carqueryapi.com/api/0.3/`; // placeholder - real URL below
-  // Watermark-free: use wikimedia/commons-style URL from NHTSA or a direct make/model search
-  // Best reliable watermark-free option: direct Bing/Google image will be blocked, so use Car API
-  // We use a branded SVG silhouette as primary, with the imagin studio image (cropped to hide watermark)
   const carImgUrl = `https://cdn.imagin.studio/getImage?customer=img&make=${encodeURIComponent(brand)}&modelFamily=${encodeURIComponent(model||brand)}&modelYear=${year}&angle=side&zoomType=fullscreen&stripwatermark=1`;
   const maxBarH  =Math.max(askN||0,avg)||1;
   const askBarH  =askN?Math.max(20,Math.round((askN/maxBarH)*120)):0;
@@ -6110,70 +6358,41 @@ function buildResult(r,brand,model,year,mileage,asking){
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
   const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,colourVal,svcVal,ai);
   const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,colourVal,svcVal,accVal,ownVal,warVal);
-  const deprRows=buildDeprTable(avg,carYear,brand,km);
   const nego=buildNegoGuide(askN,avg,condVal,accVal);
-  const cost=buildOwnershipCost(askN||avg,deprAmt,carYear);
+  const cost=buildOwnershipCost(askN||avg,deprAmt,carYear,r.rtaFees);
+
+  // ── Handshake defined HERE — required by _deprRows before it is computed ──
+  const condAdj = condVal==='Excellent'?.02:condVal==='Very Good'?.01:condVal==='Fair'?-.02:condVal==='Poor'?-.05:0;
+  const accAdj  = (accVal==='minor'||qs.accident===true)?-.04:(accVal==='major')?-.08:0;
+  const handshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
+
+  // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
+  // r.depreciation is a 3-element array of AED values from applyValuationMath()
+  const _deprRows = (r.depreciation && r.depreciation.length >= 3)
+    ? (() => {
+        let prev = handshake;
+        return r.depreciation.map((val, i) => {
+          const loss = prev - val;
+          const rate = Math.round(loss / Math.max(prev, 1) * 100);
+          const row  = { year: cy + i + 1, rate, endVal: val, cumLoss: handshake - val };
+          prev = val;
+          return row;
+        });
+      })()
+    : buildDeprTable(handshake, carYear, brand, km);
 
   const analysisText=ai?.explanation||
     `The ${year} ${brand}${model?' '+model:''} has been assessed against ${comp>0?comp+' comparable':'live UAE'} listings.`+
     (specVal==='GCC'||specVal==='GCC Spec'?' GCC specification is the most sought-after locally.':'')+
     (km>100000?` High mileage of ${km.toLocaleString()} km is a key factor.`:'');
 
-  // Time to sell
+  // Time to sell — dCls helper used in section ⑫ below
   const dCls=d=>d<=14?'fast':d<=45?'medium':'slow';
-  let mktSec='';
-  if(mkt){
-    const rows=[];
-    if(mkt.days_at_market>0) rows.push(`<div class="rpt-mkt-row"><span class="rpt-mkt-rlbl">At market value</span><span class="rpt-mkt-rval ${dCls(mkt.days_at_market)}">~${mkt.days_at_market} days</span></div>`);
-    if(askN&&mkt.days_at_asking>0&&mkt.days_at_asking!==mkt.days_at_market) rows.push(`<div class="rpt-mkt-row"><span class="rpt-mkt-rlbl">At your asking price</span><span class="rpt-mkt-rval ${dCls(mkt.days_at_asking)}">~${mkt.days_at_asking} days</span></div>`);
-    if(mkt.recommended_price>0&&askN&&mkt.recommended_price<askN) rows.push(`<div class="rpt-mkt-row highlight"><span class="rpt-mkt-rlbl">⚡ Optimal price (14-day sale)</span><span class="rpt-mkt-rval">AED ${mkt.recommended_price.toLocaleString()}</span></div>`);
-    if(rows.length) mktSec=`<div class="rpt-section r-metrics-section"><div class="rpt-section-title">Time to Sell</div><div class="rpt-mkt-grid">${rows.join('')}</div>${mkt.insight?`<p class="rpt-mkt-insight">${mkt.insight}</p>`:''}</div>`;
-  }
 
-  // AI factors
-  const aiSec=ai?.key_factors?.length?`<div class="rpt-section r-ai-section"><div class="rpt-section-title">Key Value Factors</div><div class="rpt-ai-factors">${ai.key_factors.map(f=>`<div class="rpt-ai-factor">${f}</div>`).join('')}</div>${ai.advice?`<p class="rpt-ai-text" style="margin-top:10px">${ai.advice}</p>`:''}</div>`:'';
-
-  // Flags — pir-flag classes for new PIR layout
+  // Flags array — used directly in PIR buyer-checklist section
   const allF=[...gF.map(f=>`<div class="pir-flag pir-flag-green"><span class="pir-flag-dot pir-flag-dot-green"></span><span>${f}</span></div>`),...rF.map(f=>`<div class="pir-flag pir-flag-red"><span class="pir-flag-dot pir-flag-dot-red"></span><span>${f}</span></div>`)];
-  const flagSec=allF.length?`<div class="rpt-section"><div class="rpt-section-title">Buyer's Checklist</div><div class="rpt-flags-grid">${allF.join('')}</div></div>`:'';
-
-  // Negotiation
-  const negoSec=nego?`<div class="rpt-section"><div class="rpt-section-title">Negotiation Guide</div>
-    <div class="rpt-nego-grid">
-      <div class="rpt-nego-card highlight"><div class="rpt-nego-lbl">Open With</div><div class="rpt-nego-val">AED ${nego.offer.toLocaleString()}</div></div>
-      <div class="rpt-nego-card"><div class="rpt-nego-lbl">Target Close</div><div class="rpt-nego-val">AED ${nego.close.toLocaleString()}</div></div>
-      <div class="rpt-nego-card"><div class="rpt-nego-lbl">Walk Away At</div><div class="rpt-nego-val warn">AED ${nego.walk.toLocaleString()}</div></div>
-    </div>
-    <p class="rpt-nego-tip">${nego.tactic}</p></div>`:'';
-
-  // Cost
-  const costSec=`<div class="rpt-section"><div class="rpt-section-title">First Year Cost Estimate</div>
-    <table class="rpt-cost-table">
-      <tr><td>RTA Inspection</td><td>−AED 170</td></tr>
-      <tr><td>Vehicle Registration</td><td>−AED 420</td></tr>
-      <tr><td>Ownership Transfer</td><td>−AED 350</td></tr>
-      <tr><td>${carYear>=2024?'Insurance (2.5% comprehensive)':'Insurance (3rd party, pre-2024)'}</td><td>−AED ${cost.ins.toLocaleString()}</td></tr>
-      <tr class="total"><td><strong>Total First-Year Fees</strong></td><td><strong>−AED ${cost.rtaOnly.toLocaleString()}</strong></td></tr>
-      <tr style="opacity:0.6"><td>Est. Depreciation (yr 1)</td><td>−AED ${deprAmt.toLocaleString()}</td></tr>
-      <tr style="opacity:0.6"><td>Est. Maintenance</td><td>−AED ${cost.maint.toLocaleString()}</td></tr>
-    </table>
-    <p class="rpt-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</p></div>`;
 
   // 3-Year depreciation
-  const deprSec=`<div class="rpt-section"><div class="rpt-section-title">3-Year Value Projection</div>
-    <table class="rpt-depr-table">
-      <tr><th>Year End</th><th>Est. Rate</th><th>Est. Value</th><th>Total Loss</th></tr>
-      ${deprRows.map(row=>`<tr><td>${row.year}</td><td>${row.rate}%</td><td>AED ${row.endVal.toLocaleString()}</td><td>−AED ${row.cumLoss.toLocaleString()}</td></tr>`).join('')}
-    </table></div>`;
-
-  // Accuracy
-  const accSec=`<div class="rpt-section"><div class="rpt-section-title">Data Accuracy</div>
-    <div class="rpt-acc-row">
-      <span class="rpt-acc-lbl">Confidence</span>
-      <div class="rpt-acc-bar-wrap"><div class="rpt-acc-bar" id="cbarFill" style="width:0%"></div></div>
-      <span class="rpt-acc-pct">${conf}%</span>
-    </div>
-    ${comp>0?`<p class="rpt-acc-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</p>`:''}</div>`;
 
   // ── Price Intelligence Report — build vehicle identity prose ──
   const bodyStr   = g('body')?.value||'';
@@ -6222,10 +6441,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const confWidth=Math.max(5,Math.min(95,conf));
 
   // ── PRICE SUMMARY computed values ──────────────────────────────
-  // Handshake = fair deal close price (avg adjusted for condition/accident)
-  const condAdj = condVal==='Excellent'?.02:condVal==='Very Good'?.01:condVal==='Fair'?-.02:condVal==='Poor'?-.05:0;
-  const accAdj  = (accVal==='minor'||qs.accident===true)?-.04:(accVal==='major')?-.08:0;
-  const handshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
+  // handshake, condAdj, accAdj already defined above before _deprRows
   // Sticker = asking price (if provided) or null
   const stickerPrice = askN||null;
   // Negotiation = smart entry point: slightly below lower end of range
@@ -6366,158 +6582,419 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   </div><!-- /pir-ps-wrap -->
 
-  <!-- ⑤ MARKET POSITION VISUAL -->
+  <!-- ⑤ MARKET POSITION VISUAL — clean minimal range bar -->
   <div class="pir-mp-wrap">
+
     <div class="pir-mp-header">
       <div class="pir-mp-title">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M9 3.5l3 3-3 3" stroke="#8A9AB8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="1" y1="6" x2="11" y2="6" stroke="#8A9AB8" stroke-width="1.4" stroke-linecap="round"/><polyline points="8,3 11,6 8,9" stroke="#8A9AB8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Market Position
       </div>
-      <div class="pir-mp-conf">
-        <div class="pir-mp-conf-bar-wrap"><div class="pir-mp-conf-bar" style="width:${conf}%"></div></div>
-        <span>${conf}% confidence · ${comp>0?comp+' listings':'estimated'}</span>
-      </div>
+      <div class="pir-mp-badge-source">${r.isEstimate?'AI Estimate':'Live Data'} · ${comp>0?comp+' listings':'estimated'}</div>
     </div>
 
-    <!-- The bar -->
-    <div class="pir-mp-bar-area">
-      <!-- Price labels above bar -->
-      <div class="pir-mp-bar-labels" style="position:relative;height:38px;margin-bottom:4px;">
+    <!-- Price labels row — positioned above the bar -->
+    <div class="pir-mp2-label-row">
+      <!-- Negotiation — left anchor -->
+      <div class="pir-mp2-pin pir-mp2-pin-nego" style="left:${negoPct}%">
+        <div class="pir-mp2-pin-price">AED ${negoEntry.toLocaleString()}</div>
+        <div class="pir-mp2-pin-name">Negotiation</div>
+      </div>
+      <!-- Handshake — centre anchor -->
+      <div class="pir-mp2-pin pir-mp2-pin-hand" style="left:${handshakePct}%">
+        <div class="pir-mp2-pin-price">AED ${handshake.toLocaleString()}</div>
+        <div class="pir-mp2-pin-name">Handshake</div>
+      </div>
+      ${stickerPct!==null?`
+      <!-- Sticker — conditional -->
+      <div class="pir-mp2-pin pir-mp2-pin-stick" style="left:${stickerPct}%">
+        <div class="pir-mp2-pin-price">AED ${stickerPrice.toLocaleString()}</div>
+        <div class="pir-mp2-pin-name">Sticker</div>
+      </div>`:``}
+    </div>
 
-        ${stickerPct!==null?`
-        <div class="pir-mp-label pir-mp-label-sticker" style="left:${stickerPct}%">
-          <div class="pir-mp-label-val">AED ${stickerPrice.toLocaleString()}</div>
-          <div class="pir-mp-label-name">Sticker</div>
-          <div class="pir-mp-label-stem pir-mp-stem-sticker"></div>
-        </div>`:``}
+    <!-- Connector stems row -->
+    <div class="pir-mp2-stem-row">
+      <div class="pir-mp2-stem pir-mp2-stem-nego" style="left:${negoPct}%"></div>
+      <div class="pir-mp2-stem pir-mp2-stem-hand" style="left:${handshakePct}%"></div>
+      ${stickerPct!==null?`<div class="pir-mp2-stem pir-mp2-stem-stick" style="left:${stickerPct}%"></div>`:``}
+    </div>
 
-        <div class="pir-mp-label pir-mp-label-handshake" style="left:${handshakePct}%">
-          <div class="pir-mp-label-val">AED ${handshake.toLocaleString()}</div>
-          <div class="pir-mp-label-name">Handshake</div>
-          <div class="pir-mp-label-stem pir-mp-stem-handshake"></div>
-        </div>
+    <!-- The track -->
+    <div class="pir-mp2-track">
+      <!-- Gradient fill — green left (cheap) → red right (expensive) -->
+      <div class="pir-mp2-fill"></div>
 
-        <div class="pir-mp-label pir-mp-label-nego" style="left:${negoPct}%">
-          <div class="pir-mp-label-val">AED ${negoEntry.toLocaleString()}</div>
-          <div class="pir-mp-label-name">Negotiation</div>
-          <div class="pir-mp-label-stem pir-mp-stem-nego"></div>
-        </div>
+      <!-- Negotiation dot -->
+      <div class="pir-mp2-dot pir-mp2-dot-nego" style="left:${negoPct}%"></div>
 
-      </div><!-- /pir-mp-bar-labels -->
-
-      <!-- The range bar itself -->
-      <div class="pir-mp-bar-track">
-        <!-- Coloured gradient fill -->
-        <div class="pir-mp-bar-fill"></div>
-
-        <!-- Negotiation marker — leftmost dot -->
-        <div class="pir-mp-marker pir-mp-marker-nego" style="left:${negoPct}%">
-          <div class="pir-mp-marker-dot pir-mp-dot-nego"></div>
-        </div>
-
-        <!-- Handshake marker — car icon -->
-        <div class="pir-mp-marker pir-mp-marker-handshake" style="left:${handshakePct}%">
-          <div class="pir-mp-car-icon">
-            <svg viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 9 L4.5 4.5 Q5.5 3 7 3 L10 2.5 Q12 2 13 3 L19 3.5 Q21.5 3.5 22.5 5 L25.5 8 Q26.5 8.5 26.5 9.5 L26.5 10.5 Q26.5 11 26 11 L23.5 11 Q23 12.5 21.5 12.5 Q20 12.5 19.5 11 L8.5 11 Q8 12.5 6.5 12.5 Q5 12.5 4.5 11 L2.5 11 Q2 11 2 10.5 Z"
-                fill="#0F1E38" stroke="rgba(255,255,255,0.2)" stroke-width=".5"/>
-              <circle cx="6.5" cy="11.8" r="1.8" fill="#0F1E38" stroke="white" stroke-width=".8"/>
-              <circle cx="21.5" cy="11.8" r="1.8" fill="#0F1E38" stroke="white" stroke-width=".8"/>
-              <rect x="7.5" y="3.5" width="5" height="3.5" rx="1" fill="rgba(196,213,240,0.55)" stroke="rgba(100,150,220,0.3)" stroke-width=".5"/>
-              <rect x="14" y="3.5" width="5.5" height="3.5" rx="1" fill="rgba(196,213,240,0.55)" stroke="rgba(100,150,220,0.3)" stroke-width=".5"/>
-            </svg>
-          </div>
-        </div>
-
-        ${stickerPct!==null?`
-        <!-- Sticker marker — circle dot -->
-        <div class="pir-mp-marker pir-mp-marker-sticker" style="left:${stickerPct}%">
-          <div class="pir-mp-marker-dot pir-mp-dot-sticker"></div>
-        </div>`:``}
-
-      </div><!-- /pir-mp-bar-track -->
-
-      <!-- Range endpoints -->
-      <div class="pir-mp-bar-ends">
-        <span>AED ${rangeMin.toLocaleString()}</span>
-        <span>AED ${rangeMax.toLocaleString()}</span>
+      <!-- Handshake — premium car silhouette marker -->
+      <div class="pir-mp2-car" style="left:${handshakePct}%">
+        <svg viewBox="0 0 36 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="36" height="18" rx="4" fill="#0F1E38"/>
+          <path d="M3 12 L5.5 7 Q6.5 5.5 8.5 5.5 L12 5 Q14 4.8 15 5.8 L22 6 Q24 6 25.5 7.5 L32 10.5 Q33 11 33 12 L33 13 Q33 13.5 32 13.5 L29 13.5 Q28.6 15.5 27 15.5 Q25.4 15.5 25 13.5 L11 13.5 Q10.6 15.5 9 15.5 Q7.4 15.5 7 13.5 L4 13.5 Q3 13.5 3 13 Z"
+            fill="white" opacity="0.92"/>
+          <circle cx="9" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/>
+          <circle cx="27" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/>
+          <path d="M8.5 5.5 L10.5 9 L15 9 L14 5.8" fill="rgba(180,210,255,0.4)" stroke="none"/>
+          <path d="M15.5 5.9 L16 9 L21 9 L22 6" fill="rgba(180,210,255,0.4)" stroke="none"/>
+        </svg>
       </div>
 
-    </div><!-- /pir-mp-bar-area -->
+      <!-- Sticker dot -->
+      ${stickerPct!==null?`<div class="pir-mp2-dot pir-mp2-dot-stick" style="left:${stickerPct}%"></div>`:``}
+    </div>
 
-    <!-- Legend row -->
-    <div class="pir-mp-legend">
-      <div class="pir-mp-leg-item">
-        <div class="pir-mp-leg-car">
-          <svg viewBox="0 0 16 8" fill="none"><path d="M1 5L2.5 2.5Q3 1.5 4 1.5L6 1Q7 .8 7.5 1.5L11 1.5Q12.5 1.5 13 2.5L15 4.5Q15.5 5 15.5 5.5V6Q15.5 6.5 14.5 6.5H13Q12.8 7.5 12 7.5Q11.2 7.5 11 6.5H5Q4.8 7.5 4 7.5Q3.2 7.5 3 6.5H1.5Q1 6.5 1 6Z" fill="#0F1E38"/></svg>
-        </div>
-        <span>Handshake</span>
-      </div>
-      <div class="pir-mp-leg-item">
-        <div class="pir-mp-leg-dot pir-mp-dot-sticker-leg"></div>
-        <span>Sticker${stickerPrice?'':' (none)'}</span>
-      </div>
-      <div class="pir-mp-leg-item">
-        <div class="pir-mp-leg-dot pir-mp-dot-nego-leg"></div>
-        <span>Negotiation</span>
-      </div>
+    <!-- Min / Max endpoints -->
+    <div class="pir-mp2-ends">
+      <span class="pir-mp2-end-label">
+        <span class="pir-mp2-end-tag pir-mp2-end-min">MIN</span>
+        AED ${rangeMin.toLocaleString()}
+      </span>
+      <span class="pir-mp2-end-label pir-mp2-end-right">
+        AED ${rangeMax.toLocaleString()}
+        <span class="pir-mp2-end-tag pir-mp2-end-max">MAX</span>
+      </span>
+    </div>
+
+    <!-- Legend -->
+    <div class="pir-mp2-legend">
+      <div class="pir-mp2-leg"><div class="pir-mp2-leg-car"></div><span>Handshake</span></div>
+      <div class="pir-mp2-leg"><div class="pir-mp2-leg-dot" style="background:#D97706"></div><span>Negotiation</span></div>
+      ${stickerPct!==null?`<div class="pir-mp2-leg"><div class="pir-mp2-leg-dot" style="background:#3D5280"></div><span>Sticker</span></div>`:``}
     </div>
 
   </div><!-- /pir-mp-wrap -->
-  <div class="pir-analysis-block">
-    <div class="pir-analysis-label">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="var(--accent)" stroke-width="1.2"/><path d="M3 6h6M3 4h4M3 8h5" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round"/></svg>
-      Market Analysis
+
+  <!-- ⑥ MARKET SIGNALS — horizontal bars red→yellow→green -->
+  <div class="pir-signals">
+    <div class="pir-signals-title">Market Signals</div>
+    <div class="pir-signal-row">
+      <div class="pir-signal-label">
+        <span class="pir-signal-name">Data Confidence</span>
+        <span class="pir-signal-pct" id="sigConfPct">0%</span>
+      </div>
+      <div class="pir-signal-track">
+        <div class="pir-signal-fill pir-signal-fill-ryg" data-target="${conf}" style="width:0%"></div>
+        <div class="pir-signal-thumb" data-target="${conf}" style="left:0%"></div>
+      </div>
+      <div class="pir-signal-tier" id="sigConfTier">${conf>=75?'High':'Moderate'}</div>
     </div>
-    <p class="pir-analysis-text">${analysisText}${posPct!==null?' This vehicle sits in the '+mktPositionText.toLowerCase()+'.':''}</p>
+    <div class="pir-signal-row">
+      <div class="pir-signal-label">
+        <span class="pir-signal-name">Market Demand</span>
+        <span class="pir-signal-pct" id="sigDemPct">0%</span>
+      </div>
+      <div class="pir-signal-track">
+        <div class="pir-signal-fill pir-signal-fill-ryg" data-target="${r.demandScore||55}" style="width:0%"></div>
+        <div class="pir-signal-thumb" data-target="${r.demandScore||55}" style="left:0%"></div>
+      </div>
+      <div class="pir-signal-tier" id="sigDemTier">${(r.demandScore||55)>=70?'High':'Moderate'}</div>
+    </div>
   </div>
 
-  <!-- ⑥ CONDITION SNAPSHOT -->
-  ${adjItems.length?`<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L8 5h4.5L9 7.5l1.5 4L6.5 9 3 11.5l1.5-4L1 5H5.5z" stroke="#D4AF37" stroke-width="1.2" stroke-linejoin="round"/></svg>
-      Value Adjustments
-      <span class="pir-section-chevron">▼</span>
+  <!-- ⑦ DEAL EVALUATION — logic-based badge -->
+  <div class="pir-deal-eval">
+    ${(() => {
+      // Determine deal tier from sticker vs handshake
+      if(!stickerPrice){
+        return `<div class="pir-de-row pir-de-neutral">
+          <span class="pir-de-icon">—</span>
+          <div class="pir-de-body">
+            <div class="pir-de-verdict">No Sticker Price Provided</div>
+            <div class="pir-de-sub">Enter an asking price to see the deal evaluation</div>
+          </div>
+        </div>`;
+      }
+      const diff   = stickerPrice - handshake;
+      const diffPct= Math.round(Math.abs(diff) / handshake * 100);
+      if(stickerPrice < handshake * 0.97){
+        // Strong deal: sticker is meaningfully below handshake
+        return `<div class="pir-de-row pir-de-good">
+          <span class="pir-de-icon">✅</span>
+          <div class="pir-de-body">
+            <div class="pir-de-verdict">Strong Deal</div>
+            <div class="pir-de-sub">Sticker is AED ${Math.abs(diff).toLocaleString()} (${diffPct}%) <strong>below</strong> fair market value — buy with confidence</div>
+          </div>
+          <div class="pir-de-pct pir-de-pct-good">−${diffPct}%</div>
+        </div>`;
+      } else if(stickerPrice <= handshake * 1.03){
+        // Fair price: within ±3% of handshake
+        return `<div class="pir-de-row pir-de-fair">
+          <span class="pir-de-icon">⚖️</span>
+          <div class="pir-de-body">
+            <div class="pir-de-verdict">Fair Price</div>
+            <div class="pir-de-sub">Sticker is within ${diffPct}% of fair market value — room for a small counter-offer</div>
+          </div>
+          <div class="pir-de-pct pir-de-pct-fair">≈ Market</div>
+        </div>`;
+      } else {
+        // Above market
+        return `<div class="pir-de-row pir-de-over">
+          <span class="pir-de-icon">⚠️</span>
+          <div class="pir-de-body">
+            <div class="pir-de-verdict">Above Market</div>
+            <div class="pir-de-sub">Sticker is AED ${Math.abs(diff).toLocaleString()} (${diffPct}%) <strong>above</strong> fair market value — negotiate hard or walk away</div>
+          </div>
+          <div class="pir-de-pct pir-de-pct-over">+${diffPct}%</div>
+        </div>`;
+      }
+    })()}
+  </div>
+
+  <!-- ⑧ RECOMMENDATION LINE — auto-generated action advice -->
+  <div class="pir-rec-line">
+    ${(() => {
+      const cy = new Date().getFullYear();
+      const age = Math.max(1, cy - carYear);
+      const expectedKm = age * 18000;
+      const highMil = km > expectedKm * 1.3;
+      const lowMil  = km > 0 && km < expectedKm * 0.65;
+      const isGCC   = specVal === 'GCC' || specVal === 'GCC Spec';
+      const hasAcc  = accVal === 'minor' || accVal === 'major';
+      const fshOk   = qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency';
+
+      // Pick action: buy at sticker vs target handshake
+      if (!stickerPrice) {
+        // No asking price — give a baseline advice
+        return `<div class="pir-rec-icon">💡</div>
+        <div class="pir-rec-body">
+          <div class="pir-rec-action">Target the Handshake Price</div>
+          <div class="pir-rec-reason">No asking price entered. Open at AED ${negoEntry.toLocaleString()} and aim to close at <strong>AED ${handshake.toLocaleString()}</strong> — the AI-estimated fair market value${isGCC?' for this GCC-spec vehicle':''}.${highMil?' Mileage is above average; use this as a negotiation lever.':''}</div>
+        </div>`;
+      }
+      const diff    = stickerPrice - handshake;
+      const diffPct = Math.round(Math.abs(diff) / handshake * 100);
+      if (stickerPrice <= handshake * 0.97) {
+        // Strong deal — buy at sticker
+        return `<div class="pir-rec-icon">✅</div>
+        <div class="pir-rec-body">
+          <div class="pir-rec-action">Buy at Sticker Price — AED ${stickerPrice.toLocaleString()}</div>
+          <div class="pir-rec-reason">At ${diffPct}% below fair market value, the asking price is already a strong deal. ${fshOk?'Full service history adds confidence. ':''} ${isGCC?'GCC spec supports resale value. ':''}Proceed without heavy negotiation — this may not stay available long.</div>
+        </div>`;
+      } else if (stickerPrice <= handshake * 1.03) {
+        // Fair — small counter-offer to handshake
+        return `<div class="pir-rec-icon">⚖️</div>
+        <div class="pir-rec-body">
+          <div class="pir-rec-action">Offer the Handshake Price — AED ${handshake.toLocaleString()}</div>
+          <div class="pir-rec-reason">Sticker is at market rate. Counter with <strong>AED ${handshake.toLocaleString()}</strong> and expect a quick acceptance. ${highMil?'Higher mileage justifies a gentle push. ':''} ${hasAcc?'Accident history gives you additional leverage. ':''} ${!fshOk&&svcVal?'Missing service records are another valid talking point.':''}</div>
+        </div>`;
+      } else {
+        // Overpriced — negotiate hard
+        const target = Math.round(handshake / 500) * 500;
+        return `<div class="pir-rec-icon">⚠️</div>
+        <div class="pir-rec-body">
+          <div class="pir-rec-action">Negotiate to Handshake Price — AED ${target.toLocaleString()}</div>
+          <div class="pir-rec-reason">Sticker is ${diffPct}% above fair value. Open at AED ${negoEntry.toLocaleString()}, show comparable listings, and target <strong>AED ${target.toLocaleString()}</strong>. ${hasAcc?'Accident history strongly supports your counter. ':''} ${highMil?'High mileage is a clear lever. ':''}Walk away if the seller won't move below AED ${Math.round(handshake * 1.05 / 500) * 500 .toLocaleString()}.</div>
+        </div>`;
+      }
+    })()}
+  </div>
+
+  <!-- ⑨ MARKET INSIGHT SUMMARY — merged, concise, powerful -->
+  <div class="pir-insight-wrap">
+    <div class="pir-insight-header">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#008577" stroke-width="1.3"/><path d="M7 6v4M7 4.5v.5" stroke="#008577" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Market Insight
     </div>
-    <div class="pir-section-body">
-      <div class="pir-adjustments">
-        ${adjItems.map(a=>`<div class="pir-adj-row">
-          <span class="pir-adj-name">${a.name}</span>
-          <span class="pir-adj-val ${a.positive?'pos':'neg'}">${a.positive?'+':'−'} AED ${a.amount.toLocaleString()}</span>
-        </div>`).join('')}
+
+    <!-- Short paragraph -->
+    <p class="pir-insight-para">${analysisText}${posPct!==null?' This vehicle sits in the '+mktPositionText.toLowerCase()+'.':''}</p>
+
+    <!-- Key value factors — max 3 bullets -->
+    ${(() => {
+      const cy = new Date().getFullYear();
+      const age = Math.max(1, cy - carYear);
+      const expectedKm = age * 18000;
+      const bullets = [];
+      // Mileage impact
+      if(km > 0){
+        const mDiff = km - expectedKm;
+        const mDiffK = Math.abs(Math.round(mDiff/1000));
+        if(mDiff > 15000)
+          bullets.push({ icon:'📏', text:`<strong>High mileage</strong> — ${km.toLocaleString()} km is ${mDiffK}k above the expected average for this age, pushing the value down` });
+        else if(mDiff < -15000)
+          bullets.push({ icon:'📏', text:`<strong>Low mileage</strong> — ${km.toLocaleString()} km is ${mDiffK}k below average for this age, supporting a price premium` });
+        else
+          bullets.push({ icon:'📏', text:`<strong>Average mileage</strong> — ${km.toLocaleString()} km is in line with expected wear for a ${age}-year-old vehicle` });
+      }
+      // Condition / quality
+      const acc = accVal === 'major' ? 'major accident history on record — this significantly impacts resale value'
+                : accVal === 'minor' ? 'minor accident declared — worth an independent inspection before purchase'
+                : condVal === 'Excellent' ? 'excellent condition adds a clear premium over comparable listings'
+                : condVal === 'Good' || !condVal ? 'good overall condition with no major concerns reported'
+                : `${condVal.toLowerCase()} condition is a factor — price should reflect the state of the vehicle`;
+      bullets.push({ icon:'🔍', text:`<strong>Condition:</strong> ${acc}` });
+      // Spec / demand
+      const isGCC = specVal === 'GCC' || specVal === 'GCC Spec';
+      bullets.push({ icon:'🌐', text: isGCC
+        ? `<strong>GCC specification</strong> — the most demanded variant in UAE; supports resale liquidity and price`
+        : `<strong>Non-GCC specification</strong> — limits the buyer pool in UAE and reduces long-term resale appeal` });
+      return `<div class="pir-insight-factors">
+        ${bullets.slice(0,3).map(b=>`<div class="pir-insight-bullet"><span class="pir-insight-icon">${b.icon}</span><span>${b.text}</span></div>`).join('')}
+      </div>`;
+    })()}
+
+    <!-- Buyer/Seller tips -->
+    <div class="pir-insight-tips">
+      <div class="pir-insight-tip pir-tip-buyer">
+        <div class="pir-tip-label">🛒 Buyer Tip</div>
+        <div class="pir-tip-text">${nego
+          ? `Lead with AED ${nego.offer.toLocaleString()} and settle no higher than AED ${nego.close.toLocaleString()}. ${nego.tactic}`
+          : `Reference comparable listings and target AED ${handshake.toLocaleString()} as your closing price.`}
+        </div>
+      </div>
+      <div class="pir-insight-tip pir-tip-seller">
+        <div class="pir-tip-label">🏷️ Seller Tip</div>
+        <div class="pir-tip-text">${(() => {
+          const isGCC = specVal === 'GCC' || specVal === 'GCC Spec';
+          const fshOk = qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency';
+          const demand = r.demandScore || 55;
+          if(demand >= 70)
+            return `Demand is strong for this model. List at AED ${Math.round(handshake * 1.06 / 500) * 500 .toLocaleString()} with room to negotiate down to AED ${handshake.toLocaleString()}.`;
+          else if(fshOk)
+            return `Highlight the full service history prominently — it's your strongest selling point. Price near AED ${handshake.toLocaleString()} for a clean, fast transaction.`;
+          else if(isGCC)
+            return `GCC spec is a genuine advantage. Price at AED ${Math.round(handshake * 1.03 / 500) * 500 .toLocaleString()} and expect interest within 2–4 weeks.`;
+          else
+            return `At market rate, price near AED ${handshake.toLocaleString()} for the best balance of speed and return. Consider reducing asking price if no offers in 2 weeks.`;
+        })()}
+        </div>
       </div>
     </div>
-  </div>`:''}
-
-  <!-- ⑥b CONFIDENCE + DEMAND ANIMATED BARS -->
-  <div class="pir-stat-bars">
-    <div class="pir-stat-cell">
-      <div class="pir-stat-label">Data Confidence</div>
-      <div class="pir-stat-track"><div class="pir-stat-fill pir-stat-fill-conf" data-target="${conf}" style="width:0%"></div></div>
-      <div class="pir-stat-value">${conf}%</div>
-      <div class="pir-stat-sub">${conf>=75?'High — solid data':'Moderate — verify'}</div>
-    </div>
-    <div class="pir-stat-cell">
-      <div class="pir-stat-label">Market Demand</div>
-      <div class="pir-stat-track"><div class="pir-stat-fill pir-stat-fill-demand" data-target="${r.demandScore||55}" style="width:0%"></div></div>
-      <div class="pir-stat-value">${r.demandScore||55}%</div>
-      <div class="pir-stat-sub">${(r.demandScore||55)>=70?'High — sells fast':'Moderate demand'}</div>
-    </div>
   </div>
 
-  <!-- ⑦ BUYER'S CHECKLIST -->
-  ${allF.length?`<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3 3 6-6" stroke="#1A8C6B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Buyer's Checklist
-      <span class="pir-section-chevron">▼</span>
-    </div>
-    <div class="pir-section-body">
-      <div class="pir-checklist-grid">${allF.join('')}</div>
-    </div>
-  </div>`:''}
+  <!-- ⑩ VALUE ADJUSTMENT BREAKDOWN — How This Price Was Calculated -->
+  ${(() => {
+    const cy = new Date().getFullYear();
+    const age = Math.max(1, cy - carYear);
+    const expectedKm = age * 18000;
+    const baseVal = avg || handshake;
 
-  <!-- ⑧ NEGOTIATION GUIDE -->
+    // Gather pos/neg adjustments with reason text
+    const positives = [];
+    const negatives = [];
+
+    // Spec
+    if(specVal === 'GCC' || specVal === 'GCC Spec')
+      positives.push({ label:'GCC Specification', amount: Math.round(baseVal * 0.04 / 500) * 500, reason:'Most trusted spec in UAE' });
+    else if(specVal)
+      negatives.push({ label:'Non-GCC Specification', amount: Math.round(baseVal * 0.06 / 500) * 500, reason:'Smaller resale pool' });
+
+    // Condition
+    if(condVal === 'Excellent')
+      positives.push({ label:'Excellent Condition', amount: Math.round(baseVal * 0.04 / 500) * 500, reason:'Top bracket listing' });
+    else if(condVal === 'Very Good')
+      positives.push({ label:'Very Good Condition', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Above average presentation' });
+    else if(condVal === 'Fair')
+      negatives.push({ label:'Fair Condition', amount: Math.round(baseVal * 0.04 / 500) * 500, reason:'Price must reflect repairs needed' });
+    else if(condVal === 'Poor')
+      negatives.push({ label:'Poor Condition', amount: Math.round(baseVal * 0.09 / 500) * 500, reason:'Significant discount required' });
+
+    // Mileage
+    const mDiff = km - expectedKm;
+    if(mDiff > 20000)
+      negatives.push({ label:'Above-Average Mileage', amount: Math.round(Math.min(baseVal * 0.12, (mDiff/10000) * 600) / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected` });
+    else if(mDiff < -15000)
+      positives.push({ label:'Below-Average Mileage', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:`${km.toLocaleString()} km — well below average for age` });
+
+    // Service history
+    if(qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency')
+      positives.push({ label:'Full Service History', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:'Highest buyer trust level' });
+    else if(qs.fsh === false || svcVal === 'Non-Agency' || svcVal === 'Unknown')
+      negatives.push({ label:'No Service History', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Harder to verify maintenance' });
+
+    // Accident
+    if(accVal === 'major')
+      negatives.push({ label:'Major Accident History', amount: Math.round(baseVal * 0.10 / 500) * 500, reason:'Significant buyer concern' });
+    else if(accVal === 'minor')
+      negatives.push({ label:'Minor Accident on Record', amount: Math.round(baseVal * 0.05 / 500) * 500, reason:'Disclose and negotiate' });
+
+    // Ownership
+    const ownNum = parseInt(ownVal) || 0;
+    if(qs.singleOwner === true || ownNum === 1)
+      positives.push({ label:'Single Owner', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Strong confidence signal' });
+    else if(qs.singleOwner === false || ownNum >= 3)
+      negatives.push({ label:'Multiple Owners', amount: Math.round(baseVal * 0.025 / 500) * 500, reason:'Reduces buyer confidence' });
+
+    // Warranty
+    if(qs.warranty === true || warVal === 'active')
+      positives.push({ label:'Active Warranty', amount: Math.round(baseVal * 0.025 / 500) * 500, reason:'Reduces buyer risk' });
+
+    // Popular colour
+    const highCol = ['White','Pearl White','Silver','Black','Midnight Black','Gray'].includes(colourVal);
+    const lowCol  = ['Purple','Orange','Yellow','Brown'].includes(colourVal);
+    if(highCol && colourVal)
+      positives.push({ label:`${colourVal} Colour`, amount: Math.round(baseVal * 0.01 / 500) * 500, reason:'High-demand resale colour in UAE' });
+    else if(lowCol && colourVal)
+      negatives.push({ label:`${colourVal} Colour`, amount: Math.round(baseVal * 0.01 / 500) * 500, reason:'Lower resale demand for this colour' });
+
+    const totalPos = positives.reduce((s,a)=>s+a.amount, 0);
+    const totalNeg = negatives.reduce((s,a)=>s+a.amount, 0);
+    const netAdj   = totalPos - totalNeg;
+    const netVal   = Math.round((baseVal + netAdj) / 500) * 500;
+
+    return `<div class="pir-vab-wrap">
+      <div class="pir-vab-header">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2.5" stroke="#D4AF37" stroke-width="1.3"/><path d="M4 7h6M7 4v6" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/></svg>
+        How This Price Was Calculated
+      </div>
+
+      <!-- Base value -->
+      <div class="pir-vab-base">
+        <span class="pir-vab-base-label">Base Market Value</span>
+        <span class="pir-vab-base-val">AED ${baseVal.toLocaleString()}</span>
+      </div>
+      <div class="pir-vab-base-note">Average price for comparable ${year} ${brand}${model?' '+model:''} listings in UAE</div>
+
+      <!-- Positive adjustments -->
+      ${positives.length ? `
+      <div class="pir-vab-group">
+        <div class="pir-vab-group-label pir-vab-pos-label">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="5" fill="#F0FDF4" stroke="#86EFAC"/><path d="M3 5.5h5M5.5 3v5" stroke="#15803D" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Positive Adjustments
+          <span class="pir-vab-group-total pir-vab-pos-total">+AED ${totalPos.toLocaleString()}</span>
+        </div>
+        ${positives.map(a=>`
+        <div class="pir-vab-row pir-vab-pos">
+          <div class="pir-vab-row-left">
+            <span class="pir-vab-row-label">${a.label}</span>
+            <span class="pir-vab-row-reason">${a.reason}</span>
+          </div>
+          <span class="pir-vab-row-amt pir-vab-pos-amt">+AED ${a.amount.toLocaleString()}</span>
+        </div>`).join('')}
+      </div>` : ''}
+
+      <!-- Negative adjustments -->
+      ${negatives.length ? `
+      <div class="pir-vab-group">
+        <div class="pir-vab-group-label pir-vab-neg-label">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="5" fill="#FEF2F2" stroke="#FCA5A5"/><path d="M3 5.5h5" stroke="#991B1B" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Negative Adjustments
+          <span class="pir-vab-group-total pir-vab-neg-total">−AED ${totalNeg.toLocaleString()}</span>
+        </div>
+        ${negatives.map(a=>`
+        <div class="pir-vab-row pir-vab-neg">
+          <div class="pir-vab-row-left">
+            <span class="pir-vab-row-label">${a.label}</span>
+            <span class="pir-vab-row-reason">${a.reason}</span>
+          </div>
+          <span class="pir-vab-row-amt pir-vab-neg-amt">−AED ${a.amount.toLocaleString()}</span>
+        </div>`).join('')}
+      </div>` : ''}
+
+      <!-- Net adjusted value -->
+      <div class="pir-vab-net">
+        <div class="pir-vab-net-left">
+          <div class="pir-vab-net-label">Net Adjusted Market Value</div>
+          <div class="pir-vab-net-calc">AED ${baseVal.toLocaleString()} ${netAdj>=0?`+ AED ${totalPos.toLocaleString()}`:``}${totalNeg>0?` − AED ${totalNeg.toLocaleString()}`:``}</div>
+        </div>
+        <div class="pir-vab-net-val">AED ${netVal.toLocaleString()}</div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ⑪ NEGOTIATION GUIDE -->
   ${nego?`<div class="pir-section">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 9l2-7h6l2 7" stroke="#1A2B4C" stroke-width="1.2" stroke-linecap="round"/><path d="M1 9h11" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -6542,60 +7019,364 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="pir-nego-tactic">${nego.tactic}</div>
   </div>`:''}
 
-  <!-- ⑨ TIME TO SELL -->
-  ${mkt&&(mkt.days_at_market>0)?`<div class="pir-section">
+  <!-- 🗣️ 11. SMART NEGOTIATION LINE -->
+  ${(() => {
+    const lo = low  || Math.round(avg * 0.85);
+    const hi = high || Math.round(avg * 1.15);
+    const closeTarget = nego ? nego.close : handshake;
+    const hasAccident = accVal && accVal !== 'none';
+    const hasMileageFlag = km > (Math.max(1, cy - carYear) * 18000 + 20000);
+
+    let qualifier = '';
+    if(hasMileageFlag && hasAccident)
+      qualifier = `Given the mileage of ${km.toLocaleString()} km and the accident on record, `;
+    else if(hasMileageFlag)
+      qualifier = `Given the mileage of ${km.toLocaleString()} km, `;
+    else if(hasAccident)
+      qualifier = `Given the ${accVal} accident history, `;
+    else if(!qs.fsh && qs.fsh !== null)
+      qualifier = `With no service history on record, `;
+
+    const negoLine = lo && hi
+      ? `"Similar listings are priced between AED ${lo.toLocaleString()}–${hi.toLocaleString()}. ${qualifier}an offer around AED ${closeTarget.toLocaleString()} is reasonable, subject to inspection."`
+      : `"Based on current UAE market data for the ${year} ${brand}${model?' '+model:''}, ${qualifier}a fair offer is around AED ${closeTarget.toLocaleString()}, subject to inspection."`;
+
+    return `<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2h9a1 1 0 011 1v6a1 1 0 01-1 1H6l-3 2V10H2a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#1E40AF" stroke-width="1.2"/></svg>
+      🗣️ Smart Negotiation Line
+    </div>
+    <div style="background:linear-gradient(135deg,#EFF6FF,#F0F9FF);border:1.5px solid #BFDBFE;border-radius:11px;padding:13px 15px;margin-top:2px;position:relative;">
+      <div style="font-size:.65rem;font-weight:700;color:#1E40AF;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;">💬 Say this to the seller:</div>
+      <div id="smartNegoLine" style="font-size:.82rem;color:#1D4ED8;font-style:italic;line-height:1.65;">${negoLine}</div>
+      <button onclick="(function(btn){const el=document.getElementById('smartNegoLine');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy';},2000);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy';},2000);})})(this)" type="button" style="margin-top:10px;font-family:'Exo 2',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:rgba(30,64,175,0.08);border:1px solid rgba(30,64,175,0.2);color:#1E40AF;border-radius:6px;padding:5px 12px;cursor:pointer;transition:background .15s;">📋 Copy</button>
+    </div>
+  </div>`;
+  })()}
+
+  <!-- ⑫ TIME TO SELL -->
+  ${(() => {
+    // If live mkt data exists, use it; otherwise compute locally
+    const demandScore = r.demandScore || 55;
+    const isHighDemand = demandScore >= 68;
+    const isMedDemand  = demandScore >= 48;
+
+    // Base days at handshake: high demand = fast, low = slow
+    const baseDays = isHighDemand ? 18 : isMedDemand ? 32 : 52;
+
+    // If sticker > handshake, sticker takes longer proportionally
+    const stickerDays = stickerPrice && stickerPrice > handshake
+      ? Math.round(baseDays * (1 + (stickerPrice - handshake) / handshake * 3.5))
+      : (stickerPrice && stickerPrice < handshake * 0.97 ? Math.max(5, Math.round(baseDays * 0.6)) : baseDays);
+
+    const handshakeDays = mkt && mkt.days_at_market > 0
+      ? mkt.days_at_market
+      : baseDays;
+
+    const stickerDaysFinal = mkt && mkt.days_at_asking > 0
+      ? mkt.days_at_asking
+      : (stickerPrice ? stickerDays : null);
+
+    const ttsInsight = mkt?.insight ||
+      (isHighDemand
+        ? `High demand for ${brand}${model?' '+model:''} in the UAE — well-priced units sell quickly.`
+        : isMedDemand
+          ? `Moderate demand. Pricing close to market value will keep time-on-market reasonable.`
+          : `Lower demand segment. Competitive pricing is key to a timely sale.`);
+
+    const optPrice = mkt?.recommended_price || null;
+
+    return `<div class="pir-section">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M6.5 4v2.5l2 1.5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Time to Sell
+      ⏱️ Time to Sell
     </div>
     <div class="pir-tts-grid">
-      ${mkt.days_at_market>0?`<div class="pir-tts-row"><span class="pir-tts-lbl">At market value</span><span class="pir-tts-val pir-tts-${dCls(mkt.days_at_market)}">~${mkt.days_at_market} days</span></div>`:''}
-      ${askN&&mkt.days_at_asking>0&&mkt.days_at_asking!==mkt.days_at_market?`<div class="pir-tts-row"><span class="pir-tts-lbl">At asking price</span><span class="pir-tts-val pir-tts-${dCls(mkt.days_at_asking)}">~${mkt.days_at_asking} days</span></div>`:''}
-      ${mkt.recommended_price>0&&askN&&mkt.recommended_price<askN?`<div class="pir-tts-row pir-tts-highlight"><span class="pir-tts-lbl">⚡ Optimal price (14-day sale)</span><span class="pir-tts-val">AED ${mkt.recommended_price.toLocaleString()}</span></div>`:''}
+      <div class="pir-tts-row">
+        <span class="pir-tts-lbl">At Handshake Price <span style="font-size:.62rem;color:#008577;">(AED ${handshake.toLocaleString()})</span></span>
+        <span class="pir-tts-val pir-tts-${dCls(handshakeDays)}">~${handshakeDays} days</span>
+      </div>
+      ${stickerDaysFinal!==null?`<div class="pir-tts-row">
+        <span class="pir-tts-lbl">At Sticker Price <span style="font-size:.62rem;color:#64748B;">(AED ${(stickerPrice||handshake).toLocaleString()})</span></span>
+        <span class="pir-tts-val pir-tts-${dCls(stickerDaysFinal)}">~${stickerDaysFinal} days</span>
+      </div>`:''}
+      ${optPrice&&stickerPrice&&optPrice<stickerPrice?`<div class="pir-tts-row pir-tts-highlight">
+        <span class="pir-tts-lbl">⚡ Optimal price (14-day sale)</span>
+        <span class="pir-tts-val">AED ${optPrice.toLocaleString()}</span>
+      </div>`:''}
     </div>
-    ${mkt.insight?`<div class="pir-tts-insight">${mkt.insight}</div>`:''}
-  </div>`:''}
+    <div class="pir-tts-insight">${ttsInsight}</div>
+  </div>`;
+  })()}
 
-  <!-- ⑩ FIRST YEAR COSTS -->
-  <div class="pir-section pir-collapsible" onclick="pirToggle(this)">
+  <!-- 💸 12. OWNERSHIP COST SNAPSHOT (UAE) -->
+  ${(() => {
+    const insAmt   = cost.ins;
+    const rtaFees  = 170 + 420 + 350;
+    const totalFY  = rtaFees + insAmt;
+    const yr1Depr  = deprAmt;
+    const maint    = cost.maint;
+    const fuelMo   = cost.fuelEst;
+    const grandTotal = totalFY + yr1Depr + maint;
+
+    // Visual bar widths (relative to grand total)
+    const rtaPct   = Math.round((rtaFees / grandTotal) * 100);
+    const insPct   = Math.round((insAmt  / grandTotal) * 100);
+    const deprPct  = Math.round((yr1Depr / grandTotal) * 100);
+    const maintPct = Math.round((maint   / grandTotal) * 100);
+
+    const row = (label, amt, pct, colour, dim=false) =>
+      `<div style="margin-bottom:9px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
+          <span style="font-size:.72rem;color:${dim?'#94A3B8':'#2D3F5C'};">${label}</span>
+          <span style="font-size:.72rem;font-weight:700;color:${dim?'#94A3B8':'#991B1B'};">−AED ${amt.toLocaleString()}</span>
+        </div>
+        <div style="height:5px;background:#F1F5F9;border-radius:99px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${colour};border-radius:99px;transition:width 1s .3s;"></div>
+        </div>
+      </div>`;
+
+    return `<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="3" width="11" height="8" rx="1.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M4 3V2a2.5 2.5 0 015 0v1" stroke="#D4AF37" stroke-width="1.2"/></svg>
-      First Year Cost Estimate
+      💸 Ownership Cost Snapshot (UAE)
       <span class="pir-section-chevron">▼</span>
     </div>
     <div class="pir-section-body">
-      <div class="pir-cost-list">
-        <div class="pir-cost-row"><span>RTA Inspection</span><span class="pir-cost-neg">−AED 170</span></div>
-        <div class="pir-cost-row"><span>Vehicle Registration</span><span class="pir-cost-neg">−AED 420</span></div>
-        <div class="pir-cost-row"><span>Ownership Transfer</span><span class="pir-cost-neg">−AED 350</span></div>
-        <div class="pir-cost-row"><span>${carYear>=2024?'Insurance (2.5% comprehensive)':'Insurance (3rd party)'}</span><span class="pir-cost-neg">−AED ${cost.ins.toLocaleString()}</span></div>
-        <div class="pir-cost-row pir-cost-total"><span>Total First-Year Fees</span><span class="pir-cost-neg">−AED ${cost.rtaOnly.toLocaleString()}</span></div>
-        <div class="pir-cost-row pir-cost-dim"><span>Est. Depreciation (yr 1)</span><span>−AED ${deprAmt.toLocaleString()}</span></div>
-        <div class="pir-cost-row pir-cost-dim"><span>Est. Maintenance</span><span>−AED ${cost.maint.toLocaleString()}</span></div>
-      </div>
-      <div class="pir-cost-note">Estimates only. Fuel ~AED ${cost.fuelEst}/month not included. Insurance varies by emirate and insurer.</div>
-    </div>
-  </div>
 
-  <!-- ⑪ 3-YEAR VALUE PROJECTION -->
-  <div class="pir-section pir-collapsible" onclick="pirToggle(this)">
+      <!-- Summary chips: Total First-Year Cost -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div style="background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1.5px solid #FCD34D;border-radius:10px;padding:11px 13px;text-align:center;">
+          <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#92400E;margin-bottom:4px;">Total First-Year Cost</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:#B45309;">−AED ${totalFY.toLocaleString()}</div>
+          <div style="font-size:.57rem;color:#D97706;margin-top:2px;">RTA fees + insurance</div>
+        </div>
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:11px 13px;text-align:center;">
+          <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#64748B;margin-bottom:4px;">True First-Year Outlay</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:#1A2B4C;">−AED ${grandTotal.toLocaleString()}</div>
+          <div style="font-size:.57rem;color:#94A3B8;margin-top:2px;">incl. depreciation + maint</div>
+        </div>
+      </div>
+
+      <!-- Breakdown bars -->
+      <div style="border-top:1px solid #F1F5F9;padding-top:12px;">
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#64748B;margin-bottom:10px;">Cost Breakdown</div>
+        ${row('RTA Inspection (AED 170)',                              170,            Math.round(170/grandTotal*100),          '#F59E0B')}
+        ${row('Vehicle Registration (AED 420)',                        420,            Math.round(420/grandTotal*100),          '#F59E0B')}
+        ${row('Ownership Transfer (AED 350)',                          350,            Math.round(350/grandTotal*100),          '#F59E0B')}
+        ${row(`Insurance (${carYear>=2024?'2.5% comprehensive':'3rd party est.'})`, insAmt, insPct, '#EF4444')}
+        <div style="border-top:1.5px solid #0F1E38;padding-top:8px;margin-top:2px;margin-bottom:10px;display:flex;justify-content:space-between;">
+          <span style="font-size:.73rem;font-weight:800;color:#0F1E38;">Total RTA + Insurance</span>
+          <span style="font-size:.73rem;font-weight:800;color:#991B1B;">−AED ${totalFY.toLocaleString()}</span>
+        </div>
+        ${row('Est. Year-1 Depreciation',                              yr1Depr,        deprPct,                                 '#94A3B8', true)}
+        ${row('Est. Maintenance',                                      maint,          maintPct,                                '#CBD5E1', true)}
+      </div>
+
+      <!-- Fuel note -->
+      <div style="margin-top:10px;background:#F8FAFC;border-radius:8px;padding:8px 11px;font-size:.67rem;color:#475569;line-height:1.55;">
+        ⛽ Fuel not included (~AED ${fuelMo.toLocaleString()}/month est.). Insurance premium varies by emirate, age, and insurer — verify with your broker.
+      </div>
+    </div>
+  </div>`;
+  })()}
+
+  <!-- ⑭ 3-YEAR RESALE FORECAST (based on handshake price) -->
+  ${(() => {
+    const deprRowsH = _deprRows;
+    const totalDepr = deprRowsH.length ? deprRowsH[deprRowsH.length-1].cumLoss : 0;
+    const highMil   = km > 80000;
+    const luxBrandsD = ['BMW','Mercedes-Benz','Audi','Porsche','Land Rover','Lexus','Volvo','Cadillac','Infiniti'];
+    const isLuxD    = luxBrandsD.includes(brand||'');
+    const deprInsight = highMil
+      ? `⚠️ High mileage (${km.toLocaleString()} km) accelerates depreciation — expect ${isLuxD?'steeper':'faster-than-average'} value loss each year.`
+      : isLuxD
+        ? `Luxury segment — depreciation is steeper than mainstream vehicles, especially outside warranty.`
+        : `Depreciation projections based on UAE market patterns for ${brand}.`;
+    return `<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 10L4 6l3 2 3-5 2 2" stroke="#1A2B4C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      3-Year Value Projection
+      📉 3-Year Resale Forecast
       <span class="pir-section-chevron">▼</span>
     </div>
     <div class="pir-section-body">
+      <div style="font-size:.66rem;color:#4A5E7A;margin-bottom:9px;">Based on Handshake Price: <strong>AED ${handshake.toLocaleString()}</strong></div>
       <div class="pir-depr-list">
-        <div class="pir-depr-header"><span>Year End</span><span>Annual Rate</span><span>Est. Value</span><span>Total Loss</span></div>
-        ${deprRows.map(row=>`<div class="pir-depr-row">
-          <span class="pir-depr-year">${row.year}</span>
+        <div class="pir-depr-header"><span>Year End</span><span>Rate</span><span>Est. Value</span><span>Annual Loss</span></div>
+        ${deprRowsH.map((row,i,arr)=>`<div class="pir-depr-row">
+          <span class="pir-depr-year">Year ${i+1} (${row.year})</span>
           <span class="pir-depr-rate">${row.rate}%</span>
           <span class="pir-depr-val">AED ${row.endVal.toLocaleString()}</span>
-          <span class="pir-depr-loss">−AED ${row.cumLoss.toLocaleString()}</span>
+          <span class="pir-depr-loss">−AED ${(i===0?handshake-row.endVal:arr[i-1].endVal-row.endVal).toLocaleString()}</span>
         </div>`).join('')}
       </div>
+      <div style="margin-top:10px;padding:9px 12px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA;">
+        <span style="font-size:.68rem;font-weight:800;color:#991B1B;">Total Depreciation over 3 Years: −AED ${totalDepr.toLocaleString()}</span>
+      </div>
+      <div style="margin-top:8px;font-size:.68rem;color:#4A5E7A;line-height:1.5;font-style:italic;">${deprInsight}</div>
     </div>
-  </div>
+  </div>`;
+  })()}
+
+  <!-- 🔍 13. BUYER CHECKPOINTS -->
+  ${(() => {
+    // ── Green flags ──────────────────────────────────────────────
+    const green = [];
+    const isGCC = specVal==='GCC'||specVal==='GCC Spec';
+    if(isGCC)
+      green.push({ icon:'✅', title:'GCC Specification', detail:'Most trusted spec in UAE — full parts availability, aligned warranty, and widest resale market.' });
+    if(accVal==='none'||(!accVal&&qs.accident===false))
+      green.push({ icon:'✅', title:'No Accident Declared', detail:'No accident on record. Verify independently with a CARCAM or Carfax-equivalent UAE report.' });
+    if(qs.fsh===true||svcVal==='Full Agency'||svcVal==='Agency')
+      green.push({ icon:'✅', title:'Full Service History', detail:'Agency-serviced vehicles command higher buyer confidence and resale value.' });
+    if(qs.warranty===true||warVal==='active')
+      green.push({ icon:'✅', title:'Active Warranty', detail:'Remaining factory or extended warranty reduces your risk exposure significantly.' });
+    if(qs.singleOwner===true||(parseInt(ownVal)||0)===1)
+      green.push({ icon:'✅', title:'Single Owner', detail:'One-owner vehicles typically have consistent maintenance and cleaner histories.' });
+    if(km < Math.max(1, cy - carYear) * 14000)
+      green.push({ icon:'✅', title:'Below-Average Mileage', detail:`${km.toLocaleString()} km is well below the UAE average for a ${carYear} model — a genuine value advantage.` });
+    if(condVal==='Excellent'||condVal==='Very Good')
+      green.push({ icon:'✅', title:`${condVal} Condition`, detail:'Above-average presentation supports the asking price and speeds up resale.' });
+
+    // ── Attention points ─────────────────────────────────────────
+    const attn = [];
+    const expectedKmC = Math.max(1, cy - carYear) * 18000;
+    if(km > expectedKmC + 20000)
+      attn.push({ icon:'🔶', title:'High Mileage', detail:`${km.toLocaleString()} km exceeds the expected ${expectedKmC.toLocaleString()} km for a ${carYear} model. Verify engine, gearbox, and suspension condition.` });
+    if(qs.fsh===false||svcVal==='Non-Agency'||svcVal==='Unknown')
+      attn.push({ icon:'🔶', title:'Missing Service Records', detail:'No verifiable service history. Request receipts or agency printouts. Factor in a pre-purchase inspection.' });
+    if(accVal==='minor')
+      attn.push({ icon:'🔶', title:'Minor Accident on Record', detail:'Confirm repair quality and check for paint inconsistencies or panel gaps during inspection.' });
+    if(accVal==='major')
+      attn.push({ icon:'🔴', title:'Major Accident History', detail:'Significant structural concern. Require a full inspection by a certified mechanic before making any offer.' });
+    if(qs.warranty===false||warVal==='expired')
+      attn.push({ icon:'🔶', title:'No Active Warranty', detail:'Out-of-warranty vehicles carry higher repair risk. Budget for a mechanical inspection and contingency.' });
+    if((qs.singleOwner===false)||(parseInt(ownVal)||0)>=3)
+      attn.push({ icon:'🔶', title:'Multiple Previous Owners', detail:'3+ owners can indicate recurring issues or quick resales. Ask why each owner sold.' });
+    if(specVal&&!isGCC)
+      attn.push({ icon:'🔶', title:`Non-GCC Spec (${specVal})`, detail:'Insurance, parts, and resale may be affected. Verify RTA compliance before purchasing.' });
+    if(condVal==='Fair'||condVal==='Poor')
+      attn.push({ icon:'🔴', title:`${condVal} Condition`, detail:'Price must reflect the cost of repairs and detailing needed to reach a market-ready standard.' });
+
+    if(!green.length && !attn.length) return '';
+
+    const flagCard = (f, bg, border, titleCol) =>
+      `<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:${bg};border:1px solid ${border};border-radius:9px;margin-bottom:6px;">
+        <span style="font-size:.9rem;flex-shrink:0;line-height:1.3;">${f.icon}</span>
+        <div>
+          <div style="font-size:.72rem;font-weight:800;color:${titleCol};margin-bottom:2px;">${f.title}</div>
+          <div style="font-size:.67rem;color:#475569;line-height:1.5;">${f.detail}</div>
+        </div>
+      </div>`;
+
+    return `<div class="pir-section">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3 3 6-6" stroke="#1A8C6B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      🔍 Buyer Checkpoints
+    </div>
+
+    ${green.length?`
+    <div style="margin-bottom:10px;">
+      <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#15803D;margin-bottom:6px;display:flex;align-items:center;gap:5px;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#F0FDF4" stroke="#86EFAC"/><path d="M2.5 5l2 2 3-3" stroke="#15803D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Green Flags (${green.length})
+      </div>
+      ${green.map(f=>flagCard(f,'#F0FDF4','#86EFAC','#15803D')).join('')}
+    </div>`:''}
+
+    ${attn.length?`
+    <div>
+      <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#92400E;margin-bottom:6px;display:flex;align-items:center;gap:5px;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#FFFBEB" stroke="#FCD34D"/><path d="M5 3v2.5M5 7v.5" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Attention Points (${attn.length})
+      </div>
+      ${attn.map(f=>flagCard(
+        f,
+        f.icon==='🔴'?'#FEF2F2':'#FFFBEB',
+        f.icon==='🔴'?'#FECACA':'#FDE68A',
+        f.icon==='🔴'?'#991B1B':'#92400E'
+      )).join('')}
+    </div>`:''}
+
+  </div>`;
+  })()}
+
+  <!-- 📦 14. ADDITIONAL INSIGHTS — collapsed by default -->
+  ${(() => {
+    const expectedKmI = Math.max(1, cy - carYear) * 18000;
+    // Odometer rollback probability
+    const kmDeviation = km - expectedKmI;
+    const rollbackRisk = km < expectedKmI * 0.55
+      ? { level:'High', colour:'#991B1B', bg:'#FEF2F2', border:'#FECACA',
+          text:`Mileage of ${km.toLocaleString()} km is unusually low for a ${cy-carYear}-year-old vehicle. This can indicate odometer rollback. Request a full service history and cross-reference with RTA inspection stamps.` }
+      : km < expectedKmI * 0.75
+        ? { level:'Moderate', colour:'#92400E', bg:'#FFFBEB', border:'#FDE68A',
+            text:`Mileage is below average for age. Low mileage is generally positive, but verify with service stamps that intervals haven't been skipped.` }
+        : { level:'Low', colour:'#15803D', bg:'#F0FDF4', border:'#86EFAC',
+            text:`Mileage is consistent with expected wear for a ${carYear} model — no rollback concern flagged.` };
+
+    // Accident inconsistency indicators
+    const accInconsist = [];
+    if(accVal==='none'&&condVal==='Fair') accInconsist.push('Condition rated "Fair" despite no declared accident — inspect for undisclosed bodywork or repairs.');
+    if(accVal==='none'&&condVal==='Poor') accInconsist.push('Condition rated "Poor" with no accident declared — request a CARCAM vehicle history report to verify.');
+    if(accVal==='minor'&&(svcVal==='Unknown'||qs.fsh===false)) accInconsist.push('Minor accident declared but no service history — post-accident repair quality cannot be verified.');
+    if(accVal==='major') accInconsist.push('Major accident on record — look for paint overspray, misaligned panels, welding marks, or rippling under carpets.');
+
+    // UAE-specific regulatory notes
+    const uaeNotes = [
+      { icon:'🏛️', title:'RTA Inspection Requirement', text:'All used vehicles must pass an RTA (Roads and Transport Authority) roadworthiness inspection before transfer of ownership. Budget AED 170 and allow 1–2 business days.' },
+      { icon:'📋', title:'Import & Spec Compliance', text:specVal&&!['GCC','GCC Spec'].includes(specVal)
+        ? `This vehicle is listed as ${specVal} spec. Non-GCC imports may require headlight, bumper, or AC system modifications to meet UAE/GCC standards. Verify compliance before purchase.`
+        : 'GCC specification vehicles are fully compliant with UAE regulations — no additional modifications required for standard use.' },
+      { icon:'🔧', title:'Modification Rules', text:'RTA prohibits modifications to engine output, suspension height, exhaust systems, and lighting without prior approval. Verify that any existing modifications are RTA-approved to avoid fines or registration refusal.' },
+      { icon:'📄', title:'Ownership Transfer Process', text:'Transfer requires: original vehicle registration card, seller Emirates ID/passport, valid RTA test, valid insurance, and settlement of any Salik/traffic fines. Buyer pays transfer fee of AED 350.' },
+    ];
+
+    return `<div class="pir-section pir-collapsible pir-collapsed" onclick="pirToggle(this)">
+    <div class="pir-section-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="1.5" width="10" height="10" rx="2" stroke="#1A2B4C" stroke-width="1.2"/><path d="M4 6.5h5M6.5 4v5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
+      📦 Additional Insights
+      <span style="font-size:.57rem;font-weight:600;color:#94A3B8;margin-left:4px;">(tap to expand)</span>
+      <span class="pir-section-chevron">▼</span>
+    </div>
+    <div class="pir-section-body">
+
+      <!-- Authenticity Signals -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1A2B4C;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #F1F5F9;">🔬 Authenticity Signals</div>
+
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.65rem;font-weight:700;color:#2D3F5C;margin-bottom:4px;">Odometer Rollback Probability</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+            <div style="padding:3px 10px;border-radius:99px;font-size:.6rem;font-weight:800;background:${rollbackRisk.bg};color:${rollbackRisk.colour};border:1px solid ${rollbackRisk.border};">${rollbackRisk.level} Risk</div>
+            <div style="flex:1;height:5px;background:#F1F5F9;border-radius:99px;overflow:hidden;">
+              <div style="height:100%;width:${rollbackRisk.level==='High'?80:rollbackRisk.level==='Moderate'?45:12}%;background:${rollbackRisk.colour};border-radius:99px;"></div>
+            </div>
+          </div>
+          <div style="font-size:.67rem;color:#475569;line-height:1.5;padding:8px 10px;background:${rollbackRisk.bg};border:1px solid ${rollbackRisk.border};border-radius:8px;">${rollbackRisk.text}</div>
+        </div>
+
+        ${accInconsist.length?`
+        <div>
+          <div style="font-size:.65rem;font-weight:700;color:#2D3F5C;margin-bottom:4px;">Accident Inconsistency Indicators</div>
+          ${accInconsist.map(t=>`<div style="display:flex;gap:7px;align-items:flex-start;padding:7px 10px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:7px;margin-bottom:5px;font-size:.67rem;color:#78350F;line-height:1.5;">
+            <span style="flex-shrink:0;">⚡</span><span>${t}</span>
+          </div>`).join('')}
+        </div>`:`<div style="font-size:.67rem;color:#15803D;padding:7px 10px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:7px;">✅ No inconsistency indicators detected based on the information provided.</div>`}
+      </div>
+
+      <!-- UAE Notes -->
+      <div>
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1A2B4C;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #F1F5F9;">🇦🇪 UAE Regulatory Notes</div>
+        ${uaeNotes.map(n=>`<div style="margin-bottom:8px;padding:10px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:9px;border-left:3px solid #D4AF37;">
+          <div style="font-size:.65rem;font-weight:800;color:#1A2B4C;margin-bottom:3px;">${n.icon} ${n.title}</div>
+          <div style="font-size:.67rem;color:#475569;line-height:1.55;">${n.text}</div>
+        </div>`).join('')}
+      </div>
+
+    </div>
+  </div>`;
+  })()}
 
   <!-- ⑫ EXPERT ANALYSIS (AVR + AI) -->
   ${(avr.advantage||avr.value||avr.review||ai?.key_factors?.length)?(() => {
@@ -6618,47 +7399,182 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>`;
   })():''}
 
-  <!-- ⑬ HAGGLING SCRIPT -->
-  ${script?`<div class="pir-section">
+  <!-- ⑬ FULL NEGOTIATION SCRIPT -->
+  ${(() => {
+    // Build a structured multi-step script using available data
+    const hasAsk   = !!stickerPrice;
+    const diff     = hasAsk ? stickerPrice - handshake : 0;
+    const diffPct  = hasAsk && handshake ? Math.round(Math.abs(diff)/handshake*100) : 0;
+    const isOver   = diff > handshake * 0.03;
+    const isFair   = !isOver && diff >= -(handshake * 0.03);
+    const isDeal   = diff < -(handshake * 0.03);
+    const lo       = low  || Math.round(avg * 0.85);
+    const hi       = high || Math.round(avg * 1.15);
+
+    // Leverage points
+    const leverages = [];
+    if(km > (Math.max(1, cy - carYear) * 18000 + 20000))
+      leverages.push(`the mileage of ${km.toLocaleString()} km is above average for a ${carYear} model`);
+    if(accVal && accVal !== 'none')
+      leverages.push(`there is a ${accVal} accident on record`);
+    if((qs.fsh === false) || svcVal === 'Non-Agency' || svcVal === 'Unknown')
+      leverages.push(`no verifiable service history is available`);
+    if(condVal === 'Fair') leverages.push(`the condition is rated fair and may require attention`);
+    if(qs.warranty === false || warVal === 'expired') leverages.push(`the warranty has expired`);
+    if(qs.singleOwner === false || (parseInt(ownVal)||0) >= 3) leverages.push(`the vehicle has had multiple owners`);
+
+    const leverageSentence = leverages.length
+      ? `I do want to highlight a few things: ${leverages.join('; ')}.`
+      : '';
+
+    const openOffer   = nego ? nego.offer : Math.round(handshake * 0.93 / 500) * 500;
+    const targetClose = nego ? nego.close : handshake;
+    const walkAway    = nego ? nego.walk  : Math.round(handshake * 1.06 / 500) * 500;
+
+    // Build the full script (apostrophes written as unicode to avoid quote conflicts)
+    const apos = "\u2019"; // '
+    const dash = "\u2014"; // —
+    const step3suffix = hasAsk
+      ? ` ${dash} I know you${apos}re asking AED ${(stickerPrice||0).toLocaleString()} but this reflects the market and the car${apos}s condition.`
+      : '.';
+    const fullScript = [
+      'Step 1 \u2014 Open the conversation:',
+      `"I${apos}ve done my research on current UAE market prices for the ${year} ${brand}${model?' '+model:''}. Similar listings are priced between AED ${lo.toLocaleString()} and AED ${hi.toLocaleString()}, so I have a good sense of where this sits."`,
+      '',
+      'Step 2 \u2014 State your leverage' + (leverages.length?' (use what applies)':' (if applicable)') + ':',
+      leverageSentence || `"I${apos}d like to get an independent inspection done before I commit."`,
+      '',
+      'Step 3 \u2014 Make your offer:',
+      `"Based on everything, I${apos}d like to offer AED ${openOffer.toLocaleString()}${step3suffix}"`,
+      '',
+      'Step 4 \u2014 Hold or close:',
+      `"I can close quickly and handle the paperwork today if we can agree on AED ${targetClose.toLocaleString()}. That${apos}s my best offer."`,
+      '',
+      'Step 5 \u2014 Walk-away point:',
+      `(Internal note: do not exceed AED ${walkAway.toLocaleString()}. If the seller won${apos}t come down to this, walk away politely.)`
+    ].join('\n');
+
+    const displayScript = script || fullScript;
+
+    return `<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2h9a1 1 0 011 1v6a1 1 0 01-1 1H6l-3 2V10H2a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#1E40AF" stroke-width="1.2"/></svg>
-      Say This to the Seller
+      📋 Full Negotiation Script
+      <span class="pir-section-chevron">▼</span>
     </div>
-    <div class="pir-haggle-box">
-      <div class="pir-haggle-script" id="haggleScript">${script}</div>
-      <button class="pir-haggle-copy" onclick="pirCopyHaggle(this);event.stopPropagation();" type="button">📋 Copy script</button>
+    <div class="pir-section-body">
+      ${isOver?`<div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.7rem;color:#92400E;">⚠️ This car is priced ~${diffPct}% above market. You have real negotiation room — use the steps below.</div>`:''}
+      ${isDeal?`<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.7rem;color:#166534;">✅ This is already below market. A light counter of 2–3% is reasonable without risking the deal.</div>`:''}
+      <div class="pir-haggle-box">
+        <div class="pir-haggle-script" id="haggleScript" style="white-space:pre-line;line-height:1.65;">${displayScript}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap;gap:6px;">
+          <button class="pir-haggle-copy" onclick="pirCopyHaggle(this);event.stopPropagation();" type="button">📋 Copy full script</button>
+          <div style="font-size:.58rem;color:#94A3B8;">Open with AED ${openOffer.toLocaleString()} · Target AED ${targetClose.toLocaleString()} · Walk at AED ${walkAway.toLocaleString()}</div>
+        </div>
+      </div>
     </div>
-  </div>`:''}
+  </div>`;
+  })()}
 
-  <!-- ⑭ RED FLAGS -->
-  ${redFlags.length?`<div class="pir-section">
+  <!-- ⑭ RED FLAGS & RISK SUMMARY -->
+  ${(() => {
+    // Compute local risk flags in addition to any API-provided ones
+    const computedFlags = [];
+    const computedWarnings = [];
+
+    if(accVal === 'major')
+      computedFlags.push({ icon:'🚨', text:'Major accident on record — request full inspection report and repair history before proceeding.' });
+    else if(accVal === 'minor')
+      computedFlags.push({ icon:'⚠️', text:'Minor accident declared — verify quality of repair and check for hidden structural issues.' });
+
+    if(km > (Math.max(1, cy - carYear) * 18000 + 30000))
+      computedFlags.push({ icon:'🔴', text:`High mileage: ${km.toLocaleString()} km for a ${carYear} model. Expect higher maintenance costs and faster depreciation.` });
+
+    if((qs.fsh === false) || svcVal === 'Non-Agency' || svcVal === 'Unknown')
+      computedWarnings.push({ icon:'🟡', text:'No verified service history. Ask the seller to produce receipts or agency records.' });
+
+    if(qs.warranty === false || warVal === 'expired')
+      computedWarnings.push({ icon:'🟡', text:'No active warranty. Factor in potential repair costs before agreeing on price.' });
+
+    if((qs.singleOwner === false) || (parseInt(ownVal)||0) >= 3)
+      computedWarnings.push({ icon:'🟡', text:'Multiple previous owners. Each ownership transfer reduces buyer confidence and resale value.' });
+
+    if(specVal && specVal !== 'GCC' && specVal !== 'GCC Spec')
+      computedWarnings.push({ icon:'🟡', text:`Non-GCC specification (${specVal}). Smaller resale pool and potential parts/insurance complications.` });
+
+    if(condVal === 'Fair' || condVal === 'Poor')
+      computedFlags.push({ icon:'🔴', text:`Condition rated "${condVal}" — price should reflect cost of bringing the vehicle to a sellable standard.` });
+
+    // Merge with API red flags
+    const apiFlags = (r.redFlags||[]).map(f => ({ icon:'⚠️', text: f }));
+
+    const allRed  = [...computedFlags,  ...apiFlags.filter(f => !/warning|note|minor/i.test(f.text))];
+    const allWarn = [...computedWarnings, ...apiFlags.filter(f =>  /warning|note|minor/i.test(f.text))];
+
+    if(!allRed.length && !allWarn.length) return '';
+
+    return `<div class="pir-section">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v7M6.5 10v1.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Risk Flags
+      ⚠️ Risk Flags
     </div>
-    ${redFlags.map(f=>`<div class="pir-redflag-item"><span class="pir-redflag-bullet">●</span><span>${f}</span></div>`).join('')}
-  </div>`:''}
-
+    ${allRed.length ? `
+    <div style="margin-bottom:8px;">
+      <div style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#991B1B;margin-bottom:5px;">Critical</div>
+      ${allRed.map(f=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;margin-bottom:5px;font-size:.72rem;color:#7F1D1D;line-height:1.5;">
+        <span style="flex-shrink:0;">${f.icon}</span><span>${f.text}</span>
+      </div>`).join('')}
+    </div>` : ''}
+    ${allWarn.length ? `
+    <div>
+      <div style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#92400E;margin-bottom:5px;">Watch Points</div>
+      ${allWarn.map(f=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 11px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;margin-bottom:5px;font-size:.72rem;color:#78350F;line-height:1.5;">
+        <span style="flex-shrink:0;">${f.icon}</span><span>${f.text}</span>
+      </div>`).join('')}
+    </div>` : ''}
+  </div>`;
+  })()}
   <!-- ⑮ LIVE SOURCE LINKS -->
   ${r.sourceLinks&&r.sourceLinks.length?`<div class="pir-section">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 8l3-3m0 0l-2-1m2 1l1 2" stroke="#008577" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1" y="1" width="11" height="11" rx="2" stroke="#008577" stroke-width="1.1"/></svg>
-      Live Sources Used
+      🔗 Live Sources Used
     </div>
     ${r.sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pir-source-link">${l.title||l.url}</a>`).join('')}
   </div>`:''}
 
   <!-- ⑯ HOW CALCULATED -->
-  <div class="pir-section">
+  <div class="pir-section pir-collapsible" onclick="pirToggle(this)">
     <div class="pir-section-title">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="#D4AF37" stroke-width="1.2"/><path d="M4 6.5h5M6.5 4v5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
-      How This Was Calculated
+      🔎 How This Was Calculated
+      <span class="pir-section-chevron">▼</span>
     </div>
-    <div class="pir-calc-note">
-      ${r.isEstimate
-        ? '🤖 No live listings were found for this search. This estimate is based on UAE market knowledge, brand-specific depreciation rates, and specification premiums.'
-        : '🔍 Live UAE listings were found and analysed. Outliers were filtered; adjustments applied for mileage, condition, and specification.'}
-      ${r.valuationNotes?`<div class="pir-calc-quote">"${r.valuationNotes}"</div>`:''}
+    <div class="pir-section-body">
+      <div class="pir-calc-note">
+        ${r.isEstimate
+          ? '<strong>🤖 AI Estimate Mode</strong> — No live listings were found for this exact search. The price estimate uses UAE market knowledge, brand-specific depreciation curves, GCC spec premiums, and comparable model data.'
+          : `<strong>🔍 Live Market Mode</strong> — ${comp>0?comp+' comparable UAE listings':'Live UAE listings'} were found and analysed. Outliers at both ends were filtered. Adjustments applied for mileage deviation, condition, specification, and accident history.`}
+        ${r.valuationNotes?`<div class="pir-calc-quote">"${r.valuationNotes}"</div>`:''}
+        <div style="margin-top:11px;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
+            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Method</div>
+            <div style="font-size:.69rem;color:#1A2B4C;">${r.isEstimate?'AI estimation':'Comparable listing analysis'}</div>
+          </div>
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
+            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Listings Used</div>
+            <div style="font-size:.69rem;color:#1A2B4C;">${comp>0?comp+' comparable':'Model-based estimate'}</div>
+          </div>
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
+            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Confidence</div>
+            <div style="font-size:.69rem;font-weight:700;color:${conf>=70?'#15803D':conf>=45?'#92400E':'#991B1B'};">${conf}% — ${conf>=70?'High':conf>=45?'Moderate':'Low'}</div>
+          </div>
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
+            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Data Age</div>
+            <div style="font-size:.69rem;color:#1A2B4C;">${r.cached?`Cached${r.cacheAge?' ('+r.cacheAge+' ago)':''}`:r.isEstimate?'Static model':'Live today'}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -6673,15 +7589,89 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="pir-footer-ref">${ref.label} &nbsp;|&nbsp; Based on live UAE market data</div>
   </div>
 
-  <!-- ⑱ ACTION BUTTONS -->
-  <div class="pir-section" style="border-bottom:none;">
+  <!-- 📌 15. FOOTER — CALL TO ACTION -->
+  ${(() => {
+    const isBuyer  = purpVal !== 'selling';
+    const isSeller = purpVal === 'selling';
+    const deprRowsF = _deprRows;
+    const yr3Val   = deprRowsF.length>=3 ? deprRowsF[2].endVal : Math.round(handshake*0.72);
+
+    return `<div class="pir-section" style="border-bottom:none;">
+
+    <!-- Dual CTA cards -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;">
+
+      <!-- Buyer card -->
+      <div style="background:linear-gradient(145deg,#F0FDF4,#ECFDF5);border:1.5px solid #86EFAC;border-radius:12px;padding:13px 12px;">
+        <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#15803D;margin-bottom:6px;">👤 For Buyers</div>
+        <div style="font-size:.7rem;color:#166534;line-height:1.6;margin-bottom:10px;">Compare similar listings to verify this price estimate. Use the handshake price and negotiation line to open confidently — and always request a pre-purchase RTA inspection.</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <a href="https://www.dubizzle.com/motors/cars/" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #86EFAC;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#15803D;transition:background .15s;">
+            🔍 Browse Dubizzle
+          </a>
+          <a href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #86EFAC;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#15803D;transition:background .15s;">
+            🚗 YallaMotor
+          </a>
+        </div>
+      </div>
+
+      <!-- Seller card -->
+      <div style="background:linear-gradient(145deg,#EFF6FF,#F0F9FF);border:1.5px solid #93C5FD;border-radius:12px;padding:13px 12px;">
+        <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1E40AF;margin-bottom:6px;">🏷️ For Sellers</div>
+        <div style="font-size:.7rem;color:#1D4ED8;line-height:1.6;margin-bottom:10px;">List at the handshake price <strong>(AED ${handshake.toLocaleString()})</strong> for fastest sale. Highlight your GCC spec, service history, and single ownership to command a premium. Expect the 3-year resale value to reach AED ${yr3Val.toLocaleString()}.</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <a href="https://www.dubizzle.com/motors/cars/add/" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #93C5FD;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#1E40AF;transition:background .15s;">
+            📢 List on Dubizzle
+          </a>
+          <a href="https://uae.yallamotor.com/sell-my-car" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #93C5FD;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#1E40AF;transition:background .15s;">
+            🚗 List on YallaMotor
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key numbers reminder strip -->
+    <div style="background:linear-gradient(135deg,rgba(0,38,32,0.04),rgba(0,82,68,0.06));border:1px solid var(--accent-line);border-radius:10px;padding:10px 13px;margin-bottom:12px;">
+      <div style="font-size:.57rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;">📊 Your Key Numbers at a Glance</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;">
+        <div>
+          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">Handshake</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:800;color:var(--accent);">AED ${handshake.toLocaleString()}</div>
+        </div>
+        ${stickerPrice?`<div>
+          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">Sticker</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:800;color:#3D5280;">AED ${stickerPrice.toLocaleString()}</div>
+        </div>`:
+        `<div>
+          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">Market Range</div>
+          <div style="font-size:.68rem;font-weight:700;color:#475569;">${low&&high?`AED ${low.toLocaleString()}–${high.toLocaleString()}`:'—'}</div>
+        </div>`}
+        <div>
+          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">3-Yr Value</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:800;color:#475569;">AED ${yr3Val.toLocaleString()}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Utility buttons -->
     <div class="pir-action-row">
       <button class="pir-action-btn" onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')" type="button">🔍 Dubizzle</button>
       <button class="pir-action-btn" onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')" type="button">🚗 YallaMotor</button>
       <button class="pir-action-btn" onclick="printValuation()" type="button">🖨 Print</button>
       <button class="pir-action-btn primary" onclick="resetForm()" type="button">↺ New Search</button>
     </div>
-  </div>
+
+    <!-- Disclaimer -->
+    <div style="margin-top:10px;text-align:center;font-size:.57rem;color:#94A3B8;line-height:1.6;padding:0 4px;">
+      Price estimates are based on UAE market data and should not be used as the sole basis for purchase or sale. Always verify with an independent inspection and consult current listings.
+    </div>
+
+  </div>`;
+  })()}
 
 </div>`;
 }
@@ -6806,14 +7796,14 @@ async function checkCarPrice(){
         <div style="font-size:2.6rem;margin-bottom:14px;">🚗☕</div>
         <div style="font-size:1rem;font-weight:800;color:#1A2B4C;margin-bottom:10px;letter-spacing:0.01em;">You've been busy today!</div>
         <p style="font-size:0.80rem;color:#4A5568;line-height:1.75;max-width:300px;margin:0 auto 8px;">
-          You've used all <strong>10 free valuations</strong> for today — that's a lot of car shopping! 🎉
+          You've used all <strong>10 free price reports</strong> for today — that's a lot of car shopping! 🎉
         </p>
         <p style="font-size:0.78rem;color:#718096;line-height:1.7;max-width:300px;margin:0 auto 22px;">
-          Your quota resets in <strong>${resetHr}</strong>. Come back then and we'll have fresh live market data ready and waiting for you.
+          Your quota resets in <strong>${resetHr}</strong>. Come back then and we'll have fresh live market data ready and waiting.
         </p>
         <div style="background:linear-gradient(135deg,rgba(0,133,119,0.07),rgba(0,168,150,0.05));border:1px solid rgba(0,133,119,0.18);border-radius:12px;padding:14px 18px;max-width:280px;margin:0 auto 22px;">
           <div style="font-size:0.68rem;font-weight:700;color:#008577;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">💡 In the meantime</div>
-          <div style="font-size:0.73rem;color:#4A5568;line-height:1.6;">Scroll up to review your earlier valuations, or share KamSayara with a friend who needs a car price check!</div>
+          <div style="font-size:0.73rem;color:#4A5568;line-height:1.6;">Scroll up to review earlier reports, or share KamSayara with a friend who needs a car price check!</div>
         </div>
         <button onclick="resetForm()"
           style="background:linear-gradient(135deg,#008577,#006B60);color:#fff;border:none;border-radius:10px;
@@ -6822,6 +7812,10 @@ async function checkCarPrice(){
                  box-shadow:0 4px 14px rgba(0,133,119,0.3);">↺ Start Fresh</button>
       </div>`;
       showState('content');
+      if(isMobile()){
+        const mob=g('mobContent');
+        if(mob){mob.innerHTML=g('rcontent').innerHTML;_unlockResultTab();switchMobCard('result');}
+      }
       if(btn) btn.disabled=false;
       updateReadiness();
       return;
@@ -6834,12 +7828,12 @@ async function checkCarPrice(){
     const isTimeout = error.name==='AbortError';
     const msg = isTimeout
       ? 'Request timed out. The live market search may be slow — please try again.'
-      : error.message || 'Unable to get valuation. Please try again.';
+      : error.message || 'Unable to fetch price report. Please try again.';
 
     const errHtml=`
     <div style="padding:28px 20px;text-align:center;font-family:'Exo 2',sans-serif;">
       <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">${isTimeout?'⏱':'⚠️'}</div>
-      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">${isTimeout?'Request Timed Out':'Valuation Error'}</div>
+      <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">${isTimeout?'Request Timed Out':'Unable to Fetch Report'}</div>
       <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:320px;margin:0 auto 20px;">${msg}</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
         <button onclick="checkCarPrice()"
@@ -6854,217 +7848,14 @@ async function checkCarPrice(){
     </div>`;
     g('rcontent').innerHTML=errHtml;
     showState('content');
+    if(isMobile()){
+      const mob=g('mobContent');
+      if(mob){mob.innerHTML=errHtml;_unlockResultTab();switchMobCard('result');}
+    }
   }finally{
     if(btn) btn.disabled=false;
     updateReadiness();
   }
-}
-
-function displayValuationResult(data){
-  stopLoad();
-  const resultContainer = g('rcontent');
-  if(!resultContainer) return;
-  console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
-
-  // ── Normalise all fields ──────────────────────────────────
-  const sticker      = data.stickerPrice    || data.averagePrice || 0;
-  const handshake    = data.handshakePrice  || Math.round(sticker * 0.95) || 0;
-  const negotiation  = data.negotiationPrice|| Math.round(handshake * 0.93) || 0;
-  const minP         = data.minMarket       || data.lowPrice  || Math.round(sticker * 0.88) || 0;
-  const maxP         = data.maxMarket       || data.highPrice || Math.round(sticker * 1.12) || 0;
-  const isEstimate   = data.isEstimate ?? true;
-  const listingsCount= data.listingsFound   || 0;
-  const source       = data.source          || (isEstimate ? 'AI Estimate' : 'Live Market Data');
-  const confidence   = data.confidenceScore || (isEstimate ? 30 : 75);
-  const demand       = data.demandScore     || 55;
-  const cacheInfo    = data.cached ? ` · cached ${data.cacheAge||''} ago` : '';
-  const rta          = data.rtaFees         || (()=>{ const ins=0; return { inspection:170, registration:420, transfer:350, insurance:ins, total:170+420+350+ins }; })();
-  const depr         = data.depreciation    || [];
-  const redFlags     = data.redFlags        || [];
-  const avr          = data.avr             || {};
-  const script       = data.hagglingScript  || '';
-  const sourceLinks  = data.sourceLinks     || [];
-  const cmp          = data.comparisonToAsking || null;
-  const notes        = data.valuationNotes  || '';
-  const yr           = data.year            || new Date().getFullYear();
-
-  // ── Helper: colour bar ────────────────────────────────────
-  const bar = (pct, colour) =>
-    `<div style="background:#E5E7EB;border-radius:99px;height:8px;overflow:hidden;margin-top:4px;">
-       <div style="background:${colour};height:100%;width:${Math.min(100,pct)}%;border-radius:99px;transition:width 1s;"></div>
-     </div>`;
-
-  // ── Verdict badge colour ──────────────────────────────────
-  const verdictStyle = !cmp ? '' :
-    cmp.verdict==='Good Deal'  ? 'background:#D1FAE5;border:1px solid #6EE7B7;color:#065F46;' :
-    cmp.verdict==='Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;color:#991B1B;' :
-    'background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;';
-
-  resultContainer.innerHTML = `
-<div style="padding:16px;font-family:'Exo 2',sans-serif;">
-
-  <!-- ① HEADER: live vs estimate badge + main price -->
-  <div style="background:linear-gradient(135deg,#0A2540,#1A3A5C);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;">
-    <div style="font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">
-      ${isEstimate ? '⚠️ AI ESTIMATE' : '✅ LIVE UAE MARKET VALUE'}
-    </div>
-    <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-bottom:10px;">${source}${cacheInfo}</div>
-    <div style="font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:2px;">STICKER / LISTING PRICE</div>
-    <div id="priceMain" style="font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:900;color:#D4AF37;line-height:1;">AED ${sticker.toLocaleString()}</div>
-    ${minP&&maxP ? `<div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:4px;">Market range: AED ${minP.toLocaleString()} – AED ${maxP.toLocaleString()}</div>` : ''}
-    ${listingsCount>0 ? `<div style="margin-top:8px;"><span style="font-size:0.55rem;background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:99px;color:rgba(255,255,255,0.7);">📊 ${listingsCount} live listings analysed</span></div>` : ''}
-  </div>
-
-  <!-- ② NEGOTIATION PRICES -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-    <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:12px;padding:12px;text-align:center;">
-      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#166534;margin-bottom:4px;">🤝 HANDSHAKE PRICE</div>
-      <div style="font-size:1.1rem;font-weight:800;color:#15803D;">AED ${handshake.toLocaleString()}</div>
-      <div style="font-size:0.55rem;color:#4ADE80;margin-top:2px;">Realistic closing price</div>
-    </div>
-    <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:12px;padding:12px;text-align:center;">
-      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#1E40AF;margin-bottom:4px;">💬 OPEN WITH</div>
-      <div style="font-size:1.1rem;font-weight:800;color:#1D4ED8;">AED ${negotiation.toLocaleString()}</div>
-      <div style="font-size:0.55rem;color:#60A5FA;margin-top:2px;">Your opening offer</div>
-    </div>
-  </div>
-
-  <!-- ③ ASKING PRICE VERDICT -->
-  ${cmp ? `<div style="${verdictStyle}border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:center;">
-    <div style="font-size:0.85rem;font-weight:800;">${cmp.verdict}</div>
-    <div style="font-size:0.68rem;margin-top:3px;">
-      ${cmp.verdict==='Good Deal' ? `AED ${Math.abs(cmp.difference).toLocaleString()} below market average` :
-        cmp.verdict==='Overpriced' ? `AED ${cmp.difference.toLocaleString()} above market average` : 'Right at market average'}
-    </div>
-  </div>` : ''}
-
-  <!-- ④ CONFIDENCE + DEMAND BARS -->
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div>
-        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Data Confidence</div>
-        ${bar(confidence,'#3B82F6')}
-        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${Math.min(85,Math.max(60,confidence))}%</div>
-      </div>
-      <div>
-        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Market Demand</div>
-        ${bar(demand,'#F59E0B')}
-        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${demand}%</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑤ RTA FEES + TOTAL COST -->
-  <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🏛️ UAE First-Year Fees (2026)</div>
-    <table style="width:100%;border-collapse:collapse;font-size:0.64rem;color:#1A2B4C;">
-      <tr><td style="padding:2px 0;">RTA Inspection</td><td style="text-align:right;">AED ${(rta.inspection||170).toLocaleString()}</td></tr>
-      <tr><td style="padding:2px 0;">Vehicle Registration</td><td style="text-align:right;">AED ${(rta.registration||420).toLocaleString()}</td></tr>
-      <tr><td style="padding:2px 0;">Ownership Transfer</td><td style="text-align:right;">AED ${(rta.transfer||350).toLocaleString()}</td></tr>
-      <tr><td style="padding:2px 0;">${yr >= 2024 ? 'Insurance (2.5% comprehensive)' : 'Insurance (3rd party, pre-2024)'}</td><td style="text-align:right;">AED ${(rta.insurance||1200).toLocaleString()}</td></tr>
-      <tr style="border-top:1px solid #FDE68A;font-weight:800;">
-        <td style="padding-top:4px;">Total First-Year Fees</td>
-        <td style="text-align:right;color:#D97706;">AED ${(rta.total||940).toLocaleString()}</td>
-      </tr>
-    </table>
-    <p style="font-size:0.55rem;color:#92400E;margin-top:5px;">Fees only — car purchase price not included. Verify insurance with your broker.</p>
-  </div>
-
-  <!-- ⑥ 3-YEAR DEPRECIATION -->
-  ${depr.length>=3 ? `
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">📉 3-Year Resale Forecast</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;">
-      ${[yr+1,yr+2,yr+3].map((y,i)=>`
-      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:8px;">
-        <div style="font-size:0.55rem;color:#94A3B8;">${y}</div>
-        <div style="font-size:0.8rem;font-weight:800;color:#1A2B4C;">AED ${(depr[i]||0).toLocaleString()}</div>
-        <div style="font-size:0.52rem;color:#EF4444;">−AED ${(handshake-(depr[i]||0)>0?(handshake-(depr[i]||0)).toLocaleString():'0')}</div>
-        <div style="font-size:0.48rem;color:#94A3B8;">from handshake</div>
-      </div>`).join('')}
-    </div>
-    <p style="font-size:0.55rem;color:#64748B;margin-top:6px;">Cumulative loss from handshake price (AED ${handshake.toLocaleString()}). Luxury + high-mileage vehicles depreciate faster.</p>
-  </div>` : ''}
-
-  <!-- ⑦ AVR: ADVANTAGE / VALUE / REVIEW -->
-  ${(avr.advantage||avr.value||avr.review) ? (() => {
-    // Consistency guard: if overpriced, override any "fair value" language in review
-    const isOverpriced = cmp && (cmp.verdict === 'Overpriced' || cmp.verdict === 'Significantly Overpriced');
-    const reviewText = isOverpriced && avr.review && /fair.value|good.value|fairly.priced|market.rate/i.test(avr.review)
-      ? avr.review.replace(/fair.value|good.value|fairly.priced|market.rate/gi, 'priced above market') + ' Note: asking price exceeds market average.'
-      : avr.review;
-    const bgColour = isOverpriced ? '#FFF7ED' : '#F0FDF4';
-    const borderColour = isOverpriced ? '#FED7AA' : '#BBF7D0';
-    const titleColour = isOverpriced ? '#9A3412' : '#166534';
-    return `<div style="background:${bgColour};border:1px solid ${borderColour};border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:${titleColour};margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">${isOverpriced ? '⚠️ Expert Analysis' : '🎯 Expert Analysis'}</div>
-    ${avr.advantage ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> ${avr.advantage}</div>` : ''}
-    ${avr.value     ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> ${avr.value}</div>` : ''}
-    ${reviewText    ? `<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> ${reviewText}</div>` : ''}
-  </div>`;
-  })() : ''}
-
-  <!-- ⑧ HAGGLING SCRIPT -->
-  ${script ? `
-  <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1E40AF;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🗣️ Say This to the Seller</div>
-    <div style="font-size:0.72rem;color:#1D4ED8;font-style:italic;line-height:1.5;">${script}</div>
-  </div>` : ''}
-
-  <!-- ⑨ RED FLAGS -->
-  ${redFlags.length ? `
-  <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#991B1B;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">⚠️ Red Flags</div>
-    ${redFlags.map(f=>`<div style="font-size:0.65rem;color:#7F1D1D;margin-bottom:3px;">• ${f}</div>`).join('')}
-  </div>` : ''}
-
-  <!-- ⑩ LIVE SOURCE LINKS -->
-  ${sourceLinks.length ? `
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🔗 Live Sources Used</div>
-    ${sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener"
-      style="display:block;font-size:0.63rem;color:#008577;margin-bottom:3px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-      ↗ ${l.title||l.url}</a>`).join('')}
-  </div>` : ''}
-
-  <!-- ⑪ HOW CALCULATED -->
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;border-left:3px solid #D4AF37;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:5px;">📌 How This Was Calculated</div>
-    <div style="font-size:0.63rem;color:#475569;line-height:1.6;">
-      ${isEstimate
-        ? '🤖 No live listings found today. Claude estimated from UAE market knowledge, depreciation rates, and spec premiums.'
-        : `🔍 Live UAE listings were found and analysed. Claude filtered outliers and adjusted for mileage, condition, and spec.`}
-      ${notes ? `<div style="margin-top:6px;font-style:italic;color:#334155;">"${notes}"</div>` : ''}
-    </div>
-  </div>
-
-  <!-- ⑫ ACTION BUTTONS -->
-  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-    <button onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')"
-      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🔍 Dubizzle</button>
-    <button onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')"
-      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🚗 YallaMotor</button>
-    <button onclick="resetForm()"
-      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">↺ New Search</button>
-  </div>
-</div>`;
-
-  showState('content');
-
-  // Animate price count-up on sticker price
-  const priceEl = g('priceMain');
-  if(priceEl && sticker){ animateCountUp(priceEl, sticker); }
-
-  // Scroll result into view
-  setTimeout(()=>{
-    const panel = g('resultPanel') || resultContainer.closest('.result-panel');
-    if(panel){
-      const panelTop=panel.getBoundingClientRect().top+window.scrollY;
-      window.scrollTo({top:panelTop-60,behavior:'smooth'});
-    }
-  },120);
-
-  saveLastValuation();
 }
 
 /* ── REAL displayValuationResult — routes to full PIR ─────── */
@@ -7100,7 +7891,12 @@ function displayValuationResult(data){
     sourceLinks:      data.sourceLinks     || [],
     comparisonToAsking: data.comparisonToAsking || null,
     valuationNotes:   data.valuationNotes  || '',
-    ai:               data.ai              || null,
+    ai:               data.ai || (data.avr && (data.avr.review || data.avr.advantage || data.avr.value) ? {
+      deal_rating: null,
+      explanation: data.avr.review || data.avr.value || '',
+      key_factors: [data.avr.advantage, data.avr.value, data.avr.review].filter(Boolean).slice(0,3),
+      advice:      data.avr.review || ''
+    } : null),
     marketability:    data.marketability   || null,
   };
 
@@ -7115,8 +7911,19 @@ function displayValuationResult(data){
 
   showState('content');
 
+  // Mobile: mirror result into mobContent and slide in the result card FIRST
+  // so animations below target the visible element (mobContent) not hidden rcontent
+  if (isMobile()) {
+    const mob = g('mobContent');
+    if (mob) mob.innerHTML = resultContainer.innerHTML;
+    _unlockResultTab();
+    switchMobCard('result');
+  }
+
   // Animate the dominant Handshake price
-  const priceEl = g('priceMain');
+  // On mobile, target the element inside mobContent (now visible); on desktop, rcontent
+  const _animRoot = (isMobile() ? g('mobContent') : resultContainer) || resultContainer;
+  const priceEl = _animRoot.querySelector('#priceMain') || g('priceMain');
   if(priceEl){
     const target = r.handshakePrice || r.averagePrice || 0;
     if(target) animateCountUp(priceEl, target);
@@ -7124,22 +7931,25 @@ function displayValuationResult(data){
 
   // Animate confidence footer bar + stat bars
   setTimeout(()=>{
-    const cbarFill = document.getElementById('cbarFill');
+    const cbarFill = (_animRoot.querySelector('#cbarFill')) || document.getElementById('cbarFill');
     const conf = Math.round((r.confidence||0)*100);
     if(cbarFill && conf) cbarFill.style.width = conf+'%';
     pirAnimateStatBars();
   }, 80);
 
-  // Scroll result panel into view
-  setTimeout(()=>{
-    const panel = g('resultPanel') || resultContainer.closest('.result-panel');
-    if(panel){
-      const panelTop = panel.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({top: panelTop - 60, behavior:'smooth'});
-    }
-  }, 120);
+  // Scroll result panel into view (desktop/tablet only — mobile switches card)
+  if (!isMobile()) {
+    setTimeout(()=>{
+      const panel = g('resultPanel') || resultContainer.closest('.result-panel');
+      if(panel){
+        const panelTop = panel.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({top: panelTop - 60, behavior:'smooth'});
+      }
+    }, 120);
+  }
 
   saveLastValuation();
+  activateShareStrip();
 }
 
 /* ── MOBILE BOTTOM SHEET / CARD STACK (no-op in unified layout) ── */
@@ -7185,6 +7995,10 @@ function resetForm(){
   updateReadiness();
   g('formCard').scrollIntoView({behavior:'smooth'});
   SHARE_ICONS.forEach(id=>{const el=document.getElementById('sico-'+id);if(el)el.classList.add('share-dimmed');});
+  // Mobile cleanup: clear stale result and lock tab
+  const mobC = g('mobContent');
+  if (mobC) mobC.innerHTML = '';
+  _lockResultTab();
 }
 
 /* ── COPY LINK ───────────────────────────────────────────── */
@@ -7217,7 +8031,7 @@ function printValuation(){
 
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
-  <title>KamSayara Valuation \u2014 ${d.carName}</title>
+  <title>KamSayara Price Report \u2014 ${d.carName}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap');
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -7356,7 +8170,7 @@ function printValuation(){
   </div>
 
   <div class="pdf-footer">
-    <span>Valuations are market estimates. Not a guaranteed sale price. Prices vary by condition, location &amp; negotiation.</span>
+    <span>Price estimates are based on market data. Not a guaranteed sale price. Prices vary by condition, location &amp; negotiation.</span>
     <span class="pdf-footer-ref">Page 1/1</span>
   </div>
 
@@ -7716,26 +8530,35 @@ g('btnCheck').addEventListener('click',()=>{
 (function(){
   const toast=g('mobToast');
   if(!toast)return;
-  let startY=0,isDragging=false,startTranslate=0;
+  let startX=0,startY=0,isDragging=false,axisLocked=null;
   toast.addEventListener('touchstart',e=>{
     if(e.touches.length!==1)return;
+    startX=e.touches[0].clientX;
     startY=e.touches[0].clientY;
     isDragging=true;
-    startTranslate=0;
+    axisLocked=null;
     toast.style.transition='none';
   },{passive:true});
   toast.addEventListener('touchmove',e=>{
     if(!isDragging)return;
+    const dx=e.touches[0].clientX-startX;
     const dy=e.touches[0].clientY-startY;
-    if(dy<0)return;
-    toast.style.transform=`translateY(${dy}px)`;
+    // Lock axis on first significant move
+    if(!axisLocked){
+      if(Math.abs(dx)>Math.abs(dy))axisLocked='x';
+      else axisLocked='y';
+    }
+    // Only handle rightward X swipes; let Y scroll naturally
+    if(axisLocked!=='x'||dx<0)return;
+    toast.style.transform=`translateX(${dx}px)`;
   },{passive:true});
   toast.addEventListener('touchend',e=>{
     if(!isDragging)return;
     isDragging=false;
     toast.style.transition='';
-    const dy=e.changedTouches[0].clientY-startY;
-    if(dy>100){closeMobResult();}
+    if(axisLocked!=='x'){return;}
+    const dx=e.changedTouches[0].clientX-startX;
+    if(dx>100){closeMobResult();}
     else{toast.style.transform='';}
   });
 })();
@@ -7762,7 +8585,7 @@ async function captureResultAsBlob(){
   const target=isMobile()
     ?document.getElementById('mobContent')
     :document.getElementById('rcontent');
-  if(!target||typeof html2canvas==='undefined')return null;
+  if(!target||typeof html2canvas==='undefined'){console.warn('KamSayara: html2canvas not available');return null;}
   try{
     const canvas=await html2canvas(target,{
       scale:2,useCORS:true,logging:false,
@@ -7788,7 +8611,7 @@ async function shareVia(platform){
       const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
       if(navigator.canShare({files:[file]})){
         try{
-          await navigator.share({title:'KamSayara UAE Car Valuation',text,files:[file]});
+          await navigator.share({title:'KamSayara UAE Price Report',text,files:[file]});
           return;
         }catch(e){}
       }
@@ -7797,7 +8620,7 @@ async function shareVia(platform){
 
   let shareUrl='';
   if(platform==='wa')      shareUrl=`https://wa.me/?text=${encodedText}`;
-  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Valuation \u2013 KamSayara')}&body=${encodedText}`;
+  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Price Report \u2013 KamSayara')}&body=${encodedText}`;
   else if(platform==='fb')   shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
   else if(platform==='ig'){
     const blob=await captureResultAsBlob();
@@ -8168,11 +8991,22 @@ function pirCopyHaggle(btn){
 
 /* ── PIR INTERACTIVE: animate stat bars after render ─────── */
 function pirAnimateStatBars(){
+  // Old pir-stat-fill bars (kept for compat)
   document.querySelectorAll('.pir-stat-fill[data-target]').forEach(el=>{
     const target=parseInt(el.dataset.target)||0;
-    // rAF to allow browser paint first
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       el.style.width=Math.min(100,target)+'%';
+    }));
+  });
+  // New pir-signal fills + thumbs
+  document.querySelectorAll('.pir-signal-fill-ryg[data-target]').forEach(fill=>{
+    const target=Math.min(100,parseInt(fill.dataset.target)||0);
+    const thumb=fill.nextElementSibling;
+    const pctEl=fill.closest('.pir-signal-row')?.querySelector('.pir-signal-pct');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      fill.style.width=target+'%';
+      if(thumb&&thumb.classList.contains('pir-signal-thumb')) thumb.style.left=target+'%';
+      if(pctEl) pctEl.textContent=target+'%';
     }));
   });
 }
