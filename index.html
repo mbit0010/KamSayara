@@ -6446,203 +6446,75 @@ function displayValuationResult(data){
   if(!resultContainer) return;
   console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
 
-  // ── Normalise all fields ──────────────────────────────────
-  const sticker      = data.stickerPrice    || data.averagePrice || 0;
-  const handshake    = data.handshakePrice  || Math.round(sticker * 0.95) || 0;
-  const negotiation  = data.negotiationPrice|| Math.round(handshake * 0.93) || 0;
-  const minP         = data.minMarket       || data.lowPrice  || Math.round(sticker * 0.88) || 0;
-  const maxP         = data.maxMarket       || data.highPrice || Math.round(sticker * 1.12) || 0;
-  const isEstimate   = data.isEstimate ?? true;
-  const listingsCount= data.listingsFound   || 0;
-  const source       = data.source          || (isEstimate ? 'AI Estimate' : 'Live Market Data');
-  const confidence   = data.confidenceScore || (isEstimate ? 30 : 75);
-  const demand       = data.demandScore     || 55;
-  const cacheInfo    = data.cached ? ` · cached ${data.cacheAge||''} ago` : '';
-  const rta          = data.rtaFees         || (()=>{ const ins=0; return { inspection:170, registration:420, transfer:350, insurance:ins, total:170+420+350+ins }; })();
-  const depr         = data.depreciation    || [];
-  const redFlags     = data.redFlags        || [];
-  const avr          = data.avr             || {};
-  const script       = data.hagglingScript  || '';
-  const sourceLinks  = data.sourceLinks     || [];
-  const cmp          = data.comparisonToAsking || null;
-  const notes        = data.valuationNotes  || '';
-  const yr           = data.year            || new Date().getFullYear();
+  // ── Map V12 API fields → buildResult() compatible shape ──────
+  // buildResult() reads from a legacy `r` object + form fields,
+  // so we write the API data back onto a normalised object.
+  const r = {
+    // Core prices
+    averagePrice:    data.handshakePrice  || data.averagePrice   || data.stickerPrice || 0,
+    lowPrice:        data.minMarket       || data.lowPrice       || 0,
+    highPrice:       data.maxMarket       || data.highPrice      || 0,
+    // V12 fields passed through
+    stickerPrice:    data.stickerPrice    || data.averagePrice   || 0,
+    handshakePrice:  data.handshakePrice  || 0,
+    negotiationPrice:data.negotiationPrice|| 0,
+    minMarket:       data.minMarket       || 0,
+    maxMarket:       data.maxMarket       || 0,
+    listingsFound:   data.listingsFound   || 0,
+    isEstimate:      data.isEstimate      ?? true,
+    source:          data.source          || '',
+    cached:          data.cached          || false,
+    cacheAge:        data.cacheAge        || '',
+    confidenceScore: data.confidenceScore || 0,
+    demandScore:     data.demandScore     || 55,
+    confidence:      (data.confidenceScore || 0) / 100,
+    rtaFees:         data.rtaFees         || null,
+    depreciation:    data.depreciation    || [],
+    redFlags:        data.redFlags        || [],
+    avr:             data.avr             || {},
+    hagglingScript:  data.hagglingScript  || '',
+    sourceLinks:     data.sourceLinks     || [],
+    comparisonToAsking: data.comparisonToAsking || null,
+    valuationNotes:  data.valuationNotes  || '',
+    // ai sub-object (optional — not returned by V12 worker but kept for forward-compat)
+    ai:              data.ai              || null,
+    marketability:   data.marketability   || null,
+  };
 
-  // ── Helper: colour bar ────────────────────────────────────
-  const bar = (pct, colour) =>
-    `<div style="background:#E5E7EB;border-radius:99px;height:8px;overflow:hidden;margin-top:4px;">
-       <div style="background:${colour};height:100%;width:${Math.min(100,pct)}%;border-radius:99px;transition:width 1s;"></div>
-     </div>`;
+  // Pull inputs from form (same pattern as the original buildResult caller)
+  const brand   = data.brand   || g('brand')?.value   || '';
+  const model   = data.model   || g('model')?.value   || '';
+  const year    = data.year    || g('year')?.value     || '';
+  const mileage = data.mileage != null ? String(data.mileage) : (g('mileage')?.value || '');
+  const asking  = g('asking')?.value || '';
 
-  // ── Verdict badge colour ──────────────────────────────────
-  const verdictStyle = !cmp ? '' :
-    cmp.verdict==='Good Deal'  ? 'background:#D1FAE5;border:1px solid #6EE7B7;color:#065F46;' :
-    cmp.verdict==='Overpriced' ? 'background:#FEE2E2;border:1px solid #FCA5A5;color:#991B1B;' :
-    'background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;';
-
-  resultContainer.innerHTML = `
-<div style="padding:16px;font-family:'Exo 2',sans-serif;">
-
-  <!-- ① HEADER: live vs estimate badge + main price -->
-  <div style="background:linear-gradient(135deg,#0A2540,#1A3A5C);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;">
-    <div style="font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">
-      ${isEstimate ? '⚠️ AI ESTIMATE' : '✅ LIVE UAE MARKET VALUE'}
-    </div>
-    <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-bottom:10px;">${source}${cacheInfo}</div>
-    <div style="font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:2px;">STICKER / LISTING PRICE</div>
-    <div id="priceMain" style="font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:900;color:#D4AF37;line-height:1;">AED ${sticker.toLocaleString()}</div>
-    ${minP&&maxP ? `<div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:4px;">Market range: AED ${minP.toLocaleString()} – AED ${maxP.toLocaleString()}</div>` : ''}
-    ${listingsCount>0 ? `<div style="margin-top:8px;"><span style="font-size:0.55rem;background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:99px;color:rgba(255,255,255,0.7);">📊 ${listingsCount} live listings analysed</span></div>` : ''}
-  </div>
-
-  <!-- ② NEGOTIATION PRICES -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-    <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:12px;padding:12px;text-align:center;">
-      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#166534;margin-bottom:4px;">🤝 HANDSHAKE PRICE</div>
-      <div style="font-size:1.1rem;font-weight:800;color:#15803D;">AED ${handshake.toLocaleString()}</div>
-      <div style="font-size:0.55rem;color:#4ADE80;margin-top:2px;">Realistic closing price</div>
-    </div>
-    <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:12px;padding:12px;text-align:center;">
-      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:#1E40AF;margin-bottom:4px;">💬 OPEN WITH</div>
-      <div style="font-size:1.1rem;font-weight:800;color:#1D4ED8;">AED ${negotiation.toLocaleString()}</div>
-      <div style="font-size:0.55rem;color:#60A5FA;margin-top:2px;">Your opening offer</div>
-    </div>
-  </div>
-
-  <!-- ③ ASKING PRICE VERDICT -->
-  ${cmp ? `<div style="${verdictStyle}border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:center;">
-    <div style="font-size:0.85rem;font-weight:800;">${cmp.verdict}</div>
-    <div style="font-size:0.68rem;margin-top:3px;">
-      ${cmp.verdict==='Good Deal' ? `AED ${Math.abs(cmp.difference).toLocaleString()} below market average` :
-        cmp.verdict==='Overpriced' ? `AED ${cmp.difference.toLocaleString()} above market average` : 'Right at market average'}
-    </div>
-  </div>` : ''}
-
-  <!-- ④ CONFIDENCE + DEMAND BARS -->
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div>
-        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Data Confidence</div>
-        ${bar(confidence,'#3B82F6')}
-        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${Math.min(85,Math.max(60,confidence))}%</div>
-      </div>
-      <div>
-        <div style="font-size:0.6rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Market Demand</div>
-        ${bar(demand,'#F59E0B')}
-        <div style="font-size:0.58rem;color:#94A3B8;margin-top:2px;">${demand}%</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑤ RTA FEES + TOTAL COST -->
-  <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">🏛️ UAE First-Year Fees (2026)</div>
-    <table style="width:100%;border-collapse:collapse;font-size:0.64rem;color:#1A2B4C;">
-      <tr><td style="padding:2px 0;">RTA Inspection</td><td style="text-align:right;">AED ${(rta.inspection||170).toLocaleString()}</td></tr>
-      <tr><td style="padding:2px 0;">Vehicle Registration</td><td style="text-align:right;">AED ${(rta.registration||420).toLocaleString()}</td></tr>
-      <tr><td style="padding:2px 0;">Ownership Transfer</td><td style="text-align:right;">AED ${(rta.transfer||350).toLocaleString()}</td></tr>
-      <tr><td style="padding:2px 0;">${yr >= 2024 ? 'Insurance (2.5% comprehensive)' : 'Insurance (3rd party, pre-2024)'}</td><td style="text-align:right;">AED ${(rta.insurance||1200).toLocaleString()}</td></tr>
-      <tr style="border-top:1px solid #FDE68A;font-weight:800;">
-        <td style="padding-top:4px;">Total First-Year Fees</td>
-        <td style="text-align:right;color:#D97706;">AED ${(rta.total||940).toLocaleString()}</td>
-      </tr>
-    </table>
-    <p style="font-size:0.55rem;color:#92400E;margin-top:5px;">Fees only — car purchase price not included. Verify insurance with your broker.</p>
-  </div>
-
-  <!-- ⑥ 3-YEAR DEPRECIATION -->
-  ${depr.length>=3 ? `
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">📉 3-Year Resale Forecast</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;">
-      ${[yr+1,yr+2,yr+3].map((y,i)=>`
-      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:8px;">
-        <div style="font-size:0.55rem;color:#94A3B8;">${y}</div>
-        <div style="font-size:0.8rem;font-weight:800;color:#1A2B4C;">AED ${(depr[i]||0).toLocaleString()}</div>
-        <div style="font-size:0.52rem;color:#EF4444;">−AED ${(handshake-(depr[i]||0)>0?(handshake-(depr[i]||0)).toLocaleString():'0')}</div>
-        <div style="font-size:0.48rem;color:#94A3B8;">from handshake</div>
-      </div>`).join('')}
-    </div>
-    <p style="font-size:0.55rem;color:#64748B;margin-top:6px;">Cumulative loss from handshake price (AED ${handshake.toLocaleString()}). Luxury + high-mileage vehicles depreciate faster.</p>
-  </div>` : ''}
-
-  <!-- ⑦ AVR: ADVANTAGE / VALUE / REVIEW -->
-  ${(avr.advantage||avr.value||avr.review) ? (() => {
-    // Consistency guard: if overpriced, override any "fair value" language in review
-    const isOverpriced = cmp && (cmp.verdict === 'Overpriced' || cmp.verdict === 'Significantly Overpriced');
-    const reviewText = isOverpriced && avr.review && /fair.value|good.value|fairly.priced|market.rate/i.test(avr.review)
-      ? avr.review.replace(/fair.value|good.value|fairly.priced|market.rate/gi, 'priced above market') + ' Note: asking price exceeds market average.'
-      : avr.review;
-    const bgColour = isOverpriced ? '#FFF7ED' : '#F0FDF4';
-    const borderColour = isOverpriced ? '#FED7AA' : '#BBF7D0';
-    const titleColour = isOverpriced ? '#9A3412' : '#166534';
-    return `<div style="background:${bgColour};border:1px solid ${borderColour};border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:${titleColour};margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">${isOverpriced ? '⚠️ Expert Analysis' : '🎯 Expert Analysis'}</div>
-    ${avr.advantage ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>🚀 Advantage:</strong> ${avr.advantage}</div>` : ''}
-    ${avr.value     ? `<div style="font-size:0.65rem;color:#1A2B4C;margin-bottom:5px;"><strong>💰 Value:</strong> ${avr.value}</div>` : ''}
-    ${reviewText    ? `<div style="font-size:0.65rem;color:#1A2B4C;"><strong>⭐ Review:</strong> ${reviewText}</div>` : ''}
-  </div>`;
-  })() : ''}
-
-  <!-- ⑧ HAGGLING SCRIPT -->
-  ${script ? `
-  <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1E40AF;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🗣️ Say This to the Seller</div>
-    <div style="font-size:0.72rem;color:#1D4ED8;font-style:italic;line-height:1.5;">${script}</div>
-  </div>` : ''}
-
-  <!-- ⑨ RED FLAGS -->
-  ${redFlags.length ? `
-  <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#991B1B;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">⚠️ Red Flags</div>
-    ${redFlags.map(f=>`<div style="font-size:0.65rem;color:#7F1D1D;margin-bottom:3px;">• ${f}</div>`).join('')}
-  </div>` : ''}
-
-  <!-- ⑩ LIVE SOURCE LINKS -->
-  ${sourceLinks.length ? `
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">🔗 Live Sources Used</div>
-    ${sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener"
-      style="display:block;font-size:0.63rem;color:#008577;margin-bottom:3px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-      ↗ ${l.title||l.url}</a>`).join('')}
-  </div>` : ''}
-
-  <!-- ⑪ HOW CALCULATED -->
-  <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;border-left:3px solid #D4AF37;">
-    <div style="font-size:0.65rem;font-weight:800;color:#1A2B4C;margin-bottom:5px;">📌 How This Was Calculated</div>
-    <div style="font-size:0.63rem;color:#475569;line-height:1.6;">
-      ${isEstimate
-        ? '🤖 No live listings found today. Claude estimated from UAE market knowledge, depreciation rates, and spec premiums.'
-        : `🔍 Live UAE listings were found and analysed. Claude filtered outliers and adjusted for mileage, condition, and spec.`}
-      ${notes ? `<div style="margin-top:6px;font-style:italic;color:#334155;">"${notes}"</div>` : ''}
-    </div>
-  </div>
-
-  <!-- ⑫ ACTION BUTTONS -->
-  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-    <button onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')"
-      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🔍 Dubizzle</button>
-    <button onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')"
-      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">🚗 YallaMotor</button>
-    <button onclick="resetForm()"
-      style="padding:9px 16px;background:#fff;border:1.5px solid #D0D5E0;border-radius:30px;cursor:pointer;font-size:0.65rem;font-family:'Exo 2',sans-serif;">↺ New Search</button>
-  </div>
-</div>`;
+  // ── Render the full Price Intelligence Report ─────────────
+  resultContainer.innerHTML = buildResult(r, brand, model, year, mileage, asking);
 
   showState('content');
 
-  // Animate price count-up on sticker price
+  // Animate the dominant Handshake price (id="priceMain" set inside buildResult)
   const priceEl = g('priceMain');
-  if(priceEl && sticker){ animateCountUp(priceEl, sticker); }
+  if(priceEl){
+    const target = r.handshakePrice || r.averagePrice || 0;
+    if(target) animateCountUp(priceEl, target);
+  }
 
-  // Scroll result into view
+  // Animate the confidence bar that buildResult sets at width:0% initially
+  setTimeout(()=>{
+    const cbarFill = document.getElementById('cbarFill');
+    const conf = Math.round((r.confidence||0)*100);
+    if(cbarFill && conf) cbarFill.style.width = conf+'%';
+  }, 80);
+
+  // Scroll result panel into view
   setTimeout(()=>{
     const panel = g('resultPanel') || resultContainer.closest('.result-panel');
     if(panel){
-      const panelTop=panel.getBoundingClientRect().top+window.scrollY;
-      window.scrollTo({top:panelTop-60,behavior:'smooth'});
+      const panelTop = panel.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({top: panelTop - 60, behavior:'smooth'});
     }
-  },120);
+  }, 120);
 
   saveLastValuation();
 }
