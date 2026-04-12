@@ -7672,279 +7672,266 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   </div><!-- /pir-ps-wrap -->
 
-  <!-- ⑤⑥ ROW 1: MARKET POSITION | MARKET SIGNALS -->
-  <div class="pir-row-grid">
-
-    <!-- LEFT: Market Position -->
-    <div class="pir-row-cell pir-mp-cell">
-      <div class="pir-sec-hdr">
-        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-teal">📊</div>
-        Market Position
-        <div class="pir-sec-hdr-line"></div>
-        <span style="font-size:.55rem;font-weight:600;color:#8A9AB8;letter-spacing:.04em;white-space:nowrap;">${r.isEstimate?'AI Est.':'Live'} · ${comp>0?comp+'L':'est.'}</span>
-      </div>
-
-      <div style="position:relative;margin:34px 0 14px;">
-        <div class="pir-mp2-pin-v28 pin-nego" style="left:${negoPct}%;bottom:16px;">
-          <div class="pir-mp2-pin-price-v28">AED ${negoEntry.toLocaleString()}</div>
-          <div class="pir-mp2-pin-name-v28">Open</div>
-          <div class="pir-mp2-stem-v28"></div>
-        </div>
-        <div class="pir-mp2-pin-v28 pin-hand" style="left:${handshakePct}%;bottom:16px;">
-          <div class="pir-mp2-pin-price-v28">AED ${handshake.toLocaleString()}</div>
-          <div class="pir-mp2-pin-name-v28">Handshake</div>
-          <div class="pir-mp2-stem-v28"></div>
-        </div>
-        ${stickerPct!==null?`<div class="pir-mp2-pin-v28 pin-stick" style="left:${stickerPct}%;bottom:16px;">
-          <div class="pir-mp2-pin-price-v28">AED ${stickerPrice.toLocaleString()}</div>
-          <div class="pir-mp2-pin-name-v28">Sticker</div>
-          <div class="pir-mp2-stem-v28"></div>
-        </div>`:``}
-
-        <div class="pir-mp2-bar-wrap-v28">
-          <div class="pir-mp2-dot-v28" style="left:${negoPct}%;background:#D97706;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>
-          <div class="pir-mp2-car-v28" style="left:${handshakePct}%;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:4;">
-            <svg viewBox="0 0 36 18" fill="none"><rect x="0" y="0" width="36" height="18" rx="4" fill="#0F1E38"/><path d="M3 12 L5.5 7 Q6.5 5.5 8.5 5.5 L12 5 Q14 4.8 15 5.8 L22 6 Q24 6 25.5 7.5 L32 10.5 Q33 11 33 12 L33 13 Q33 13.5 32 13.5 L29 13.5 Q28.6 15.5 27 15.5 Q25.4 15.5 25 13.5 L11 13.5 Q10.6 15.5 9 15.5 Q7.4 15.5 7 13.5 L4 13.5 Q3 13.5 3 13 Z" fill="white" opacity="0.92"/><circle cx="9" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/><circle cx="27" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/></svg>
-          </div>
-          ${stickerPct!==null?`<div class="pir-mp2-dot-v28" style="left:${stickerPct}%;background:#3D5280;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>`:``}
-        </div>
-      </div>
-
-      <div class="pir-mp2-ends-v28">
-        <span style="color:#22C55E;font-weight:700;">AED ${rangeMin.toLocaleString()}</span>
-        <span style="font-size:.55rem;color:#A8B8CC;">${comp>0?comp+' listings':''}</span>
-        <span style="color:#EF4444;font-weight:700;">AED ${rangeMax.toLocaleString()}</span>
-      </div>
-      <div class="pir-mp2-legend-v28">
-        <div class="pir-mp2-leg-v28">
-          <div class="pir-mp2-leg-car-v28"><svg viewBox="0 0 28 14" fill="none"><path d="M2 9 L4 5 Q5 4 7 4 L10 3.5 Q12 3.3 13 4.3 L18 4.5 Q20 4.5 21 6 L26 8.5 Q27 9 27 9.5 L27 10 Q27 10.5 26 10.5 L23 10.5 Q22.6 12 21 12 Q19.4 12 19 10.5 L9 10.5 Q8.6 12 7 12 Q5.4 12 5 10.5 L3 10.5 Q2 10.5 2 10 Z" fill="white" opacity="0.9"/></svg></div>
-          <span>Handshake</span>
-        </div>
-        <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#D97706"></div><span>Open Offer</span></div>
-        ${stickerPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#3D5280"></div><span>Sticker</span></div>`:``}
-      </div>
+  <!-- ⑤⑥ MARKET POSITION + MARKET SIGNALS — unified single box -->
+  <div style="border-bottom:1px solid #E8EBF3;background:linear-gradient(160deg,#F8F9FC 0%,#fff 100%);padding:18px 22px 20px;">
+    <div class="pir-sec-hdr">
+      <div class="pir-sec-hdr-icon pir-sec-hdr-icon-teal">📊</div>
+      Market Position &amp; Signals
+      <div class="pir-sec-hdr-line"></div>
+      <span style="font-size:.65rem;font-weight:600;color:#8A9AB8;letter-spacing:.04em;white-space:nowrap;">${r.isEstimate?'AI Est.':'Live'} · ${comp>0?comp+' listings':'est.'}</span>
     </div>
 
-    <!-- RIGHT: Market Signals -->
-    <div class="pir-row-cell pir-signals-cell">
-      <div class="pir-sec-hdr">
-        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-blue">📡</div>
-        Market Signals
-        <div class="pir-sec-hdr-line"></div>
+    <!-- Price bar -->
+    <div style="position:relative;margin:36px 0 14px;">
+      <div class="pir-mp2-pin-v28 pin-nego" style="left:${negoPct}%;bottom:16px;">
+        <div class="pir-mp2-pin-price-v28">AED ${negoEntry.toLocaleString()}</div>
+        <div class="pir-mp2-pin-name-v28">Open Offer</div>
+        <div class="pir-mp2-stem-v28"></div>
       </div>
+      <div class="pir-mp2-pin-v28 pin-hand" style="left:${handshakePct}%;bottom:16px;">
+        <div class="pir-mp2-pin-price-v28">AED ${handshake.toLocaleString()}</div>
+        <div class="pir-mp2-pin-name-v28">Handshake</div>
+        <div class="pir-mp2-stem-v28"></div>
+      </div>
+      ${stickerPct!==null?`<div class="pir-mp2-pin-v28 pin-stick" style="left:${stickerPct}%;bottom:16px;">
+        <div class="pir-mp2-pin-price-v28">AED ${stickerPrice.toLocaleString()}</div>
+        <div class="pir-mp2-pin-name-v28">Sticker</div>
+        <div class="pir-mp2-stem-v28"></div>
+      </div>`:``}
+      <div class="pir-mp2-bar-wrap-v28">
+        <div class="pir-mp2-dot-v28" style="left:${negoPct}%;background:#D97706;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>
+        <div class="pir-mp2-dot-v28" style="left:${handshakePct}%;background:#008577;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:4;width:18px;height:18px;border:3px solid #fff;"></div>
+        ${stickerPct!==null?`<div class="pir-mp2-dot-v28" style="left:${stickerPct}%;background:#3D5280;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>`:``}
+      </div>
+    </div>
+    <div class="pir-mp2-ends-v28">
+      <span style="color:#22C55E;font-weight:700;">AED ${rangeMin.toLocaleString()}</span>
+      <span></span>
+      <span style="color:#EF4444;font-weight:700;">AED ${rangeMax.toLocaleString()}</span>
+    </div>
+    <div class="pir-mp2-legend-v28" style="margin-bottom:18px;">
+      <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#008577;width:12px;height:12px;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,133,119,0.4);"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Handshake</span></div>
+      <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#D97706"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Open Offer</span></div>
+      ${stickerPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#3D5280"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Sticker</span></div>`:``}
+    </div>
 
-      <div class="pir-signal-row-v28">
+    <!-- Signals inline below bar — 3 signals in a clean grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 20px;padding-top:14px;border-top:1px solid #E8EBF3;">
+
+      <div class="pir-signal-row-v28" style="margin-bottom:0;">
         <div class="pir-signal-top-v28">
-          <span class="pir-signal-name-v28">Data Confidence</span>
+          <span class="pir-signal-name-v28" style="font-size:.78rem;">Data Confidence</span>
           <span class="pir-signal-badge-v28 ${conf>=75?'sig-high':conf>=50?'sig-mid':'sig-low'}">${conf>=75?'High':conf>=50?'Moderate':'Low'}</span>
         </div>
         <div class="pir-signal-track-v28">
           <div class="pir-signal-fill-v28" data-target="${conf}" style="width:0%"></div>
           <div class="pir-signal-thumb-v28" data-target="${conf}" style="left:0%"></div>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:.54rem;color:#A8B8CC;margin-top:3px;">
-          <span>Low</span><span id="sigConfPct">${conf}%</span><span>High</span>
-        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.65rem;color:#A8B8CC;margin-top:3px;"><span>Low</span><span>${conf}%</span><span>High</span></div>
       </div>
 
-      <div class="pir-signal-row-v28">
+      <div class="pir-signal-row-v28" style="margin-bottom:0;">
         <div class="pir-signal-top-v28">
-          <span class="pir-signal-name-v28">Market Demand</span>
+          <span class="pir-signal-name-v28" style="font-size:.78rem;">Market Demand</span>
           <span class="pir-signal-badge-v28 ${(r.demandScore||55)>=70?'sig-high':(r.demandScore||55)>=45?'sig-mid':'sig-low'}">${(r.demandScore||55)>=70?'High':(r.demandScore||55)>=45?'Moderate':'Low'}</span>
         </div>
         <div class="pir-signal-track-v28">
           <div class="pir-signal-fill-v28" data-target="${r.demandScore||55}" style="width:0%"></div>
           <div class="pir-signal-thumb-v28" data-target="${r.demandScore||55}" style="left:0%"></div>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:.54rem;color:#A8B8CC;margin-top:3px;">
-          <span>Low</span><span id="sigDemPct">${r.demandScore||55}%</span><span>High</span>
-        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.65rem;color:#A8B8CC;margin-top:3px;"><span>Low</span><span>${r.demandScore||55}%</span><span>High</span></div>
       </div>
 
       ${(() => {
         const tsColor = _tsScore>=7.5?'#15803D':_tsScore>=5.5?'#92400E':'#991B1B';
         const tsDots = Array.from({length:10},(_x,i)=>`<div class="pir-ts-dot-v28${i<Math.round(_tsScore)?' on':''}\" style="${i<Math.round(_tsScore)?'background:'+tsColor+';':''}"></div>`).join('');
-        return `<div class="pir-ts-row-v28">
-          <div>
-            <div class="pir-ts-label-v28">Transparency Score</div>
-            <div class="pir-ts-dots-v28" style="margin-top:4px;">${tsDots}</div>
-            <div style="font-size:.6rem;color:#8A9AB8;margin-top:3px;">${_tsLabel}</div>
+        return `<div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:.78rem;font-weight:700;color:#2D3F5C;">Transparency Score</span>
+            <span style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:800;color:${tsColor};">${_tsScore}<span style="font-size:.6rem;font-weight:600;color:#8A9AB8;">/10</span></span>
           </div>
-          <div class="pir-ts-score-v28" style="color:${tsColor};font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:800;">${_tsScore}<span style="font-size:.55rem;font-weight:600;color:#8A9AB8;">/10</span></div>
+          <div class="pir-ts-dots-v28">${tsDots}</div>
+          <div style="font-size:.65rem;color:#8A9AB8;">${_tsLabel}</div>
         </div>`;
       })()}
+
     </div>
-  </div><!-- /row 1 -->
+  </div><!-- /market position + signals -->
 
-  <!-- ROW 2: VALUE ADJUSTMENTS | EXPERT VERDICT -->
+  <!-- ROW 2: VALUE ADJUSTMENTS | EXPERT VERDICT + ATTENTION POINTS — unified -->
+  ${(()=>{
+    // ── Shared nego computation used by BOTH tabs ──────────────────
+    const _openOffer   = negoEntry;
+    const _closeTarget = Math.min(nego?.close || handshake, handshake);
+    const _walkAway    = stickerPrice
+      ? Math.round(Math.min(stickerPrice * 0.97, handshake * 1.04) / 500) * 500
+      : Math.round(handshake * 1.04 / 500) * 500;
+    const _safeOpen  = Math.round(Math.min(_openOffer, _closeTarget - 500) / 500) * 500;
+    const _safeClose = Math.round(Math.min(_closeTarget, _walkAway - 500) / 500) * 500;
+    const _safeWalk  = Math.round(Math.max(_walkAway, _safeClose + 500) / 500) * 500;
+
+    const _levers = [];
+    if(qs.fsh===false)         _levers.push('no service history');
+    if(qs.warranty===false)    _levers.push('no active warranty');
+    if(qs.accident===true)     _levers.push('accident on record');
+    if(qs.singleOwner===false) _levers.push('multiple previous owners');
+    const _leverStr = _levers.length ? ` — noting ${_levers.slice(0,2).join(' and ')}` : '';
+    const _rangeCredible = rangeMin > 0 && rangeMax > 0 && _safeOpen <= rangeMax * 1.08;
+    const _carLabel = `${year} ${brand}${model ? ' ' + model : ''}`;
+    const _scriptText = nego?.script || (_rangeCredible
+      ? `"I've reviewed current UAE listings — comparable ${_carLabel} units are selling AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()}. Based on the mileage and condition of this vehicle${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}."`
+      : `"Based on my research of the current UAE market for the ${_carLabel}${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}. This reflects comparable listings and the specifics of this vehicle."`);
+
+    // ── Shared Expert Verdict text ─────────────────────────────────
+    const _isGCC  = specVal==='GCC'||specVal==='GCC Spec';
+    const _fshOk  = qs.fsh===true;
+    const _age    = Math.max(1,new Date().getFullYear()-carYear);
+    const _expKm  = _age*18000;
+    const _highMil = km > _expKm*1.25;
+    const _hasAcc  = accVal==='minor'||accVal==='major';
+    const _advText = ai?.key_factors?.[0]||(_isGCC
+      ? `GCC specification — the most demanded UAE variant. Supports strong resale liquidity and full local parts availability.`
+      : `${brand} ${model||''} — verify parts availability and UAE service coverage before proceeding.`);
+    const _valText = stickerPrice
+      ? (stickerPrice > handshake*1.05
+          ? `Asking price is ${Math.round((stickerPrice-handshake)/handshake*100)}% above fair market — negotiate firmly and reference comparable listings.`
+          : `Asking price is near market value. Counter-offer AED ${handshake.toLocaleString()} — take it or leave it.`)
+      : `Target AED ${handshake.toLocaleString()} as your closing price — take it or leave it at that number.`;
+    const _revText = _hasAcc
+      ? `${accVal==='major'?'Major':'Minor'} accident on record — get an independent inspection. Use this as a strong negotiation lever.`
+      : _highMil
+        ? `Mileage of ${km.toLocaleString()} km is above average for a ${_age}-year-old vehicle — budget for upcoming maintenance and use this in your offer.`
+        : !_fshOk
+          ? `No full service history — request receipts or agency records, and include a pre-purchase inspection in your offer terms.`
+          : qs.singleOwner===false
+            ? `Multiple previous owners — ask why each sold and check for recurring fault patterns in the maintenance records.`
+            : `Standard review: verify RTA clearance, chassis number, and confirm no outstanding loans before transfer.`;
+
+    // ── Shared nego block HTML builder (tab-specific id) ──────────
+    function _negoBlock(tabId){
+      return `<div class="pir-nego-timeline">
+        <div class="pir-nt-hdr">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="rgba(232,208,96,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Negotiation Script
+        </div>
+        <div class="pir-nt-track-wrap">
+          <div class="pir-nt-pins" style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <div class="pir-nt-pin pir-nt-pin-open" style="align-items:flex-start;">
+              <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:#4ADE80;white-space:nowrap;">AED ${_safeOpen.toLocaleString()}</div>
+              <div class="pir-nt-pin-label" style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(74,222,128,0.7);">Open</div>
+              <div style="width:11px;height:11px;border-radius:50%;background:#22C55E;margin-top:5px;"></div>
+            </div>
+            <div class="pir-nt-pin pir-nt-pin-target" style="align-items:center;">
+              <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:#E8D060;white-space:nowrap;">AED ${_safeClose.toLocaleString()}</div>
+              <div class="pir-nt-pin-label" style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(232,208,96,0.7);">Settle Here</div>
+              <div style="width:11px;height:11px;border-radius:50%;background:#E8D060;margin-top:5px;"></div>
+            </div>
+            <div class="pir-nt-pin pir-nt-pin-walk" style="align-items:flex-end;">
+              <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:#FCA5A5;white-space:nowrap;">AED ${_safeWalk.toLocaleString()}</div>
+              <div class="pir-nt-pin-label" style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(252,165,165,0.7);">Walk Away</div>
+              <div style="width:11px;height:11px;border-radius:50%;background:#EF4444;margin-top:5px;"></div>
+            </div>
+          </div>
+          <div class="pir-nt-track"><div class="pir-nt-track-fill"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,0.3);margin-top:5px;">
+            <span>Opening offer</span><span>Take it or leave it</span><span>Walk away</span>
+          </div>
+        </div>
+        <div class="pir-nt-script" id="haggleScript${tabId}">${_scriptText}</div>
+        <button class="pir-nt-copy-btn" onclick="(function(btn){const el=document.getElementById('haggleScript${tabId}');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Copy Script';btn.classList.remove('copied');},2200);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy Script';},2200);});})(this)">
+          📋 Copy Script
+        </button>
+      </div>`;
+    }
+
+    // ── Value Adjustments HTML builder (shared) ────────────────────
+    function _vabBlock(){
+      const baseVal=avg||handshake;
+      const isGCC_=specVal==='GCC'||specVal==='GCC Spec';
+      const fshOk_=qs.fsh===true;
+      const age_=Math.max(1,new Date().getFullYear()-carYear);
+      const expKm_=age_*18000;
+      const mDiff_=km-expKm_;
+      const rows_=[];
+      if(isGCC_) rows_.push({l:'GCC Specification',a:Math.round(baseVal*.04/500)*500,p:true});
+      if(condVal==='Excellent') rows_.push({l:'Excellent Condition',a:Math.round(baseVal*.04/500)*500,p:true});
+      else if(condVal==='Very Good') rows_.push({l:'Very Good Condition',a:Math.round(baseVal*.02/500)*500,p:true});
+      if(fshOk_) rows_.push({l:'Full Service History',a:Math.round(baseVal*.03/500)*500,p:true});
+      if(qs.singleOwner===true||ownVal==='1') rows_.push({l:'Single Owner',a:Math.round(baseVal*.02/500)*500,p:true});
+      if(qs.warranty===true||warVal==='active') rows_.push({l:'Active Warranty',a:Math.round(baseVal*.025/500)*500,p:true});
+      if(!isGCC_&&specVal) rows_.push({l:'Non-GCC Spec',a:Math.round(baseVal*.06/500)*500,p:false});
+      if(condVal==='Fair') rows_.push({l:'Fair Condition',a:Math.round(baseVal*.04/500)*500,p:false});
+      else if(condVal==='Poor') rows_.push({l:'Poor Condition',a:Math.round(baseVal*.09/500)*500,p:false});
+      if(mDiff_>20000) rows_.push({l:'High Mileage',a:Math.round(Math.min(baseVal*.12,(mDiff_/10000)*600)/500)*500,p:false});
+      else if(mDiff_<-15000) rows_.push({l:'Low Mileage ✓',a:Math.round(baseVal*.03/500)*500,p:true});
+      if(!fshOk_&&(qs.fsh===false)) rows_.push({l:'No Service History',a:Math.round(baseVal*.02/500)*500,p:false});
+      if(accVal==='major') rows_.push({l:'Major Accident',a:Math.round(baseVal*.10/500)*500,p:false});
+      else if(accVal==='minor') rows_.push({l:'Minor Accident',a:Math.round(baseVal*.05/500)*500,p:false});
+      if(qs.singleOwner===false&&!rows_.find(r=>r.l==='Non-GCC Spec')) rows_.push({l:'Multiple Owners',a:Math.round(baseVal*.025/500)*500,p:false});
+      const maxA_=rows_.length?Math.max(...rows_.map(r=>r.a)):1;
+      const posTotal_=rows_.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
+      const negTotal_=rows_.filter(r=>!r.p).reduce((s,r)=>s+r.a,0);
+      const netVal_=Math.round((baseVal+posTotal_-negTotal_)/500)*500;
+      const rowsHtml_=rows_.slice(0,6).map(r=>{
+        const w=Math.max(10,Math.round((r.a/maxA_)*80));
+        return `<div class="pir-vadj-row-v28">
+          <span class="pir-vadj-label-v28">${r.l}</span>
+          <div class="pir-vadj-bar-v28 ${r.p?'pir-vadj-bar-pos':'pir-vadj-bar-neg'}" style="width:${w}px;display:inline-block;vertical-align:middle;height:6px;border-radius:3px;"></div>
+          <span class="pir-vadj-amt-v28 ${r.p?'pir-vadj-amt-pos':'pir-vadj-amt-neg'}">${r.p?'+':'-'}${r.a.toLocaleString()}</span>
+        </div>`;
+      }).join('');
+      return `<div class="pir-vadj-base-row"><span>Base Market</span><span>AED ${baseVal.toLocaleString()}</span></div>
+      ${rowsHtml_}
+      <div class="pir-vadj-net-row"><span>Net Adjusted</span><span style="color:${posTotal_>=negTotal_?'#15803D':'#991B1B'}">AED ${netVal_.toLocaleString()}</span></div>`;
+    }
+
+    // ── Expert Verdict + Attention Points block HTML builder ───────
+    function _evBlock(){
+      const attHtml = rF.length
+        ? `<div style="margin-top:14px;padding-top:12px;border-top:1px solid #E8EBF3;">
+            <div style="font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#D97706;margin-bottom:8px;">🔶 Attention Points <span style="background:rgba(217,119,6,0.12);color:#92400E;border:1px solid rgba(217,119,6,0.2);border-radius:99px;font-size:.65rem;padding:1px 8px;font-weight:700;">${rF.length}</span></div>
+            ${rF.map(f=>`<div style="font-size:.78rem;color:#4A5E7A;line-height:1.5;padding:3px 0 3px 4px;border-left:2px solid #F59E0B;margin-bottom:5px;padding-left:10px;">${f}</div>`).join('')}
+          </div>`
+        : '';
+      return `<div style="font-size:.78rem;color:#2D3F5C;line-height:1.55;">
+        <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;">
+          <span style="font-size:1rem;flex-shrink:0;line-height:1.4;">🚀</span>
+          <div><strong style="display:block;font-size:.78rem;color:#15803D;margin-bottom:2px;">Advantage</strong>${_advText}</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;">
+          <span style="font-size:1rem;flex-shrink:0;line-height:1.4;">💰</span>
+          <div><strong style="display:block;font-size:.78rem;color:#92400E;margin-bottom:2px;">Value</strong>${_valText}</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:9px;">
+          <span style="font-size:1rem;flex-shrink:0;line-height:1.4;">⚠️</span>
+          <div><strong style="display:block;font-size:.78rem;color:#991B1B;margin-bottom:2px;">Review</strong>${_revText}</div>
+        </div>
+        ${attHtml}
+      </div>`;
+    }
+
+    return `
   <div class="pir-row-grid">
-
-    <!-- LEFT: Value Adjustments compact chart -->
     <div class="pir-row-cell pir-vab-cell">
       <div class="pir-sec-hdr">
         <div class="pir-sec-hdr-icon pir-sec-hdr-icon-amber">⚖️</div>
         Value Adjustments
         <div class="pir-sec-hdr-line"></div>
       </div>
-      ${(()=>{
-        const baseVal=avg||handshake;
-        const isGCC=specVal==='GCC'||specVal==='GCC Spec';
-        const fshOk=qs.fsh===true;
-        const age=Math.max(1,new Date().getFullYear()-carYear);
-        const expKm=age*18000;
-        const mDiff=km-expKm;
-        const rows=[];
-        if(isGCC) rows.push({l:'GCC Specification',a:Math.round(baseVal*.04/500)*500,p:true});
-        if(condVal==='Excellent') rows.push({l:'Excellent Condition',a:Math.round(baseVal*.04/500)*500,p:true});
-        else if(condVal==='Very Good') rows.push({l:'Very Good Condition',a:Math.round(baseVal*.02/500)*500,p:true});
-        if(fshOk) rows.push({l:'Full Service History',a:Math.round(baseVal*.03/500)*500,p:true});
-        if(qs.singleOwner===true||ownVal==='1') rows.push({l:'Single Owner',a:Math.round(baseVal*.02/500)*500,p:true});
-        if(qs.warranty===true||warVal==='active') rows.push({l:'Active Warranty',a:Math.round(baseVal*.025/500)*500,p:true});
-        if(!isGCC&&specVal) rows.push({l:'Non-GCC Spec',a:Math.round(baseVal*.06/500)*500,p:false});
-        if(condVal==='Fair') rows.push({l:'Fair Condition',a:Math.round(baseVal*.04/500)*500,p:false});
-        else if(condVal==='Poor') rows.push({l:'Poor Condition',a:Math.round(baseVal*.09/500)*500,p:false});
-        if(mDiff>20000) rows.push({l:'High Mileage',a:Math.round(Math.min(baseVal*.12,(mDiff/10000)*600)/500)*500,p:false});
-        else if(mDiff<-15000) rows.push({l:'Low Mileage ✓',a:Math.round(baseVal*.03/500)*500,p:true});
-        if(!fshOk&&(qs.fsh===false)) rows.push({l:'No Service History',a:Math.round(baseVal*.02/500)*500,p:false});
-        if(accVal==='major') rows.push({l:'Major Accident',a:Math.round(baseVal*.10/500)*500,p:false});
-        else if(accVal==='minor') rows.push({l:'Minor Accident',a:Math.round(baseVal*.05/500)*500,p:false});
-        if(qs.singleOwner===false&&!rows.find(r=>r.l==='Non-GCC Spec')) rows.push({l:'Multiple Owners',a:Math.round(baseVal*.025/500)*500,p:false});
-        const maxA=rows.length?Math.max(...rows.map(r=>r.a)):1;
-        const posTotal=rows.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
-        const negTotal=rows.filter(r=>!r.p).reduce((s,r)=>s+r.a,0);
-        const netVal=Math.round((baseVal+posTotal-negTotal)/500)*500;
-        const rowsHtml=rows.slice(0,6).map(r=>{
-          const w=Math.max(10,Math.round((r.a/maxA)*80));
-          return `<div class="pir-vadj-row-v28">
-            <span class="pir-vadj-label-v28">${r.l}</span>
-            <div class="pir-vadj-bar-v28 ${r.p?'pir-vadj-bar-pos':'pir-vadj-bar-neg'}" style="width:${w}px;display:inline-block;vertical-align:middle;height:6px;border-radius:3px;"></div>
-            <span class="pir-vadj-amt-v28 ${r.p?'pir-vadj-amt-pos':'pir-vadj-amt-neg'}">${r.p?'+':'-'}${r.a.toLocaleString()}</span>
-          </div>`;
-        }).join('');
-        return `<div class="pir-vadj-base-row"><span>Base Market</span><span>AED ${baseVal.toLocaleString()}</span></div>
-        ${rowsHtml}
-        <div class="pir-vadj-net-row"><span>Net Adjusted</span><span style="color:${posTotal>=negTotal?'#15803D':'#991B1B'}">AED ${netVal.toLocaleString()}</span></div>`;
-      })()}
+      ${_vabBlock()}
     </div>
-
-    <!-- RIGHT: Expert Verdict -->
     <div class="pir-row-cell pir-ev-cell">
       <div class="pir-sec-hdr">
         <div class="pir-sec-hdr-icon pir-sec-hdr-icon-purple">🧠</div>
         Expert Verdict
         <div class="pir-sec-hdr-line"></div>
       </div>
-      ${(()=>{
-        const isGCC=specVal==='GCC'||specVal==='GCC Spec';
-        const fshOk=qs.fsh===true;
-        const age=Math.max(1,new Date().getFullYear()-carYear);
-        const expKm=age*18000;
-        const highMil=km>expKm*1.25;
-        const hasAcc=accVal==='minor'||accVal==='major';
-        const advText=ai?.key_factors?.[0]||(isGCC?`GCC specification — the most demanded UAE variant. Supports strong resale liquidity and full local parts availability.`:`${brand} ${model||''} — verify parts availability and UAE service coverage before proceeding.`);
-        const valText=stickerPrice?(stickerPrice>handshake*1.05?`Asking price is ${Math.round((stickerPrice-handshake)/handshake*100)}% above fair market — negotiate firmly and reference comparable listings.`:`Asking price is near market value. A small counter-offer to AED ${handshake.toLocaleString()} is reasonable.`):`Target AED ${handshake.toLocaleString()} as your closing price based on current UAE market data.`;
-        const revText=hasAcc?`${accVal==='major'?'Major':'Minor'} accident on record — get an independent inspection. Use this as a strong negotiation lever.`:highMil?`Mileage of ${km.toLocaleString()} km is above average for a ${age}-year-old vehicle — budget for upcoming maintenance and use this in your offer.`:!fshOk?`No full service history — request receipts or agency records, and include a pre-purchase inspection in your offer terms.`:qs.singleOwner===false?`Multiple previous owners — ask why each sold and check for recurring fault patterns in the maintenance records.`:`Standard review: verify RTA clearance, chassis number, and confirm no outstanding loans before transfer.`;
-        return `<div class="pir-ev-bullet pir-ev-bullet-adv">
-          <span class="pir-ev-icon">🚀</span>
-          <div class="pir-ev-body"><div class="pir-ev-title pir-ev-adv-title">Advantage</div><div>${advText}</div></div>
-        </div>
-        <div class="pir-ev-bullet pir-ev-bullet-val">
-          <span class="pir-ev-icon">💰</span>
-          <div class="pir-ev-body"><div class="pir-ev-title pir-ev-val-title">Value</div><div>${valText}</div></div>
-        </div>
-        <div class="pir-ev-bullet pir-ev-bullet-rev">
-          <span class="pir-ev-icon">⚠️</span>
-          <div class="pir-ev-body"><div class="pir-ev-title pir-ev-rev-title">Review</div><div>${revText}</div></div>
-        </div>`;
-      })()}
+      ${_evBlock()}
     </div>
   </div><!-- /row 2 -->
 
-  <!-- ROW 3: GREEN FLAGS | ATTENTION POINTS -->
-  <div class="pir-row-grid">
-    <div class="pir-row-cell pir-flags-cell-green">
-      <div class="pir-sec-hdr">
-        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-green">✅</div>
-        Green Flags
-        <span class="pir-flags-count-badge pir-flags-count-green">${gF.length}</span>
-        <div class="pir-sec-hdr-line"></div>
-      </div>
-      ${gF.length?gF.map(f=>`<div class="pir-flag-v28 pir-flag-v28-green"><span class="pir-flag-v28-icon">✅</span><span>${f}</span></div>`).join(''):`<div style="font-size:.78rem;color:#8A9AB8;font-style:italic;padding:4px 0;">No specific green flags identified.</div>`}
-    </div>
-    <div class="pir-row-cell pir-flags-cell-red">
-      <div class="pir-sec-hdr">
-        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-amber">🔶</div>
-        Attention Points
-        <span class="pir-flags-count-badge pir-flags-count-amber">${rF.length}</span>
-        <div class="pir-sec-hdr-line"></div>
-      </div>
-      ${rF.length?rF.map(f=>`<div class="pir-flag-v28 pir-flag-v28-amber"><span class="pir-flag-v28-icon">🔶</span><span>${f}</span></div>`).join(''):`<div style="font-size:.78rem;color:#8A9AB8;font-style:italic;padding:4px 0;">No major concerns identified.</div>`}
-    </div>
-  </div><!-- /row 3 -->
-
-  <!-- ROW 4: NEGOTIATION TIMELINE (full width dark) -->
-  ${(()=>{
-    const openOffer   = negoEntry;
-    const closeTarget = Math.min(nego?.close || handshake, handshake); // never above fair value
-    const walkAway    = stickerPrice
-      ? Math.round(Math.min(stickerPrice * 0.97, handshake * 1.04) / 500) * 500
-      : Math.round(handshake * 1.04 / 500) * 500;
-
-    // Safety: ensure openOffer < closeTarget ≤ walkAway
-    const _safeOpen  = Math.min(openOffer, closeTarget - 500);
-    const _safeClose = Math.min(closeTarget, walkAway - 500);
-    const _safeWalk  = Math.max(walkAway, _safeClose + 500);
-
-    // Build leverages list from checkbox signals
-    const _levers = [];
-    if(qs.fsh===false)      _levers.push('no service history');
-    if(qs.warranty===false) _levers.push('no active warranty');
-    if(qs.accident===true)  _levers.push('accident on record');
-    if(qs.singleOwner===false) _levers.push('multiple previous owners');
-    const _leverStr = _levers.length
-      ? ` — noting ${_levers.slice(0,2).join(' and ')}`
-      : '';
-
-    // Only cite rangeMin–rangeMax if openOffer is plausibly within that range
-    const _rangeCredible = rangeMin > 0 && rangeMax > 0 && _safeOpen <= rangeMax * 1.08;
-    const carLabel = `${year} ${brand}${model ? ' ' + model : ''}`;
-
-    const scriptText = nego?.script || (_rangeCredible
-      ? `"I've reviewed current UAE listings — comparable ${carLabel} units are selling AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()}. Based on the mileage and condition of this vehicle${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}."`
-      : `"Based on my research of the current UAE market for the ${carLabel}${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}. This reflects comparable listings and the specifics of this vehicle."`);    return `<div class="pir-nego-timeline">
-      <div class="pir-nt-hdr">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="rgba(232,208,96,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Negotiation Script
-      </div>
-      <div class="pir-nt-track-wrap">
-        <div class="pir-nt-pins" style="display:flex;justify-content:space-between;margin-bottom:8px;">
-          <div class="pir-nt-pin pir-nt-pin-open" style="align-items:flex-start;">
-            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#4ADE80;white-space:nowrap;">AED ${_safeOpen.toLocaleString()}</div>
-            <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(74,222,128,0.6);">Open</div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;margin-top:4px;"></div>
-          </div>
-          <div class="pir-nt-pin pir-nt-pin-target" style="align-items:center;">
-            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#E8D060;white-space:nowrap;">AED ${_safeClose.toLocaleString()}</div>
-            <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,208,96,0.6);">Target</div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#E8D060;margin-top:4px;"></div>
-          </div>
-          <div class="pir-nt-pin pir-nt-pin-walk" style="align-items:flex-end;">
-            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#FCA5A5;white-space:nowrap;">AED ${_safeWalk.toLocaleString()}</div>
-            <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(252,165,165,0.6);">Walk Away</div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;margin-top:4px;"></div>
-          </div>
-        </div>
-        <div class="pir-nt-track"><div class="pir-nt-track-fill"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:.5rem;color:rgba(255,255,255,0.25);margin-top:4px;">
-          <span>Opening offer</span><span>Settle here</span><span>Walk away</span>
-        </div>
-      </div>
-      <div class="pir-nt-script" id="haggleScriptTab1">${scriptText}</div>
-      <button class="pir-nt-copy-btn" onclick="(function(btn){const el=document.getElementById('haggleScriptTab1');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Copy Script';btn.classList.remove('copied');},2200);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy Script';},2200);});})(this)">
-        📋 Copy Script
-      </button>
-    </div>`;
-  })()}
+  <!-- NEGOTIATION SCRIPT — Verdict Tab -->
+  ${_negoBlock('Tab1')}
 
   <!-- TAB 1 FOOTER -->
   <div class="pir-tab-footer">
@@ -7964,188 +7951,126 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   </div><!-- /pir-tab-verdict -->
 
-  <!-- TAB 2: FULL ANALYSIS -->
+  <!-- ════════════════════════════════════════════════════════
+       TAB 2: FULL ANALYSIS
+       Verdict section identical to Tab 1, then extended below
+  ════════════════════════════════════════════════════════ -->
   <div class="pir-tab-panel" id="pirTabAnalysis" style="display:none">
 
-  <!-- ── VERDICT CLONE (injected by pirSwitchTab JS) ── -->
+  <!-- ── VERDICT CLONE (same sections as Tab 1, injected by JS) ── -->
   <div id="pirTab2VerdictClone"></div>
 
-  <!-- ── EXTENDED ANALYSIS DIVIDER ── -->
+  <!-- ── EXTENDED ANALYSIS SEPARATOR ── -->
   <div class="pir-t2-clone-sep">Extended Analysis</div>
 
   <!-- ── EXTENDED ANALYSIS BLOCK ── -->
   <div class="pir-ext-wrap">
 
-    <!-- Header strip -->
     <div class="pir-ext-header">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2.5" stroke="#008577" stroke-width="1.3"/><path d="M4 7h6M7 4v6" stroke="#008577" stroke-width="1.4" stroke-linecap="round"/></svg>
       Full Market Report
       <span class="pir-ext-ref">${ref.label}</span>
     </div>
 
-    <!-- A: RATINGS ROW (4 gauges) -->
+    <!-- A: RATINGS ROW -->
     ${(()=>{
-      // Deal score
       const _dealScore = stickerPrice
-        ? (stickerPrice < handshake*0.92 ? 10 : stickerPrice < handshake*0.96 ? 9 : stickerPrice < handshake*1.00 ? 7 : stickerPrice < handshake*1.05 ? 6 : stickerPrice < handshake*1.10 ? 4 : stickerPrice < handshake*1.20 ? 3 : 2)
-        : 5;
-      const _demScore = Math.round((r.demandScore||55)/10);
-      const _tsScoreInt = Math.round(_tsScore);
-      const _confScore  = Math.round(conf/12);
-
-      function _ratingDots(score, color){
-        return Array.from({length:10},(_,i)=>`<div class="pir-rdot${i<score?' on':''}" style="${i<score?'background:'+color+';':''}"></div>`).join('');
-      }
-      function _gauge(label, score, max, color, sub){
-        return `<div class="pir-rating-cell">
-          <div class="pir-rating-label">${label}</div>
-          <div class="pir-rating-score" style="color:${color};">${score}<span style="font-size:.45rem;font-weight:600;color:#8A9AB8;">/${max}</span></div>
-          <div class="pir-rating-dots" style="color:${color};">${_ratingDots(score,color)}</div>
-          <div class="pir-rating-sub">${sub}</div>
-        </div>`;
-      }
-      const _dc = _dealScore>=8?'#15803D':_dealScore>=5?'#92400E':'#991B1B';
-      const _dd = _demScore>=8?'#15803D':_demScore>=5?'#92400E':'#991B1B';
-      const _dt = _tsScoreInt>=8?'#15803D':_tsScoreInt>=6?'#92400E':'#991B1B';
-      const _df = _confScore>=7?'#008577':_confScore>=4?'#92400E':'#991B1B';
-      const _dealSub = stickerPrice ? (_dealScore>=8?'Strong Deal':_dealScore>=6?'Fair Price':_dealScore>=4?'Above Market':'Overpriced') : 'No sticker';
+        ? (stickerPrice<handshake*0.92?10:stickerPrice<handshake*0.96?9:stickerPrice<handshake*1.00?7:stickerPrice<handshake*1.05?6:stickerPrice<handshake*1.10?4:stickerPrice<handshake*1.20?3:2) : 5;
+      const _demScore  = Math.round((r.demandScore||55)/10);
+      const _tsInt     = Math.round(_tsScore);
+      const _confScore = Math.round(conf/12);
+      function _ratingDots(score,color){ return Array.from({length:10},(_,i)=>`<div class="pir-rdot${i<score?' on':''}" style="${i<score?'background:'+color+';':''}"></div>`).join(''); }
+      function _gauge(label,score,max,color,sub){ return `<div class="pir-rating-cell"><div class="pir-rating-label">${label}</div><div class="pir-rating-score" style="color:${color};">${score}<span style="font-size:.52rem;font-weight:600;color:#8A9AB8;">/${max}</span></div><div class="pir-rating-dots" style="color:${color};">${_ratingDots(score,color)}</div><div class="pir-rating-sub">${sub}</div></div>`; }
+      const _dc=_dealScore>=8?'#15803D':_dealScore>=5?'#92400E':'#991B1B';
+      const _dd=_demScore>=8?'#15803D':_demScore>=5?'#92400E':'#991B1B';
+      const _dt=_tsInt>=8?'#15803D':_tsInt>=6?'#92400E':'#991B1B';
+      const _df=_confScore>=7?'#008577':_confScore>=4?'#92400E':'#991B1B';
+      const _dealSub=stickerPrice?(_dealScore>=8?'Strong Deal':_dealScore>=6?'Fair Price':_dealScore>=4?'Above Market':'Overpriced'):'No sticker';
       return `<div class="pir-ratings-row">
-        ${_gauge('Deal Score', _dealScore, 10, _dc, _dealSub)}
-        ${_gauge('Market Demand', _demScore, 10, _dd, _demScore>=8?'High':_demScore>=5?'Moderate':'Low')}
-        ${_gauge('Transparency', _tsScoreInt, 10, _dt, _tsLabel.split(' — ')[0])}
-        ${_gauge('Data Confidence', _confScore, 10, _df, conf+'% '+(_confScore>=7?'High':_confScore>=4?'Moderate':'Low'))}
+        ${_gauge('Deal Score',_dealScore,10,_dc,_dealSub)}
+        ${_gauge('Market Demand',_demScore,10,_dd,_demScore>=8?'High':_demScore>=5?'Moderate':'Low')}
+        ${_gauge('Transparency',_tsInt,10,_dt,_tsLabel.split(' — ')[0])}
+        ${_gauge('Data Confidence',_confScore,10,_df,conf+'% '+(_confScore>=7?'High':_confScore>=4?'Moderate':'Low'))}
       </div>`;
     })()}
 
     <!-- B: MARKET INTELLIGENCE + VALUE ADJUSTMENTS -->
     <div class="pir-ext-2col">
-
-      <!-- Left: Market Intelligence table -->
       <div class="pir-ext-col">
         <div class="pir-ext-col-title">Market Intelligence</div>
         <table class="pir-kv-table">
           <tr><td>Handshake (FMV)</td><td class="pir-kv-accent">AED ${handshake.toLocaleString()}</td></tr>
-          ${stickerPrice ? `<tr><td>Seller Asking</td><td>AED ${stickerPrice.toLocaleString()}</td></tr>` : ''}
-          ${stickerPrice ? `<tr><td>Price vs Market</td><td class="${stickerPrice>handshake?'pir-kv-bad':'pir-kv-good'}">${stickerPrice>handshake?'+':''}${Math.round((stickerPrice-handshake)/handshake*100)}%</td></tr>` : ''}
+          ${stickerPrice?`<tr><td>Seller Asking</td><td>AED ${stickerPrice.toLocaleString()}</td></tr>`:''}
+          ${stickerPrice?`<tr><td>Price vs Market</td><td class="${stickerPrice>handshake?'pir-kv-bad':'pir-kv-good'}">${stickerPrice>handshake?'+':''}${Math.round((stickerPrice-handshake)/handshake*100)}%</td></tr>`:''}
           <tr><td>Market Low</td><td class="pir-kv-good">AED ${rangeMin.toLocaleString()}</td></tr>
           <tr><td>Market High</td><td class="pir-kv-bad">AED ${rangeMax.toLocaleString()}</td></tr>
           <tr><td>Market Spread</td><td>AED ${(rangeMax-rangeMin).toLocaleString()}</td></tr>
           <tr><td>Comparable Listings</td><td>${comp>0?comp+' found':'Estimated'}</td></tr>
           <tr><td>Data Confidence</td><td>${conf}% — ${conf>=75?'High':conf>=50?'Moderate':'Low'}</td></tr>
           <tr><td>Market Demand</td><td>${r.demandScore||55}% — ${(r.demandScore||55)>=70?'High':'Moderate'}</td></tr>
-          <tr><td>Transparency Score</td><td>${_tsScore}/10</td></tr>
-          ${(() => {
-            const daysAtHandshake = r.demandScore
-              ? Math.round(45 - (r.demandScore - 50) * 0.4)
-              : 35;
-            const daysAtSticker = stickerPrice && stickerPrice > handshake
-              ? Math.round(daysAtHandshake * (stickerPrice / handshake))
-              : daysAtHandshake;
-            return `<tr><td>Est. Days to Sell</td><td>~${Math.max(7,Math.min(90,daysAtHandshake))} days at FMV</td></tr>`;
-          })()}
+          <tr><td>Transparency Score</td><td>${_tsScore}/10 — ${_tsLabel}</td></tr>
+          <tr><td>Est. Days to Sell</td><td>~${Math.max(7,Math.min(90,Math.round(45-(r.demandScore||55-50)*0.4)))} days at FMV</td></tr>
         </table>
       </div>
-
-      <!-- Right: Value Adjustment Breakdown bars -->
       <div class="pir-ext-col">
         <div class="pir-ext-col-title">Value Adjustments</div>
         ${(()=>{
-          const baseVal = avg || handshake;
-          const isGCC = specVal==='GCC'||specVal==='GCC Spec';
-          const age = Math.max(1, new Date().getFullYear()-carYear);
-          const expKm = age*18000;
-          const mDiff = km - expKm;
-          const rows = [];
-          if(isGCC)               rows.push({l:'GCC Specification',  a:Math.round(baseVal*.04/500)*500, p:true});
-          else if(specVal)        rows.push({l:'Non-GCC Spec',        a:Math.round(baseVal*.06/500)*500, p:false});
-          if(condVal==='Excellent')   rows.push({l:'Excellent Condition', a:Math.round(baseVal*.04/500)*500, p:true});
-          else if(condVal==='Very Good') rows.push({l:'Very Good Condition',a:Math.round(baseVal*.02/500)*500, p:true});
-          else if(condVal==='Fair')   rows.push({l:'Fair Condition',     a:Math.round(baseVal*.04/500)*500, p:false});
-          else if(condVal==='Poor')   rows.push({l:'Poor Condition',     a:Math.round(baseVal*.09/500)*500, p:false});
-          if(mDiff>20000) rows.push({l:'High Mileage',         a:Math.round(Math.min(baseVal*.12,(mDiff/10000)*600)/500)*500, p:false});
-          else if(mDiff<-15000) rows.push({l:'Low Mileage ✓',   a:Math.round(baseVal*.03/500)*500, p:true});
-          if(qs.fsh===true)        rows.push({l:'Full Service Hist.', a:Math.round(baseVal*.03/500)*500, p:true});
-          else if(qs.fsh===false)  rows.push({l:'No Service Hist.',   a:Math.round(baseVal*.025/500)*500, p:false});
-          if(qs.warranty===true)   rows.push({l:'Active Warranty',    a:Math.round(baseVal*.02/500)*500, p:true});
-          if(qs.singleOwner===true) rows.push({l:'Single Owner',      a:Math.round(baseVal*.02/500)*500, p:true});
-          else if(qs.singleOwner===false) rows.push({l:'Multi Owner', a:Math.round(baseVal*.025/500)*500, p:false});
-          if(qs.accident===true)   rows.push({l:'Accident Declared',  a:Math.round(baseVal*.07/500)*500, p:false});
-          const maxA  = rows.length ? Math.max(...rows.map(r=>r.a)) : 1;
-          const posT  = rows.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
-          const negT  = rows.filter(r=>!r.p).reduce((s,r)=>s+r.a,0);
-          const netAdj = posT-negT;
-          const netVal = Math.round((baseVal+netAdj)/500)*500;
-          const rowsHtml = rows.map(r=>{
-            const w = Math.max(8, Math.round((r.a/maxA)*80));
-            return `<tr>
-              <td class="pir-adj-name-cell">${r.l}</td>
-              <td class="pir-adj-bar-cell">
-                <div class="pir-adj-bar-track">
-                  <div class="pir-adj-bar-fill ${r.p?'pir-adj-bar-pos':'pir-adj-bar-neg'}" style="width:${w}px;${r.p?'':'float:right'}"></div>
-                </div>
-              </td>
-              <td class="pir-adj-amt-cell ${r.p?'pir-adj-pos-amt':'pir-adj-neg-amt'}">${r.p?'+':'-'}AED ${r.a.toLocaleString()}</td>
-            </tr>`;
-          }).join('');
+          const bv=avg||handshake,isG=specVal==='GCC'||specVal==='GCC Spec',ag=Math.max(1,new Date().getFullYear()-carYear),ek=ag*18000,md=km-ek,rws=[];
+          if(isG) rws.push({l:'GCC Specification',a:Math.round(bv*.04/500)*500,p:true});
+          else if(specVal) rws.push({l:'Non-GCC Spec',a:Math.round(bv*.06/500)*500,p:false});
+          if(condVal==='Excellent') rws.push({l:'Excellent Condition',a:Math.round(bv*.04/500)*500,p:true});
+          else if(condVal==='Very Good') rws.push({l:'Very Good Condition',a:Math.round(bv*.02/500)*500,p:true});
+          else if(condVal==='Fair') rws.push({l:'Fair Condition',a:Math.round(bv*.04/500)*500,p:false});
+          else if(condVal==='Poor') rws.push({l:'Poor Condition',a:Math.round(bv*.09/500)*500,p:false});
+          if(md>20000) rws.push({l:'High Mileage',a:Math.round(Math.min(bv*.12,(md/10000)*600)/500)*500,p:false});
+          else if(md<-15000) rws.push({l:'Low Mileage ✓',a:Math.round(bv*.03/500)*500,p:true});
+          if(qs.fsh===true) rws.push({l:'Full Service Hist.',a:Math.round(bv*.03/500)*500,p:true});
+          else if(qs.fsh===false) rws.push({l:'No Service Hist.',a:Math.round(bv*.025/500)*500,p:false});
+          if(qs.warranty===true) rws.push({l:'Active Warranty',a:Math.round(bv*.02/500)*500,p:true});
+          if(qs.singleOwner===true) rws.push({l:'Single Owner',a:Math.round(bv*.02/500)*500,p:true});
+          else if(qs.singleOwner===false) rws.push({l:'Multi Owner',a:Math.round(bv*.025/500)*500,p:false});
+          if(qs.accident===true) rws.push({l:'Accident Declared',a:Math.round(bv*.07/500)*500,p:false});
+          const mx=rws.length?Math.max(...rws.map(r=>r.a)):1,pt=rws.filter(r=>r.p).reduce((s,r)=>s+r.a,0),nt=rws.filter(r=>!r.p).reduce((s,r)=>s+r.a,0),nv=Math.round((bv+pt-nt)/500)*500;
           return `<table class="pir-adj-table">
-            <tr><td class="pir-adj-name-cell" style="color:#1A1610;font-weight:700;">Base Market</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:#1A1610;font-weight:700;">AED ${baseVal.toLocaleString()}</td></tr>
-            ${rowsHtml}
-            <tr class="pir-adj-net-row">
-              <td class="pir-adj-name-cell">Net Adjusted</td>
-              <td class="pir-adj-bar-cell"></td>
-              <td class="pir-adj-amt-cell" style="color:${netAdj>=0?'#15803D':'#991B1B'};font-size:.7rem;">AED ${netVal.toLocaleString()}</td>
-            </tr>
+            <tr><td class="pir-adj-name-cell" style="color:#1A1610;font-weight:700;">Base Market</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:#1A1610;font-weight:700;">AED ${bv.toLocaleString()}</td></tr>
+            ${rws.map(r=>{const w=Math.max(8,Math.round((r.a/mx)*80));return `<tr><td class="pir-adj-name-cell">${r.l}</td><td class="pir-adj-bar-cell"><div class="pir-adj-bar-track"><div class="pir-adj-bar-fill ${r.p?'pir-adj-bar-pos':'pir-adj-bar-neg'}" style="width:${w}px;${r.p?'':'float:right'}"></div></div></td><td class="pir-adj-amt-cell ${r.p?'pir-adj-pos-amt':'pir-adj-neg-amt'}">${r.p?'+':'-'}AED ${r.a.toLocaleString()}</td></tr>`;}).join('')}
+            <tr class="pir-adj-net-row"><td class="pir-adj-name-cell">Net Adjusted</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:${pt>=nt?'#15803D':'#991B1B'};">AED ${nv.toLocaleString()}</td></tr>
           </table>`;
         })()}
       </div>
-    </div><!-- /2col -->
+    </div>
 
     <!-- C: 3-YEAR DEPRECIATION + FIRST YEAR COSTS -->
     <div class="pir-ext-2col">
-
-      <!-- Left: Depreciation -->
       <div class="pir-ext-col">
         <div class="pir-ext-col-title">3-Year Depreciation</div>
         <table class="pir-depr-table">
-          <thead>
-            <tr>
-              <th style="text-align:left;">Year</th>
-              <th>Rate</th>
-              <th>Value</th>
-              <th>Annual Loss</th>
-            </tr>
-          </thead>
+          <thead><tr><th style="text-align:left;">Year</th><th>Rate</th><th>Value</th><th>Annual Loss</th></tr></thead>
           <tbody>
             ${_deprRows.map(dr=>`<tr>
-              <td>${dr.year}</td>
-              <td>${dr.rate}%</td>
+              <td>${dr.year}</td><td>${dr.rate}%</td>
               <td>AED ${dr.endVal.toLocaleString()}</td>
-              <td class="pir-depr-loss-val">−AED ${(handshake - dr.endVal > 0 ? dr.endVal - (dr.year===cy+1?handshake:_deprRows[_deprRows.indexOf(dr)-1]?.endVal||handshake) : 0).toLocaleString().replace('-','')}</td>
+              <td class="pir-depr-loss-val">−AED ${Math.abs(dr.endVal-(dr.year===cy+1?handshake:_deprRows[_deprRows.indexOf(dr)-1]?.endVal||handshake)).toLocaleString()}</td>
             </tr>`).join('')}
             <tr style="border-top:1.5px solid #D4C8B0;">
-              <td colspan="2" style="color:#7A8FA8;font-size:.62rem;">3-yr total loss</td>
+              <td colspan="2" style="color:#7A8FA8;font-size:.72rem;">3-yr total loss</td>
               <td><strong>AED ${(_deprRows[2]?.endVal||handshake).toLocaleString()}</strong></td>
               <td class="pir-depr-loss-val" style="font-weight:800;">−AED ${(handshake-(_deprRows[2]?.endVal||handshake)).toLocaleString()}</td>
             </tr>
           </tbody>
         </table>
-        <!-- Depreciation bar -->
         <div style="margin-top:10px;">
           ${[{yr:'Now',v:handshake},{yr:cy+1+'',v:_deprRows[0]?.endVal||0},{yr:cy+2+'',v:_deprRows[1]?.endVal||0},{yr:cy+3+'',v:_deprRows[2]?.endVal||0}].map((p,i)=>{
             const w=handshake>0?Math.round((p.v/handshake)*100):0;
             const clr=i===0?'#008577':i===1?'#C49A2A':i===2?'#D97706':'#DC2626';
-            return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:.62rem;">
+            return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:.72rem;">
               <span style="width:30px;color:#7A8FA8;">${p.yr}</span>
-              <div style="flex:1;height:7px;background:#F0EBE0;border-radius:3px;overflow:hidden;">
-                <div style="width:${w}%;height:100%;background:${clr};border-radius:3px;"></div>
-              </div>
+              <div style="flex:1;height:7px;background:#F0EBE0;border-radius:3px;overflow:hidden;"><div style="width:${w}%;height:100%;background:${clr};border-radius:3px;"></div></div>
               <span style="width:64px;text-align:right;font-weight:700;color:${clr};">AED ${p.v.toLocaleString()}</span>
             </div>`;
           }).join('')}
         </div>
       </div>
-
-      <!-- Right: First Year Costs + Buyer Checklist -->
       <div class="pir-ext-col">
         <div class="pir-ext-col-title">First Year Cost</div>
         <table class="pir-kv-table" style="margin-bottom:14px;">
@@ -8153,40 +8078,45 @@ function buildResult(r,brand,model,year,mileage,asking){
           <tr><td>Registration</td><td>AED 420</td></tr>
           <tr><td>Transfer Fee</td><td>AED 350</td></tr>
           <tr><td>Insurance (est.)</td><td>AED ${cost.ins.toLocaleString()}</td></tr>
-          <tr><td class="pir-kv-total" style="font-weight:800;">RTA + Insurance</td><td class="pir-kv-total" style="font-weight:800;color:#1A1610;">AED ${cost.rtaOnly.toLocaleString()}</td></tr>
+          <tr><td style="font-weight:800;">RTA + Insurance</td><td style="font-weight:800;color:#1A1610;">AED ${cost.rtaOnly.toLocaleString()}</td></tr>
           <tr><td>Year-1 Depreciation</td><td class="pir-kv-bad">−AED ${(_deprRows[0]?(handshake-_deprRows[0].endVal):deprAmt).toLocaleString()}</td></tr>
           <tr><td style="font-weight:800;color:#1A1610;">True Year-1 Cost</td><td style="font-weight:800;color:#991B1B;">−AED ${(cost.rtaOnly+(_deprRows[0]?(handshake-_deprRows[0].endVal):deprAmt)).toLocaleString()}</td></tr>
         </table>
-
         <div class="pir-ext-col-title">Buyer Checklist</div>
         <table class="pir-chk-table">
           ${gF.map(f=>`<tr><td class="pir-chk-icon">✅</td><td class="pir-chk-text">${f}</td></tr>`).join('')}
           ${rF.map(f=>`<tr><td class="pir-chk-icon">🔶</td><td class="pir-chk-text">${f}</td></tr>`).join('')}
-          ${gF.length===0&&rF.length===0?`<tr><td colspan="2" style="color:#8A9AB8;font-size:.7rem;padding:4px 0;font-style:italic;">Enter details above to generate checklist.</td></tr>`:''}
+          ${gF.length===0&&rF.length===0?`<tr><td colspan="2" style="color:#8A9AB8;font-size:.78rem;padding:4px 0;font-style:italic;">Enter details above to generate checklist.</td></tr>`:''}
         </table>
       </div>
-    </div><!-- /2col -->
+    </div>
 
-    <!-- D: ACTION BUTTONS -->
+    <!-- D: NEGOTIATION SCRIPT — Full Analysis Tab (same logic, unique id) -->
+    ${_negoBlock('Tab2')}
+
+    <!-- E: ACTION BUTTONS -->
     <div class="pir-ext-actions">
       <a class="pir-ext-btn" href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener">🔍 Dubizzle</a>
       <a class="pir-ext-btn" href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener">🚗 YallaMotor</a>
       <button class="pir-ext-btn" onclick="window.print()" type="button">🖨 Print Report</button>
       <button class="pir-ext-btn pir-ext-btn-primary" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})" type="button">↺ New Search</button>
-      <span style="margin-left:auto;font-size:.55rem;color:#A8B8CC;font-family:'Exo 2',sans-serif;">${ref.label} · Live UAE market data</span>
+      <span style="margin-left:auto;font-size:.65rem;color:#A8B8CC;font-family:'Exo 2',sans-serif;">${ref.label} · Live UAE market data</span>
     </div>
 
-    <!-- E: DISCLAIMER -->
-    <div style="padding:8px 20px;font-size:.56rem;color:#A8B8CC;line-height:1.6;text-align:center;border-top:1px solid #F0EBE0;">
+    <!-- F: DISCLAIMER -->
+    <div style="padding:8px 20px;font-size:.65rem;color:#A8B8CC;line-height:1.6;text-align:center;border-top:1px solid #F0EBE0;">
       Price estimates are based on UAE market data and AI analysis. Always verify with an independent inspection and current listings before any purchase or sale decision.
     </div>
 
   </div><!-- /pir-ext-wrap -->
 
   </div><!-- /pir-tab-analysis -->
+`;
+  })()}
 
 </div><!-- /pir-wrap -->`;
 }
+
 async function checkCarPrice(){
   const brand = g('brand')?.value;
   const model = g('model')?.value;
