@@ -2,6 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!--
+    KamSayara – UAE Car Price Intelligence
+    VERSION: v27 (April 2026) — kamsayara_v27.html
+    Paired worker: kamsayara_worker27.js (V15)
+
+    FIXES APPLIED IN v27 (from audit):
+      FIX #1  — Removed duplicate pirToggle() definition that overwrote the correct
+                one; all PIR collapsible sections were silently broken on click.
+      FIX #6  — Removed dead pirDrawGauge('confGaugeFill',...) calls; those SVG IDs
+                do not exist in buildResult() output — calls were silent no-ops.
+      FIX #7  — Removed duplicate animateCountUp() call on #priceMain; two concurrent
+                count-up animations were racing and causing price display flicker.
+      FIX #10 — setYN() now stores true/false booleans (was storing 'yes'/'no' strings).
+                ALL downstream === true / === false comparisons for QC signals
+                (FSH, warranty, single owner, accident) were silently failing,
+                meaning those signals had zero effect on display logic or
+                worker pricing math. This is the most pervasive fix in the file.
+      FIX #12 — saveLastValuation() now persists QC state (qs object). restoreValuation()
+                now restores tick/cross button visual state. Previously restored searches
+                lost all QC answers.
+  -->
   <title>KamSayara – UAE Car Price Intelligence</title>
   <meta name="description" content="Get an instant, accurate UAE car price intelligence report based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6013,7 +6034,9 @@ function saveLastValuation(){
       trim:g('trim').value,mileage:g('mileage').value,spec:g('spec').value,
       condition:g('condition').value,colour:g('colour').value,
       body:g('body').value,seller:g('seller').value,service:g('service').value,
-      asking:g('asking').value,ts:Date.now()
+      asking:g('asking').value,ts:Date.now(),
+      // FIX #12: persist QC state so restore recovers tick/cross answers
+      qs:{warranty:qs.warranty,singleOwner:qs.singleOwner,fsh:qs.fsh,accident:qs.accident}
     };
     // Keep last 6 in history array
     let hist=[];
@@ -6044,6 +6067,27 @@ function restoreValuation(idx){
         ['trim','mileage','asking'].forEach(id=>{
           if(data[id]){g(id).value=data[id];markFilled(g(id));}
         });
+        // FIX #12: restore QC tick/cross state
+        if(data.qs){
+          ['warranty','singleOwner','fsh','accident'].forEach(key=>{
+            const val=data.qs[key];
+            if(val===null||val===undefined)return;
+            qs[key]=val;
+            // Find the qcbar item by aria-label prefix and mark the right button
+            const allQBs=document.querySelectorAll('.qcbar-item');
+            allQBs.forEach(item=>{
+              const tick=item.querySelector('.qb.tick');
+              const cross=item.querySelector('.qb.cross');
+              if(!tick||!cross)return;
+              // Match item by which key it controls via onclick attribute
+              const tickOnclick=tick.getAttribute('onclick')||'';
+              if(!tickOnclick.includes("'"+key+"'"))return;
+              tick.classList.toggle('on',val===true);
+              cross.classList.toggle('on',val===false);
+              item.classList.remove('qcbar-item--unset');
+            });
+          });
+        }
         _ksMap.forEach((_w,sel)=>ksSync(sel));
         updateReadiness();
       }));
@@ -6272,7 +6316,7 @@ function populateTrims(brand,model){
 
 /* ── QUICK CHECK ────────────────────────────────────────── */
 function setYN(key,val,btn){
-  qs[key]=val;
+  qs[key]=(val==='yes'); // FIX #10: store true/false booleans, not 'yes'/'no' strings
   const item=btn.closest('.qcbar-item');
   if(item){
     item.querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
@@ -8423,13 +8467,8 @@ function displayValuationResult(data){
   }
 
   // Animate the dominant Handshake price
-  // On mobile, target the element inside mobContent (now visible); on desktop, rcontent
-  const _animRoot = (isMobile() ? g('mobContent') : resultContainer) || resultContainer;
-  const priceEl = _animRoot.querySelector('#priceMain') || g('priceMain');
-  if(priceEl){
-    const target = r.handshakePrice || r.averagePrice || 0;
-    if(target) animateCountUp(priceEl, target);
-  }
+  // FIX #7: Removed duplicate animateCountUp call here — pirCountUp inside requestAnimationFrame below handles this
+  // (two concurrent count-ups on #priceMain caused a janky race condition)
 
   // Animate confidence footer bar + stat bars
   setTimeout(()=>{
@@ -8452,13 +8491,12 @@ function displayValuationResult(data){
 
   saveLastValuation();
   activateShareStrip();
-  // Animate gauges and price count-up after DOM renders
+  // Animate price count-up and UI elements after DOM renders
   requestAnimationFrame(()=>{
-    const confPct=Math.round((r.confidenceScore||r.confidence||0)*100)||60,demPct=Math.round(r.demandScore||55);
-    const confCol=confPct>=70?'#22C55E':confPct>=40?'#F59E0B':'#EF4444';
-    const demCol =demPct>=70?'#22C55E':demPct>=40?'#F59E0B':'#EF4444';
-    pirDrawGauge('confGaugeFill',confPct,confCol);
-    pirDrawGauge('demGaugeFill',demPct,demCol);
+    const confPct=Math.round((r.confidenceScore||0))||60,demPct=Math.round(r.demandScore||55);
+    // FIX #6: Removed pirDrawGauge('confGaugeFill',...) and pirDrawGauge('demGaugeFill',...)
+    // — those SVG element IDs do not exist in buildResult() output; calls were silently no-ops.
+    // Signal bars (pir-signal-fill-ryg) are animated by pirAnimateStatBars() instead.
     const priceEl=document.getElementById('priceMain');
     if(priceEl) pirCountUp(priceEl,r.handshakePrice||r.averagePrice||0);
     // Animate footer confidence bar
@@ -9581,14 +9619,8 @@ function pirDrawGauge(svgId,pct,colour){
 }
 
 /* ── COLLAPSIBLE ───────────────────────────────────────── */
-function pirToggle(id){
-  const body=document.getElementById(id);
-  const hdr=body?.previousElementSibling;
-  if(!body)return;
-  const open=body.style.maxHeight&&body.style.maxHeight!=='0px';
-  body.style.maxHeight=open?'0px':body.scrollHeight+'px';
-  hdr?.classList.toggle('open',!open);
-}
+/* FIX #1: Removed duplicate pirToggle(id) definition here — was overwriting
+   the correct pirToggle(section) at line ~9490 which all callers use via onclick="pirToggle(this)" */
 function pirCollExpand(id){
   const body=document.getElementById(id);
   if(!body)return;
