@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v27 (April 2026) — kamsayara_v27.html
+    VERSION: v28 (April 2026) — kamsayara_v28.html
     Paired worker: kamsayara_worker27.js (V15)
 
     FIXES APPLIED IN v27 (from audit):
@@ -876,28 +876,24 @@
     .fg .ig:nth-child(1) .ks-panel,
     .fg .ig:nth-child(2) .ks-panel,
     .fg .ig:nth-child(3) .ks-panel,
-    .fg .ig:nth-child(4) .ks-panel,
-    .fg .ig:nth-child(5) .ks-panel,
-    .fg .ig:nth-child(6) .ks-panel,
-    .fg .ig:nth-child(7) .ks-panel,
-    .fg .ig:nth-child(8) .ks-panel {
+    .fg .ig:nth-child(4) .ks-panel {
       top: calc(100% + 3px) !important;
       bottom: auto !important;
       transform-origin: top center;
     }
-    .fg .ig:nth-child(9)  .ks-panel,
-    .fg .ig:nth-child(10) .ks-panel,
-    .fg .ig:nth-child(11) .ks-panel,
-    .fg .ig:nth-child(12) .ks-panel {
+    .fg .ig:nth-child(5)  .ks-panel,
+    .fg .ig:nth-child(6) .ks-panel,
+    .fg .ig:nth-child(7) .ks-panel,
+    .fg .ig:nth-child(8) .ks-panel {
       top: auto !important;
       bottom: calc(100% + 3px) !important;
       transform: translateY(5px);   /* slide up on open */
       transform-origin: bottom center;
     }
-    .fg .ig:nth-child(9)  .ks-wrap.open .ks-panel,
-    .fg .ig:nth-child(10) .ks-wrap.open .ks-panel,
-    .fg .ig:nth-child(11) .ks-wrap.open .ks-panel,
-    .fg .ig:nth-child(12) .ks-wrap.open .ks-panel {
+    .fg .ig:nth-child(5)  .ks-wrap.open .ks-panel,
+    .fg .ig:nth-child(6) .ks-wrap.open .ks-panel,
+    .fg .ig:nth-child(7) .ks-wrap.open .ks-panel,
+    .fg .ig:nth-child(8) .ks-wrap.open .ks-panel {
       transform: translateY(0) !important;
     }
     /* Prevent parent containers from clipping panels */
@@ -5492,6 +5488,389 @@
       background:#fff;border:2px solid;box-shadow:0 1px 4px rgba(0,0,0,0.25);
       transition:left 1s cubic-bezier(0.34,1.2,0.64,1);}
 
+    /* ═══════════════════════════════════════════════════════════
+       KAMSAYARA v28 — VISUAL ENHANCEMENT LAYER
+       2-column row grids · Premium section headers · Rich signals
+    ═══════════════════════════════════════════════════════════ */
+
+    /* ── 2-COLUMN ROW GRID ── */
+    .pir-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid #E8EBF3;
+      background: #fff;
+    }
+    .pir-row-grid > .pir-row-cell {
+      padding: 18px 22px 20px;
+      border-right: 1px solid #E8EBF3;
+      position: relative;
+    }
+    .pir-row-grid > .pir-row-cell:last-child { border-right: none; }
+    @media(max-width:640px) {
+      .pir-row-grid { grid-template-columns: 1fr; }
+      .pir-row-grid > .pir-row-cell { border-right: none; border-bottom: 1px solid #E8EBF3; }
+      .pir-row-grid > .pir-row-cell:last-child { border-bottom: none; }
+    }
+
+    /* ── PREMIUM SECTION HEADER ── */
+    .pir-sec-hdr {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .62rem; font-weight: 800; letter-spacing: .16em;
+      text-transform: uppercase; color: #1A2B4C;
+      margin-bottom: 14px;
+    }
+    .pir-sec-hdr-icon {
+      width: 24px; height: 24px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; flex-shrink: 0;
+    }
+    .pir-sec-hdr-icon-teal   { background: rgba(0,133,119,0.12); }
+    .pir-sec-hdr-icon-blue   { background: rgba(37,99,235,0.10); }
+    .pir-sec-hdr-icon-amber  { background: rgba(217,119,6,0.10); }
+    .pir-sec-hdr-icon-green  { background: rgba(22,163,74,0.10); }
+    .pir-sec-hdr-icon-red    { background: rgba(220,38,38,0.10); }
+    .pir-sec-hdr-icon-purple { background: rgba(124,58,237,0.10); }
+    .pir-sec-hdr-line { flex: 1; height: 1px; background: linear-gradient(90deg,#E8EBF3,transparent); }
+
+    /* ── MARKET POSITION SECTION ── */
+    .pir-mp-cell { background: linear-gradient(160deg, #F8F9FC 0%, #fff 100%); }
+    .pir-mp2-bar-wrap-v28 {
+      position: relative; height: 10px; border-radius: 6px;
+      background: linear-gradient(90deg, #22C55E 0%, #86EFAC 18%, #FDE68A 50%, #FCA5A5 80%, #EF4444 100%);
+      margin: 30px 0 16px;
+    }
+    .pir-mp2-pin-v28 {
+      position: absolute; bottom: 18px;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      pointer-events: none;
+    }
+    .pir-mp2-pin-price-v28 {
+      font-size: .64rem; font-weight: 800; white-space: nowrap;
+      padding: 2px 6px; border-radius: 5px; line-height: 1.3;
+    }
+    .pir-mp2-pin-name-v28 {
+      font-size: .5rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; white-space: nowrap; opacity: .7;
+    }
+    .pir-mp2-stem-v28 {
+      position: absolute; bottom: -2px;
+      width: 2px; border-radius: 1px;
+      height: 12px; transform: translateX(-50%);
+    }
+    .pin-hand .pir-mp2-pin-price-v28 { background: rgba(0,133,119,0.12); color: #008577; }
+    .pin-hand .pir-mp2-pin-name-v28  { color: #008577; }
+    .pin-hand .pir-mp2-stem-v28      { background: #008577; }
+    .pin-nego .pir-mp2-pin-price-v28 { background: rgba(217,119,6,0.10); color: #92400E; }
+    .pin-nego .pir-mp2-pin-name-v28  { color: #D97706; }
+    .pin-nego .pir-mp2-stem-v28      { background: #D97706; }
+    .pin-stick .pir-mp2-pin-price-v28{ background: rgba(15,30,56,0.08); color: #0F1E38; }
+    .pin-stick .pir-mp2-pin-name-v28 { color: #3D5280; }
+    .pin-stick .pir-mp2-stem-v28     { background: #3D5280; }
+    .pir-mp2-dot-v28 {
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2.5px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+    }
+    .pir-mp2-car-v28 {
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      width: 36px; height: 20px;
+      background: #0F1E38; border-radius: 5px;
+      border: 2px solid #fff;
+      box-shadow: 0 3px 12px rgba(15,30,56,0.45);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1px 2px;
+    }
+    .pir-mp2-car-v28 svg { width: 28px; height: 14px; }
+    .pir-mp2-ends-v28 {
+      display: flex; justify-content: space-between;
+      font-size: .6rem; color: #8A9AB8; font-weight: 600;
+      margin-top: 4px;
+    }
+    .pir-mp2-legend-v28 {
+      display: flex; gap: 14px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .pir-mp2-leg-v28 {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .64rem; font-weight: 700; color: #6A7E9A;
+    }
+    .pir-mp2-leg-car-v28 {
+      width: 24px; height: 12px; background: #0F1E38; border-radius: 3px;
+      display: flex; align-items: center; justify-content: center; padding: 1px 2px;
+    }
+    .pir-mp2-leg-dot-v28 {
+      width: 10px; height: 10px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.8);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    }
+
+    /* ── MARKET SIGNALS SECTION ── */
+    .pir-signals-cell { background: #FAFBFD; }
+    .pir-signal-row-v28 {
+      display: flex; flex-direction: column; gap: 5px;
+      margin-bottom: 14px;
+    }
+    .pir-signal-row-v28:last-child { margin-bottom: 0; }
+    .pir-signal-top-v28 {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pir-signal-name-v28 { font-size: .72rem; font-weight: 700; color: #2D3F5C; }
+    .pir-signal-badge-v28 {
+      font-size: .6rem; font-weight: 800; padding: 2px 8px;
+      border-radius: 99px; letter-spacing: .04em;
+    }
+    .sig-high  { background: rgba(22,163,74,0.1); color: #15803D; border: 1px solid rgba(22,163,74,0.2); }
+    .sig-mid   { background: rgba(217,119,6,0.1);  color: #92400E; border: 1px solid rgba(217,119,6,0.2); }
+    .sig-low   { background: rgba(220,38,38,0.1);  color: #991B1B; border: 1px solid rgba(220,38,38,0.2); }
+    .pir-signal-track-v28 {
+      position: relative; height: 8px; border-radius: 99px;
+      background: #EEF1F8; overflow: visible;
+    }
+    .pir-signal-fill-v28 {
+      position: absolute; top: 0; left: 0; bottom: 0; border-radius: 99px;
+      background: linear-gradient(90deg, #EF4444 0%, #F97316 25%, #EAB308 50%, #84CC16 75%, #22C55E 100%);
+      width: 0%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .pir-signal-thumb-v28 {
+      position: absolute; top: 50%; left: 0%;
+      transform: translate(-50%,-50%);
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; border: 2.5px solid #0F1E38;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.18); z-index: 3;
+      transition: left 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .pir-ts-row-v28 {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 14px; padding-top: 12px; border-top: 1px solid #E8EBF3;
+    }
+    .pir-ts-score-v28 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+    }
+    .pir-ts-label-v28 { font-size: .65rem; font-weight: 700; color: #6A7E9A; }
+    .pir-ts-dots-v28 { display: flex; gap: 3px; margin-top: 4px; }
+    .pir-ts-dot-v28 {
+      width: 8px; height: 8px; border-radius: 50%; background: #DDE4EE;
+    }
+    .pir-ts-dot-v28.on { background: currentColor; }
+
+    /* ── VALUE ADJUSTMENTS CHART ── */
+    .pir-vab-cell { background: #fff; }
+    .pir-vadj-base-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1.5px dashed #DDE4EE;
+      margin-bottom: 8px;
+      font-size: .78rem; font-weight: 700; color: #0F1E38;
+    }
+    .pir-vadj-row-v28 {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 0;
+    }
+    .pir-vadj-label-v28 {
+      font-size: .72rem; color: #4A5E7A; min-width: 0; flex: 1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .pir-vadj-bar-v28 {
+      height: 6px; border-radius: 3px; flex-shrink: 0;
+      transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .pir-vadj-bar-pos { background: linear-gradient(90deg, #4ADE80, #22C55E); }
+    .pir-vadj-bar-neg { background: linear-gradient(90deg, #EF4444, #F87171); }
+    .pir-vadj-amt-v28 {
+      font-size: .7rem; font-weight: 800; white-space: nowrap; min-width: 58px; text-align: right;
+    }
+    .pir-vadj-amt-pos { color: #15803D; }
+    .pir-vadj-amt-neg { color: #991B1B; }
+    .pir-vadj-net-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0 2px; border-top: 1.5px solid #0F1E38;
+      margin-top: 6px;
+      font-size: .82rem; font-weight: 800; color: #0F1E38;
+    }
+
+    /* ── EXPERT VERDICT ── */
+    .pir-ev-cell { background: linear-gradient(160deg, #F8F9FC 0%, #F3F5FA 100%); }
+    .pir-ev-bullet {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px; border-radius: 10px; margin-bottom: 8px;
+      font-size: .78rem; color: #2D3F5C; line-height: 1.55;
+    }
+    .pir-ev-bullet:last-child { margin-bottom: 0; }
+    .pir-ev-bullet-adv { background: rgba(22,163,74,0.07); border: 1px solid rgba(22,163,74,0.18); }
+    .pir-ev-bullet-val { background: rgba(217,119,6,0.07); border: 1px solid rgba(217,119,6,0.18); }
+    .pir-ev-bullet-rev { background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.16); }
+    .pir-ev-bullet-neu { background: rgba(100,116,139,0.06); border: 1px solid rgba(100,116,139,0.14); }
+    .pir-ev-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+    .pir-ev-body { flex: 1; }
+    .pir-ev-title { font-size: .63rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+    .pir-ev-adv-title { color: #15803D; }
+    .pir-ev-val-title { color: #92400E; }
+    .pir-ev-rev-title { color: #991B1B; }
+    .pir-ev-neu-title { color: #475569; }
+
+    /* ── FLAGS ROW ── */
+    .pir-flags-cell-green { background: rgba(240,253,244,0.6); }
+    .pir-flags-cell-red   { background: rgba(254,242,242,0.6); }
+    .pir-flag-v28 {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 9px 11px; border-radius: 9px;
+      font-size: .76rem; color: #2D3F5C; line-height: 1.45;
+      margin-bottom: 6px; transition: transform .12s;
+    }
+    .pir-flag-v28:last-child { margin-bottom: 0; }
+    .pir-flag-v28:hover { transform: translateY(-1px); }
+    .pir-flag-v28-green { background: #F0FDF4; border: 1px solid #86EFAC; }
+    .pir-flag-v28-amber { background: #FFFBEB; border: 1px solid #FCD34D; }
+    .pir-flag-v28-red   { background: #FEF2F2; border: 1px solid #FCA5A5; }
+    .pir-flag-v28-icon  { font-size: .85rem; flex-shrink: 0; line-height: 1.5; }
+    .pir-flags-count-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 50%;
+      font-size: .6rem; font-weight: 800; margin-left: 6px;
+    }
+    .pir-flags-count-green { background: rgba(22,163,74,0.12); color: #15803D; }
+    .pir-flags-count-amber { background: rgba(217,119,6,0.12); color: #92400E; }
+    .pir-flags-count-red   { background: rgba(220,38,38,0.12); color: #991B1B; }
+
+    /* ── NEGOTIATION TIMELINE (Tab 1 full-width) ── */
+    .pir-nego-timeline {
+      padding: 18px 22px 20px;
+      background: linear-gradient(160deg, #0A1828 0%, #0F2040 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      position: relative; overflow: hidden;
+    }
+    .pir-nego-timeline::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(115deg, transparent 0, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    }
+    .pir-nego-timeline::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #C49A2A 20%, #E8D060 50%, #C49A2A 80%, transparent);
+    }
+    .pir-nt-hdr {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .62rem; font-weight: 800; letter-spacing: .16em;
+      text-transform: uppercase; color: rgba(232,208,96,0.8);
+      margin-bottom: 14px; position: relative; z-index: 2;
+    }
+    .pir-nt-track-wrap { position: relative; z-index: 2; margin: 24px 0 10px; }
+    .pir-nt-track {
+      height: 4px; border-radius: 99px;
+      background: rgba(255,255,255,0.12);
+      position: relative;
+    }
+    .pir-nt-track-fill {
+      position: absolute; inset: 0; border-radius: 99px;
+      background: linear-gradient(90deg, #22C55E 0%, #E8D060 60%, #EF4444 100%);
+    }
+    .pir-nt-pins {
+      display: flex; justify-content: space-between;
+      position: absolute; top: -22px; left: 0; right: 0;
+    }
+    .pir-nt-pin {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .pir-nt-pin-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
+      margin-bottom: -2px;
+    }
+    .pir-nt-pin-price {
+      font-family: "Orbitron", sans-serif;
+      font-size: .72rem; font-weight: 700; white-space: nowrap;
+    }
+    .pir-nt-pin-label {
+      font-size: .5rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .pir-nt-pin-open  .pir-nt-pin-dot   { background: #22C55E; }
+    .pir-nt-pin-open  .pir-nt-pin-price { color: #4ADE80; }
+    .pir-nt-pin-open  .pir-nt-pin-label { color: rgba(74,222,128,0.6); }
+    .pir-nt-pin-target .pir-nt-pin-dot  { background: #E8D060; }
+    .pir-nt-pin-target .pir-nt-pin-price{ color: #E8D060; }
+    .pir-nt-pin-target .pir-nt-pin-label{ color: rgba(232,208,96,0.6); }
+    .pir-nt-pin-walk  .pir-nt-pin-dot   { background: #EF4444; }
+    .pir-nt-pin-walk  .pir-nt-pin-price { color: #FCA5A5; }
+    .pir-nt-pin-walk  .pir-nt-pin-label { color: rgba(252,165,165,0.6); }
+    .pir-nt-labels-below {
+      display: flex; justify-content: space-between;
+      margin-top: 6px;
+    }
+    .pir-nt-pin-below { font-size: .5rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .pir-nt-pin-below-open   { color: rgba(74,222,128,0.5); }
+    .pir-nt-pin-below-target { color: rgba(232,208,96,0.5); text-align: center; }
+    .pir-nt-pin-below-walk   { color: rgba(252,165,165,0.5); text-align: right; }
+    .pir-nt-script {
+      position: relative; z-index: 2;
+      font-size: .8rem; color: rgba(255,255,255,0.65); line-height: 1.7;
+      padding: 12px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-left: 3px solid rgba(232,208,96,0.45);
+      margin-top: 14px; font-style: italic;
+    }
+    .pir-nt-copy-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-family: "Exo 2", sans-serif;
+      font-size: .62rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(232,208,96,0.7);
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(232,208,96,0.2);
+      border-radius: 99px; padding: 5px 14px; cursor: pointer;
+      transition: all .18s; margin-top: 10px; position: relative; z-index: 2;
+    }
+    .pir-nt-copy-btn:hover { background: rgba(232,208,96,0.1); color: #E8D060; border-color: rgba(232,208,96,0.35); }
+    .pir-nt-copy-btn.copied { color: #4ADE80; border-color: rgba(74,222,128,0.3); }
+
+    /* ── TAB 1 FOOTER LINKS ── */
+    .pir-tab-footer {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+      gap: 8px; padding: 14px 20px;
+      background: #F8F9FC; border-top: 1px solid #E8EBF3;
+    }
+    .pir-tab-footer-link {
+      display: flex; align-items: center; gap: 6px;
+      font-family: "Exo 2", sans-serif;
+      font-size: .65rem; font-weight: 700; letter-spacing: .06em;
+      color: #4A5E7A; background: #fff;
+      border: 1px solid #DDE4EE; border-radius: 99px;
+      padding: 5px 14px; text-decoration: none;
+      transition: all .16s; cursor: pointer;
+    }
+    .pir-tab-footer-link:hover { border-color: #008577; color: #008577; background: rgba(0,133,119,0.04); }
+    .pir-tab-footer-reset {
+      display: flex; align-items: center; gap: 6px;
+      font-family: "Exo 2", sans-serif;
+      font-size: .65rem; font-weight: 700; letter-spacing: .06em;
+      color: #7A8FA8; background: transparent;
+      border: 1px solid #DDE4EE; border-radius: 99px;
+      padding: 5px 14px; cursor: pointer;
+      transition: all .16s;
+    }
+    .pir-tab-footer-reset:hover { color: var(--accent); border-color: var(--accent); background: rgba(0,133,119,0.04); }
+
+    /* ── SIGNALS: keep existing but override track size ── */
+    .pir-signals { padding: 0; background: transparent; border: none; }
+    .pir-signals-title { display: none; }
+
+    /* ── MP WRAP: reset for cell embedding ── */
+    .pir-mp-wrap { padding: 0; border: none; background: transparent; }
+    .pir-mp-wrap .pir-mp-header { margin-bottom: 6px; }
+
+    /* ── FULL-WIDTH SECTION ── */
+    .pir-full-section {
+      padding: 16px 22px;
+      border-bottom: 1px solid #E8EBF3;
+    }
+
+    /* ── VERDICT RIBBON ENHANCED ── */
+    .pir-verdict-ribbon {
+      border-radius: 0;
+      border-bottom: 1px solid #E8EBF3;
+    }
+
+    /* ── PRICE SUMMARY ON DARK BG ── */
+    .pir-ps-wrap { border-radius: 0; }
+
     </style>
 <body>
 
@@ -5576,7 +5955,7 @@
 
       <div class="form-body">
 
-        <!-- 12 input cells -->
+        <!-- 8 input cells — 4 per row × 2 rows -->
         <div class="fg">
 
           <div class="ig">
@@ -5626,7 +6005,7 @@
           </div>
 
           <div class="ig">
-            <label for="spec">Spec</label>
+            <label for="spec">Specification</label>
             <select id="spec" onchange="markFilled(this)">
               <option value="">Select…</option>
               <option value="GCC">GCC</option>
@@ -5650,56 +6029,6 @@
             </select>
           </div>
 
-          <div class="ig">
-            <label for="body">Body Type</label>
-            <select id="body" onchange="markFilled(this)">
-              <option value="">Select…</option>
-              <option>Sedan</option><option>SUV</option><option>Hatchback</option>
-              <option>Coupe</option><option>Convertible</option><option>Pickup</option>
-              <option>Van</option><option>Wagon</option><option>Other</option>
-            </select>
-          </div>
-
-          <div class="ig">
-            <label for="seller">Seller Type</label>
-            <select id="seller" onchange="markFilled(this)">
-              <option value="">Select…</option>
-              <option>Individual</option>
-              <option>Dealer</option>
-              <option>Showroom</option>
-              <option>Export</option>
-            </select>
-          </div>
-
-          <div class="ig">
-            <label for="colour">Colour</label>
-            <select id="colour" onchange="markFilled(this)">
-              <option value="">Select…</option>
-              <option>White</option><option>Pearl White</option>
-              <option>Black</option><option>Midnight Black</option>
-              <option>Silver</option><option>Gray</option><option>Dark Gray</option>
-              <option>Blue</option><option>Dark Blue</option><option>Light Blue</option>
-              <option>Red</option><option>Maroon</option><option>Burgundy</option>
-              <option>Gold</option><option>Champagne</option><option>Bronze</option>
-              <option>Beige</option><option>Cream</option><option>Sand</option>
-              <option>Brown</option><option>Green</option><option>Dark Green</option>
-              <option>Orange</option><option>Yellow</option><option>Purple</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div class="ig">
-            <label for="service">Service</label>
-            <select id="service" onchange="markFilled(this)">
-              <option value="">Select…</option>
-              <option>Full Agency</option>
-              <option>Agency</option>
-              <option>Non-Agency</option>
-              <option>Mixed</option>
-              <option>Unknown</option>
-            </select>
-          </div>
-
           <div class="ig asking-field-wrap">
             <label for="asking">Asking Price</label>
             <div class="prefix-wrap">
@@ -5712,14 +6041,40 @@
 
         <!-- Hidden selects retained for JS logic — not displayed -->
         <div style="display:none" aria-hidden="true">
+          <select id="body"><option value="">—</option></select>
+          <select id="seller"><option value="">—</option></select>
+          <select id="colour"><option value="">—</option></select>
+          <select id="service"><option value="">—</option></select>
           <select id="accidentSel"><option value="none">None</option><option value="minor">Minor</option><option value="major">Major</option></select>
           <select id="warrantySel"><option value="">Unknown</option><option value="active">Active</option><option value="extended">Extended</option><option value="expired">Expired</option></select>
           <select id="owners"><option value="">Unknown</option><option value="1">1 Owner</option><option value="2">2 Owners</option><option value="3">3 Owners</option><option value="4+">4+ Owners</option></select>
-          <select id="emirate"><option value="">Any</option><option value="Dubai">Dubai</option><option value="Abu Dhabi">Abu Dhabi</option><option value="Sharjah">Sharjah</option><option value="Ajman">Ajman</option><option value="Ras Al Khaimah">RAK</option><option value="Fujairah">Fujairah</option><option value="Umm Al Quwain">UAQ</option></select>
-          <select id="finance"><option value="">Select</option><option value="Cash">Cash</option><option value="Bank Finance">Bank Finance</option><option value="Dealer Finance">Dealer Finance</option><option value="Lease">Lease</option></select>
+          <select id="emirate"><option value="">Any</option></select>
+          <select id="finance"><option value="">Select</option></select>
           <select id="purpose"><option value="buying">Buyer</option><option value="selling">Seller</option><option value="research">Researching</option></select>
         </div>
+
+        <!-- 4 Yes/No Checkboxes — single row desktop, 2×2 mobile -->
         <div class="qcbar" role="group" aria-label="Additional details">
+
+          <div class="ig-qc">
+            <div class="qcbar-item">
+              <span class="qcbar-lbl">Accident</span>
+              <div class="qcbar-btns">
+                <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
+                <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ig-qc">
+            <div class="qcbar-item">
+              <span class="qcbar-lbl">Svc. History</span>
+              <div class="qcbar-btns">
+                <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
+                <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
+              </div>
+            </div>
+          </div>
 
           <div class="ig-qc">
             <div class="qcbar-item">
@@ -5737,26 +6092,6 @@
               <div class="qcbar-btns">
                 <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
                 <button class="qb cross" onclick="setYN('singleOwner','no',this)" aria-label="Single Owner No">✗</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="ig-qc">
-            <div class="qcbar-item">
-              <span class="qcbar-lbl">Svc. History</span>
-              <div class="qcbar-btns">
-                <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
-                <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="ig-qc">
-            <div class="qcbar-item">
-              <span class="qcbar-lbl">Accident</span>
-              <div class="qcbar-btns">
-                <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
-                <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
               </div>
             </div>
           </div>
@@ -6032,8 +6367,7 @@ function saveLastValuation(){
     const entry={
       brand:g('brand').value,model:g('model').value,year:g('year').value,
       trim:g('trim').value,mileage:g('mileage').value,spec:g('spec').value,
-      condition:g('condition').value,colour:g('colour').value,
-      body:g('body').value,seller:g('seller').value,service:g('service').value,
+      condition:g('condition').value,
       asking:g('asking').value,ts:Date.now(),
       // FIX #12: persist QC state so restore recovers tick/cross answers
       qs:{warranty:qs.warranty,singleOwner:qs.singleOwner,fsh:qs.fsh,accident:qs.accident}
@@ -6061,7 +6395,7 @@ function restoreValuation(idx){
       // Wait two frames: first for options to render, second for ksRefresh to finish
       requestAnimationFrame(()=>requestAnimationFrame(()=>{
         if(data.model)setVal(g('model'),data.model);
-        ['year','spec','condition','colour','body','seller','service'].forEach(id=>{
+        ['year','spec','condition'].forEach(id=>{
           if(data[id])setVal(g(id),data[id]);
         });
         ['trim','mileage','asking'].forEach(id=>{
@@ -6246,10 +6580,6 @@ function populateModels(){
   ksSync(g('brand'));
   // Reset trim dropdown when brand changes (model not yet chosen)
   populateTrims(b, '');
-  // Reset body type to unset when brand changes
-  g('body').value='';
-  markFilled(g('body'));
-  ksSync(g('body'));
   // refresh model ks-dropdown with new options
   requestAnimationFrame(()=>{
     ksRefresh(s);
@@ -6261,12 +6591,6 @@ function onModelChange(){
   markFilled(g('model'));
   const b=g('brand').value,m=g('model').value;
   if(b&&m){
-    const bg=guessBody(b,m);
-    if(bg){
-      setVal(g('body'),bg);
-      markFilled(g('body'));
-      ksSync(g('body'));
-    }
     populateTrims(b,m);
   }
   updateReadiness();
@@ -6567,10 +6891,10 @@ function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPr
   const cy=new Date().getFullYear();
   const age=Math.max(1,cy-carYear);
   const expected=age*18000;
-  const acc=g('accidentSel')?.value||'none';
-  const own=g('owners')?.value||'';
-  const war=g('warrantySel')?.value||'';
-  const svc=g('service')?.value||'';
+  const acc=qs.accident===true?'minor':qs.accident===false?'none':'none';
+  const own=qs.singleOwner===true?'1':qs.singleOwner===false?'2':'';
+  const war=qs.warranty===true?'active':qs.warranty===false?'expired':'';
+  const svc='';
   const r=n=>Math.round(n/500)*500;
   if(specVal==='GCC'||specVal==='GCC Spec') adj.push({name:'GCC Specification',amount:r(avgPrice*.04),positive:true});
   else if(specVal&&specVal!=='GCC') adj.push({name:'Non-GCC Specification',amount:r(avgPrice*.06),positive:false});
@@ -6618,8 +6942,8 @@ function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,
   const mileageLow=mileageNum>0&&mileageNum<expected*.7;
   const isGCC=specVal==='GCC'||specVal==='GCC Spec';
   const hasAccident=accidentVal==='minor'||accidentVal==='major';
-  const agency=serviceVal==='Full Agency'||serviceVal==='Agency';
-  const goodColour=['White','Pearl White','Silver','Gray','Black','Midnight Black'].includes(colourVal);
+  const agency=qs.fsh===true;
+  const goodColour=false;
   let vk,vl;
   if(purpose==='selling'){
     if(diff>.06)      {vk='negotiate';vl='↕ Price Down';}
@@ -6647,7 +6971,6 @@ function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,
   if(isGCC)        pros.push('GCC spec is the preferred choice in the UAE');
   if(mileageLow)   pros.push(`${mileageNum.toLocaleString()} km is below average for a ${age}-year-old car`);
   if(agency||hasFSH) pros.push('full service history adds trust and resale value');
-  if(goodColour)   pros.push(`${colourVal} resells fast in the UAE market`);
   if(isSingleOwner) pros.push('single ownership is a strong confidence signal');
   if(hasWarranty)  pros.push('active warranty reduces buyer risk');
   if(conditionVal==='Excellent'||conditionVal==='Very Good') pros.push(`${conditionVal.toLowerCase()} condition supports the asking price`);
@@ -6674,9 +6997,8 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
   const exp=age*18000;
   const isGCC=specVal==='GCC'||specVal==='GCC Spec';
   if(isGCC) green.push('GCC specification — preferred in UAE market');
-  if(['White','Pearl White','Silver','Gray','Black','Midnight Black'].includes(colourVal)) green.push(`${colourVal} — high-demand resale colour`);
-  if(serviceVal==='Full Agency'||serviceVal==='Agency'||qs.fsh===true) green.push('Full service history — highest trust level');
-  if(mileageNum>0&&mileageNum<exp*.65) green.push(`${mileageNum.toLocaleString()} km — Low mileage for year (premium supported)`);
+  if(qs.fsh===true) green.push('Full service history — highest trust level');
+  if(qs.fsh===false) red.push('No full service history — maintenance harder to verify');  if(mileageNum>0&&mileageNum<exp*.65) green.push(`${mileageNum.toLocaleString()} km — Low mileage for year (premium supported)`);
   if(ownersVal==='1'||qs.singleOwner===true) green.push('Single owner — commands premium at resale');
   if(conditionVal==='Excellent') green.push('Excellent condition — top bracket justified');
   if(warrantyVal==='active'||qs.warranty===true) green.push('Active warranty — reduces buyer risk');
@@ -6687,7 +7009,7 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
   if(accidentVal==='major') red.push('Major accident history — significant value impact');
   if(ownersVal==='3'||ownersVal==='4+'||qs.singleOwner===false) red.push('Multiple owners — affects confidence and resale');
   if(conditionVal==='Fair'||conditionVal==='Poor') red.push(`${conditionVal} condition — price must reflect repair costs`);
-  if(qs.fsh===false||(serviceVal==='Non-Agency'||serviceVal==='Unknown')) red.push('No full service history — maintenance harder to verify');
+  if(qs.fsh===false) red.push('No full service history — maintenance harder to verify');
   return{green:green.slice(0,5),red:red.slice(0,4)};
 }
 
@@ -6789,16 +7111,16 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   const specVal  =g('spec')?.value||'GCC';
   const condVal  =g('condition')?.value||'';
-  const colourVal=g('colour')?.value||'';
-  const svcVal   =g('service')?.value||'';
-  const bodyVal  =g('body')?.value||'';
-  const sellerVal=g('seller')?.value||'';
-  const accVal   =g('accidentSel')?.value||'none';
-  const ownVal   =g('owners')?.value||'';
-  const warVal   =g('warrantySel')?.value||'';
-  const emirVal  =g('emirate')?.value||'';
-  const finVal   =g('finance')?.value||'';
-  const purpVal  =g('purpose')?.value||'buying';
+  const colourVal='';
+  const svcVal   ='';
+  const bodyVal  ='';
+  const sellerVal='';
+  const accVal   =qs.accident===true?'minor':qs.accident===false?'none':'none';
+  const ownVal   =qs.singleOwner===true?'1':qs.singleOwner===false?'2':'';
+  const warVal   =qs.warranty===true?'active':qs.warranty===false?'expired':'';
+  const emirVal  ='';
+  const finVal   ='';
+  const purpVal  ='buying';
   const km       =mileage?parseInt(mileage):0;
   const kmFmt    =km?km.toLocaleString():'—';
   const carYear  =parseInt(year)||2020;
@@ -6829,22 +7151,17 @@ function buildResult(r,brand,model,year,mileage,asking){
       g('trim')?.value?['Trim',g('trim').value]:null,
       mileage?['Mileage',km.toLocaleString()+' km']:null,
       specVal?['Spec',specVal]:null,condVal?['Condition',condVal]:null,
-      colourVal?['Colour',colourVal]:null,bodyVal?['Body',bodyVal]:null,
-      sellerVal?['Seller',sellerVal]:null,svcVal?['Service',svcVal]:null,
-      accVal&&accVal!=='none'?['Accident',accVal]:null,
-      ownVal?['Owners',ownVal]:null,warVal?['Warranty',warVal]:null,
-      emirVal?['Emirate',emirVal]:null,finVal?['Payment',finVal]:null,
-      qs.fsh!==null?['Full Service History',qs.fsh?'Yes':'No']:null,
-      qs.singleOwner!==null?['Single Owner',qs.singleOwner?'Yes':'No']:null,
-      qs.warranty!==null?['Has Warranty',qs.warranty?'Yes':'No']:null,
-      qs.accident!==null?['Accident Declared',qs.accident?'Yes':'No']:null,
       askN?['Asking Price','AED '+askN.toLocaleString()]:null,
+      qs.fsh!==null?['Service History',qs.fsh?'Yes':'No']:null,
+      qs.warranty!==null?['Warranty',qs.warranty?'Active':'None']:null,
+      qs.singleOwner!==null?['Single Owner',qs.singleOwner?'Yes':'No']:null,
+      qs.accident!==null?['Accident',qs.accident?'Yes':'No']:null,
     ].filter(Boolean),
   };
 
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
-  const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,colourVal,svcVal,ai);
-  const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,colourVal,svcVal,accVal,ownVal,warVal);
+  const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai);
+  const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,'','',accVal,ownVal,warVal);
   const nego=buildNegoGuide(askN,avg,condVal,accVal);
   const cost=buildOwnershipCost(askN||avg,deprAmt,carYear,r.rtaFees);
 
@@ -6885,37 +7202,43 @@ function buildResult(r,brand,model,year,mileage,asking){
   // 3-Year depreciation
 
   // ── Price Intelligence Report — build vehicle identity prose ──
-  const bodyStr   = g('body')?.value||'';
-  const ownersStr = g('owners')?.value||'';
-  const accSel    = g('accidentSel')?.value||'none';
-  const warSel    = g('warrantySel')?.value||'';
-  const svcDisplay= svcVal||'Not Available';
+  const bodyStr   = '';
+  const ownersStr = qs.singleOwner===true?'Single Owner':qs.singleOwner===false?'Multiple Owners':'';
+  const accSel    = qs.accident===true?'minor':qs.accident===false?'none':'none';
+  const warSel    = qs.warranty===true?'active':qs.warranty===false?'expired':'';
+  const svcDisplay= qs.fsh===true?'Available':qs.fsh===false?'Not Available':'Unknown';
   const condDisplay=condVal||'—';
-  const sellerDisplay=sellerVal||'—';
+  const sellerDisplay='';
   const singleOwnerDisplay=qs.singleOwner===true?'Yes':qs.singleOwner===false?'No':'—';
-  const accidentDisplay=accSel==='none'||!accSel?'No':(accSel.charAt(0).toUpperCase()+accSel.slice(1)+' accident');
-  const warrantyDisplay=warSel==='active'||qs.warranty===true?'Active':warSel==='extended'?'Extended':qs.warranty===false?'No':'—';
-  const serviceDisplay=svcVal==='Full Agency'||svcVal==='Agency'?svcVal:svcVal||'Not Available';
-  const bodyDisplay=bodyStr||'Sedan';
+  const accidentDisplay=qs.accident===true?'Yes':qs.accident===false?'No':'—';
+  const warrantyDisplay=qs.warranty===true?'Active':qs.warranty===false?'None':'—';
+  const serviceDisplay=qs.fsh===true?'Available':qs.fsh===false?'Not Available':'Unknown';
+  const bodyDisplay='';
   const specDisplay=specVal||'GCC Spec';
-  const colourDisplay=colourVal||'—';
+  const colourDisplay='';
   const trimDisplay=g('trim')?.value||'';
 
-  // Vehicle identity line 1: Make Model Year Trim KM • Spec • Body • Colour
+  // Vehicle identity line 1: Make Model Year Trim
   const identLine1Parts=[`${brand} ${model||''}`.trim(),year,trimDisplay].filter(Boolean);
-  const identLine2Parts=[`${kmFmt} km`,specDisplay,bodyDisplay,colourDisplay].filter(s=>s&&s!=='—');
-  const identLine3Parts=[`Condition: ${condDisplay}`,`Seller: ${sellerDisplay||'—'}`].filter(Boolean);
-  const identLine4Parts=[`Service History: ${serviceDisplay}`,`Warranty: ${warrantyDisplay}`].filter(Boolean);
-  const identLine5Parts=[`Single Owner: ${singleOwnerDisplay}`,`Accident: ${accidentDisplay}`].filter(Boolean);
+  const identLine2Parts=[`${kmFmt} km`,specDisplay].filter(s=>s&&s!=='—');
+  const identLine3Parts=[`Condition: ${condDisplay}`].filter(Boolean);
+  // QC checkbox state display
+  const _qcBadge=(val,yLbl,nLbl)=>val===true?`<span style="color:#15803D;font-weight:700;">✓ ${yLbl}</span>`:val===false?`<span style="color:#991B1B;font-weight:700;">✗ ${nLbl}</span>`:`<span style="color:#8A9AB8;">— ${yLbl}</span>`;
+  const identLine4Parts=[
+    _qcBadge(qs.accident,'Accident','No Accident'),
+    _qcBadge(qs.fsh,'Svc History','No Svc History'),
+    _qcBadge(qs.warranty,'Warranty','No Warranty'),
+    _qcBadge(qs.singleOwner,'Single Owner','Multi Owner'),
+  ];
 
   // Market position text — replaced raw percentile with Transparency Score
   // Score degrades for: Non-GCC, No FSH, multiple owners, accident history, poor/fair condition
   const _tsBase = 8.5;
   const _tsPenalties = [
     (specVal && specVal!=='GCC' && specVal!=='GCC Spec') ? 1.5 : 0,
-    (qs.fsh===false || svcVal==='Non-Agency' || svcVal==='Unknown') ? 1.2 : 0,
-    (ownVal==='3'||ownVal==='4+'||qs.singleOwner===false) ? 0.8 : 0,
-    (accVal==='minor') ? 0.6 : (accVal==='major') ? 1.4 : 0,
+    (qs.fsh===false) ? 1.2 : 0,
+    (qs.singleOwner===false) ? 0.8 : 0,
+    (qs.accident===true) ? 1.2 : 0,
     (condVal==='Fair') ? 0.4 : (condVal==='Poor') ? 0.9 : 0,
   ];
   const _tsScore = Math.max(1.0, Math.round((_tsBase - _tsPenalties.reduce((a,b)=>a+b,0)) * 10) / 10);
@@ -6985,15 +7308,13 @@ function buildResult(r,brand,model,year,mileage,asking){
           <circle cx="54" cy="31" r="4" fill="rgba(26,43,76,0.2)" stroke="rgba(26,43,76,0.4)" stroke-width="1"/>
         </svg>
       </div>
-      ${colourDisplay&&colourDisplay!=='—'?`<div class="pir-colour-chip" style="background:${_pirColourHex(colourDisplay)}"></div>`:''}
     </div>
     <div class="pir-vehicle-info">
       <div class="pir-vehicle-name">${brand} ${model||''} ${year}${trimDisplay?' '+trimDisplay:''}</div>
-      <div class="pir-vehicle-meta">${identLine2Parts.join(' • ')}</div>
+      <div class="pir-vehicle-meta">${identLine2Parts.join(' · ')}</div>
       <div class="pir-vehicle-details">
         <span>${identLine3Parts.join(' &nbsp;·&nbsp; ')}</span>
-        <span>${identLine4Parts.join(' &nbsp;·&nbsp; ')}</span>
-        <span>${identLine5Parts.join(' &nbsp;·&nbsp; ')}</span>
+        <span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">${identLine4Parts.join(' &nbsp; ')}</span>
       </div>
     </div>
   </div>
@@ -7103,213 +7424,271 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   </div><!-- /pir-ps-wrap -->
 
-  <!-- ⑤ MARKET POSITION VISUAL — clean minimal range bar -->
-  <div class="pir-mp-wrap">
+  <!-- ⑤⑥ ROW 1: MARKET POSITION | MARKET SIGNALS -->
+  <div class="pir-row-grid">
 
-    <div class="pir-mp-header">
-      <div class="pir-mp-title">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="1" y1="6" x2="11" y2="6" stroke="#8A9AB8" stroke-width="1.4" stroke-linecap="round"/><polyline points="8,3 11,6 8,9" stroke="#8A9AB8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <!-- LEFT: Market Position -->
+    <div class="pir-row-cell pir-mp-cell">
+      <div class="pir-sec-hdr">
+        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-teal">📊</div>
         Market Position
-      </div>
-      <div class="pir-mp-badge-source">${r.isEstimate?'AI Estimate':'Live Data'} · ${comp>0?comp+' listings':'estimated'}</div>
-    </div>
-
-    <!-- Price labels row — positioned above the bar -->
-    <div class="pir-mp2-label-row">
-      <!-- Negotiation — left anchor -->
-      <div class="pir-mp2-pin pir-mp2-pin-nego" style="left:${negoPct}%">
-        <div class="pir-mp2-pin-price">AED ${negoEntry.toLocaleString()}</div>
-        <div class="pir-mp2-pin-name">Negotiation</div>
-      </div>
-      <!-- Handshake — centre anchor -->
-      <div class="pir-mp2-pin pir-mp2-pin-hand" style="left:${handshakePct}%">
-        <div class="pir-mp2-pin-price">AED ${handshake.toLocaleString()}</div>
-        <div class="pir-mp2-pin-name">Handshake</div>
-      </div>
-      ${stickerPct!==null?`
-      <!-- Sticker — conditional -->
-      <div class="pir-mp2-pin pir-mp2-pin-stick" style="left:${stickerPct}%">
-        <div class="pir-mp2-pin-price">AED ${stickerPrice.toLocaleString()}</div>
-        <div class="pir-mp2-pin-name">Sticker</div>
-      </div>`:``}
-    </div>
-
-    <!-- Connector stems row -->
-    <div class="pir-mp2-stem-row">
-      <div class="pir-mp2-stem pir-mp2-stem-nego" style="left:${negoPct}%"></div>
-      <div class="pir-mp2-stem pir-mp2-stem-hand" style="left:${handshakePct}%"></div>
-      ${stickerPct!==null?`<div class="pir-mp2-stem pir-mp2-stem-stick" style="left:${stickerPct}%"></div>`:``}
-    </div>
-
-    <!-- The track -->
-    <div class="pir-mp2-track">
-      <!-- Gradient fill — green left (cheap) → red right (expensive) -->
-      <div class="pir-mp2-fill"></div>
-
-      <!-- Negotiation dot -->
-      <div class="pir-mp2-dot pir-mp2-dot-nego" style="left:${negoPct}%"></div>
-
-      <!-- Handshake — premium car silhouette marker -->
-      <div class="pir-mp2-car" style="left:${handshakePct}%">
-        <svg viewBox="0 0 36 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="0" y="0" width="36" height="18" rx="4" fill="#0F1E38"/>
-          <path d="M3 12 L5.5 7 Q6.5 5.5 8.5 5.5 L12 5 Q14 4.8 15 5.8 L22 6 Q24 6 25.5 7.5 L32 10.5 Q33 11 33 12 L33 13 Q33 13.5 32 13.5 L29 13.5 Q28.6 15.5 27 15.5 Q25.4 15.5 25 13.5 L11 13.5 Q10.6 15.5 9 15.5 Q7.4 15.5 7 13.5 L4 13.5 Q3 13.5 3 13 Z"
-            fill="white" opacity="0.92"/>
-          <circle cx="9" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/>
-          <circle cx="27" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/>
-          <path d="M8.5 5.5 L10.5 9 L15 9 L14 5.8" fill="rgba(180,210,255,0.4)" stroke="none"/>
-          <path d="M15.5 5.9 L16 9 L21 9 L22 6" fill="rgba(180,210,255,0.4)" stroke="none"/>
-        </svg>
+        <div class="pir-sec-hdr-line"></div>
+        <span style="font-size:.55rem;font-weight:600;color:#8A9AB8;letter-spacing:.04em;white-space:nowrap;">${r.isEstimate?'AI Est.':'Live'} · ${comp>0?comp+'L':'est.'}</span>
       </div>
 
-      <!-- Sticker dot -->
-      ${stickerPct!==null?`<div class="pir-mp2-dot pir-mp2-dot-stick" style="left:${stickerPct}%"></div>`:``}
-    </div>
+      <div style="position:relative;margin:34px 0 14px;">
+        <div class="pir-mp2-pin-v28 pin-nego" style="left:${negoPct}%;bottom:16px;">
+          <div class="pir-mp2-pin-price-v28">AED ${negoEntry.toLocaleString()}</div>
+          <div class="pir-mp2-pin-name-v28">Open</div>
+          <div class="pir-mp2-stem-v28"></div>
+        </div>
+        <div class="pir-mp2-pin-v28 pin-hand" style="left:${handshakePct}%;bottom:16px;">
+          <div class="pir-mp2-pin-price-v28">AED ${handshake.toLocaleString()}</div>
+          <div class="pir-mp2-pin-name-v28">Handshake</div>
+          <div class="pir-mp2-stem-v28"></div>
+        </div>
+        ${stickerPct!==null?`<div class="pir-mp2-pin-v28 pin-stick" style="left:${stickerPct}%;bottom:16px;">
+          <div class="pir-mp2-pin-price-v28">AED ${stickerPrice.toLocaleString()}</div>
+          <div class="pir-mp2-pin-name-v28">Sticker</div>
+          <div class="pir-mp2-stem-v28"></div>
+        </div>`:``}
 
-    <!-- Min / Max endpoints -->
-    <div class="pir-mp2-ends">
-      <span class="pir-mp2-end-label">
-        <span class="pir-mp2-end-tag pir-mp2-end-min">MIN</span>
-        AED ${rangeMin.toLocaleString()}
-      </span>
-      <span class="pir-mp2-end-label pir-mp2-end-right">
-        AED ${rangeMax.toLocaleString()}
-        <span class="pir-mp2-end-tag pir-mp2-end-max">MAX</span>
-      </span>
-    </div>
-
-    <!-- Legend -->
-    <div class="pir-mp2-legend">
-      <div class="pir-mp2-leg"><div class="pir-mp2-leg-car"></div><span>Handshake</span></div>
-      <div class="pir-mp2-leg"><div class="pir-mp2-leg-dot" style="background:#D97706"></div><span>Negotiation</span></div>
-      ${stickerPct!==null?`<div class="pir-mp2-leg"><div class="pir-mp2-leg-dot" style="background:#3D5280"></div><span>Sticker</span></div>`:``}
-    </div>
-
-  </div><!-- /pir-mp-wrap -->
-
-  <!-- ⑥ MARKET SIGNALS — horizontal bars red→yellow→green -->
-  <div class="pir-signals">
-    <div class="pir-signals-title">Market Signals</div>
-    <div class="pir-signal-row">
-      <div class="pir-signal-label">
-        <span class="pir-signal-name">Data Confidence</span>
-        <span class="pir-signal-pct" id="sigConfPct">0%</span>
-      </div>
-      <div class="pir-signal-track">
-        <div class="pir-signal-fill pir-signal-fill-ryg" data-target="${conf}" style="width:0%"></div>
-        <div class="pir-signal-thumb" data-target="${conf}" style="left:0%"></div>
-      </div>
-      <div class="pir-signal-tier" id="sigConfTier">${conf>=75?'High':'Moderate'}</div>
-    </div>
-    <div class="pir-signal-row">
-      <div class="pir-signal-label">
-        <span class="pir-signal-name">Market Demand</span>
-        <span class="pir-signal-pct" id="sigDemPct">0%</span>
-      </div>
-      <div class="pir-signal-track">
-        <div class="pir-signal-fill pir-signal-fill-ryg" data-target="${r.demandScore||55}" style="width:0%"></div>
-        <div class="pir-signal-thumb" data-target="${r.demandScore||55}" style="left:0%"></div>
-      </div>
-      <div class="pir-signal-tier" id="sigDemTier">${(r.demandScore||55)>=70?'High':'Moderate'}</div>
-    </div>
-  </div>
-
-  <!-- ⑦ DEAL EVALUATION — logic-based badge -->
-  <div class="pir-deal-eval">
-    ${(() => {
-      // Determine deal tier from sticker vs handshake
-      if(!stickerPrice){
-        return `<div class="pir-de-row pir-de-neutral">
-          <span class="pir-de-icon">—</span>
-          <div class="pir-de-body">
-            <div class="pir-de-verdict">No Sticker Price Provided</div>
-            <div class="pir-de-sub">Enter an asking price to see the deal evaluation</div>
+        <div class="pir-mp2-bar-wrap-v28">
+          <div class="pir-mp2-dot-v28" style="left:${negoPct}%;background:#D97706;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>
+          <div class="pir-mp2-car-v28" style="left:${handshakePct}%;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:4;">
+            <svg viewBox="0 0 36 18" fill="none"><rect x="0" y="0" width="36" height="18" rx="4" fill="#0F1E38"/><path d="M3 12 L5.5 7 Q6.5 5.5 8.5 5.5 L12 5 Q14 4.8 15 5.8 L22 6 Q24 6 25.5 7.5 L32 10.5 Q33 11 33 12 L33 13 Q33 13.5 32 13.5 L29 13.5 Q28.6 15.5 27 15.5 Q25.4 15.5 25 13.5 L11 13.5 Q10.6 15.5 9 15.5 Q7.4 15.5 7 13.5 L4 13.5 Q3 13.5 3 13 Z" fill="white" opacity="0.92"/><circle cx="9" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/><circle cx="27" cy="14.5" r="2" fill="#0F1E38" stroke="white" stroke-width="1"/></svg>
           </div>
-        </div>`;
-      }
-      const diff   = stickerPrice - handshake;
-      const diffPct= Math.round(Math.abs(diff) / handshake * 100);
-      if(stickerPrice < handshake * 0.97){
-        // Strong deal: sticker is meaningfully below handshake
-        return `<div class="pir-de-row pir-de-good">
-          <span class="pir-de-icon">✅</span>
-          <div class="pir-de-body">
-            <div class="pir-de-verdict">Strong Deal</div>
-            <div class="pir-de-sub">Sticker is AED ${Math.abs(diff).toLocaleString()} (${diffPct}%) <strong>below</strong> fair market value — buy with confidence</div>
-          </div>
-          <div class="pir-de-pct pir-de-pct-good">−${diffPct}%</div>
-        </div>`;
-      } else if(stickerPrice <= handshake * 1.03){
-        // Fair price: within ±3% of handshake
-        return `<div class="pir-de-row pir-de-fair">
-          <span class="pir-de-icon">⚖️</span>
-          <div class="pir-de-body">
-            <div class="pir-de-verdict">Fair Price</div>
-            <div class="pir-de-sub">Sticker is within ${diffPct}% of fair market value — room for a small counter-offer</div>
-          </div>
-          <div class="pir-de-pct pir-de-pct-fair">≈ Market</div>
-        </div>`;
-      } else {
-        // Above market
-        return `<div class="pir-de-row pir-de-over">
-          <span class="pir-de-icon">⚠️</span>
-          <div class="pir-de-body">
-            <div class="pir-de-verdict">Above Market</div>
-            <div class="pir-de-sub">Sticker is AED ${Math.abs(diff).toLocaleString()} (${diffPct}%) <strong>above</strong> fair market value — negotiate hard or walk away</div>
-          </div>
-          <div class="pir-de-pct pir-de-pct-over">+${diffPct}%</div>
-        </div>`;
-      }
-    })()}
-  </div>
+          ${stickerPct!==null?`<div class="pir-mp2-dot-v28" style="left:${stickerPct}%;background:#3D5280;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>`:``}
+        </div>
+      </div>
 
-  <!-- ⑧ RECOMMENDATION LINE — auto-generated action advice -->
-  <div class="pir-rec-line">
-    ${(() => {
-      const cy = new Date().getFullYear();
-      const age = Math.max(1, cy - carYear);
-      const expectedKm = age * 18000;
-      const highMil = km > expectedKm * 1.3;
-      const lowMil  = km > 0 && km < expectedKm * 0.65;
-      const isGCC   = specVal === 'GCC' || specVal === 'GCC Spec';
-      const hasAcc  = accVal === 'minor' || accVal === 'major';
-      const fshOk   = qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency';
+      <div class="pir-mp2-ends-v28">
+        <span style="color:#22C55E;font-weight:700;">AED ${rangeMin.toLocaleString()}</span>
+        <span style="font-size:.55rem;color:#A8B8CC;">${comp>0?comp+' listings':''}</span>
+        <span style="color:#EF4444;font-weight:700;">AED ${rangeMax.toLocaleString()}</span>
+      </div>
+      <div class="pir-mp2-legend-v28">
+        <div class="pir-mp2-leg-v28">
+          <div class="pir-mp2-leg-car-v28"><svg viewBox="0 0 28 14" fill="none"><path d="M2 9 L4 5 Q5 4 7 4 L10 3.5 Q12 3.3 13 4.3 L18 4.5 Q20 4.5 21 6 L26 8.5 Q27 9 27 9.5 L27 10 Q27 10.5 26 10.5 L23 10.5 Q22.6 12 21 12 Q19.4 12 19 10.5 L9 10.5 Q8.6 12 7 12 Q5.4 12 5 10.5 L3 10.5 Q2 10.5 2 10 Z" fill="white" opacity="0.9"/></svg></div>
+          <span>Handshake</span>
+        </div>
+        <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#D97706"></div><span>Open Offer</span></div>
+        ${stickerPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#3D5280"></div><span>Sticker</span></div>`:``}
+      </div>
+    </div>
 
-      // Pick action: buy at sticker vs target handshake
-      if (!stickerPrice) {
-        // No asking price — give a baseline advice
-        return `<div class="pir-rec-icon">💡</div>
-        <div class="pir-rec-body">
-          <div class="pir-rec-action">Target the Handshake Price</div>
-          <div class="pir-rec-reason">No asking price entered. Open at AED ${negoEntry.toLocaleString()} and aim to close at <strong>AED ${handshake.toLocaleString()}</strong> — the AI-estimated fair market value${isGCC?' for this GCC-spec vehicle':''}.${highMil?' Mileage is above average; use this as a negotiation lever.':''}</div>
+    <!-- RIGHT: Market Signals -->
+    <div class="pir-row-cell pir-signals-cell">
+      <div class="pir-sec-hdr">
+        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-blue">📡</div>
+        Market Signals
+        <div class="pir-sec-hdr-line"></div>
+      </div>
+
+      <div class="pir-signal-row-v28">
+        <div class="pir-signal-top-v28">
+          <span class="pir-signal-name-v28">Data Confidence</span>
+          <span class="pir-signal-badge-v28 ${conf>=75?'sig-high':conf>=50?'sig-mid':'sig-low'}">${conf>=75?'High':conf>=50?'Moderate':'Low'}</span>
+        </div>
+        <div class="pir-signal-track-v28">
+          <div class="pir-signal-fill-v28" data-target="${conf}" style="width:0%"></div>
+          <div class="pir-signal-thumb-v28" data-target="${conf}" style="left:0%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.54rem;color:#A8B8CC;margin-top:3px;">
+          <span>Low</span><span id="sigConfPct">${conf}%</span><span>High</span>
+        </div>
+      </div>
+
+      <div class="pir-signal-row-v28">
+        <div class="pir-signal-top-v28">
+          <span class="pir-signal-name-v28">Market Demand</span>
+          <span class="pir-signal-badge-v28 ${(r.demandScore||55)>=70?'sig-high':(r.demandScore||55)>=45?'sig-mid':'sig-low'}">${(r.demandScore||55)>=70?'High':(r.demandScore||55)>=45?'Moderate':'Low'}</span>
+        </div>
+        <div class="pir-signal-track-v28">
+          <div class="pir-signal-fill-v28" data-target="${r.demandScore||55}" style="width:0%"></div>
+          <div class="pir-signal-thumb-v28" data-target="${r.demandScore||55}" style="left:0%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.54rem;color:#A8B8CC;margin-top:3px;">
+          <span>Low</span><span id="sigDemPct">${r.demandScore||55}%</span><span>High</span>
+        </div>
+      </div>
+
+      ${(() => {
+        const tsColor = _tsScore>=7.5?'#15803D':_tsScore>=5.5?'#92400E':'#991B1B';
+        const tsDots = Array.from({length:10},(_x,i)=>`<div class="pir-ts-dot-v28${i<Math.round(_tsScore)?' on':''}\" style="${i<Math.round(_tsScore)?'background:'+tsColor+';':''}"></div>`).join('');
+        return `<div class="pir-ts-row-v28">
+          <div>
+            <div class="pir-ts-label-v28">Transparency Score</div>
+            <div class="pir-ts-dots-v28" style="margin-top:4px;">${tsDots}</div>
+            <div style="font-size:.6rem;color:#8A9AB8;margin-top:3px;">${_tsLabel}</div>
+          </div>
+          <div class="pir-ts-score-v28" style="color:${tsColor};font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:800;">${_tsScore}<span style="font-size:.55rem;font-weight:600;color:#8A9AB8;">/10</span></div>
         </div>`;
-      }
-      const diff    = stickerPrice - handshake;
-      const diffPct = Math.round(Math.abs(diff) / handshake * 100);
-      if (stickerPrice <= handshake * 0.97) {
-        // Strong deal — buy at sticker
-        return `<div class="pir-rec-icon">✅</div>
-        <div class="pir-rec-body">
-          <div class="pir-rec-action">Buy at Sticker Price — AED ${stickerPrice.toLocaleString()}</div>
-          <div class="pir-rec-reason">At ${diffPct}% below fair market value, the asking price is already a strong deal. ${fshOk?'Full service history adds confidence. ':''} ${isGCC?'GCC spec supports resale value. ':''}Proceed without heavy negotiation — this may not stay available long.</div>
+      })()}
+    </div>
+  </div><!-- /row 1 -->
+
+  <!-- ROW 2: VALUE ADJUSTMENTS | EXPERT VERDICT -->
+  <div class="pir-row-grid">
+
+    <!-- LEFT: Value Adjustments compact chart -->
+    <div class="pir-row-cell pir-vab-cell">
+      <div class="pir-sec-hdr">
+        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-amber">⚖️</div>
+        Value Adjustments
+        <div class="pir-sec-hdr-line"></div>
+      </div>
+      ${(()=>{
+        const baseVal=avg||handshake;
+        const isGCC=specVal==='GCC'||specVal==='GCC Spec';
+        const fshOk=qs.fsh===true;
+        const age=Math.max(1,new Date().getFullYear()-carYear);
+        const expKm=age*18000;
+        const mDiff=km-expKm;
+        const rows=[];
+        if(isGCC) rows.push({l:'GCC Specification',a:Math.round(baseVal*.04/500)*500,p:true});
+        if(condVal==='Excellent') rows.push({l:'Excellent Condition',a:Math.round(baseVal*.04/500)*500,p:true});
+        else if(condVal==='Very Good') rows.push({l:'Very Good Condition',a:Math.round(baseVal*.02/500)*500,p:true});
+        if(fshOk) rows.push({l:'Full Service History',a:Math.round(baseVal*.03/500)*500,p:true});
+        if(qs.singleOwner===true||ownVal==='1') rows.push({l:'Single Owner',a:Math.round(baseVal*.02/500)*500,p:true});
+        if(qs.warranty===true||warVal==='active') rows.push({l:'Active Warranty',a:Math.round(baseVal*.025/500)*500,p:true});
+        if(!isGCC&&specVal) rows.push({l:'Non-GCC Spec',a:Math.round(baseVal*.06/500)*500,p:false});
+        if(condVal==='Fair') rows.push({l:'Fair Condition',a:Math.round(baseVal*.04/500)*500,p:false});
+        else if(condVal==='Poor') rows.push({l:'Poor Condition',a:Math.round(baseVal*.09/500)*500,p:false});
+        if(mDiff>20000) rows.push({l:'High Mileage',a:Math.round(Math.min(baseVal*.12,(mDiff/10000)*600)/500)*500,p:false});
+        else if(mDiff<-15000) rows.push({l:'Low Mileage ✓',a:Math.round(baseVal*.03/500)*500,p:true});
+        if(!fshOk&&(qs.fsh===false)) rows.push({l:'No Service History',a:Math.round(baseVal*.02/500)*500,p:false});
+        if(accVal==='major') rows.push({l:'Major Accident',a:Math.round(baseVal*.10/500)*500,p:false});
+        else if(accVal==='minor') rows.push({l:'Minor Accident',a:Math.round(baseVal*.05/500)*500,p:false});
+        if(qs.singleOwner===false&&!rows.find(r=>r.l==='Non-GCC Spec')) rows.push({l:'Multiple Owners',a:Math.round(baseVal*.025/500)*500,p:false});
+        const maxA=rows.length?Math.max(...rows.map(r=>r.a)):1;
+        const posTotal=rows.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
+        const negTotal=rows.filter(r=>!r.p).reduce((s,r)=>s+r.a,0);
+        const netVal=Math.round((baseVal+posTotal-negTotal)/500)*500;
+        const rowsHtml=rows.slice(0,6).map(r=>{
+          const w=Math.max(10,Math.round((r.a/maxA)*80));
+          return `<div class="pir-vadj-row-v28">
+            <span class="pir-vadj-label-v28">${r.l}</span>
+            <div class="pir-vadj-bar-v28 ${r.p?'pir-vadj-bar-pos':'pir-vadj-bar-neg'}" style="width:${w}px;display:inline-block;vertical-align:middle;height:6px;border-radius:3px;"></div>
+            <span class="pir-vadj-amt-v28 ${r.p?'pir-vadj-amt-pos':'pir-vadj-amt-neg'}">${r.p?'+':'-'}${r.a.toLocaleString()}</span>
+          </div>`;
+        }).join('');
+        return `<div class="pir-vadj-base-row"><span>Base Market</span><span>AED ${baseVal.toLocaleString()}</span></div>
+        ${rowsHtml}
+        <div class="pir-vadj-net-row"><span>Net Adjusted</span><span style="color:${posTotal>=negTotal?'#15803D':'#991B1B'}">AED ${netVal.toLocaleString()}</span></div>`;
+      })()}
+    </div>
+
+    <!-- RIGHT: Expert Verdict -->
+    <div class="pir-row-cell pir-ev-cell">
+      <div class="pir-sec-hdr">
+        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-purple">🧠</div>
+        Expert Verdict
+        <div class="pir-sec-hdr-line"></div>
+      </div>
+      ${(()=>{
+        const isGCC=specVal==='GCC'||specVal==='GCC Spec';
+        const fshOk=qs.fsh===true;
+        const age=Math.max(1,new Date().getFullYear()-carYear);
+        const expKm=age*18000;
+        const highMil=km>expKm*1.25;
+        const hasAcc=accVal==='minor'||accVal==='major';
+        const advText=ai?.key_factors?.[0]||(isGCC?`GCC specification — the most demanded UAE variant. Supports strong resale liquidity and full local parts availability.`:`${brand} ${model||''} — verify parts availability and UAE service coverage before proceeding.`);
+        const valText=stickerPrice?(stickerPrice>handshake*1.05?`Asking price is ${Math.round((stickerPrice-handshake)/handshake*100)}% above fair market — negotiate firmly and reference comparable listings.`:`Asking price is near market value. A small counter-offer to AED ${handshake.toLocaleString()} is reasonable.`):`Target AED ${handshake.toLocaleString()} as your closing price based on current UAE market data.`;
+        const revText=hasAcc?`${accVal==='major'?'Major':'Minor'} accident on record — get an independent inspection. Use this as a strong negotiation lever.`:highMil?`Mileage of ${km.toLocaleString()} km is above average for a ${age}-year-old vehicle — budget for upcoming maintenance and use this in your offer.`:!fshOk?`No full service history — request receipts or agency records, and include a pre-purchase inspection in your offer terms.`:qs.singleOwner===false?`Multiple previous owners — ask why each sold and check for recurring fault patterns in the maintenance records.`:`Standard review: verify RTA clearance, chassis number, and confirm no outstanding loans before transfer.`;
+        return `<div class="pir-ev-bullet pir-ev-bullet-adv">
+          <span class="pir-ev-icon">🚀</span>
+          <div class="pir-ev-body"><div class="pir-ev-title pir-ev-adv-title">Advantage</div><div>${advText}</div></div>
+        </div>
+        <div class="pir-ev-bullet pir-ev-bullet-val">
+          <span class="pir-ev-icon">💰</span>
+          <div class="pir-ev-body"><div class="pir-ev-title pir-ev-val-title">Value</div><div>${valText}</div></div>
+        </div>
+        <div class="pir-ev-bullet pir-ev-bullet-rev">
+          <span class="pir-ev-icon">⚠️</span>
+          <div class="pir-ev-body"><div class="pir-ev-title pir-ev-rev-title">Review</div><div>${revText}</div></div>
         </div>`;
-      } else if (stickerPrice <= handshake * 1.03) {
-        // Fair — small counter-offer to handshake
-        return `<div class="pir-rec-icon">⚖️</div>
-        <div class="pir-rec-body">
-          <div class="pir-rec-action">Offer the Handshake Price — AED ${handshake.toLocaleString()}</div>
-          <div class="pir-rec-reason">Sticker is at market rate. Counter with <strong>AED ${handshake.toLocaleString()}</strong> and expect a quick acceptance. ${highMil?'Higher mileage justifies a gentle push. ':''} ${hasAcc?'Accident history gives you additional leverage. ':''} ${!fshOk&&svcVal?'Missing service records are another valid talking point.':''}</div>
-        </div>`;
-      } else {
-        // Overpriced — negotiate hard
-        const target = Math.round(handshake / 500) * 500;
-        return `<div class="pir-rec-icon">⚠️</div>
-        <div class="pir-rec-body">
-          <div class="pir-rec-action">Negotiate to Handshake Price — AED ${target.toLocaleString()}</div>
-          <div class="pir-rec-reason">Sticker is ${diffPct}% above fair value. Open at AED ${negoEntry.toLocaleString()}, show comparable listings, and target <strong>AED ${target.toLocaleString()}</strong>. ${hasAcc?'Accident history strongly supports your counter. ':''} ${highMil?'High mileage is a clear lever. ':''}Walk away if the seller won't move below AED ${Math.round(handshake * 1.05 / 500) * 500 .toLocaleString()}.</div>
-        </div>`;
-      }
-    })()}
+      })()}
+    </div>
+  </div><!-- /row 2 -->
+
+  <!-- ROW 3: GREEN FLAGS | ATTENTION POINTS -->
+  <div class="pir-row-grid">
+    <div class="pir-row-cell pir-flags-cell-green">
+      <div class="pir-sec-hdr">
+        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-green">✅</div>
+        Green Flags
+        <span class="pir-flags-count-badge pir-flags-count-green">${gF.length}</span>
+        <div class="pir-sec-hdr-line"></div>
+      </div>
+      ${gF.length?gF.map(f=>`<div class="pir-flag-v28 pir-flag-v28-green"><span class="pir-flag-v28-icon">✅</span><span>${f}</span></div>`).join(''):`<div style="font-size:.78rem;color:#8A9AB8;font-style:italic;padding:4px 0;">No specific green flags identified.</div>`}
+    </div>
+    <div class="pir-row-cell pir-flags-cell-red">
+      <div class="pir-sec-hdr">
+        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-amber">🔶</div>
+        Attention Points
+        <span class="pir-flags-count-badge pir-flags-count-amber">${rF.length}</span>
+        <div class="pir-sec-hdr-line"></div>
+      </div>
+      ${rF.length?rF.map(f=>`<div class="pir-flag-v28 pir-flag-v28-amber"><span class="pir-flag-v28-icon">🔶</span><span>${f}</span></div>`).join(''):`<div style="font-size:.78rem;color:#8A9AB8;font-style:italic;padding:4px 0;">No major concerns identified.</div>`}
+    </div>
+  </div><!-- /row 3 -->
+
+  <!-- ROW 4: NEGOTIATION TIMELINE (full width dark) -->
+  ${(()=>{
+    const openOffer=negoEntry;
+    const closeTarget=nego?.close||handshake;
+    const walkAway=stickerPrice?Math.round(Math.max(handshake*1.06,stickerPrice*0.98)/500)*500:Math.round(handshake*1.08/500)*500;
+    const scriptText=nego?.script||`"I've reviewed current listings — comparable ${year} ${brand}${model?' '+model:''} units are available AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()} in the UAE market. Considering the details of this vehicle, I'd like to open at AED ${openOffer.toLocaleString()} and settle at AED ${closeTarget.toLocaleString()}."`;
+    return `<div class="pir-nego-timeline">
+      <div class="pir-nt-hdr">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="rgba(232,208,96,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Negotiation Script
+      </div>
+      <div class="pir-nt-track-wrap">
+        <div class="pir-nt-pins" style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <div class="pir-nt-pin pir-nt-pin-open" style="align-items:flex-start;">
+            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#4ADE80;white-space:nowrap;">AED ${openOffer.toLocaleString()}</div>
+            <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(74,222,128,0.6);">Open</div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;margin-top:4px;"></div>
+          </div>
+          <div class="pir-nt-pin pir-nt-pin-target" style="align-items:center;">
+            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#E8D060;white-space:nowrap;">AED ${closeTarget.toLocaleString()}</div>
+            <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,208,96,0.6);">Target</div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#E8D060;margin-top:4px;"></div>
+          </div>
+          <div class="pir-nt-pin pir-nt-pin-walk" style="align-items:flex-end;">
+            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#FCA5A5;white-space:nowrap;">AED ${walkAway.toLocaleString()}</div>
+            <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(252,165,165,0.6);">Walk Away</div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;margin-top:4px;"></div>
+          </div>
+        </div>
+        <div class="pir-nt-track"><div class="pir-nt-track-fill"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.5rem;color:rgba(255,255,255,0.25);margin-top:4px;">
+          <span>Opening offer</span><span>Settle here</span><span>Walk away</span>
+        </div>
+      </div>
+      <div class="pir-nt-script" id="haggleScriptTab1">${scriptText}</div>
+      <button class="pir-nt-copy-btn" onclick="(function(btn){const el=document.getElementById('haggleScriptTab1');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Copy Script';btn.classList.remove('copied');},2200);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy Script';},2200);});})(this)">
+        📋 Copy Script
+      </button>
+    </div>`;
+  })()}
+
+  <!-- TAB 1 FOOTER -->
+  <div class="pir-tab-footer">
+    <a class="pir-tab-footer-link" href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M9 9l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Dubizzle
+    </a>
+    <a class="pir-tab-footer-link" href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M9 9l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      YallaMotor
+    </a>
+    <button class="pir-tab-footer-reset" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5A4.5 4.5 0 1 0 6.5 2M2 2v4.5h4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      New Search
+    </button>
   </div>
 
   </div><!-- /pir-tab-verdict -->
@@ -7392,7 +7771,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         <div class="pir-tip-label">🏷️ Seller Tip</div>
         <div class="pir-tip-text">${(() => {
           const isGCC = specVal === 'GCC' || specVal === 'GCC Spec';
-          const fshOk = qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency';
+          const fshOk = qs.fsh === true;
           const demand = r.demandScore || 55;
           if(demand >= 70)
             return `Demand is strong for this model. List at AED ${Math.round(handshake * 1.06 / 500) * 500 .toLocaleString()} with room to negotiate down to AED ${handshake.toLocaleString()}.`;
@@ -7443,9 +7822,9 @@ function buildResult(r,brand,model,year,mileage,asking){
       positives.push({ label:'Low Mileage for Year ✅', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected — price premium supported` });
 
     // Service history
-    if(qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency')
+    if(qs.fsh === true)
       positives.push({ label:'Full Service History', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:'Highest buyer trust level' });
-    else if(qs.fsh === false || svcVal === 'Non-Agency' || svcVal === 'Unknown')
+    else if(qs.fsh === false || false)
       negatives.push({ label:'No Service History', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Harder to verify maintenance' });
 
     // Accident
@@ -7465,13 +7844,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     if(qs.warranty === true || warVal === 'active')
       positives.push({ label:'Active Warranty', amount: Math.round(baseVal * 0.025 / 500) * 500, reason:'Reduces buyer risk' });
 
-    // Popular colour
-    const highCol = ['White','Pearl White','Silver','Black','Midnight Black','Gray'].includes(colourVal);
-    const lowCol  = ['Purple','Orange','Yellow','Brown'].includes(colourVal);
-    if(highCol && colourVal)
-      positives.push({ label:`${colourVal} Colour`, amount: Math.round(baseVal * 0.01 / 500) * 500, reason:'High-demand resale colour in UAE' });
-    else if(lowCol && colourVal)
-      negatives.push({ label:`${colourVal} Colour`, amount: Math.round(baseVal * 0.01 / 500) * 500, reason:'Lower resale demand for this colour' });
+    // Popular colour — removed (colour field no longer collected)
 
     const totalPos = positives.reduce((s,a)=>s+a.amount, 0);
     const totalNeg = negatives.reduce((s,a)=>s+a.amount, 0);
@@ -7771,7 +8144,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       green.push({ icon:'✅', title:'GCC Specification', detail:'Most trusted spec in UAE — full parts availability, aligned warranty, and widest resale market.' });
     if(accVal==='none'||(!accVal&&qs.accident===false))
       green.push({ icon:'✅', title:'No Accident Declared', detail:'No accident on record. Verify independently with a CARCAM or Carfax-equivalent UAE report.' });
-    if(qs.fsh===true||svcVal==='Full Agency'||svcVal==='Agency')
+    if(qs.fsh===true)
       green.push({ icon:'✅', title:'Full Service History', detail:'Agency-serviced vehicles command higher buyer confidence and resale value.' });
     if(qs.warranty===true||warVal==='active')
       green.push({ icon:'✅', title:'Active Warranty', detail:'Remaining factory or extended warranty reduces your risk exposure significantly.' });
@@ -7787,7 +8160,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     const expectedKmC = Math.max(1, cy - carYear) * 18000;
     if(km > expectedKmC + 20000)
       attn.push({ icon:'🔶', title:'High Mileage', detail:`${km.toLocaleString()} km exceeds the expected ${expectedKmC.toLocaleString()} km for a ${carYear} model. Verify engine, gearbox, and suspension condition.` });
-    if(qs.fsh===false||svcVal==='Non-Agency'||svcVal==='Unknown')
+    if(qs.fsh===false)
       attn.push({ icon:'🔶', title:'Missing Service Records', detail:'No verifiable service history. Request receipts or agency printouts. Factor in a pre-purchase inspection.' });
     if(accVal==='minor')
       attn.push({ icon:'🔶', title:'Minor Accident on Record', detail:'Confirm repair quality and check for paint inconsistencies or panel gaps during inspection.' });
@@ -7863,7 +8236,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     const accInconsist = [];
     if(accVal==='none'&&condVal==='Fair') accInconsist.push('Condition rated "Fair" despite no declared accident — inspect for undisclosed bodywork or repairs.');
     if(accVal==='none'&&condVal==='Poor') accInconsist.push('Condition rated "Poor" with no accident declared — request a CARCAM vehicle history report to verify.');
-    if(accVal==='minor'&&(svcVal==='Unknown'||qs.fsh===false)) accInconsist.push('Minor accident declared but no service history — post-accident repair quality cannot be verified.');
+    if(accVal==='minor'&&(qs.fsh===false)) accInconsist.push('Minor accident declared but no service history — post-accident repair quality cannot be verified.');
     if(accVal==='major') accInconsist.push('Major accident on record — look for paint overspray, misaligned panels, welding marks, or rippling under carpets.');
 
     // UAE-specific regulatory notes
@@ -7961,7 +8334,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       leverages.push(`the mileage of ${km.toLocaleString()} km is above average for a ${carYear} model`);
     if(accVal && accVal !== 'none')
       leverages.push(`there is a ${accVal} accident on record`);
-    if((qs.fsh === false) || svcVal === 'Non-Agency' || svcVal === 'Unknown')
+    if(qs.fsh === false)
       leverages.push(`no verifiable service history is available`);
     if(condVal === 'Fair') leverages.push(`the condition is rated fair and may require attention`);
     if(qs.warranty === false || warVal === 'expired') leverages.push(`the warranty has expired`);
@@ -8034,7 +8407,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     if(km > (Math.max(1, cy - carYear) * 18000 + 30000))
       computedFlags.push({ icon:'🔴', text:`High mileage: ${km.toLocaleString()} km for a ${carYear} model. Expect higher maintenance costs and faster depreciation.` });
 
-    if((qs.fsh === false) || svcVal === 'Non-Agency' || svcVal === 'Unknown')
+    if(qs.fsh === false)
       computedWarnings.push({ icon:'🟡', text:'No verified service history. Ask the seller to produce receipts or agency records.' });
 
     if(qs.warranty === false || warVal === 'expired')
@@ -8129,7 +8502,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="pir-footer-bar-wrap"><div class="pir-footer-bar" id="cbarFill" style="width:0%"></div></div>
       <span class="pir-footer-conf-pct">${conf}%</span>
     </div>
-    ${comp>0?`<div class="pir-footer-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}${emirVal?' · '+emirVal:''}</div>`:''}
+    ${comp>0?`<div class="pir-footer-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}</div>`:''}
     <div class="pir-footer-ref">${ref.label} &nbsp;|&nbsp; Based on live UAE market data</div>
   </div>
 
@@ -8288,18 +8661,10 @@ async function checkCarPrice(){
     brand, model, year:parseInt(year), mileage:parseInt(mileage),
     trim:g('trim')?.value||'',
     spec:spec||'GCC', condition:condition||'Good',
-    colour:g('colour')?.value||'',
-    bodyType:g('body')?.value||'',
-    sellerType:g('seller')?.value||'',
-    service:g('service')?.value||'',
     askingPrice:asking?parseInt(asking):null,
     warranty:qs.warranty, singleOwner:qs.singleOwner,
-    fsh:qs.fsh, accidentHistory:g('accidentSel')?.value||qs.accident||null,
-    purpose:g('purpose')?.value||'buying',
-    owners:g('owners')?.value||'',
-    warrantyStatus:g('warrantySel')?.value||'',
-    emirate:g('emirate')?.value||'',
-    finance:g('finance')?.value||'',
+    fsh:qs.fsh, accidentHistory:qs.accident,
+    purpose:'buying',
     deviceToken:_deviceToken
   });
 
@@ -8517,7 +8882,7 @@ function closeMobResult(){
 
 /* ── RESET ──────────────────────────────────────────────── */
 function resetForm(){
-  ['brand','year','trim','mileage','colour','body','seller','service','asking'].forEach(id=>{
+  ['brand','year','trim','mileage','asking'].forEach(id=>{
     const el=g(id);if(el){el.value='';markFilled(el);}
   });
   g('model').innerHTML='<option value="">Select model…</option>';
@@ -9508,7 +9873,7 @@ function _updateStage2(){
 
 // Hook into form fields for live-sync
 (function initStage2Listeners(){
-  const watchIds = ['brand','model','year','mileage','body','colour','trim','spec','condition'];
+  const watchIds = ['brand','model','year','mileage','trim','spec','condition'];
   watchIds.forEach(id=>{
     const el = document.getElementById(id);
     if(!el) return;
@@ -9555,7 +9920,7 @@ function pirAnimateStatBars(){
       el.style.width=Math.min(100,target)+'%';
     }));
   });
-  // New pir-signal fills + thumbs
+  // New pir-signal fills + thumbs (legacy)
   document.querySelectorAll('.pir-signal-fill-ryg[data-target]').forEach(fill=>{
     const target=Math.min(100,parseInt(fill.dataset.target)||0);
     const thumb=fill.nextElementSibling;
@@ -9564,6 +9929,15 @@ function pirAnimateStatBars(){
       fill.style.width=target+'%';
       if(thumb&&thumb.classList.contains('pir-signal-thumb')) thumb.style.left=target+'%';
       if(pctEl) pctEl.textContent=target+'%';
+    }));
+  });
+  // v28 signal fills + thumbs
+  document.querySelectorAll('.pir-signal-fill-v28[data-target]').forEach(fill=>{
+    const target=Math.min(100,parseInt(fill.dataset.target)||0);
+    const thumb=fill.nextElementSibling;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      fill.style.width=target+'%';
+      if(thumb&&thumb.classList.contains('pir-signal-thumb-v28')) thumb.style.left=target+'%';
     }));
   });
 }
