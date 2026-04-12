@@ -5868,8 +5868,243 @@
       border-bottom: 1px solid #E8EBF3;
     }
 
-    /* ── PRICE SUMMARY ON DARK BG ── */
-    .pir-ps-wrap { border-radius: 0; }
+    /* ═══════════════════════════════════════════════════════════════
+       KAMSAYARA v28 — LIGHT THEME OVERRIDES + EXTENDED ANALYSIS
+       Replaces all dark navy backgrounds with warm cream/teal theme
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* ── REPORT HEADER: teal-gold gradient instead of dark navy ── */
+    .pir-header {
+      background: linear-gradient(138deg, rgba(0,38,32,0.93) 0%, rgba(0,82,68,0.95) 30%, rgba(140,105,8,0.89) 68%, rgba(196,154,42,0.96) 100%) !important;
+    }
+
+    /* ── TAB NAV: light white bar ── */
+    .pir-tabs-nav { background: #fff !important; border-bottom: 2px solid #E4D9C6 !important; position: sticky !important; top: 0 !important; z-index: 50 !important; }
+    .pir-tnav-btn { color: #6A7E9A !important; border-bottom: 2px solid transparent !important; background: transparent !important; }
+    .pir-tnav-btn:hover { color: #3D4E6A !important; background: rgba(0,133,119,0.04) !important; }
+    .pir-tnav-btn.pir-tnav-active { color: #008577 !important; border-bottom-color: #008577 !important; background: transparent !important; }
+
+    /* ── PRICE SUMMARY: warm cream instead of dark navy ── */
+    .pir-ps-wrap {
+      background: linear-gradient(145deg, #FDFCF8 0%, rgba(0,133,119,0.04) 60%, rgba(196,154,42,0.03) 100%) !important;
+      border-bottom: 1px solid #E4D9C6 !important;
+      padding: 18px 22px 16px !important;
+    }
+    .pir-ps-wrap::before, .pir-ps-wrap::after { display: none !important; }
+    .pir-ps-hero-label { color: #6A7E9A !important; }
+    .pir-ps-hero-dot { background: #008577 !important; box-shadow: 0 0 8px rgba(0,133,119,0.3) !important; animation: none !important; }
+    .pir-ps-micro { color: #8A9AB8 !important; }
+    .pir-ps-hero-amount { color: #008577 !important; text-shadow: none !important; font-size: clamp(1.6rem, 4.5vw, 2.5rem) !important; }
+    .pir-ps-hero-badge { border: 1px solid rgba(0,133,119,0.25) !important; }
+    .pir-hs-align-note { color: #6A7E9A !important; }
+    .pir-hs-align-note.capped { color: #991B1B !important; }
+    .pir-deal-good { background: rgba(22,163,74,0.09) !important; color: #15803D !important; border-color: rgba(22,163,74,0.25) !important; }
+    .pir-deal-warn { background: rgba(217,119,6,0.09) !important; color: #92400E !important; border-color: rgba(217,119,6,0.25) !important; }
+    .pir-deal-bad  { background: rgba(220,38,38,0.09) !important; color: #991B1B !important; border-color: rgba(220,38,38,0.25) !important; }
+    .pir-deal-neutral { background: rgba(100,116,139,0.07) !important; color: #475569 !important; border-color: rgba(100,116,139,0.2) !important; }
+
+    /* ── PRICE CARDS: warm white ── */
+    .pir-ps-card { background: #FDFCF8 !important; border: none !important; border-right: 1px solid #E4D9C6 !important; }
+    .pir-ps-card:hover { background: #FAF7F0 !important; }
+    .pir-ps-card-label { color: #4A5E7A !important; }
+    .pir-ps-card-def   { color: #A8B8CC !important; }
+    .pir-ps-card-val   { color: #1A1610 !important; }
+    .pir-ps-card-na    { color: #A8B8CC !important; }
+    .pir-ps-card-aed   { color: #6A7E9A !important; }
+    .pir-ps-delta-over   { color: #991B1B !important; }
+    .pir-ps-delta-under  { color: #15803D !important; }
+    .pir-ps-delta-tactic { color: #92400E !important; }
+    .pir-ps-delta-spread { color: #6A7E9A !important; }
+    .pir-ps-range-min { color: #15803D !important; font-weight: 700 !important; }
+    .pir-ps-range-max { color: #991B1B !important; font-weight: 700 !important; }
+    .pir-ps-range-arrow { color: #C8D4E4 !important; }
+    .pir-ps-legend { background: #FAF7F0 !important; color: #8A9AB8 !important; border-top: 1px solid #E4D9C6 !important; }
+    .pir-ps-legend strong { color: #4A5E7A !important; }
+    .pir-ps-legend-sep { color: #D4C8B0 !important; }
+
+    /* ── NEGOTIATION TIMELINE: warm teal/cream ── */
+    .pir-nego-timeline {
+      background: linear-gradient(145deg, rgba(0,133,119,0.06) 0%, rgba(250,247,240,0.95) 50%, rgba(196,154,42,0.06) 100%) !important;
+      border: none !important;
+      border-top: 1px solid rgba(0,133,119,0.14) !important;
+      border-bottom: 2px solid rgba(196,154,42,0.3) !important;
+    }
+    .pir-nego-timeline::before, .pir-nego-timeline::after { display: none !important; }
+    .pir-nt-hdr { color: #C49A2A !important; }
+    .pir-nt-track { background: rgba(0,133,119,0.1) !important; }
+    .pir-nt-track-fill { background: linear-gradient(90deg, #22C55E 0%, #C49A2A 60%, #EF4444 100%) !important; }
+    .pir-nt-script {
+      background: rgba(255,255,255,0.8) !important;
+      border: 1px solid rgba(0,133,119,0.15) !important;
+      border-left: 3px solid #C49A2A !important;
+      color: #2D3F5C !important;
+    }
+    .pir-nt-copy-btn {
+      color: #C49A2A !important;
+      border-color: rgba(196,154,42,0.35) !important;
+      background: rgba(255,255,255,0.6) !important;
+    }
+    .pir-nt-copy-btn:hover { background: rgba(196,154,42,0.08) !important; border-color: rgba(196,154,42,0.55) !important; }
+    /* Pin colors on light bg */
+    [class*="pir-nt-pin-open"] .pir-nt-pin-price  { color: #16A34A !important; }
+    [class*="pir-nt-pin-target"] .pir-nt-pin-price { color: #C49A2A !important; }
+    [class*="pir-nt-pin-walk"] .pir-nt-pin-price   { color: #DC2626 !important; }
+
+    /* ── EXTENDED ANALYSIS STYLES ── */
+    .pir-ext-wrap {
+      background: #FDFCF8;
+      border-top: 3px solid rgba(0,133,119,0.2);
+    }
+    .pir-ext-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 22px 12px;
+      background: linear-gradient(90deg, rgba(0,133,119,0.07) 0%, transparent 100%);
+      border-bottom: 1px solid #E4D9C6;
+      font-size: .7rem; font-weight: 800; letter-spacing: .18em;
+      text-transform: uppercase; color: #008577;
+    }
+    .pir-ext-ref { margin-left: auto; font-family: "Orbitron",sans-serif; font-size: .62rem; font-weight: 700; color: #C49A2A; letter-spacing: .06em; }
+
+    /* Ratings row — 4 equal columns */
+    .pir-ratings-row {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      border-bottom: 1px solid #E4D9C6;
+    }
+    .pir-rating-cell {
+      padding: 12px 14px; border-right: 1px solid #E4D9C6;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .pir-rating-cell:last-child { border-right: none; }
+    .pir-rating-label { font-size: .55rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #8A9AB8; }
+    .pir-rating-score { font-family: "Orbitron",sans-serif; font-size: 1.1rem; font-weight: 800; line-height: 1; }
+    .pir-rating-score-green  { color: #15803D; }
+    .pir-rating-score-amber  { color: #92400E; }
+    .pir-rating-score-red    { color: #991B1B; }
+    .pir-rating-score-teal   { color: #008577; }
+    .pir-rating-dots { display: flex; gap: 2px; margin: 2px 0; }
+    .pir-rdot { width: 7px; height: 7px; border-radius: 50%; background: #E4D9C6; }
+    .pir-rdot.on { background: currentColor; }
+    .pir-rating-sub { font-size: .52rem; color: #8A9AB8; font-weight: 600; }
+
+    /* 2-col grid for market intel + adjustments */
+    .pir-ext-2col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid #E4D9C6;
+    }
+    .pir-ext-col {
+      padding: 14px 18px;
+      border-right: 1px solid #E4D9C6;
+    }
+    .pir-ext-col:last-child { border-right: none; }
+    .pir-ext-col-title {
+      font-size: .6rem; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: #1A2B4C;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .pir-ext-col-title::after { content:''; flex:1; height:1px; background: linear-gradient(90deg,#E4D9C6,transparent); }
+
+    /* Compact data table */
+    .pir-kv-table { width: 100%; border-collapse: collapse; font-size: .72rem; }
+    .pir-kv-table tr { border-bottom: 1px solid #F0EBE0; }
+    .pir-kv-table tr:last-child { border-bottom: none; }
+    .pir-kv-table td { padding: 5px 0; color: #2D3F5C; vertical-align: middle; }
+    .pir-kv-table td:first-child { color: #7A8FA8; font-weight: 600; width: 52%; }
+    .pir-kv-table td:last-child { text-align: right; font-weight: 700; color: #1A1610; }
+    .pir-kv-accent { color: #008577 !important; }
+    .pir-kv-good   { color: #15803D !important; }
+    .pir-kv-bad    { color: #991B1B !important; }
+    .pir-kv-total  { font-weight: 800 !important; border-top: 1.5px solid #1A1610 !important; }
+
+    /* Adjustment bar rows */
+    .pir-adj-table { width: 100%; border-collapse: collapse; font-size: .7rem; }
+    .pir-adj-table tr { border-bottom: 1px solid #F0EBE0; }
+    .pir-adj-table tr:last-child { border-bottom: none; }
+    .pir-adj-table td { padding: 4px 0; vertical-align: middle; }
+    .pir-adj-name-cell { color: #2D3F5C; width: 44%; font-size: .68rem; }
+    .pir-adj-bar-cell  { width: 32%; padding: 0 6px; }
+    .pir-adj-bar-track { height: 6px; background: #F0EBE0; border-radius: 3px; overflow: hidden; }
+    .pir-adj-bar-fill  { height: 100%; border-radius: 3px; }
+    .pir-adj-bar-pos   { background: linear-gradient(90deg, #4ADE80, #16A34A); }
+    .pir-adj-bar-neg   { background: linear-gradient(90deg, #EF4444, #F87171); float: right; }
+    .pir-adj-amt-cell  { text-align: right; font-weight: 700; font-size: .68rem; width: 24%; white-space: nowrap; }
+    .pir-adj-pos-amt   { color: #15803D; }
+    .pir-adj-neg-amt   { color: #991B1B; }
+    .pir-adj-net-row td { border-top: 1.5px solid #1A1610 !important; font-weight: 800; color: #1A1610; padding-top: 6px !important; }
+
+    /* Depreciation table */
+    .pir-depr-table { width: 100%; border-collapse: collapse; font-size: .71rem; }
+    .pir-depr-table th { font-size: .57rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #7A8FA8; padding: 0 6px 7px 0; border-bottom: 1.5px solid #D4C8B0; text-align: right; }
+    .pir-depr-table th:first-child { text-align: left; padding-left: 0; }
+    .pir-depr-table td { padding: 5px 6px 5px 0; border-bottom: 1px solid #F0EBE0; text-align: right; color: #2D3F5C; vertical-align: middle; }
+    .pir-depr-table td:first-child { text-align: left; font-weight: 700; color: #1A1610; padding-left: 0; }
+    .pir-depr-table tr:last-child td { border-bottom: none; }
+    .pir-depr-loss-val { color: #991B1B; font-weight: 700; }
+
+    /* Compact bar inline */
+    .pir-inline-bar { display: flex; align-items: center; gap: 5px; }
+    .pir-inline-bar-track { flex: 1; height: 5px; background: #F0EBE0; border-radius: 3px; overflow: hidden; }
+    .pir-inline-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #EF4444 0%, #EAB308 50%, #22C55E 100%); }
+
+    /* Checklist compact */
+    .pir-chk-table { width: 100%; border-collapse: collapse; font-size: .7rem; }
+    .pir-chk-table tr { border-bottom: 1px solid #F0EBE0; }
+    .pir-chk-table tr:last-child { border-bottom: none; }
+    .pir-chk-table td { padding: 5px 0; vertical-align: top; }
+    .pir-chk-icon { font-size: .78rem; padding-right: 7px; white-space: nowrap; }
+    .pir-chk-text { color: #2D3F5C; line-height: 1.4; }
+    .pir-chk-note { font-size: .6rem; color: #7A8FA8; margin-top: 1px; }
+
+    /* Extended action buttons */
+    .pir-ext-actions {
+      display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+      padding: 12px 20px;
+      background: #FAF7F0;
+      border-top: 1px solid #E4D9C6;
+    }
+    .pir-ext-btn {
+      font-family: "Exo 2",sans-serif; font-size: .62rem; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 99px; cursor: pointer;
+      border: 1px solid #DDD4BC; background: #fff; color: #4A5E7A;
+      transition: all .15s;
+    }
+    .pir-ext-btn:hover { border-color: #008577; color: #008577; background: rgba(0,133,119,0.04); }
+    .pir-ext-btn-primary { background: #008577 !important; color: #fff !important; border-color: #008577 !important; }
+    .pir-ext-btn-primary:hover { background: #006B60 !important; }
+
+    /* Verdict clone separator */
+    .pir-t2-clone-sep {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 22px 8px;
+      font-size: .58rem; font-weight: 800; letter-spacing: .16em;
+      text-transform: uppercase; color: #8A9AB8;
+      background: #F8F5EE; border-bottom: 1px solid #E4D9C6;
+    }
+    .pir-t2-clone-sep::before, .pir-t2-clone-sep::after { content:''; flex:1; height:1px; background: #E4D9C6; }
+
+    /* ── PRINT / A4 CSS ── */
+    @media print {
+      @page { size: A4; margin: 8mm 10mm; }
+      body { font-size: 9.5px !important; background: #fff !important; }
+      .snav, .hero, .mob-fixed-header, .form-card, #restoreBar,
+      .pir-tab-footer, .pir-ext-actions, .pir-tabs-nav { display: none !important; }
+      .layout { display: block !important; }
+      .result-panel { width: 100% !important; box-shadow: none !important; border: 1px solid #ccc !important; }
+      #pirTabVerdict { display: none !important; }
+      #pirTabAnalysis { display: block !important; }
+      .pir-wrap { box-shadow: none !important; border: 1px solid #ccc !important; }
+      .pir-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .pir-row-grid { page-break-inside: avoid; }
+      .pir-ext-2col { page-break-inside: avoid; }
+      .pir-nego-timeline { page-break-inside: avoid; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+
+    @media(max-width:520px) {
+      .pir-ratings-row { grid-template-columns: repeat(2,1fr); }
+      .pir-ext-2col { grid-template-columns: 1fr; }
+      .pir-ext-col { border-right: none; border-bottom: 1px solid #E4D9C6; }
+    }
 
     </style>
 <body>
@@ -7038,27 +7273,40 @@ function buildDeprTable(handshake,carYear,brandName,mileageKm){
 }
 
 function buildNegoGuide(askN,avg,conditionVal,accidentVal){
-  if(!askN||!avg)return null;
-  const diff=(askN-avg)/avg;
-  const cf=conditionVal==='Fair'?.03:conditionVal==='Poor'?.06:0;
-  const af=accidentVal==='major'?.10:accidentVal==='minor'?.05:0;
-  // No FSH and no warranty each add 1% negotiation room
-  const fshDisc  = qs.fsh===false?.01:0;
-  const warDisc  = qs.warranty===false?.01:0;
-  const disc=cf+af+fshDisc+warDisc+(diff>0?diff*.5:0);
-  const offer=Math.round(askN*(1-Math.min(disc,.15))/500)*500;
-  const close=Math.round(askN*(1-Math.min(disc,.10)*.5)/500)*500;
-  const walk =Math.round(avg*1.08/500)*500;
-  const room =Math.max(0,Math.round((1-offer/askN)*100));
-  let tactic='';
-  if(accidentVal==='major') tactic='The accident history is your primary leverage — request a full inspection report and use it to justify a significant reduction.';
-  else if(accidentVal==='minor') tactic='Point to the minor accident record as justification for your counter-offer. Ask for the repair documentation.';
-  else if(qs.fsh===false&&qs.warranty===false) tactic='No service history and no warranty — use both gaps to push for a lower price. Offer to split the cost of an independent inspection.';
-  else if(qs.fsh===false) tactic='Missing service history is a legitimate negotiation point. Request a discount or ask the seller to obtain records before closing.';
-  else if(diff>.10) tactic=`This is priced above market. Lead with the AED ${avg.toLocaleString()} market benchmark and work down from there.`;
-  else if(diff>.02) tactic='There is modest room to negotiate. Use mileage or condition as your reason for a counter-offer.';
-  else tactic='Already close to or below market — a token 2–3% counter-offer is reasonable without risking the deal.';
-  return{offer,close,walk,room,tactic};
+  if(!avg) return null;
+  const hasAsk = !!(askN && askN > 0);
+
+  // Discount factors based on vehicle weaknesses
+  const cf     = conditionVal==='Fair'?.03:conditionVal==='Poor'?.06:0;
+  const af     = accidentVal==='major'?.10:accidentVal==='minor'?.05:0;
+  const fshDisc= qs.fsh===false?.01:0;
+  const warDisc= qs.warranty===false?.01:0;
+  const ownDisc= qs.singleOwner===false?.01:0;
+  const mktDisc= hasAsk ? Math.max(0,(askN-avg)/avg*.5) : 0; // over-ask discount
+  const disc   = Math.min(cf+af+fshDisc+warDisc+ownDisc+mktDisc, 0.18);
+
+  // Offer and close MUST be anchored to avg (fair market), never above it
+  // Buyer's opening offer: avg × (1 - total discount), min 85% of avg
+  const offerRaw  = hasAsk
+    ? Math.min(avg, askN * (1 - disc))   // come down from ask, cap at fair value
+    : avg * (1 - Math.max(0.04, disc));  // when no ask, open ~4–10% below avg
+  const closeRaw  = hasAsk
+    ? Math.min(avg, askN * (1 - disc * 0.4))  // settle closer to ask but cap at avg
+    : avg;                                      // when no ask, target is avg itself
+  const offer = Math.round(offerRaw / 500) * 500;
+  const close = Math.round(Math.min(closeRaw, avg) / 500) * 500;
+  const walk  = Math.round(avg * (hasAsk && askN < avg * 1.05 ? 1.02 : 1.04) / 500) * 500;
+  const room  = hasAsk ? Math.max(0, Math.round((1 - offer / askN) * 100)) : 0;
+
+  let tactic = '';
+  if(af > 0)            tactic = 'The accident history is your primary leverage — use it to justify a firm reduction.';
+  else if(qs.fsh===false && qs.warranty===false) tactic = 'No service history and no warranty — use both gaps to push for a lower price.';
+  else if(qs.fsh===false)  tactic = 'Missing service history is a legitimate negotiation point.';
+  else if(mktDisc > 0.08)  tactic = `Listed ${Math.round(mktDisc*200)}% above market. Reference the AED ${avg.toLocaleString()} fair value and negotiate from there.`;
+  else if(disc > 0.02)     tactic = 'Use mileage and condition as your reason for a counter-offer.';
+  else                     tactic = 'Already close to market — a 2–3% counter is reasonable without risking the deal.';
+
+  return { offer, close, walk, room, tactic };
 }
 
 function buildOwnershipCost(price,deprAmt,carYear,rtaFees){
@@ -7270,7 +7518,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Negotiation = smart entry point: slightly below lower end of range
   const rangeMin = low||Math.round(avg*.82);
   const rangeMax = high||Math.round(avg*1.18);
-  const negoEntry = nego ? nego.offer : Math.round(rangeMin*.97/500)*500;
+  const negoEntry = nego ? nego.offer : Math.round(avg * 0.93 / 500) * 500;
   // Market position % for the bar — based on handshake vs full range
   const pirRng = rangeMax - rangeMin;
   const handshakePct = pirRng>0 ? Math.max(3,Math.min(97,Math.round(((handshake-rangeMin)/pirRng)*100))) : 50;
@@ -7636,11 +7884,34 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ROW 4: NEGOTIATION TIMELINE (full width dark) -->
   ${(()=>{
-    const openOffer=negoEntry;
-    const closeTarget=nego?.close||handshake;
-    const walkAway=stickerPrice?Math.round(Math.max(handshake*1.06,stickerPrice*0.98)/500)*500:Math.round(handshake*1.08/500)*500;
-    const scriptText=nego?.script||`"I've reviewed current listings — comparable ${year} ${brand}${model?' '+model:''} units are available AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()} in the UAE market. Considering the details of this vehicle, I'd like to open at AED ${openOffer.toLocaleString()} and settle at AED ${closeTarget.toLocaleString()}."`;
-    return `<div class="pir-nego-timeline">
+    const openOffer   = negoEntry;
+    const closeTarget = Math.min(nego?.close || handshake, handshake); // never above fair value
+    const walkAway    = stickerPrice
+      ? Math.round(Math.min(stickerPrice * 0.97, handshake * 1.04) / 500) * 500
+      : Math.round(handshake * 1.04 / 500) * 500;
+
+    // Safety: ensure openOffer < closeTarget ≤ walkAway
+    const _safeOpen  = Math.min(openOffer, closeTarget - 500);
+    const _safeClose = Math.min(closeTarget, walkAway - 500);
+    const _safeWalk  = Math.max(walkAway, _safeClose + 500);
+
+    // Build leverages list from checkbox signals
+    const _levers = [];
+    if(qs.fsh===false)      _levers.push('no service history');
+    if(qs.warranty===false) _levers.push('no active warranty');
+    if(qs.accident===true)  _levers.push('accident on record');
+    if(qs.singleOwner===false) _levers.push('multiple previous owners');
+    const _leverStr = _levers.length
+      ? ` — noting ${_levers.slice(0,2).join(' and ')}`
+      : '';
+
+    // Only cite rangeMin–rangeMax if openOffer is plausibly within that range
+    const _rangeCredible = rangeMin > 0 && rangeMax > 0 && _safeOpen <= rangeMax * 1.08;
+    const carLabel = `${year} ${brand}${model ? ' ' + model : ''}`;
+
+    const scriptText = nego?.script || (_rangeCredible
+      ? `"I've reviewed current UAE listings — comparable ${carLabel} units are selling AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()}. Based on the mileage and condition of this vehicle${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}."`
+      : `"Based on my research of the current UAE market for the ${carLabel}${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}. This reflects comparable listings and the specifics of this vehicle."`);    return `<div class="pir-nego-timeline">
       <div class="pir-nt-hdr">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="rgba(232,208,96,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Negotiation Script
@@ -7648,17 +7919,17 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="pir-nt-track-wrap">
         <div class="pir-nt-pins" style="display:flex;justify-content:space-between;margin-bottom:8px;">
           <div class="pir-nt-pin pir-nt-pin-open" style="align-items:flex-start;">
-            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#4ADE80;white-space:nowrap;">AED ${openOffer.toLocaleString()}</div>
+            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#4ADE80;white-space:nowrap;">AED ${_safeOpen.toLocaleString()}</div>
             <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(74,222,128,0.6);">Open</div>
             <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;margin-top:4px;"></div>
           </div>
           <div class="pir-nt-pin pir-nt-pin-target" style="align-items:center;">
-            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#E8D060;white-space:nowrap;">AED ${closeTarget.toLocaleString()}</div>
+            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#E8D060;white-space:nowrap;">AED ${_safeClose.toLocaleString()}</div>
             <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,208,96,0.6);">Target</div>
             <div style="width:10px;height:10px;border-radius:50%;background:#E8D060;margin-top:4px;"></div>
           </div>
           <div class="pir-nt-pin pir-nt-pin-walk" style="align-items:flex-end;">
-            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#FCA5A5;white-space:nowrap;">AED ${walkAway.toLocaleString()}</div>
+            <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#FCA5A5;white-space:nowrap;">AED ${_safeWalk.toLocaleString()}</div>
             <div class="pir-nt-pin-label" style="font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(252,165,165,0.6);">Walk Away</div>
             <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;margin-top:4px;"></div>
           </div>
@@ -7696,901 +7967,224 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- TAB 2: FULL ANALYSIS -->
   <div class="pir-tab-panel" id="pirTabAnalysis" style="display:none">
 
-  <!-- ⑨ MARKET INSIGHT SUMMARY — merged, concise, powerful -->
-  <div class="pir-insight-wrap">
-    <div class="pir-insight-header">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#008577" stroke-width="1.3"/><path d="M7 6v4M7 4.5v.5" stroke="#008577" stroke-width="1.4" stroke-linecap="round"/></svg>
-      Market Insight
+  <!-- ── VERDICT CLONE (injected by pirSwitchTab JS) ── -->
+  <div id="pirTab2VerdictClone"></div>
+
+  <!-- ── EXTENDED ANALYSIS DIVIDER ── -->
+  <div class="pir-t2-clone-sep">Extended Analysis</div>
+
+  <!-- ── EXTENDED ANALYSIS BLOCK ── -->
+  <div class="pir-ext-wrap">
+
+    <!-- Header strip -->
+    <div class="pir-ext-header">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2.5" stroke="#008577" stroke-width="1.3"/><path d="M4 7h6M7 4v6" stroke="#008577" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Full Market Report
+      <span class="pir-ext-ref">${ref.label}</span>
     </div>
 
-    <!-- Short paragraph -->
-    <p class="pir-insight-para">${analysisText}</p>
-    <!-- Transparency Score badge — replaces old raw percentile -->
-    ${(() => {
-      const cls = _tsScore >= 7.5 ? 'pir-ts-high' : _tsScore >= 5.5 ? 'pir-ts-mid' : 'pir-ts-low';
-      const needlePct = Math.round((_tsScore / 10) * 100);
-      return `<div class="pir-ts-badge ${cls}">
-        <div class="pir-ts-score">${_tsScore}/10</div>
-        <div class="pir-ts-body">
-          <div class="pir-ts-label">${_tsLabel}</div>
-          <div class="pir-ts-sub">Vehicle Transparency Score — replaces market percentile</div>
-          <div class="pir-ts-bar-wrap">
-            <div class="pir-ts-bar-track">
-              <div class="pir-ts-bar-needle" style="left:${needlePct}%"></div>
-            </div>
-          </div>
-          <div class="pir-ts-bar-ends"><span>Low</span><span>High</span></div>
-        </div>
-      </div>`;
-    })()}
+    <!-- A: RATINGS ROW (4 gauges) -->
+    ${(()=>{
+      // Deal score
+      const _dealScore = stickerPrice
+        ? (stickerPrice < handshake*0.92 ? 10 : stickerPrice < handshake*0.96 ? 9 : stickerPrice < handshake*1.00 ? 7 : stickerPrice < handshake*1.05 ? 6 : stickerPrice < handshake*1.10 ? 4 : stickerPrice < handshake*1.20 ? 3 : 2)
+        : 5;
+      const _demScore = Math.round((r.demandScore||55)/10);
+      const _tsScoreInt = Math.round(_tsScore);
+      const _confScore  = Math.round(conf/12);
 
-    <!-- Key value factors — max 3 bullets -->
-    ${(() => {
-      const cy = new Date().getFullYear();
-      const age = Math.max(1, cy - carYear);
-      const expectedKm = age * 18000;
-      const bullets = [];
-      // Mileage impact
-      if(km > 0){
-        const mDiff = km - expectedKm;
-        const mDiffK = Math.abs(Math.round(mDiff/1000));
-        if(mDiff > 15000)
-          bullets.push({ icon:'📏', text:`<strong>High Mileage (for Year)</strong> — ${km.toLocaleString()} km is ${mDiffK}k above the expected average for this age, pushing the value down` });
-        else if(mDiff < -15000)
-          bullets.push({ icon:'📏', text:`<strong>Low Mileage for Year</strong> — ${km.toLocaleString()} km is ${mDiffK}k below average for this age, supporting a price premium` });
-        else
-          bullets.push({ icon:'📏', text:`<strong>Average mileage</strong> — ${km.toLocaleString()} km is in line with expected wear for a ${age}-year-old vehicle` });
+      function _ratingDots(score, color){
+        return Array.from({length:10},(_,i)=>`<div class="pir-rdot${i<score?' on':''}" style="${i<score?'background:'+color+';':''}"></div>`).join('');
       }
-      // Condition / quality
-      const acc = accVal === 'major' ? 'major accident history on record — this significantly impacts resale value'
-                : accVal === 'minor' ? 'minor accident declared — worth an independent inspection before purchase'
-                : condVal === 'Excellent' ? 'excellent condition adds a clear premium over comparable listings'
-                : condVal === 'Good' || !condVal ? 'good overall condition with no major concerns reported'
-                : `${condVal.toLowerCase()} condition is a factor — price should reflect the state of the vehicle`;
-      bullets.push({ icon:'🔍', text:`<strong>Condition:</strong> ${acc}` });
-      // Spec / demand
-      const isGCC = specVal === 'GCC' || specVal === 'GCC Spec';
-      bullets.push({ icon:'🌐', text: isGCC
-        ? `<strong>GCC specification</strong> — the most demanded variant in UAE; supports resale liquidity and price`
-        : `<strong>Non-GCC specification</strong> — limits the buyer pool in UAE and reduces long-term resale appeal` });
-      return `<div class="pir-insight-factors">
-        ${bullets.slice(0,3).map(b=>`<div class="pir-insight-bullet"><span class="pir-insight-icon">${b.icon}</span><span>${b.text}</span></div>`).join('')}
+      function _gauge(label, score, max, color, sub){
+        return `<div class="pir-rating-cell">
+          <div class="pir-rating-label">${label}</div>
+          <div class="pir-rating-score" style="color:${color};">${score}<span style="font-size:.45rem;font-weight:600;color:#8A9AB8;">/${max}</span></div>
+          <div class="pir-rating-dots" style="color:${color};">${_ratingDots(score,color)}</div>
+          <div class="pir-rating-sub">${sub}</div>
+        </div>`;
+      }
+      const _dc = _dealScore>=8?'#15803D':_dealScore>=5?'#92400E':'#991B1B';
+      const _dd = _demScore>=8?'#15803D':_demScore>=5?'#92400E':'#991B1B';
+      const _dt = _tsScoreInt>=8?'#15803D':_tsScoreInt>=6?'#92400E':'#991B1B';
+      const _df = _confScore>=7?'#008577':_confScore>=4?'#92400E':'#991B1B';
+      const _dealSub = stickerPrice ? (_dealScore>=8?'Strong Deal':_dealScore>=6?'Fair Price':_dealScore>=4?'Above Market':'Overpriced') : 'No sticker';
+      return `<div class="pir-ratings-row">
+        ${_gauge('Deal Score', _dealScore, 10, _dc, _dealSub)}
+        ${_gauge('Market Demand', _demScore, 10, _dd, _demScore>=8?'High':_demScore>=5?'Moderate':'Low')}
+        ${_gauge('Transparency', _tsScoreInt, 10, _dt, _tsLabel.split(' — ')[0])}
+        ${_gauge('Data Confidence', _confScore, 10, _df, conf+'% '+(_confScore>=7?'High':_confScore>=4?'Moderate':'Low'))}
       </div>`;
     })()}
 
-    <!-- Buyer/Seller tips -->
-    <div class="pir-insight-tips">
-      <div class="pir-insight-tip pir-tip-buyer">
-        <div class="pir-tip-label">🛒 Buyer Tip</div>
-        <div class="pir-tip-text">${nego
-          ? `Lead with AED ${nego.offer.toLocaleString()} and settle no higher than AED ${nego.close.toLocaleString()}. ${nego.tactic}`
-          : `Reference comparable listings and target AED ${handshake.toLocaleString()} as your closing price.`}
-        </div>
+    <!-- B: MARKET INTELLIGENCE + VALUE ADJUSTMENTS -->
+    <div class="pir-ext-2col">
+
+      <!-- Left: Market Intelligence table -->
+      <div class="pir-ext-col">
+        <div class="pir-ext-col-title">Market Intelligence</div>
+        <table class="pir-kv-table">
+          <tr><td>Handshake (FMV)</td><td class="pir-kv-accent">AED ${handshake.toLocaleString()}</td></tr>
+          ${stickerPrice ? `<tr><td>Seller Asking</td><td>AED ${stickerPrice.toLocaleString()}</td></tr>` : ''}
+          ${stickerPrice ? `<tr><td>Price vs Market</td><td class="${stickerPrice>handshake?'pir-kv-bad':'pir-kv-good'}">${stickerPrice>handshake?'+':''}${Math.round((stickerPrice-handshake)/handshake*100)}%</td></tr>` : ''}
+          <tr><td>Market Low</td><td class="pir-kv-good">AED ${rangeMin.toLocaleString()}</td></tr>
+          <tr><td>Market High</td><td class="pir-kv-bad">AED ${rangeMax.toLocaleString()}</td></tr>
+          <tr><td>Market Spread</td><td>AED ${(rangeMax-rangeMin).toLocaleString()}</td></tr>
+          <tr><td>Comparable Listings</td><td>${comp>0?comp+' found':'Estimated'}</td></tr>
+          <tr><td>Data Confidence</td><td>${conf}% — ${conf>=75?'High':conf>=50?'Moderate':'Low'}</td></tr>
+          <tr><td>Market Demand</td><td>${r.demandScore||55}% — ${(r.demandScore||55)>=70?'High':'Moderate'}</td></tr>
+          <tr><td>Transparency Score</td><td>${_tsScore}/10</td></tr>
+          ${(() => {
+            const daysAtHandshake = r.demandScore
+              ? Math.round(45 - (r.demandScore - 50) * 0.4)
+              : 35;
+            const daysAtSticker = stickerPrice && stickerPrice > handshake
+              ? Math.round(daysAtHandshake * (stickerPrice / handshake))
+              : daysAtHandshake;
+            return `<tr><td>Est. Days to Sell</td><td>~${Math.max(7,Math.min(90,daysAtHandshake))} days at FMV</td></tr>`;
+          })()}
+        </table>
       </div>
-      <div class="pir-insight-tip pir-tip-seller">
-        <div class="pir-tip-label">🏷️ Seller Tip</div>
-        <div class="pir-tip-text">${(() => {
-          const isGCC = specVal === 'GCC' || specVal === 'GCC Spec';
-          const fshOk = qs.fsh === true;
-          const demand = r.demandScore || 55;
-          if(demand >= 70)
-            return `Demand is strong for this model. List at AED ${Math.round(handshake * 1.06 / 500) * 500 .toLocaleString()} with room to negotiate down to AED ${handshake.toLocaleString()}.`;
-          else if(fshOk)
-            return `Highlight the full service history prominently — it's your strongest selling point. Price near AED ${handshake.toLocaleString()} for a clean, fast transaction.`;
-          else if(isGCC)
-            return `GCC spec is a genuine advantage. Price at AED ${Math.round(handshake * 1.03 / 500) * 500 .toLocaleString()} and expect interest within 2–4 weeks.`;
-          else
-            return `At market rate, price near AED ${handshake.toLocaleString()} for the best balance of speed and return. Consider reducing asking price if no offers in 2 weeks.`;
+
+      <!-- Right: Value Adjustment Breakdown bars -->
+      <div class="pir-ext-col">
+        <div class="pir-ext-col-title">Value Adjustments</div>
+        ${(()=>{
+          const baseVal = avg || handshake;
+          const isGCC = specVal==='GCC'||specVal==='GCC Spec';
+          const age = Math.max(1, new Date().getFullYear()-carYear);
+          const expKm = age*18000;
+          const mDiff = km - expKm;
+          const rows = [];
+          if(isGCC)               rows.push({l:'GCC Specification',  a:Math.round(baseVal*.04/500)*500, p:true});
+          else if(specVal)        rows.push({l:'Non-GCC Spec',        a:Math.round(baseVal*.06/500)*500, p:false});
+          if(condVal==='Excellent')   rows.push({l:'Excellent Condition', a:Math.round(baseVal*.04/500)*500, p:true});
+          else if(condVal==='Very Good') rows.push({l:'Very Good Condition',a:Math.round(baseVal*.02/500)*500, p:true});
+          else if(condVal==='Fair')   rows.push({l:'Fair Condition',     a:Math.round(baseVal*.04/500)*500, p:false});
+          else if(condVal==='Poor')   rows.push({l:'Poor Condition',     a:Math.round(baseVal*.09/500)*500, p:false});
+          if(mDiff>20000) rows.push({l:'High Mileage',         a:Math.round(Math.min(baseVal*.12,(mDiff/10000)*600)/500)*500, p:false});
+          else if(mDiff<-15000) rows.push({l:'Low Mileage ✓',   a:Math.round(baseVal*.03/500)*500, p:true});
+          if(qs.fsh===true)        rows.push({l:'Full Service Hist.', a:Math.round(baseVal*.03/500)*500, p:true});
+          else if(qs.fsh===false)  rows.push({l:'No Service Hist.',   a:Math.round(baseVal*.025/500)*500, p:false});
+          if(qs.warranty===true)   rows.push({l:'Active Warranty',    a:Math.round(baseVal*.02/500)*500, p:true});
+          if(qs.singleOwner===true) rows.push({l:'Single Owner',      a:Math.round(baseVal*.02/500)*500, p:true});
+          else if(qs.singleOwner===false) rows.push({l:'Multi Owner', a:Math.round(baseVal*.025/500)*500, p:false});
+          if(qs.accident===true)   rows.push({l:'Accident Declared',  a:Math.round(baseVal*.07/500)*500, p:false});
+          const maxA  = rows.length ? Math.max(...rows.map(r=>r.a)) : 1;
+          const posT  = rows.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
+          const negT  = rows.filter(r=>!r.p).reduce((s,r)=>s+r.a,0);
+          const netAdj = posT-negT;
+          const netVal = Math.round((baseVal+netAdj)/500)*500;
+          const rowsHtml = rows.map(r=>{
+            const w = Math.max(8, Math.round((r.a/maxA)*80));
+            return `<tr>
+              <td class="pir-adj-name-cell">${r.l}</td>
+              <td class="pir-adj-bar-cell">
+                <div class="pir-adj-bar-track">
+                  <div class="pir-adj-bar-fill ${r.p?'pir-adj-bar-pos':'pir-adj-bar-neg'}" style="width:${w}px;${r.p?'':'float:right'}"></div>
+                </div>
+              </td>
+              <td class="pir-adj-amt-cell ${r.p?'pir-adj-pos-amt':'pir-adj-neg-amt'}">${r.p?'+':'-'}AED ${r.a.toLocaleString()}</td>
+            </tr>`;
+          }).join('');
+          return `<table class="pir-adj-table">
+            <tr><td class="pir-adj-name-cell" style="color:#1A1610;font-weight:700;">Base Market</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:#1A1610;font-weight:700;">AED ${baseVal.toLocaleString()}</td></tr>
+            ${rowsHtml}
+            <tr class="pir-adj-net-row">
+              <td class="pir-adj-name-cell">Net Adjusted</td>
+              <td class="pir-adj-bar-cell"></td>
+              <td class="pir-adj-amt-cell" style="color:${netAdj>=0?'#15803D':'#991B1B'};font-size:.7rem;">AED ${netVal.toLocaleString()}</td>
+            </tr>
+          </table>`;
         })()}
-        </div>
       </div>
-    </div>
-  </div>
+    </div><!-- /2col -->
 
-  <!-- ⑩ VALUE ADJUSTMENT BREAKDOWN — How This Price Was Calculated -->
-  ${(() => {
-    const cy = new Date().getFullYear();
-    const age = Math.max(1, cy - carYear);
-    const expectedKm = age * 18000;
-    const baseVal = avg || handshake;
+    <!-- C: 3-YEAR DEPRECIATION + FIRST YEAR COSTS -->
+    <div class="pir-ext-2col">
 
-    // Gather pos/neg adjustments with reason text
-    const positives = [];
-    const negatives = [];
-
-    // Spec
-    if(specVal === 'GCC' || specVal === 'GCC Spec')
-      positives.push({ label:'GCC Specification', amount: Math.round(baseVal * 0.04 / 500) * 500, reason:'Most trusted spec in UAE' });
-    else if(specVal)
-      negatives.push({ label:'Non-GCC Specification', amount: Math.round(baseVal * 0.06 / 500) * 500, reason:'Smaller resale pool' });
-
-    // Condition
-    if(condVal === 'Excellent')
-      positives.push({ label:'Excellent Condition', amount: Math.round(baseVal * 0.04 / 500) * 500, reason:'Top bracket listing' });
-    else if(condVal === 'Very Good')
-      positives.push({ label:'Very Good Condition', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Above average presentation' });
-    else if(condVal === 'Fair')
-      negatives.push({ label:'Fair Condition', amount: Math.round(baseVal * 0.04 / 500) * 500, reason:'Price must reflect repairs needed' });
-    else if(condVal === 'Poor')
-      negatives.push({ label:'Poor Condition', amount: Math.round(baseVal * 0.09 / 500) * 500, reason:'Significant discount required' });
-
-    // Mileage
-    const mDiff = km - expectedKm;
-    if(mDiff > 20000)
-      negatives.push({ label:'Above-Average Mileage (for Year)', amount: Math.round(Math.min(baseVal * 0.12, (mDiff/10000) * 600) / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected` });
-    else if(mDiff < -15000)
-      positives.push({ label:'Low Mileage for Year ✅', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected — price premium supported` });
-
-    // Service history
-    if(qs.fsh === true)
-      positives.push({ label:'Full Service History', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:'Highest buyer trust level' });
-    else if(qs.fsh === false || false)
-      negatives.push({ label:'No Service History', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Harder to verify maintenance' });
-
-    // Accident
-    if(accVal === 'major')
-      negatives.push({ label:'Major Accident History', amount: Math.round(baseVal * 0.10 / 500) * 500, reason:'Significant buyer concern' });
-    else if(accVal === 'minor')
-      negatives.push({ label:'Minor Accident on Record', amount: Math.round(baseVal * 0.05 / 500) * 500, reason:'Disclose and negotiate' });
-
-    // Ownership
-    const ownNum = parseInt(ownVal) || 0;
-    if(qs.singleOwner === true || ownNum === 1)
-      positives.push({ label:'Single Owner', amount: Math.round(baseVal * 0.02 / 500) * 500, reason:'Strong confidence signal' });
-    else if(qs.singleOwner === false || ownNum >= 3)
-      negatives.push({ label:'Multiple Owners', amount: Math.round(baseVal * 0.025 / 500) * 500, reason:'Reduces buyer confidence' });
-
-    // Warranty
-    if(qs.warranty === true || warVal === 'active')
-      positives.push({ label:'Active Warranty', amount: Math.round(baseVal * 0.025 / 500) * 500, reason:'Reduces buyer risk' });
-
-    // Popular colour — removed (colour field no longer collected)
-
-    const totalPos = positives.reduce((s,a)=>s+a.amount, 0);
-    const totalNeg = negatives.reduce((s,a)=>s+a.amount, 0);
-    const netAdj   = totalPos - totalNeg;
-    const netVal   = Math.round((baseVal + netAdj) / 500) * 500;
-
-    return `<div class="pir-vab-wrap">
-      <div class="pir-vab-header">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2.5" stroke="#D4AF37" stroke-width="1.3"/><path d="M4 7h6M7 4v6" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/></svg>
-        How This Price Was Calculated
-      </div>
-
-      <!-- Base value -->
-      <div class="pir-vab-base">
-        <span class="pir-vab-base-label">Base Market Value</span>
-        <span class="pir-vab-base-val">AED ${baseVal.toLocaleString()}</span>
-      </div>
-      <div class="pir-vab-base-note">Average price for comparable ${year} ${brand}${model?' '+model:''} listings in UAE</div>
-
-      <!-- Positive adjustments -->
-      ${positives.length ? `
-      <div class="pir-vab-group">
-        <div class="pir-vab-group-label pir-vab-pos-label">
-          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="5" fill="#F0FDF4" stroke="#86EFAC"/><path d="M3 5.5h5M5.5 3v5" stroke="#15803D" stroke-width="1.3" stroke-linecap="round"/></svg>
-          Positive Adjustments
-          <span class="pir-vab-group-total pir-vab-pos-total">+AED ${totalPos.toLocaleString()}</span>
-        </div>
-        ${positives.map(a=>`
-        <div class="pir-vab-row pir-vab-pos">
-          <div class="pir-vab-row-left">
-            <span class="pir-vab-row-label">${a.label}</span>
-            <span class="pir-vab-row-reason">${a.reason}</span>
-          </div>
-          <span class="pir-vab-row-amt pir-vab-pos-amt">+AED ${a.amount.toLocaleString()}</span>
-        </div>`).join('')}
-      </div>` : ''}
-
-      <!-- Negative adjustments -->
-      ${negatives.length ? `
-      <div class="pir-vab-group">
-        <div class="pir-vab-group-label pir-vab-neg-label">
-          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="5" fill="#FEF2F2" stroke="#FCA5A5"/><path d="M3 5.5h5" stroke="#991B1B" stroke-width="1.3" stroke-linecap="round"/></svg>
-          Negative Adjustments
-          <span class="pir-vab-group-total pir-vab-neg-total">−AED ${totalNeg.toLocaleString()}</span>
-        </div>
-        ${negatives.map(a=>`
-        <div class="pir-vab-row pir-vab-neg">
-          <div class="pir-vab-row-left">
-            <span class="pir-vab-row-label">${a.label}</span>
-            <span class="pir-vab-row-reason">${a.reason}</span>
-          </div>
-          <span class="pir-vab-row-amt pir-vab-neg-amt">−AED ${a.amount.toLocaleString()}</span>
-        </div>`).join('')}
-      </div>` : ''}
-
-      <!-- Net adjusted value -->
-      <div class="pir-vab-net">
-        <div class="pir-vab-net-left">
-          <div class="pir-vab-net-label">Net Adjusted Market Value</div>
-          <div class="pir-vab-net-calc">AED ${baseVal.toLocaleString()}${totalPos>0?` + AED ${totalPos.toLocaleString()}`:''}${totalNeg>0?` − AED ${totalNeg.toLocaleString()}`:''} = AED ${netVal.toLocaleString()}</div>
-        </div>
-        <div class="pir-vab-net-val">AED ${netVal.toLocaleString()}</div>
-      </div>
-    </div>`;
-  })()}
-
-  <!-- ⑪ NEGOTIATION GUIDE -->
-  ${nego?`<div class="pir-section">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 9l2-7h6l2 7" stroke="#1A2B4C" stroke-width="1.2" stroke-linecap="round"/><path d="M1 9h11" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round"/></svg>
-      Negotiation Guide
-    </div>
-    <div class="pir-nego-row">
-      <div class="pir-nego-card pir-nego-open">
-        <div class="pir-nego-card-label">Open With</div>
-        <div class="pir-nego-card-val">AED ${nego.offer.toLocaleString()}</div>
-      </div>
-      <div class="pir-nego-arrow">→</div>
-      <div class="pir-nego-card">
-        <div class="pir-nego-card-label">Target Close</div>
-        <div class="pir-nego-card-val">AED ${nego.close.toLocaleString()}</div>
-      </div>
-      <div class="pir-nego-arrow">→</div>
-      <div class="pir-nego-card pir-nego-walk">
-        <div class="pir-nego-card-label">Walk Away At</div>
-        <div class="pir-nego-card-val warn">AED ${nego.walk.toLocaleString()}</div>
-      </div>
-    </div>
-    <div class="pir-nego-tactic">${nego.tactic}</div>
-  </div>`:''}
-
-  <!-- 🗣️ 11. SMART NEGOTIATION LINE -->
-  ${(() => {
-    const lo = low  || Math.round(avg * 0.85);
-    const hi = high || Math.round(avg * 1.15);
-    const closeTarget = nego ? nego.close : handshake;
-    const hasAccident = accVal && accVal !== 'none';
-    const hasMileageFlag = km > (Math.max(1, cy - carYear) * 18000 + 20000);
-
-    let qualifier = '';
-    if(hasMileageFlag && hasAccident)
-      qualifier = `Given the mileage of ${km.toLocaleString()} km and the accident on record, `;
-    else if(hasMileageFlag)
-      qualifier = `Given the mileage of ${km.toLocaleString()} km, `;
-    else if(hasAccident)
-      qualifier = `Given the ${accVal} accident history, `;
-    else if(!qs.fsh && qs.fsh !== null)
-      qualifier = `With no service history on record, `;
-
-    const negoLine = lo && hi
-      ? `"Similar listings are priced between AED ${lo.toLocaleString()}–${hi.toLocaleString()}. ${qualifier}an offer around AED ${closeTarget.toLocaleString()} is reasonable, subject to inspection."`
-      : `"Based on current UAE market data for the ${year} ${brand}${model?' '+model:''}, ${qualifier}a fair offer is around AED ${closeTarget.toLocaleString()}, subject to inspection."`;
-
-    return `<div class="pir-section">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2h9a1 1 0 011 1v6a1 1 0 01-1 1H6l-3 2V10H2a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#1E40AF" stroke-width="1.2"/></svg>
-      🗣️ Smart Negotiation Line
-    </div>
-    <div style="background:linear-gradient(135deg,#EFF6FF,#F0F9FF);border:1.5px solid #BFDBFE;border-radius:11px;padding:13px 15px;margin-top:2px;position:relative;">
-      <div style="font-size:.65rem;font-weight:700;color:#1E40AF;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;">💬 Say this to the seller:</div>
-      <div id="smartNegoLine" style="font-size:.82rem;color:#1D4ED8;font-style:italic;line-height:1.65;">${negoLine}</div>
-      <button onclick="(function(btn){const el=document.getElementById('smartNegoLine');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy';},2000);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy';},2000);})})(this)" type="button" style="margin-top:10px;font-family:'Exo 2',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:rgba(30,64,175,0.08);border:1px solid rgba(30,64,175,0.2);color:#1E40AF;border-radius:6px;padding:5px 12px;cursor:pointer;transition:background .15s;">📋 Copy</button>
-    </div>
-  </div>`;
-  })()}
-
-  <!-- ⑫ TIME TO SELL -->
-  ${(() => {
-    // If live mkt data exists, use it; otherwise compute locally
-    const demandScore = r.demandScore || 55;
-    const isHighDemand = demandScore >= 68;
-    const isMedDemand  = demandScore >= 48;
-
-    // Base days at handshake: high demand = fast, low = slow
-    const baseDays = isHighDemand ? 18 : isMedDemand ? 32 : 52;
-
-    // If sticker > handshake, sticker takes longer proportionally
-    const stickerDays = stickerPrice && stickerPrice > handshake
-      ? Math.round(baseDays * (1 + (stickerPrice - handshake) / handshake * 3.5))
-      : (stickerPrice && stickerPrice < handshake * 0.97 ? Math.max(5, Math.round(baseDays * 0.6)) : baseDays);
-
-    const handshakeDays = mkt && mkt.days_at_market > 0
-      ? mkt.days_at_market
-      : baseDays;
-
-    const stickerDaysFinal = mkt && mkt.days_at_asking > 0
-      ? mkt.days_at_asking
-      : (stickerPrice ? stickerDays : null);
-
-    const ttsInsight = mkt?.insight ||
-      (isHighDemand
-        ? `High demand for ${brand}${model?' '+model:''} in the UAE — well-priced units sell quickly.`
-        : isMedDemand
-          ? `Moderate demand. Pricing close to market value will keep time-on-market reasonable.`
-          : `Lower demand segment. Competitive pricing is key to a timely sale.`);
-
-    const optPrice = mkt?.recommended_price || null;
-
-    return `<div class="pir-section">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M6.5 4v2.5l2 1.5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
-      ⏱️ Time to Sell
-    </div>
-    <div class="pir-tts-grid">
-      <div class="pir-tts-row">
-        <span class="pir-tts-lbl">At Handshake Price <span style="font-size:.62rem;color:#008577;">(AED ${handshake.toLocaleString()})</span></span>
-        <span class="pir-tts-val pir-tts-${dCls(handshakeDays)}">~${handshakeDays} days</span>
-      </div>
-      ${stickerDaysFinal!==null?`<div class="pir-tts-row">
-        <span class="pir-tts-lbl">At Sticker Price <span style="font-size:.62rem;color:#64748B;">(AED ${(stickerPrice||handshake).toLocaleString()})</span></span>
-        <span class="pir-tts-val pir-tts-${dCls(stickerDaysFinal)}">~${stickerDaysFinal} days</span>
-      </div>`:''}
-      ${optPrice&&stickerPrice&&optPrice<stickerPrice?`<div class="pir-tts-row pir-tts-highlight">
-        <span class="pir-tts-lbl">⚡ Optimal price (14-day sale)</span>
-        <span class="pir-tts-val">AED ${optPrice.toLocaleString()}</span>
-      </div>`:''}
-    </div>
-    <div class="pir-tts-insight">${ttsInsight}</div>
-  </div>`;
-  })()}
-
-  <!-- 💸 12. OWNERSHIP COST SNAPSHOT (UAE) -->
-  ${(() => {
-    const insAmt   = cost.ins;
-    const rtaFees  = 170 + 420 + 350;
-    const totalFY  = rtaFees + insAmt;
-    const yr1Depr  = deprAmt;
-    const maint    = cost.maint;
-    const fuelMo   = cost.fuelEst;
-    const grandTotal = totalFY + yr1Depr + maint;
-
-    // Visual bar widths (relative to grand total)
-    const rtaPct   = Math.round((rtaFees / grandTotal) * 100);
-    const insPct   = Math.round((insAmt  / grandTotal) * 100);
-    const deprPct  = Math.round((yr1Depr / grandTotal) * 100);
-    const maintPct = Math.round((maint   / grandTotal) * 100);
-
-    const row = (label, amt, pct, colour, dim=false) =>
-      `<div style="margin-bottom:9px;">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
-          <span style="font-size:.72rem;color:${dim?'#94A3B8':'#2D3F5C'};">${label}</span>
-          <span style="font-size:.72rem;font-weight:700;color:${dim?'#94A3B8':'#991B1B'};">−AED ${amt.toLocaleString()}</span>
-        </div>
-        <div style="height:5px;background:#F1F5F9;border-radius:99px;overflow:hidden;">
-          <div style="height:100%;width:${pct}%;background:${colour};border-radius:99px;transition:width 1s .3s;"></div>
-        </div>
-      </div>`;
-
-    return `<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="3" width="11" height="8" rx="1.5" stroke="#1A2B4C" stroke-width="1.2"/><path d="M4 3V2a2.5 2.5 0 015 0v1" stroke="#D4AF37" stroke-width="1.2"/></svg>
-      💸 Ownership Cost Snapshot (UAE)
-      <span class="pir-section-chevron">▼</span>
-    </div>
-    <div class="pir-section-body">
-
-      <!-- Summary chips: Total First-Year Cost -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-        <div style="background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1.5px solid #FCD34D;border-radius:10px;padding:11px 13px;text-align:center;">
-          <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#92400E;margin-bottom:4px;">Total First-Year Cost</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:#B45309;">−AED ${totalFY.toLocaleString()}</div>
-          <div style="font-size:.57rem;color:#D97706;margin-top:2px;">RTA fees + insurance</div>
-        </div>
-        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:11px 13px;text-align:center;">
-          <div style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#64748B;margin-bottom:4px;">True First-Year Outlay</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:#1A2B4C;">−AED ${grandTotal.toLocaleString()}</div>
-          <div style="font-size:.57rem;color:#94A3B8;margin-top:2px;">incl. depreciation + maint</div>
+      <!-- Left: Depreciation -->
+      <div class="pir-ext-col">
+        <div class="pir-ext-col-title">3-Year Depreciation</div>
+        <table class="pir-depr-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">Year</th>
+              <th>Rate</th>
+              <th>Value</th>
+              <th>Annual Loss</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${_deprRows.map(dr=>`<tr>
+              <td>${dr.year}</td>
+              <td>${dr.rate}%</td>
+              <td>AED ${dr.endVal.toLocaleString()}</td>
+              <td class="pir-depr-loss-val">−AED ${(handshake - dr.endVal > 0 ? dr.endVal - (dr.year===cy+1?handshake:_deprRows[_deprRows.indexOf(dr)-1]?.endVal||handshake) : 0).toLocaleString().replace('-','')}</td>
+            </tr>`).join('')}
+            <tr style="border-top:1.5px solid #D4C8B0;">
+              <td colspan="2" style="color:#7A8FA8;font-size:.62rem;">3-yr total loss</td>
+              <td><strong>AED ${(_deprRows[2]?.endVal||handshake).toLocaleString()}</strong></td>
+              <td class="pir-depr-loss-val" style="font-weight:800;">−AED ${(handshake-(_deprRows[2]?.endVal||handshake)).toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Depreciation bar -->
+        <div style="margin-top:10px;">
+          ${[{yr:'Now',v:handshake},{yr:cy+1+'',v:_deprRows[0]?.endVal||0},{yr:cy+2+'',v:_deprRows[1]?.endVal||0},{yr:cy+3+'',v:_deprRows[2]?.endVal||0}].map((p,i)=>{
+            const w=handshake>0?Math.round((p.v/handshake)*100):0;
+            const clr=i===0?'#008577':i===1?'#C49A2A':i===2?'#D97706':'#DC2626';
+            return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:.62rem;">
+              <span style="width:30px;color:#7A8FA8;">${p.yr}</span>
+              <div style="flex:1;height:7px;background:#F0EBE0;border-radius:3px;overflow:hidden;">
+                <div style="width:${w}%;height:100%;background:${clr};border-radius:3px;"></div>
+              </div>
+              <span style="width:64px;text-align:right;font-weight:700;color:${clr};">AED ${p.v.toLocaleString()}</span>
+            </div>`;
+          }).join('')}
         </div>
       </div>
 
-      <!-- Breakdown bars -->
-      <div style="border-top:1px solid #F1F5F9;padding-top:12px;">
-        <div style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#64748B;margin-bottom:10px;">Cost Breakdown</div>
-        ${row('RTA Inspection (AED 170)',                              170,            Math.round(170/grandTotal*100),          '#F59E0B')}
-        ${row('Vehicle Registration (AED 420)',                        420,            Math.round(420/grandTotal*100),          '#F59E0B')}
-        ${row('Ownership Transfer (AED 350)',                          350,            Math.round(350/grandTotal*100),          '#F59E0B')}
-        ${row(`Insurance (${carYear>=2024?'2.5% comprehensive':'3rd party est.'})`, insAmt, insPct, '#EF4444')}
-        <div style="border-top:1.5px solid #0F1E38;padding-top:8px;margin-top:2px;margin-bottom:10px;display:flex;justify-content:space-between;">
-          <span style="font-size:.73rem;font-weight:800;color:#0F1E38;">Total RTA + Insurance</span>
-          <span style="font-size:.73rem;font-weight:800;color:#991B1B;">−AED ${totalFY.toLocaleString()}</span>
-        </div>
-        ${row('Est. Year-1 Depreciation',                              yr1Depr,        deprPct,                                 '#94A3B8', true)}
-        ${row('Est. Maintenance',                                      maint,          maintPct,                                '#CBD5E1', true)}
+      <!-- Right: First Year Costs + Buyer Checklist -->
+      <div class="pir-ext-col">
+        <div class="pir-ext-col-title">First Year Cost</div>
+        <table class="pir-kv-table" style="margin-bottom:14px;">
+          <tr><td>RTA Inspection</td><td>AED 170</td></tr>
+          <tr><td>Registration</td><td>AED 420</td></tr>
+          <tr><td>Transfer Fee</td><td>AED 350</td></tr>
+          <tr><td>Insurance (est.)</td><td>AED ${cost.ins.toLocaleString()}</td></tr>
+          <tr><td class="pir-kv-total" style="font-weight:800;">RTA + Insurance</td><td class="pir-kv-total" style="font-weight:800;color:#1A1610;">AED ${cost.rtaOnly.toLocaleString()}</td></tr>
+          <tr><td>Year-1 Depreciation</td><td class="pir-kv-bad">−AED ${(_deprRows[0]?(handshake-_deprRows[0].endVal):deprAmt).toLocaleString()}</td></tr>
+          <tr><td style="font-weight:800;color:#1A1610;">True Year-1 Cost</td><td style="font-weight:800;color:#991B1B;">−AED ${(cost.rtaOnly+(_deprRows[0]?(handshake-_deprRows[0].endVal):deprAmt)).toLocaleString()}</td></tr>
+        </table>
+
+        <div class="pir-ext-col-title">Buyer Checklist</div>
+        <table class="pir-chk-table">
+          ${gF.map(f=>`<tr><td class="pir-chk-icon">✅</td><td class="pir-chk-text">${f}</td></tr>`).join('')}
+          ${rF.map(f=>`<tr><td class="pir-chk-icon">🔶</td><td class="pir-chk-text">${f}</td></tr>`).join('')}
+          ${gF.length===0&&rF.length===0?`<tr><td colspan="2" style="color:#8A9AB8;font-size:.7rem;padding:4px 0;font-style:italic;">Enter details above to generate checklist.</td></tr>`:''}
+        </table>
       </div>
+    </div><!-- /2col -->
 
-      <!-- Fuel note -->
-      <div style="margin-top:10px;background:#F8FAFC;border-radius:8px;padding:8px 11px;font-size:.67rem;color:#475569;line-height:1.55;">
-        ⛽ Fuel not included (~AED ${fuelMo.toLocaleString()}/month est.). Insurance premium varies by emirate, age, and insurer — verify with your broker.
-      </div>
-    </div>
-  </div>`;
-  })()}
-
-  <!-- ⑭ 3-YEAR RESALE FORECAST (based on handshake price) -->
-  ${(() => {
-    const deprRowsH = _deprRows;
-    const totalDepr = deprRowsH.length ? deprRowsH[deprRowsH.length-1].cumLoss : 0;
-    const highMil   = km > 80000;
-    const luxBrandsD = ['BMW','Mercedes-Benz','Audi','Porsche','Land Rover','Lexus','Volvo','Cadillac','Infiniti'];
-    const isLuxD    = luxBrandsD.includes(brand||'');
-    const deprInsight = highMil
-      ? `⚠️ High mileage (${km.toLocaleString()} km) accelerates depreciation — expect ${isLuxD?'steeper':'faster-than-average'} value loss each year.`
-      : isLuxD
-        ? `Luxury segment — depreciation is steeper than mainstream vehicles, especially outside warranty.`
-        : `Depreciation projections based on UAE market patterns for ${brand}.`;
-    return `<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 10L4 6l3 2 3-5 2 2" stroke="#1A2B4C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      📉 3-Year Resale Forecast
-      <span class="pir-section-chevron">▼</span>
-    </div>
-    <div class="pir-section-body">
-      <div style="font-size:.66rem;color:#4A5E7A;margin-bottom:9px;">Based on Handshake Price: <strong>AED ${handshake.toLocaleString()}</strong></div>
-      <div class="pir-depr-list">
-        <div class="pir-depr-header"><span>Year End</span><span>Rate</span><span>Est. Value</span><span>Annual Loss</span></div>
-        ${deprRowsH.map((row,i,arr)=>`<div class="pir-depr-row">
-          <span class="pir-depr-year">Year ${i+1} (${row.year})</span>
-          <span class="pir-depr-rate">${row.rate}%</span>
-          <span class="pir-depr-val">AED ${row.endVal.toLocaleString()}</span>
-          <span class="pir-depr-loss">−AED ${(i===0?handshake-row.endVal:arr[i-1].endVal-row.endVal).toLocaleString()}</span>
-        </div>`).join('')}
-      </div>
-      <div style="margin-top:10px;padding:9px 12px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA;">
-        <span style="font-size:.68rem;font-weight:800;color:#991B1B;">Total Depreciation over 3 Years: −AED ${totalDepr.toLocaleString()}</span>
-      </div>
-      <div style="margin-top:8px;font-size:.68rem;color:#4A5E7A;line-height:1.5;font-style:italic;">${deprInsight}</div>
-    </div>
-  </div>`;
-  })()}
-
-  <!-- 🔍 13. BUYER CHECKPOINTS -->
-  ${(() => {
-    // ── Green flags ──────────────────────────────────────────────
-    const green = [];
-    const isGCC = specVal==='GCC'||specVal==='GCC Spec';
-    if(isGCC)
-      green.push({ icon:'✅', title:'GCC Specification', detail:'Most trusted spec in UAE — full parts availability, aligned warranty, and widest resale market.' });
-    if(accVal==='none'||(!accVal&&qs.accident===false))
-      green.push({ icon:'✅', title:'No Accident Declared', detail:'No accident on record. Verify independently with a CARCAM or Carfax-equivalent UAE report.' });
-    if(qs.fsh===true)
-      green.push({ icon:'✅', title:'Full Service History', detail:'Agency-serviced vehicles command higher buyer confidence and resale value.' });
-    if(qs.warranty===true||warVal==='active')
-      green.push({ icon:'✅', title:'Active Warranty', detail:'Remaining factory or extended warranty reduces your risk exposure significantly.' });
-    if(qs.singleOwner===true||(parseInt(ownVal)||0)===1)
-      green.push({ icon:'✅', title:'Single Owner', detail:'One-owner vehicles typically have consistent maintenance and cleaner histories.' });
-    if(km < Math.max(1, cy - carYear) * 14000)
-      green.push({ icon:'✅', title:'Below-Average Mileage', detail:`${km.toLocaleString()} km is well below the UAE average for a ${carYear} model — a genuine value advantage.` });
-    if(condVal==='Excellent'||condVal==='Very Good')
-      green.push({ icon:'✅', title:`${condVal} Condition`, detail:'Above-average presentation supports the asking price and speeds up resale.' });
-
-    // ── Attention points ─────────────────────────────────────────
-    const attn = [];
-    const expectedKmC = Math.max(1, cy - carYear) * 18000;
-    if(km > expectedKmC + 20000)
-      attn.push({ icon:'🔶', title:'High Mileage', detail:`${km.toLocaleString()} km exceeds the expected ${expectedKmC.toLocaleString()} km for a ${carYear} model. Verify engine, gearbox, and suspension condition.` });
-    if(qs.fsh===false)
-      attn.push({ icon:'🔶', title:'Missing Service Records', detail:'No verifiable service history. Request receipts or agency printouts. Factor in a pre-purchase inspection.' });
-    if(accVal==='minor')
-      attn.push({ icon:'🔶', title:'Minor Accident on Record', detail:'Confirm repair quality and check for paint inconsistencies or panel gaps during inspection.' });
-    if(accVal==='major')
-      attn.push({ icon:'🔴', title:'Major Accident History', detail:'Significant structural concern. Require a full inspection by a certified mechanic before making any offer.' });
-    if(qs.warranty===false||warVal==='expired')
-      attn.push({ icon:'🔶', title:'No Active Warranty', detail:'Out-of-warranty vehicles carry higher repair risk. Budget for a mechanical inspection and contingency.' });
-    if((qs.singleOwner===false)||(parseInt(ownVal)||0)>=3)
-      attn.push({ icon:'🔶', title:'Multiple Previous Owners', detail:'3+ owners can indicate recurring issues or quick resales. Ask why each owner sold.' });
-    if(specVal&&!isGCC)
-      attn.push({ icon:'🔶', title:`Non-GCC Spec (${specVal})`, detail:'Insurance, parts, and resale may be affected. Verify RTA compliance before purchasing.' });
-    if(condVal==='Fair'||condVal==='Poor')
-      attn.push({ icon:'🔴', title:`${condVal} Condition`, detail:'Price must reflect the cost of repairs and detailing needed to reach a market-ready standard.' });
-
-    if(!green.length && !attn.length) return '';
-
-    const flagCard = (f, bg, border, titleCol) =>
-      `<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:${bg};border:1px solid ${border};border-radius:9px;margin-bottom:6px;">
-        <span style="font-size:.9rem;flex-shrink:0;line-height:1.3;">${f.icon}</span>
-        <div>
-          <div style="font-size:.72rem;font-weight:800;color:${titleCol};margin-bottom:2px;">${f.title}</div>
-          <div style="font-size:.67rem;color:#475569;line-height:1.5;">${f.detail}</div>
-        </div>
-      </div>`;
-
-    return `<div class="pir-section">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3 3 6-6" stroke="#1A8C6B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      🔍 Buyer Checkpoints
+    <!-- D: ACTION BUTTONS -->
+    <div class="pir-ext-actions">
+      <a class="pir-ext-btn" href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener">🔍 Dubizzle</a>
+      <a class="pir-ext-btn" href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener">🚗 YallaMotor</a>
+      <button class="pir-ext-btn" onclick="window.print()" type="button">🖨 Print Report</button>
+      <button class="pir-ext-btn pir-ext-btn-primary" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})" type="button">↺ New Search</button>
+      <span style="margin-left:auto;font-size:.55rem;color:#A8B8CC;font-family:'Exo 2',sans-serif;">${ref.label} · Live UAE market data</span>
     </div>
 
-    ${green.length?`
-    <div style="margin-bottom:10px;">
-      <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#15803D;margin-bottom:6px;display:flex;align-items:center;gap:5px;">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#F0FDF4" stroke="#86EFAC"/><path d="M2.5 5l2 2 3-3" stroke="#15803D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Green Flags (${green.length})
-      </div>
-      ${green.map(f=>flagCard(f,'#F0FDF4','#86EFAC','#15803D')).join('')}
-    </div>`:''}
-
-    ${attn.length?`
-    <div>
-      <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#92400E;margin-bottom:6px;display:flex;align-items:center;gap:5px;">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#FFFBEB" stroke="#FCD34D"/><path d="M5 3v2.5M5 7v.5" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/></svg>
-        Attention Points (${attn.length})
-      </div>
-      ${attn.map(f=>flagCard(
-        f,
-        f.icon==='🔴'?'#FEF2F2':'#FFFBEB',
-        f.icon==='🔴'?'#FECACA':'#FDE68A',
-        f.icon==='🔴'?'#991B1B':'#92400E'
-      )).join('')}
-    </div>`:''}
-
-  </div>`;
-  })()}
-
-  <!-- 📦 14. ADDITIONAL INSIGHTS — collapsed by default -->
-  ${(() => {
-    const expectedKmI = Math.max(1, cy - carYear) * 18000;
-    // Odometer rollback probability
-    const kmDeviation = km - expectedKmI;
-    const rollbackRisk = km < expectedKmI * 0.55
-      ? { level:'High', colour:'#991B1B', bg:'#FEF2F2', border:'#FECACA',
-          text:`Mileage of ${km.toLocaleString()} km is unusually low for a ${cy-carYear}-year-old vehicle. This can indicate odometer rollback. Request a full service history and cross-reference with RTA inspection stamps.` }
-      : km < expectedKmI * 0.75
-        ? { level:'Moderate', colour:'#92400E', bg:'#FFFBEB', border:'#FDE68A',
-            text:`Mileage is below average for age. Low mileage is generally positive, but verify with service stamps that intervals haven't been skipped.` }
-        : { level:'Low', colour:'#15803D', bg:'#F0FDF4', border:'#86EFAC',
-            text:`Mileage is consistent with expected wear for a ${carYear} model — no rollback concern flagged.` };
-
-    // Accident inconsistency indicators
-    const accInconsist = [];
-    if(accVal==='none'&&condVal==='Fair') accInconsist.push('Condition rated "Fair" despite no declared accident — inspect for undisclosed bodywork or repairs.');
-    if(accVal==='none'&&condVal==='Poor') accInconsist.push('Condition rated "Poor" with no accident declared — request a CARCAM vehicle history report to verify.');
-    if(accVal==='minor'&&(qs.fsh===false)) accInconsist.push('Minor accident declared but no service history — post-accident repair quality cannot be verified.');
-    if(accVal==='major') accInconsist.push('Major accident on record — look for paint overspray, misaligned panels, welding marks, or rippling under carpets.');
-
-    // UAE-specific regulatory notes
-    const uaeNotes = [
-      { icon:'🏛️', title:'RTA Inspection Requirement', text:'All used vehicles must pass an RTA (Roads and Transport Authority) roadworthiness inspection before transfer of ownership. Budget AED 170 and allow 1–2 business days.' },
-      { icon:'📋', title:'Import & Spec Compliance', text:specVal&&!['GCC','GCC Spec'].includes(specVal)
-        ? `This vehicle is listed as ${specVal} spec. Non-GCC imports may require headlight, bumper, or AC system modifications to meet UAE/GCC standards. Verify compliance before purchase.`
-        : 'GCC specification vehicles are fully compliant with UAE regulations — no additional modifications required for standard use.' },
-      { icon:'🔧', title:'Modification Rules', text:'RTA prohibits modifications to engine output, suspension height, exhaust systems, and lighting without prior approval. Verify that any existing modifications are RTA-approved to avoid fines or registration refusal.' },
-      { icon:'📄', title:'Ownership Transfer Process', text:'Transfer requires: original vehicle registration card, seller Emirates ID/passport, valid RTA test, valid insurance, and settlement of any Salik/traffic fines. Buyer pays transfer fee of AED 350.' },
-    ];
-
-    return `<div class="pir-section pir-collapsible pir-collapsed" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="1.5" width="10" height="10" rx="2" stroke="#1A2B4C" stroke-width="1.2"/><path d="M4 6.5h5M6.5 4v5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
-      📦 Additional Insights
-      <span style="font-size:.57rem;font-weight:600;color:#94A3B8;margin-left:4px;">(tap to expand)</span>
-      <span class="pir-section-chevron">▼</span>
-    </div>
-    <div class="pir-section-body">
-
-      <!-- Authenticity Signals -->
-      <div style="margin-bottom:14px;">
-        <div style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1A2B4C;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #F1F5F9;">🔬 Authenticity Signals</div>
-
-        <div style="margin-bottom:10px;">
-          <div style="font-size:.65rem;font-weight:700;color:#2D3F5C;margin-bottom:4px;">Odometer Rollback Probability</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
-            <div style="padding:3px 10px;border-radius:99px;font-size:.6rem;font-weight:800;background:${rollbackRisk.bg};color:${rollbackRisk.colour};border:1px solid ${rollbackRisk.border};">${rollbackRisk.level} Risk</div>
-            <div style="flex:1;height:5px;background:#F1F5F9;border-radius:99px;overflow:hidden;">
-              <div style="height:100%;width:${rollbackRisk.level==='High'?80:rollbackRisk.level==='Moderate'?45:12}%;background:${rollbackRisk.colour};border-radius:99px;"></div>
-            </div>
-          </div>
-          <div style="font-size:.67rem;color:#475569;line-height:1.5;padding:8px 10px;background:${rollbackRisk.bg};border:1px solid ${rollbackRisk.border};border-radius:8px;">${rollbackRisk.text}</div>
-        </div>
-
-        ${accInconsist.length?`
-        <div>
-          <div style="font-size:.65rem;font-weight:700;color:#2D3F5C;margin-bottom:4px;">Accident Inconsistency Indicators</div>
-          ${accInconsist.map(t=>`<div style="display:flex;gap:7px;align-items:flex-start;padding:7px 10px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:7px;margin-bottom:5px;font-size:.67rem;color:#78350F;line-height:1.5;">
-            <span style="flex-shrink:0;">⚡</span><span>${t}</span>
-          </div>`).join('')}
-        </div>`:`<div style="font-size:.67rem;color:#15803D;padding:7px 10px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:7px;">✅ No inconsistency indicators detected based on the information provided.</div>`}
-      </div>
-
-      <!-- UAE Notes -->
-      <div>
-        <div style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1A2B4C;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #F1F5F9;">🇦🇪 UAE Regulatory Notes</div>
-        ${uaeNotes.map(n=>`<div style="margin-bottom:8px;padding:10px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:9px;border-left:3px solid #D4AF37;">
-          <div style="font-size:.65rem;font-weight:800;color:#1A2B4C;margin-bottom:3px;">${n.icon} ${n.title}</div>
-          <div style="font-size:.67rem;color:#475569;line-height:1.55;">${n.text}</div>
-        </div>`).join('')}
-      </div>
-
-    </div>
-  </div>`;
-  })()}
-
-  <!-- ⑫ EXPERT ANALYSIS (AVR + AI) -->
-  ${(avr.advantage||avr.value||avr.review||ai?.key_factors?.length)?(() => {
-    const isOverpriced = cmp && (cmp.verdict==='Overpriced'||cmp.verdict==='Significantly Overpriced');
-    const reviewText = isOverpriced && avr.review && /fair.value|good.value|fairly.priced|market.rate/i.test(avr.review)
-      ? avr.review.replace(/fair.value|good.value|fairly.priced|market.rate/gi,'priced above market')+' Note: asking price exceeds market average.'
-      : avr.review;
-    return `<div class="pir-section">
-      <div class="pir-section-title">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5C4 1.5 2 3.5 2 6s1.5 3.5 2 4l1 1.5h3L9 10c.5-.5 2-1.5 2-4s-2-4.5-4.5-4.5z" stroke="#1A2B4C" stroke-width="1.1"/></svg>
-        Expert Analysis
-      </div>
-      <div class="pir-avr-block">
-        ${avr.advantage?`<div class="pir-avr-row"><span class="pir-avr-icon">🚀</span><span><span class="pir-avr-key">Advantage:</span>${avr.advantage}</span></div>`:''}
-        ${avr.value?`<div class="pir-avr-row"><span class="pir-avr-icon">💰</span><span><span class="pir-avr-key">Value:</span>${avr.value}</span></div>`:''}
-        ${reviewText?`<div class="pir-avr-row"><span class="pir-avr-icon">${isOverpriced?'⚠️':'⭐'}</span><span><span class="pir-avr-key">Review:</span>${reviewText}</span></div>`:''}
-        ${(ai?.key_factors||[]).map(f=>`<div class="pir-avr-row"><span class="pir-avr-icon">→</span><span>${f}</span></div>`).join('')}
-        ${ai?.advice?`<div class="pir-ai-advice" style="margin-top:8px">${ai.advice}</div>`:''}
-      </div>
-    </div>`;
-  })():''}
-
-  <!-- ⑬ FULL NEGOTIATION SCRIPT -->
-  ${(() => {
-    // Build a structured multi-step script using available data
-    const hasAsk   = !!stickerPrice;
-    const diff     = hasAsk ? stickerPrice - handshake : 0;
-    const diffPct  = hasAsk && handshake ? Math.round(Math.abs(diff)/handshake*100) : 0;
-    const isOver   = diff > handshake * 0.03;
-    const isFair   = !isOver && diff >= -(handshake * 0.03);
-    const isDeal   = diff < -(handshake * 0.03);
-    const lo       = low  || Math.round(avg * 0.85);
-    const hi       = high || Math.round(avg * 1.15);
-
-    // Leverage points
-    const leverages = [];
-    if(km > (Math.max(1, cy - carYear) * 18000 + 20000))
-      leverages.push(`the mileage of ${km.toLocaleString()} km is above average for a ${carYear} model`);
-    if(accVal && accVal !== 'none')
-      leverages.push(`there is a ${accVal} accident on record`);
-    if(qs.fsh === false)
-      leverages.push(`no verifiable service history is available`);
-    if(condVal === 'Fair') leverages.push(`the condition is rated fair and may require attention`);
-    if(qs.warranty === false || warVal === 'expired') leverages.push(`the warranty has expired`);
-    if(qs.singleOwner === false || (parseInt(ownVal)||0) >= 3) leverages.push(`the vehicle has had multiple owners`);
-
-    const leverageSentence = leverages.length
-      ? `I do want to highlight a few things: ${leverages.join('; ')}.`
-      : '';
-
-    const openOffer   = nego ? nego.offer : Math.round(handshake * 0.93 / 500) * 500;
-    const targetClose = nego ? nego.close : handshake;
-    const walkAway    = nego ? nego.walk  : Math.round(handshake * 1.06 / 500) * 500;
-
-    // Build the full script (apostrophes written as unicode to avoid quote conflicts)
-    const apos = "\u2019"; // '
-    const dash = "\u2014"; // —
-    const step3suffix = hasAsk
-      ? ` ${dash} I know you${apos}re asking AED ${(stickerPrice||0).toLocaleString()} but this reflects the market and the car${apos}s condition.`
-      : '.';
-    const fullScript = [
-      'Step 1 \u2014 Open the conversation:',
-      `"I${apos}ve done my research on current UAE market prices for the ${year} ${brand}${model?' '+model:''}. Similar listings are priced between AED ${lo.toLocaleString()} and AED ${hi.toLocaleString()}, so I have a good sense of where this sits."`,
-      '',
-      'Step 2 \u2014 State your leverage' + (leverages.length?' (use what applies)':' (if applicable)') + ':',
-      leverageSentence || `"I${apos}d like to get an independent inspection done before I commit."`,
-      '',
-      'Step 3 \u2014 Make your offer:',
-      `"Based on everything, I${apos}d like to offer AED ${openOffer.toLocaleString()}${step3suffix}"`,
-      '',
-      'Step 4 \u2014 Hold or close:',
-      `"I can close quickly and handle the paperwork today if we can agree on AED ${targetClose.toLocaleString()}. That${apos}s my best offer."`,
-      '',
-      'Step 5 \u2014 Walk-away point:',
-      `(Internal note: do not exceed AED ${walkAway.toLocaleString()}. If the seller won${apos}t come down to this, walk away politely.)`
-    ].join('\n');
-
-    const displayScript = script || fullScript;
-
-    return `<div class="pir-section pir-collapsible" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2h9a1 1 0 011 1v6a1 1 0 01-1 1H6l-3 2V10H2a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#1E40AF" stroke-width="1.2"/></svg>
-      📋 Full Negotiation Script
-      <span class="pir-section-chevron">▼</span>
-    </div>
-    <div class="pir-section-body">
-      ${isOver?`<div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.7rem;color:#92400E;">⚠️ This car is priced ~${diffPct}% above market. You have real negotiation room — use the steps below.</div>`:''}
-      ${isDeal?`<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.7rem;color:#166534;">✅ This is already below market. A light counter of 2–3% is reasonable without risking the deal.</div>`:''}
-      <div class="pir-haggle-box">
-        <div class="pir-haggle-script" id="haggleScript" style="white-space:pre-line;line-height:1.65;">${displayScript}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap;gap:6px;">
-          <button class="pir-haggle-copy" onclick="pirCopyHaggle(this);event.stopPropagation();" type="button">📋 Copy full script</button>
-          <div style="font-size:.58rem;color:#94A3B8;">Open with AED ${openOffer.toLocaleString()} · Target AED ${targetClose.toLocaleString()} · Walk at AED ${walkAway.toLocaleString()}</div>
-        </div>
-      </div>
-    </div>
-  </div>`;
-  })()}
-
-  <!-- ⑭ RED FLAGS & RISK SUMMARY -->
-  ${(() => {
-    // Compute local risk flags in addition to any API-provided ones
-    const computedFlags = [];
-    const computedWarnings = [];
-
-    if(accVal === 'major')
-      computedFlags.push({ icon:'🚨', text:'Major accident on record — request full inspection report and repair history before proceeding.' });
-    else if(accVal === 'minor')
-      computedFlags.push({ icon:'⚠️', text:'Minor accident declared — verify quality of repair and check for hidden structural issues.' });
-
-    if(km > (Math.max(1, cy - carYear) * 18000 + 30000))
-      computedFlags.push({ icon:'🔴', text:`High mileage: ${km.toLocaleString()} km for a ${carYear} model. Expect higher maintenance costs and faster depreciation.` });
-
-    if(qs.fsh === false)
-      computedWarnings.push({ icon:'🟡', text:'No verified service history. Ask the seller to produce receipts or agency records.' });
-
-    if(qs.warranty === false || warVal === 'expired')
-      computedWarnings.push({ icon:'🟡', text:'No active warranty. Factor in potential repair costs before agreeing on price.' });
-
-    if((qs.singleOwner === false) || (parseInt(ownVal)||0) >= 3)
-      computedWarnings.push({ icon:'🟡', text:'Multiple previous owners. Each ownership transfer reduces buyer confidence and resale value.' });
-
-    if(specVal && specVal !== 'GCC' && specVal !== 'GCC Spec')
-      computedWarnings.push({ icon:'🟡', text:`Non-GCC specification (${specVal}). Smaller resale pool and potential parts/insurance complications.` });
-
-    if(condVal === 'Fair' || condVal === 'Poor')
-      computedFlags.push({ icon:'🔴', text:`Condition rated "${condVal}" — price should reflect cost of bringing the vehicle to a sellable standard.` });
-
-    // Merge with API red flags
-    const apiFlags = (r.redFlags||[]).map(f => ({ icon:'⚠️', text: f }));
-
-    const allRed  = [...computedFlags,  ...apiFlags.filter(f => !/warning|note|minor/i.test(f.text))];
-    const allWarn = [...computedWarnings, ...apiFlags.filter(f =>  /warning|note|minor/i.test(f.text))];
-
-    if(!allRed.length && !allWarn.length) return '';
-
-    return `<div class="pir-section">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v7M6.5 10v1.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/></svg>
-      ⚠️ Risk Flags
-    </div>
-    ${allRed.length ? `
-    <div style="margin-bottom:8px;">
-      <div style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#991B1B;margin-bottom:5px;">Critical</div>
-      ${allRed.map(f=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;margin-bottom:5px;font-size:.72rem;color:#7F1D1D;line-height:1.5;">
-        <span style="flex-shrink:0;">${f.icon}</span><span>${f.text}</span>
-      </div>`).join('')}
-    </div>` : ''}
-    ${allWarn.length ? `
-    <div>
-      <div style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#92400E;margin-bottom:5px;">Watch Points</div>
-      ${allWarn.map(f=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 11px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;margin-bottom:5px;font-size:.72rem;color:#78350F;line-height:1.5;">
-        <span style="flex-shrink:0;">${f.icon}</span><span>${f.text}</span>
-      </div>`).join('')}
-    </div>` : ''}
-  </div>`;
-  })()}
-  <!-- ⑮ LIVE SOURCE LINKS -->
-  ${r.sourceLinks&&r.sourceLinks.length?`<div class="pir-section">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 8l3-3m0 0l-2-1m2 1l1 2" stroke="#008577" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1" y="1" width="11" height="11" rx="2" stroke="#008577" stroke-width="1.1"/></svg>
-      🔗 Live Sources Used
-    </div>
-    ${r.sourceLinks.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pir-source-link">${l.title||l.url}</a>`).join('')}
-  </div>`:''}
-
-  <!-- ⑯ HOW CALCULATED -->
-  <div class="pir-section pir-collapsible" onclick="pirToggle(this)">
-    <div class="pir-section-title">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="#D4AF37" stroke-width="1.2"/><path d="M4 6.5h5M6.5 4v5" stroke="#D4AF37" stroke-width="1.3" stroke-linecap="round"/></svg>
-      🔎 How This Was Calculated
-      <span class="pir-section-chevron">▼</span>
-    </div>
-    <div class="pir-section-body">
-      <div class="pir-calc-note">
-        ${r.isEstimate
-          ? '<strong>🤖 AI Estimate Mode</strong> — No live listings were found for this exact search. The price estimate uses UAE market knowledge, brand-specific depreciation curves, GCC spec premiums, and comparable model data.'
-          : `<strong>🔍 Live Market Mode</strong> — ${comp>0?comp+' comparable UAE listings':'Live UAE listings'} were found and analysed. Outliers at both ends were filtered. Adjustments applied for mileage deviation, condition, specification, and accident history.`}
-        ${r.valuationNotes?`<div class="pir-calc-quote">"${r.valuationNotes}"</div>`:''}
-        <div style="margin-top:11px;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
-          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
-            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Method</div>
-            <div style="font-size:.69rem;color:#1A2B4C;">${r.isEstimate?'AI estimation':'Comparable listing analysis'}</div>
-          </div>
-          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
-            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Listings Used</div>
-            <div style="font-size:.69rem;color:#1A2B4C;">${comp>0?comp+' comparable':'Model-based estimate'}</div>
-          </div>
-          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
-            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Confidence</div>
-            <div style="font-size:.69rem;font-weight:700;color:${conf>=70?'#15803D':conf>=45?'#92400E':'#991B1B'};">${conf}% — ${conf>=70?'High':conf>=45?'Moderate':'Low'}</div>
-          </div>
-          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:8px 10px;">
-            <div style="font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:3px;">Data Age</div>
-            <div style="font-size:.69rem;color:#1A2B4C;">${r.cached?`Cached${r.cacheAge?' ('+r.cacheAge+' ago)':''}`:r.isEstimate?'Static model':'Live today'}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑰ DATA ACCURACY FOOTER -->
-  <div class="pir-footer-accuracy">
-    <div class="pir-footer-conf">
-      <span class="pir-footer-conf-lbl">Confidence</span>
-      <div class="pir-footer-bar-wrap"><div class="pir-footer-bar" id="cbarFill" style="width:0%"></div></div>
-      <span class="pir-footer-conf-pct">${conf}%</span>
-    </div>
-    ${comp>0?`<div class="pir-footer-note">Based on ${comp} comparable UAE listings${r.cached?' (cached)':' (live)'}</div>`:''}
-    <div class="pir-footer-ref">${ref.label} &nbsp;|&nbsp; Based on live UAE market data</div>
-  </div>
-
-  <!-- 📌 15. FOOTER — CALL TO ACTION -->
-  ${(() => {
-    const isBuyer  = purpVal !== 'selling';
-    const isSeller = purpVal === 'selling';
-    const deprRowsF = _deprRows;
-    const yr3Val   = deprRowsF.length>=3 ? deprRowsF[2].endVal : Math.round(handshake*0.72);
-
-    return `<div class="pir-section" style="border-bottom:none;">
-
-    <!-- Dual CTA cards -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;">
-
-      <!-- Buyer card -->
-      <div style="background:linear-gradient(145deg,#F0FDF4,#ECFDF5);border:1.5px solid #86EFAC;border-radius:12px;padding:13px 12px;">
-        <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#15803D;margin-bottom:6px;">👤 For Buyers</div>
-        <div style="font-size:.7rem;color:#166534;line-height:1.6;margin-bottom:10px;">Compare similar listings to verify this price estimate. Use the handshake price and negotiation line to open confidently — and always request a pre-purchase RTA inspection.</div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <a href="https://www.dubizzle.com/motors/cars/" target="_blank" rel="noopener"
-            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #86EFAC;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#15803D;transition:background .15s;">
-            🔍 Browse Dubizzle
-          </a>
-          <a href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener"
-            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #86EFAC;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#15803D;transition:background .15s;">
-            🚗 YallaMotor
-          </a>
-        </div>
-      </div>
-
-      <!-- Seller card -->
-      <div style="background:linear-gradient(145deg,#EFF6FF,#F0F9FF);border:1.5px solid #93C5FD;border-radius:12px;padding:13px 12px;">
-        <div style="font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1E40AF;margin-bottom:6px;">🏷️ For Sellers</div>
-        <div style="font-size:.7rem;color:#1D4ED8;line-height:1.6;margin-bottom:10px;">List at the handshake price <strong>(AED ${handshake.toLocaleString()})</strong> for fastest sale. Highlight your GCC spec, service history, and single ownership to command a premium. Expect the 3-year resale value to reach AED ${yr3Val.toLocaleString()}.</div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <a href="https://www.dubizzle.com/motors/cars/add/" target="_blank" rel="noopener"
-            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #93C5FD;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#1E40AF;transition:background .15s;">
-            📢 List on Dubizzle
-          </a>
-          <a href="https://uae.yallamotor.com/sell-my-car" target="_blank" rel="noopener"
-            style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;background:#fff;border:1px solid #93C5FD;border-radius:8px;text-decoration:none;font-size:.62rem;font-weight:700;color:#1E40AF;transition:background .15s;">
-            🚗 List on YallaMotor
-          </a>
-        </div>
-      </div>
+    <!-- E: DISCLAIMER -->
+    <div style="padding:8px 20px;font-size:.56rem;color:#A8B8CC;line-height:1.6;text-align:center;border-top:1px solid #F0EBE0;">
+      Price estimates are based on UAE market data and AI analysis. Always verify with an independent inspection and current listings before any purchase or sale decision.
     </div>
 
-    <!-- Key numbers reminder strip -->
-    <div style="background:linear-gradient(135deg,rgba(0,38,32,0.04),rgba(0,82,68,0.06));border:1px solid var(--accent-line);border-radius:10px;padding:10px 13px;margin-bottom:12px;">
-      <div style="font-size:.57rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;">📊 Your Key Numbers at a Glance</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;">
-        <div>
-          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">Handshake</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:800;color:var(--accent);">AED ${handshake.toLocaleString()}</div>
-        </div>
-        ${stickerPrice?`<div>
-          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">Sticker</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:800;color:#3D5280;">AED ${stickerPrice.toLocaleString()}</div>
-        </div>`:
-        `<div>
-          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">Market Range</div>
-          <div style="font-size:.68rem;font-weight:700;color:#475569;">${low&&high?`AED ${low.toLocaleString()}–${high.toLocaleString()}`:'—'}</div>
-        </div>`}
-        <div>
-          <div style="font-size:.55rem;color:#64748B;margin-bottom:2px;">3-Yr Value</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:800;color:#475569;">AED ${yr3Val.toLocaleString()}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Utility buttons -->
-    <div class="pir-action-row">
-      <button class="pir-action-btn" onclick="window.open('https://www.dubizzle.com/motors/cars/','_blank')" type="button">🔍 Dubizzle</button>
-      <button class="pir-action-btn" onclick="window.open('https://uae.yallamotor.com/used-cars','_blank')" type="button">🚗 YallaMotor</button>
-      <button class="pir-action-btn" onclick="printValuation()" type="button">🖨 Print</button>
-      <button class="pir-action-btn primary" onclick="resetForm()" type="button">↺ New Search</button>
-    </div>
-
-    <!-- Disclaimer -->
-    <div style="margin-top:10px;text-align:center;font-size:.57rem;color:#94A3B8;line-height:1.6;padding:0 4px;">
-      Price estimates are based on UAE market data and should not be used as the sole basis for purchase or sale. Always verify with an independent inspection and consult current listings.
-    </div>
-
-  </div>`;
-  })()}
+  </div><!-- /pir-ext-wrap -->
 
   </div><!-- /pir-tab-analysis -->
+
 </div><!-- /pir-wrap -->`;
 }
 async function checkCarPrice(){
@@ -9962,6 +9556,23 @@ function pirSwitchTab(n){
     v.style.display='none';a.style.display='';
     b2&&b2.classList.add('pir-tnav-active');
     b1&&b1.classList.remove('pir-tnav-active');
+    // Clone Verdict into top of Full Analysis (once only)
+    const clone=document.getElementById('pirTab2VerdictClone');
+    if(clone&&!clone.hasChildNodes()){
+      clone.innerHTML=v.innerHTML;
+      // Remove the Tab 1 footer links from the clone (avoid duplicate buttons)
+      clone.querySelectorAll('.pir-tab-footer').forEach(el=>el.remove());
+      // Re-trigger animated bars in clone
+      clone.querySelectorAll('.pir-signal-fill-v28[data-target],.pir-signal-fill-ryg[data-target]').forEach(fill=>{
+        const target=Math.min(100,parseInt(fill.dataset.target)||0);
+        const thumb=fill.nextElementSibling;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          fill.style.width=target+'%';
+          if(thumb&&(thumb.classList.contains('pir-signal-thumb-v28')||thumb.classList.contains('pir-signal-thumb')))
+            thumb.style.left=target+'%';
+        }));
+      });
+    }
   }
 }
 
