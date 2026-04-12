@@ -5075,7 +5075,298 @@
     .pir-vab-net-val { font-size:1rem; }
   }
 
-  
+
+  /* ═══════════════════════════════════════════════════════════════
+     KAMSAYARA v25 — PART 2 REPORT REDESIGN
+     Two-tab premium PIR: Verdict + Full Analysis
+     Transparency Score · Corrected VAB · Mileage rationalization
+  ═══════════════════════════════════════════════════════════════ */
+
+  /* ── TAB NAV — elevated pill style ── */
+  .pir-tabs-nav {
+    display: flex; gap: 0; padding: 0;
+    background: #0F1E38;
+    border-bottom: none;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .pir-tnav-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+    padding: .7rem 1rem; border: none; border-radius: 0; border-bottom: 3px solid transparent;
+    font-family: "Exo 2", sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.48); background: transparent;
+    cursor: pointer; transition: all .2s; position: relative; bottom: 0;
+  }
+  .pir-tnav-btn:hover { color: rgba(255,255,255,0.78); background: rgba(255,255,255,0.05); }
+  .pir-tnav-btn.pir-tnav-active {
+    color: #E8D060; background: transparent;
+    border-bottom-color: #E8D060;
+  }
+
+  /* ── VERDICT TAB — hero price card ── */
+  .pir-ps-wrap {
+    background: linear-gradient(160deg, #0A1828 0%, #0F2040 40%, #0A1828 100%);
+    padding: 22px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    position: relative; overflow: hidden;
+  }
+  .pir-ps-wrap::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(118deg, transparent 0, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+  }
+  .pir-ps-wrap::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #C49A2A 20%, #E8D060 50%, #C49A2A 80%, transparent);
+  }
+  .pir-ps-hero { position: relative; z-index: 2; margin-bottom: 16px; }
+  .pir-ps-hero-label {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .6rem; font-weight: 800; letter-spacing: .18em;
+    text-transform: uppercase; color: rgba(232,208,96,0.75);
+    margin-bottom: 6px;
+  }
+  .pir-ps-hero-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #E8D060; flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(232,208,96,0.6);
+    animation: heroDotPulse 2s ease-in-out infinite;
+  }
+  @keyframes heroDotPulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .pir-ps-micro { color: rgba(255,255,255,0.32); font-weight: 600; font-size: .55rem; margin-left: 4px; }
+  .pir-ps-hero-amount {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    font-weight: 900; color: #E8D060;
+    letter-spacing: -.02em; line-height: 1;
+    text-shadow: 0 4px 24px rgba(232,208,96,0.25);
+    animation: priceReveal .6s .2s var(--ease) both;
+  }
+  @keyframes priceReveal { from{opacity:0;transform:scale(.92);} to{opacity:1;transform:none;} }
+  .pir-ps-hero-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: .62rem; font-weight: 700; letter-spacing: .05em;
+    padding: 3px 11px; border-radius: 99px; margin-top: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .pir-deal-good { background: rgba(34,197,94,0.15); color: #4ADE80; border-color: rgba(74,222,128,0.25); }
+  .pir-deal-warn { background: rgba(234,179,8,0.15);  color: #FDE047; border-color: rgba(253,224,71,0.25); }
+  .pir-deal-bad  { background: rgba(239,68,68,0.15);  color: #FCA5A5; border-color: rgba(252,165,165,0.25); }
+  .pir-deal-neutral { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.55); }
+
+  /* Three secondary price cards */
+  .pir-ps-cards {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+    position: relative; z-index: 2; margin-bottom: 12px;
+  }
+  @media(max-width:520px) { .pir-ps-cards { grid-template-columns: 1fr 1fr; } }
+  .pir-ps-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 11px 12px;
+    transition: background .18s, border-color .18s;
+  }
+  .pir-ps-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
+  .pir-ps-card-top { display: flex; flex-direction: column; gap: 2px; margin-bottom: 7px; }
+  .pir-ps-card-label { font-size: .58rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+  .pir-ps-card-def   { font-size: .52rem; color: rgba(255,255,255,0.28); font-weight: 500; }
+  .pir-ps-card-val   { font-family: "Orbitron", sans-serif; font-size: .95rem; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+  .pir-ps-card-val .pir-ps-card-aed { font-size: .55rem; font-weight: 600; color: rgba(255,255,255,0.45); margin-left: 3px; font-family: "Exo 2",sans-serif; }
+  .pir-ps-card-na { font-size: .75rem; color: rgba(255,255,255,0.28); font-family: "Exo 2",sans-serif; font-weight: 500; }
+  .pir-ps-card-delta { font-size: .58rem; font-weight: 700; margin-top: 5px; }
+  .pir-ps-delta-over   { color: #FCA5A5; }
+  .pir-ps-delta-under  { color: #4ADE80; }
+  .pir-ps-delta-tactic { color: rgba(232,208,96,0.7); }
+  .pir-ps-delta-spread { color: rgba(255,255,255,0.35); }
+  .pir-ps-range-vals   { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .pir-ps-range-min, .pir-ps-range-max { font-size: .68rem; font-weight: 700; color: rgba(255,255,255,0.75); }
+  .pir-ps-range-arrow  { color: rgba(255,255,255,0.28); font-size: .6rem; }
+  .pir-ps-legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    font-size: .57rem; color: rgba(255,255,255,0.32);
+    position: relative; z-index: 2;
+  }
+  .pir-ps-legend strong { color: rgba(255,255,255,0.55); }
+  .pir-ps-legend-sep { color: rgba(255,255,255,0.2); }
+
+  /* ── TRANSPARENCY SCORE — replaces old percentile ── */
+  .pir-ts-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 14px; border-radius: 10px; margin: 12px 0;
+    border: 1.5px solid;
+  }
+  .pir-ts-high  { background: rgba(34,197,94,0.08);  border-color: rgba(34,197,94,0.25); }
+  .pir-ts-mid   { background: rgba(234,179,8,0.08);   border-color: rgba(234,179,8,0.25); }
+  .pir-ts-low   { background: rgba(239,68,68,0.08);   border-color: rgba(239,68,68,0.25); }
+  .pir-ts-score {
+    font-family: "Orbitron", sans-serif; font-size: 1.15rem; font-weight: 800;
+    letter-spacing: -.01em;
+  }
+  .pir-ts-high .pir-ts-score { color: #16A34A; }
+  .pir-ts-mid  .pir-ts-score { color: #CA8A04; }
+  .pir-ts-low  .pir-ts-score { color: #DC2626; }
+  .pir-ts-body {}
+  .pir-ts-label { font-size: .72rem; font-weight: 800; letter-spacing: .05em; margin-bottom: 2px; }
+  .pir-ts-high .pir-ts-label { color: #15803D; }
+  .pir-ts-mid  .pir-ts-label { color: #92400E; }
+  .pir-ts-low  .pir-ts-label { color: #991B1B; }
+  .pir-ts-sub { font-size: .62rem; color: #64748B; }
+  /* Score bar */
+  .pir-ts-bar-wrap { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .pir-ts-bar-track {
+    flex: 1; height: 6px; border-radius: 99px;
+    background: linear-gradient(90deg, #EF4444 0%, #F59E0B 40%, #22C55E 80%, #16A34A 100%);
+    position: relative;
+  }
+  .pir-ts-bar-needle {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; border: 2.5px solid #0F1E38;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: left 1s cubic-bezier(0.34,1.1,0.64,1);
+  }
+  .pir-ts-bar-ends { display: flex; justify-content: space-between; font-size: .5rem; color: #9CA3AF; margin-top: 3px; }
+
+  /* ── MILEAGE RATIONALIZATION BADGE ── */
+  .pir-mileage-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .65rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 99px; margin-left: 6px;
+  }
+  .pir-mileage-premium { background: rgba(34,197,94,0.1); color: #15803D; border: 1px solid rgba(34,197,94,0.25); }
+  .pir-mileage-average { background: rgba(100,116,139,0.08); color: #475569; border: 1px solid rgba(100,116,139,0.2); }
+  .pir-mileage-high    { background: rgba(239,68,68,0.08); color: #DC2626; border: 1px solid rgba(239,68,68,0.2); }
+
+  /* ── VAB NET FORMULA ROW — improved readability ── */
+  .pir-vab-net-calc {
+    font-size: .72rem; color: rgba(255,255,255,0.45); line-height: 1.5;
+    font-family: "Exo 2", sans-serif; letter-spacing: .01em;
+  }
+  .pir-vab-net-calc .vab-pos { color: rgba(74,222,128,0.7); font-weight: 700; }
+  .pir-vab-net-calc .vab-neg { color: rgba(252,165,165,0.7); font-weight: 700; }
+  .pir-vab-net-calc .vab-eq  { color: rgba(232,208,96,0.6); }
+
+  /* ── HANDSHAKE ALIGNMENT INDICATOR ── */
+  .pir-hs-align-note {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .62rem; font-weight: 600; color: rgba(255,255,255,0.38);
+    margin-top: 4px; padding-top: 4px;
+  }
+  .pir-hs-align-note.capped {
+    color: rgba(252,165,165,0.65);
+  }
+  .pir-hs-align-note span.align-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0;
+  }
+
+  /* ── VERDICT RIBBON — larger, more confident ── */
+  .pir-verdict-ribbon {
+    padding: 18px 24px 16px;
+    border-bottom: 1px solid #E8EBF3;
+    position: relative;
+  }
+  .pir-verdict-badge-wrap { margin-bottom: 9px; }
+  .pir-verdict-pill {
+    display: inline-flex; align-items: center;
+    font-size: .78rem; font-weight: 800; letter-spacing: .06em;
+    padding: 5px 16px; border-radius: 99px;
+  }
+  .pir-verdict-strong-buy { background: linear-gradient(135deg,#0F1E38,#1A3A2A); border-left: 4px solid #22C55E; }
+  .pir-verdict-strong-buy .pir-verdict-pill { background: #16A34A; color: #fff; }
+  .pir-verdict-buy { background: linear-gradient(135deg,#F0FDF4,#ECFDF5); border-left: 4px solid #4ADE80; }
+  .pir-verdict-buy .pir-verdict-pill { background: #22C55E; color: #fff; }
+  .pir-verdict-negotiate { background: linear-gradient(135deg,#FFFBEB,#FEF3C7); border-left: 4px solid #FCD34D; }
+  .pir-verdict-negotiate .pir-verdict-pill { background: #F59E0B; color: #fff; }
+  .pir-verdict-caution { background: linear-gradient(135deg,#FFF7ED,#FFEDD5); border-left: 4px solid #FB923C; }
+  .pir-verdict-caution .pir-verdict-pill { background: #EA580C; color: #fff; }
+  .pir-verdict-pass { background: linear-gradient(135deg,#FEF2F2,#FEE2E2); border-left: 4px solid #EF4444; }
+  .pir-verdict-pass .pir-verdict-pill { background: #DC2626; color: #fff; }
+  .pir-verdict-text {
+    font-size: .88rem; color: #2D3F5C; line-height: 1.75; margin-top: 4px;
+  }
+
+  /* ── MARKET SIGNALS — upgraded ── */
+  .pir-signals {
+    padding: 16px 24px 18px; border-bottom: 1px solid #E8EBF3;
+    background: #FAFBFD;
+  }
+  .pir-signals-title {
+    font-size: .65rem; font-weight: 800; letter-spacing: .14em;
+    text-transform: uppercase; color: #1A2B4C; margin-bottom: 13px;
+  }
+  .pir-signal-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .pir-signal-row:last-child { margin-bottom: 0; }
+  .pir-signal-label { display: flex; justify-content: space-between; align-items: center; min-width: 130px; }
+  .pir-signal-name { font-size: .72rem; font-weight: 600; color: #2D3F5C; }
+  .pir-signal-pct  { font-size: .65rem; font-weight: 800; color: #1A2B4C; min-width: 32px; text-align: right; }
+  .pir-signal-track { flex: 1; position: relative; height: 10px; border-radius: 99px; background: #EEF1F8; overflow: visible; }
+  .pir-signal-fill-ryg {
+    position: absolute; top: 0; left: 0; bottom: 0; border-radius: 99px;
+    background: linear-gradient(90deg,#EF4444 0%,#F97316 25%,#EAB308 50%,#84CC16 75%,#22C55E 100%);
+    width: 0%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .pir-signal-thumb {
+    position: absolute; top: 50%; left: 0%;
+    transform: translate(-50%,-50%);
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; border: 2.5px solid #0F1E38;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.18); z-index: 3;
+    transition: left 1.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .pir-signal-tier { font-size: .62rem; font-weight: 700; color: #8A9AB8; min-width: 60px; text-align: right; letter-spacing: .03em; }
+
+  /* ── DEAL EVAL — sharper ── */
+  .pir-deal-eval { padding: 14px 24px 16px; border-bottom: 1px solid #E8EBF3; }
+  .pir-de-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border-radius: 12px; border: 1.5px solid transparent;
+  }
+  .pir-de-good   { background: #F0FDF4; border-color: #86EFAC; }
+  .pir-de-fair   { background: #FEFCE8; border-color: #FDE047; }
+  .pir-de-over   { background: #FEF2F2; border-color: #FECACA; }
+  .pir-de-neutral{ background: #F8F9FA; border-color: #E2E8F0; }
+  .pir-de-icon   { font-size: 1.6rem; flex-shrink: 0; line-height: 1; }
+  .pir-de-body   { flex: 1; min-width: 0; }
+  .pir-de-verdict { font-size: .95rem; font-weight: 800; color: #0F1E38; margin-bottom: 3px; }
+  .pir-de-sub    { font-size: .76rem; color: #475569; line-height: 1.5; }
+  .pir-de-sub strong { color: #0F1E38; }
+  .pir-de-pct    { font-family: "Orbitron",sans-serif; font-size: 1.05rem; font-weight: 800; flex-shrink: 0; padding: 6px 12px; border-radius: 8px; }
+  .pir-de-pct-good { background: #DCFCE7; color: #15803D; }
+  .pir-de-pct-fair { background: #FEF9C3; color: #854D0E; }
+  .pir-de-pct-over { background: #FEE2E2; color: #991B1B; }
+
+  /* ── SECTION HEADERS — consistent style ── */
+  .pir-section { padding: 16px 24px; border-bottom: 1px solid #E8EBF3; }
+  .pir-section:last-child { border-bottom: none; }
+  .pir-section-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: .68rem; font-weight: 800; letter-spacing: .12em;
+    text-transform: uppercase; color: #1A2B4C; margin-bottom: 12px;
+  }
+  .pir-section-chevron { margin-left: auto; color: #94A3B8; font-size: .7rem; transition: transform .25s; }
+  .pir-collapsible .pir-section-title { cursor: pointer; }
+  .pir-collapsible-body {
+    max-height: 1200px; overflow: hidden;
+    transition: max-height .4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .pir-collapsible.pir-collapsed .pir-collapsible-body { max-height: 0; }
+  .pir-collapsible.pir-collapsed .pir-section-chevron { transform: rotate(-90deg); }
+
+  /* ── FULL ANALYSIS TAB ── */
+  .pir-tab-panel { animation: fIn .28s var(--ease) both; }
+  @keyframes fIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+
+  /* ── FOOTER ACCURACY BAR ── */
+  .pir-footer-accuracy {
+    padding: 12px 24px; background: #F8FAFC;
+    border-top: 1px solid #E8EBF3;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .pir-footer-conf { display: flex; align-items: center; gap: 10px; }
+  .pir-footer-conf-lbl { font-size: .58rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #94A3B8; flex-shrink: 0; }
+  .pir-footer-bar-wrap { flex: 1; height: 5px; background: #E2E8F0; border-radius: 99px; overflow: hidden; }
+  .pir-footer-bar { height: 100%; background: linear-gradient(90deg,#EF4444,#22C55E); border-radius: 99px; transition: width 1.2s var(--ease); }
+  .pir-footer-conf-pct { font-size: .68rem; font-weight: 800; color: #1A2B4C; flex-shrink: 0; min-width: 32px; text-align: right; }
+  .pir-footer-note { font-size: .6rem; color: #94A3B8; }
+  .pir-footer-ref  { font-size: .58rem; color: #CBD5E1; letter-spacing: .04em; }
+
     /* ── IDLE PANEL (Stage 1) ─────────────────────────────────── */
     .rph-idle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 20px 24px;height:100%;min-height:240px;}
     .rph-idle-car{display:flex;flex-direction:column;align-items:center;gap:0;}
@@ -6240,8 +6531,9 @@ function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPr
   if(specVal==='GCC'||specVal==='GCC Spec') adj.push({name:'GCC Specification',amount:r(avgPrice*.04),positive:true});
   else if(specVal&&specVal!=='GCC') adj.push({name:'Non-GCC Specification',amount:r(avgPrice*.06),positive:false});
   if(mileageNum>0){
-    if(mileageNum>expected*1.6){const p=Math.min(r(((mileageNum-expected)/10000)*600),r(avgPrice*.18));if(p>0)adj.push({name:'High Mileage',amount:p,positive:false});}
-    else if(mileageNum<expected*.5) adj.push({name:'Low Mileage',amount:r(avgPrice*.03),positive:true});
+    if(mileageNum>expected*1.6){const p=Math.min(r(((mileageNum-expected)/10000)*600),r(avgPrice*.18));if(p>0)adj.push({name:'Above-Average Mileage',amount:p,positive:false});}
+    else if(mileageNum<expected*.65) adj.push({name:'Low Mileage for Year',amount:r(avgPrice*.03),positive:true});
+    else if(mileageNum>=expected*.65&&mileageNum<=expected*1.1) adj.push({name:'Average Mileage for Age',amount:0,positive:true});
   }
   if(conditionVal==='Excellent')     adj.push({name:'Excellent Condition',amount:r(avgPrice*.04),positive:true});
   else if(conditionVal==='Very Good') adj.push({name:'Very Good Condition',amount:r(avgPrice*.025),positive:true});
@@ -6340,13 +6632,13 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
   if(isGCC) green.push('GCC specification — preferred in UAE market');
   if(['White','Pearl White','Silver','Gray','Black','Midnight Black'].includes(colourVal)) green.push(`${colourVal} — high-demand resale colour`);
   if(serviceVal==='Full Agency'||serviceVal==='Agency'||qs.fsh===true) green.push('Full service history — highest trust level');
-  if(mileageNum>0&&mileageNum<exp*.65) green.push(`${mileageNum.toLocaleString()} km — below average for age`);
+  if(mileageNum>0&&mileageNum<exp*.65) green.push(`${mileageNum.toLocaleString()} km — Low mileage for year (premium supported)`);
   if(ownersVal==='1'||qs.singleOwner===true) green.push('Single owner — commands premium at resale');
   if(conditionVal==='Excellent') green.push('Excellent condition — top bracket justified');
   if(warrantyVal==='active'||qs.warranty===true) green.push('Active warranty — reduces buyer risk');
   if(warrantyVal==='extended') green.push('Extended warranty — added peace of mind');
   if(!isGCC) red.push('Non-GCC spec — smaller UAE buyer pool');
-  if(mileageNum>exp*1.5) red.push(`${mileageNum.toLocaleString()} km — above expected mileage`);
+  if(mileageNum>exp*1.5) red.push(`${mileageNum.toLocaleString()} km — above expected mileage for year`);
   if(accidentVal==='minor') red.push('Minor accident on record — disclose and negotiate');
   if(accidentVal==='major') red.push('Major accident history — significant value impact');
   if(ownersVal==='3'||ownersVal==='4+'||qs.singleOwner===false) red.push('Multiple owners — affects confidence and resale');
@@ -6515,7 +6807,10 @@ function buildResult(r,brand,model,year,mileage,asking){
   // ── Handshake defined HERE — required by _deprRows before it is computed ──
   const condAdj = condVal==='Excellent'?.02:condVal==='Very Good'?.01:condVal==='Fair'?-.02:condVal==='Poor'?-.05:0;
   const accAdj  = (accVal==='minor'||qs.accident===true)?-.04:(accVal==='major')?-.08:0;
-  const handshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
+  // Handshake must not exceed Net Adjusted Market Value when risk factors are present
+  const _rawHandshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
+  const _hasNegativeRisk = accAdj < 0 || condAdj < 0 || qs.fsh===false || (g('spec')?.value && g('spec').value!=='GCC' && g('spec').value!=='GCC Spec');
+  const handshake = _hasNegativeRisk ? Math.min(_rawHandshake, avg) : _rawHandshake;
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
   // r.depreciation is a 3-element array of AED values from applyValuationMath()
@@ -6569,9 +6864,19 @@ function buildResult(r,brand,model,year,mileage,asking){
   const identLine4Parts=[`Service History: ${serviceDisplay}`,`Warranty: ${warrantyDisplay}`].filter(Boolean);
   const identLine5Parts=[`Single Owner: ${singleOwnerDisplay}`,`Accident: ${accidentDisplay}`].filter(Boolean);
 
-  // Market position text
-  const positionPct=posPct!==null?(100-posPct):null;
-  const mktPositionText=positionPct!==null?`Top ${positionPct}% of comparable listings`:'Market reference established';
+  // Market position text — replaced raw percentile with Transparency Score
+  // Score degrades for: Non-GCC, No FSH, multiple owners, accident history, poor/fair condition
+  const _tsBase = 8.5;
+  const _tsPenalties = [
+    (specVal && specVal!=='GCC' && specVal!=='GCC Spec') ? 1.5 : 0,
+    (qs.fsh===false || svcVal==='Non-Agency' || svcVal==='Unknown') ? 1.2 : 0,
+    (ownVal==='3'||ownVal==='4+'||qs.singleOwner===false) ? 0.8 : 0,
+    (accVal==='minor') ? 0.6 : (accVal==='major') ? 1.4 : 0,
+    (condVal==='Fair') ? 0.4 : (condVal==='Poor') ? 0.9 : 0,
+  ];
+  const _tsScore = Math.max(1.0, Math.round((_tsBase - _tsPenalties.reduce((a,b)=>a+b,0)) * 10) / 10);
+  const _tsLabel = _tsScore >= 7.5 ? 'High Transparency' : _tsScore >= 5.5 ? 'Moderate Transparency' : 'Value Grade — Lower Transparency';
+  const mktPositionText = `Transparency Score: ${_tsScore}/10 — ${_tsLabel}`;
 
   // Trend icon for depreciation
   const deprIcon=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4l5 6 5-6" stroke="#C0392B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -6684,6 +6989,12 @@ function buildResult(r,brand,model,year,mileage,asking){
       </div>
       <div class="pir-ps-hero-amount" id="priceMain">AED 0</div>
       ${dealInfo?`<div class="pir-ps-hero-badge pir-deal-${dealInfo.cls}">${dealInfo.label}</div>`:''}
+      <div class="pir-hs-align-note${_hasNegativeRisk?' capped':''}">
+        <span class="align-dot"></span>
+        ${_hasNegativeRisk
+          ? `Handshake capped at market average — negative risk factors present`
+          : `Handshake at or above market average — strong vehicle profile`}
+      </div>
     </div>
 
     <!-- Three secondary price cards -->
@@ -6970,7 +7281,25 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>
 
     <!-- Short paragraph -->
-    <p class="pir-insight-para">${analysisText}${posPct!==null?' This vehicle sits in the '+mktPositionText.toLowerCase()+'.':''}</p>
+    <p class="pir-insight-para">${analysisText}</p>
+    <!-- Transparency Score badge — replaces old raw percentile -->
+    ${(() => {
+      const cls = _tsScore >= 7.5 ? 'pir-ts-high' : _tsScore >= 5.5 ? 'pir-ts-mid' : 'pir-ts-low';
+      const needlePct = Math.round((_tsScore / 10) * 100);
+      return `<div class="pir-ts-badge ${cls}">
+        <div class="pir-ts-score">${_tsScore}/10</div>
+        <div class="pir-ts-body">
+          <div class="pir-ts-label">${_tsLabel}</div>
+          <div class="pir-ts-sub">Vehicle Transparency Score — replaces market percentile</div>
+          <div class="pir-ts-bar-wrap">
+            <div class="pir-ts-bar-track">
+              <div class="pir-ts-bar-needle" style="left:${needlePct}%"></div>
+            </div>
+          </div>
+          <div class="pir-ts-bar-ends"><span>Low</span><span>High</span></div>
+        </div>
+      </div>`;
+    })()}
 
     <!-- Key value factors — max 3 bullets -->
     ${(() => {
@@ -6983,9 +7312,9 @@ function buildResult(r,brand,model,year,mileage,asking){
         const mDiff = km - expectedKm;
         const mDiffK = Math.abs(Math.round(mDiff/1000));
         if(mDiff > 15000)
-          bullets.push({ icon:'📏', text:`<strong>High mileage</strong> — ${km.toLocaleString()} km is ${mDiffK}k above the expected average for this age, pushing the value down` });
+          bullets.push({ icon:'📏', text:`<strong>High Mileage (for Year)</strong> — ${km.toLocaleString()} km is ${mDiffK}k above the expected average for this age, pushing the value down` });
         else if(mDiff < -15000)
-          bullets.push({ icon:'📏', text:`<strong>Low mileage</strong> — ${km.toLocaleString()} km is ${mDiffK}k below average for this age, supporting a price premium` });
+          bullets.push({ icon:'📏', text:`<strong>Low Mileage for Year</strong> — ${km.toLocaleString()} km is ${mDiffK}k below average for this age, supporting a price premium` });
         else
           bullets.push({ icon:'📏', text:`<strong>Average mileage</strong> — ${km.toLocaleString()} km is in line with expected wear for a ${age}-year-old vehicle` });
       }
@@ -7065,9 +7394,9 @@ function buildResult(r,brand,model,year,mileage,asking){
     // Mileage
     const mDiff = km - expectedKm;
     if(mDiff > 20000)
-      negatives.push({ label:'Above-Average Mileage', amount: Math.round(Math.min(baseVal * 0.12, (mDiff/10000) * 600) / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected` });
+      negatives.push({ label:'Above-Average Mileage (for Year)', amount: Math.round(Math.min(baseVal * 0.12, (mDiff/10000) * 600) / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected` });
     else if(mDiff < -15000)
-      positives.push({ label:'Below-Average Mileage', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:`${km.toLocaleString()} km — well below average for age` });
+      positives.push({ label:'Low Mileage for Year ✅', amount: Math.round(baseVal * 0.03 / 500) * 500, reason:`${km.toLocaleString()} km vs ~${expectedKm.toLocaleString()} km expected — price premium supported` });
 
     // Service history
     if(qs.fsh === true || svcVal === 'Full Agency' || svcVal === 'Agency')
@@ -7158,7 +7487,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="pir-vab-net">
         <div class="pir-vab-net-left">
           <div class="pir-vab-net-label">Net Adjusted Market Value</div>
-          <div class="pir-vab-net-calc">AED ${baseVal.toLocaleString()} ${netAdj>=0?`+ AED ${totalPos.toLocaleString()}`:``}${totalNeg>0?` − AED ${totalNeg.toLocaleString()}`:``}</div>
+          <div class="pir-vab-net-calc">AED ${baseVal.toLocaleString()}${totalPos>0?` + AED ${totalPos.toLocaleString()}`:''}${totalNeg>0?` − AED ${totalNeg.toLocaleString()}`:''} = AED ${netVal.toLocaleString()}</div>
         </div>
         <div class="pir-vab-net-val">AED ${netVal.toLocaleString()}</div>
       </div>
