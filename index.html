@@ -6144,8 +6144,8 @@
       .pir-tab-footer, .pir-ext-actions, .pir-tabs-nav { display: none !important; }
       .layout { display: block !important; }
       .result-panel { width: 100% !important; box-shadow: none !important; border: 1px solid #ccc !important; }
-      #pirTabVerdict { display: none !important; }
-      #pirTabAnalysis { display: block !important; }
+      #ksPirFree { display: none !important; }
+      #ksPirPaid { display: block !important; }
       .pir-wrap { box-shadow: none !important; border: 1px solid #ccc !important; }
       .pir-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .pir-row-grid { page-break-inside: avoid; }
@@ -6233,6 +6233,363 @@
       100% { opacity:1; transform: none; filter: blur(0); }
     }
     .pir-ps-hero-amount { animation: priceRevealV29 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both !important; }
+
+/* ═══════════════════════════════════════════════════════
+   KS PIR v30 — TWO-TAB REPORT SYSTEM
+═══════════════════════════════════════════════════════ */
+
+/* Outer wrapper */
+.ks-pir { font-family:"Exo 2",system-ui,sans-serif; max-width:760px; margin:0 auto; }
+
+/* ── TAB NAV ── */
+.ks-tabnav {
+  display:flex; align-items:center; gap:4px;
+  padding:10px 14px; background:#fff;
+  border-bottom:1.5px solid var(--border);
+  position:sticky; top:0; z-index:50;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+}
+.ks-tabnav-btn {
+  display:flex; align-items:center; gap:6px;
+  font-family:"Exo 2",sans-serif; font-size:.72rem; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  padding:7px 16px; border-radius:99px;
+  border:1.5px solid transparent; background:transparent;
+  color:var(--muted); cursor:pointer; transition:all .18s;
+}
+.ks-tabnav-btn:hover { background:var(--accent-soft); color:var(--accent); }
+.ks-tabnav-btn.ks-tabnav-active {
+  background:var(--accent); color:#fff;
+  border-color:var(--accent);
+}
+.ks-tabnav-ref {
+  margin-left:auto; display:flex; align-items:center; gap:6px;
+  flex-wrap:wrap; justify-content:flex-end;
+}
+.ks-tabnav-code {
+  font-size:.6rem; font-weight:600; color:var(--muted);
+  font-family:"Exo 2",sans-serif; letter-spacing:.06em;
+}
+
+/* ── SECTION BASE ── */
+.ks-tab-content { display:flex; flex-direction:column; gap:0; }
+.ks-section {
+  background:#fff; padding:20px 22px 22px;
+  border-bottom:1px solid var(--border);
+}
+.ks-section:first-child { border-top:none; }
+.ks-section-eyebrow {
+  font-size:.6rem; font-weight:800; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:3px;
+}
+.ks-section-title {
+  font-size:1.05rem; font-weight:700; color:var(--ink);
+  margin-bottom:14px; letter-spacing:-.01em;
+}
+
+/* ── S1: CAR IDENTITY CARD ── */
+.ks-id-card {
+  display:flex; gap:16px; align-items:flex-start;
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--r-md); padding:14px; overflow:hidden;
+}
+.ks-id-photo {
+  width:clamp(100px,28%,160px); flex-shrink:0;
+  border-radius:var(--r-sm); overflow:hidden;
+  background:var(--surface); display:flex; align-items:center; justify-content:center;
+}
+.ks-id-img {
+  width:100%; height:90px; object-fit:contain;
+  object-position:center; display:block;
+  clip-path:inset(0 0 18px 0);
+}
+.ks-id-img-fallback {
+  display:none; align-items:center; justify-content:center;
+  width:100%; height:90px; opacity:.4;
+}
+.ks-id-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
+.ks-id-name { font-size:.95rem; font-weight:800; color:var(--ink); line-height:1.3; }
+.ks-id-meta { font-size:.78rem; color:var(--ink-soft); font-weight:600; }
+.ks-id-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.ks-id-tag {
+  font-size:.65rem; font-weight:700; padding:3px 9px;
+  border-radius:99px; letter-spacing:.04em;
+}
+.ks-tag-good { background:var(--good-bg); color:var(--good); border:1px solid var(--good-line); }
+.ks-tag-bad  { background:var(--bad-bg);  color:var(--bad);  border:1px solid var(--bad-line); }
+.ks-tag-mid  { background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn-line); }
+.ks-id-footer {
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+  margin-top:2px;
+}
+.ks-id-ref { font-size:.58rem; color:var(--muted); font-family:"Exo 2",sans-serif; }
+
+/* ── S2: YOUR POSITION ── */
+.ks-position-card {
+  display:flex; gap:16px; align-items:flex-start;
+}
+.ks-pos-left { flex:1; min-width:0; }
+.ks-pos-verdict {
+  display:inline-flex; align-items:center;
+  font-size:.68rem; font-weight:800; letter-spacing:.1em;
+  text-transform:uppercase; padding:5px 14px;
+  border-radius:99px; margin-bottom:10px;
+}
+.ks-verdict-good { background:var(--good-bg); color:var(--good); border:1px solid var(--good-line); }
+.ks-verdict-bad  { background:var(--bad-bg);  color:var(--bad);  border:1px solid var(--bad-line); }
+.ks-verdict-warn { background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn-line); }
+.ks-verdict-neu  { background:var(--surface-2); color:var(--ink-soft); border:1px solid var(--border); }
+.ks-pos-fmv-label { font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.ks-pos-fmv {
+  font-family:"Orbitron",sans-serif; font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:900; color:var(--ink); letter-spacing:-.02em;
+  line-height:1.1; margin:4px 0 10px;
+}
+.ks-pos-ask-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.ks-pos-ask-label { font-size:.72rem; color:var(--muted); }
+.ks-pos-ask { font-size:.88rem; font-weight:700; color:var(--ink-soft); }
+.ks-pos-delta {
+  font-size:.7rem; font-weight:700; padding:2px 8px;
+  border-radius:99px;
+}
+.ks-delta-over { background:var(--bad-bg); color:var(--bad); }
+.ks-delta-under { background:var(--good-bg); color:var(--good); }
+.ks-pos-summary { font-size:.82rem; color:var(--ink-soft); line-height:1.65; }
+.ks-pos-right {
+  display:flex; flex-direction:column; gap:10px;
+  flex-shrink:0; min-width:80px;
+}
+.ks-pos-stat { text-align:center; }
+.ks-pos-stat-val {
+  font-family:"Orbitron",sans-serif; font-size:1.1rem;
+  font-weight:700; color:var(--accent); line-height:1;
+}
+.ks-pos-stat-label { font-size:.6rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-top:2px; }
+
+/* ── S3: WHY TRUST THIS ── */
+.ks-trust-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ks-trust-card {
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--r-md); padding:12px 14px;
+}
+.ks-trust-card-label { font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.ks-trust-card-val { font-family:"Orbitron",sans-serif; font-size:1.4rem; font-weight:700; line-height:1.1; margin-bottom:6px; }
+.ks-trust-denom { font-size:.6em; font-weight:600; color:var(--muted); }
+.ks-meter-track { height:5px; background:var(--border); border-radius:99px; overflow:hidden; }
+.ks-meter-fill { height:100%; border-radius:99px; transition:width .6s ease; }
+.ks-trust-card-sub { font-size:.68rem; color:var(--muted); margin-top:5px; }
+
+/* ── S4: MARKET FIT ── */
+.ks-mf-wrap { display:flex; flex-direction:column; gap:10px; }
+.ks-mf-bar-area { position:relative; padding:44px 0 0; }
+.ks-mf-bar-bg {
+  height:10px; background:linear-gradient(90deg,var(--good-bg) 0%,var(--warn-bg) 50%,var(--bad-bg) 100%);
+  border-radius:99px; border:1px solid var(--border); position:relative;
+}
+.ks-mf-pin {
+  position:absolute; top:50%; transform:translate(-50%,-50%);
+  display:flex; flex-direction:column; align-items:center; gap:0;
+}
+.ks-mf-pin-dot {
+  width:13px; height:13px; border-radius:50%;
+  border:2px solid #fff; box-shadow:0 0 0 1.5px rgba(0,0,0,0.15);
+  flex-shrink:0;
+}
+.ks-mf-pin-label {
+  position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+  font-size:.6rem; font-weight:700; white-space:nowrap; text-align:center;
+  line-height:1.3; pointer-events:none;
+}
+.ks-mf-bar-ends {
+  display:flex; justify-content:space-between;
+  margin-top:8px; font-size:.68rem; font-weight:600; color:var(--muted);
+}
+.ks-mf-end-lbl { font-size:.58rem; font-weight:600; color:var(--muted); display:block; }
+.ks-mf-end-low { text-align:left; }
+.ks-mf-end-high { text-align:right; }
+.ks-mf-legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; }
+.ks-mf-leg { display:flex; align-items:center; gap:5px; font-size:.68rem; color:var(--ink-soft); font-weight:600; }
+.ks-mf-leg-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.ks-mf-note { font-size:.68rem; color:var(--muted); padding:9px 12px; background:var(--surface-2); border-radius:var(--r-sm); border-left:3px solid var(--border); line-height:1.5; }
+
+/* ── S5: VALUE LOGIC ── */
+.ks-vl-base-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 12px; background:var(--surface-2); border-radius:var(--r-sm);
+  margin-bottom:10px; border:1px solid var(--border);
+}
+.ks-vl-base-label { font-size:.82rem; font-weight:700; color:var(--ink); }
+.ks-vl-base-val { font-family:"Orbitron",sans-serif; font-size:.9rem; font-weight:700; color:var(--ink); }
+.ks-vl-group-label {
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:.62rem; font-weight:800; letter-spacing:.1em;
+  text-transform:uppercase; padding:6px 0 4px;
+}
+.ks-vl-pos-label { color:var(--good); }
+.ks-vl-neg-label { color:var(--bad); }
+.ks-vl-row { display:flex; align-items:center; gap:8px; padding:6px 0; }
+.ks-vl-row-label { font-size:.78rem; color:var(--ink-soft); flex:0 0 160px; min-width:0; }
+.ks-vl-row-bar { flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden; }
+.ks-vl-bar-fill { height:100%; border-radius:99px; }
+.ks-bar-pos { background:var(--good); }
+.ks-bar-neg { background:var(--bad); }
+.ks-vl-row-amt { font-size:.75rem; font-weight:700; flex-shrink:0; min-width:90px; text-align:right; }
+.ks-amt-pos { color:var(--good); }
+.ks-amt-neg { color:var(--bad); }
+.ks-vl-net-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:11px 12px; background:var(--ink); border-radius:var(--r-sm);
+  margin-top:10px;
+}
+.ks-vl-net-label { font-size:.8rem; font-weight:700; color:rgba(255,255,255,0.8); }
+.ks-vl-net-val { font-family:"Orbitron",sans-serif; font-size:.95rem; font-weight:700; color:var(--gold-light); }
+.ks-vl-note { font-size:.66rem; color:var(--muted); margin-top:10px; font-style:italic; }
+
+/* ── S6: KEY POINTS ── */
+.ks-kp-wrap { display:flex; flex-direction:column; gap:0; }
+.ks-kp-block { padding:10px 0; }
+.ks-kp-block-label { font-size:.62rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+.ks-kp-item { display:flex; align-items:flex-start; gap:8px; font-size:.8rem; line-height:1.55; color:var(--ink-soft); padding:3px 0; }
+.ks-kp-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.ks-kp-dot-good { background:var(--good); }
+.ks-kp-dot-bad  { background:var(--bad); }
+.ks-kp-sep { border:none; border-top:1px solid var(--border); margin:6px 0; }
+.ks-free-upsell {
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  margin-top:16px; padding:14px 16px; border-radius:var(--r-md);
+  background:linear-gradient(135deg,var(--surface-2),rgba(196,154,42,0.06));
+  border:1px solid var(--accent-line);
+}
+.ks-upsell-icon { font-size:1.1rem; color:var(--gold); flex-shrink:0; }
+.ks-upsell-text { flex:1; min-width:0; font-size:.78rem; color:var(--ink-soft); line-height:1.5; }
+.ks-upsell-btn {
+  font-family:"Exo 2",sans-serif; font-size:.72rem; font-weight:800;
+  letter-spacing:.08em; text-transform:uppercase;
+  background:var(--accent); color:#fff;
+  border:none; border-radius:99px; padding:8px 18px; cursor:pointer;
+  transition:background .18s; white-space:nowrap; flex-shrink:0;
+}
+.ks-upsell-btn:hover { background:var(--accent-h); }
+
+/* ── PAID DIVIDER ── */
+.ks-paid-divider {
+  display:flex; align-items:center; gap:12px;
+  padding:16px 22px;
+}
+.ks-paid-divider-line { flex:1; height:1px; background:var(--border); }
+.ks-paid-divider-label {
+  font-size:.6rem; font-weight:800; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--accent); flex-shrink:0;
+}
+
+/* ── S7: BEST MOVE ── */
+.ks-nego-cols { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px; }
+.ks-nego-col {
+  text-align:center; padding:14px 10px; border-radius:var(--r-md);
+  border:1.5px solid var(--border); background:#fff;
+}
+.ks-nego-open  { border-color:#BFDBFE; background:#EFF6FF; }
+.ks-nego-settle{ border-color:var(--good-line); background:var(--good-bg); }
+.ks-nego-walk  { border-color:var(--bad-line);  background:var(--bad-bg); }
+.ks-nego-col-label { font-size:.6rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+.ks-nego-col-val { font-family:"Orbitron",sans-serif; font-size:1rem; font-weight:700; line-height:1.2; }
+.ks-nego-col-sub { font-size:.62rem; color:var(--muted); margin-top:4px; }
+.ks-zoa-bar-wrap { margin-bottom:14px; }
+.ks-zoa-label { font-size:.62rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--good); margin-bottom:6px; }
+.ks-zoa-bar { height:10px; background:var(--border); border-radius:99px; position:relative; overflow:hidden; }
+.ks-zoa-fill { position:absolute; top:0; bottom:0; background:rgba(26,140,107,0.35); border-radius:99px; }
+.ks-zoa-ends { display:flex; justify-content:space-between; font-size:.68rem; font-weight:700; color:var(--good); margin-top:4px; }
+.ks-zoa-note { font-size:.66rem; color:var(--muted); margin-top:4px; }
+.ks-scenarios { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
+.ks-scenario { text-align:center; padding:10px 8px; border-radius:var(--r-sm); border:1px solid var(--border); }
+.ks-sc-opt  { background:#F0FDF4; border-color:#BBF7D0; }
+.ks-sc-real { background:var(--surface-2); }
+.ks-sc-pess { background:#FEF2F2; border-color:#FECACA; }
+.ks-sc-label { font-size:.58rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.ks-sc-val { font-family:"Orbitron",sans-serif; font-size:.8rem; font-weight:700; color:var(--ink); }
+.ks-nego-tactic { font-size:.8rem; color:var(--ink-soft); line-height:1.6; padding:11px 14px; background:var(--surface-2); border-radius:var(--r-sm); border-left:3px solid var(--accent); }
+
+/* ── S8: MARKET MOOD ── */
+.ks-mood-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+.ks-mood-card { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 12px; }
+.ks-mood-card-label { font-size:.6rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+.ks-mood-card-val { font-family:"Orbitron",sans-serif; font-size:1.4rem; font-weight:700; line-height:1.1; }
+.ks-mood-card-sub { font-size:.66rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+
+/* ── S9: OWNERSHIP OUTLOOK ── */
+.ks-depr-chart { display:flex; gap:10px; align-items:flex-end; padding:10px 0 14px; overflow-x:auto; }
+.ks-depr-col { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:60px; }
+.ks-depr-bar-wrap { display:flex; align-items:flex-end; }
+.ks-depr-bar { width:40px; border-radius:6px 6px 0 0; transition:height .5s ease; }
+.ks-depr-year { font-size:.7rem; font-weight:800; color:var(--ink-soft); }
+.ks-depr-val { font-size:.65rem; font-weight:700; color:var(--ink); text-align:center; }
+.ks-depr-loss { font-size:.6rem; font-weight:700; text-align:center; }
+.ks-cost-table { width:100%; border-collapse:collapse; font-size:.78rem; margin-top:6px; }
+.ks-cost-table td { padding:7px 4px; border-bottom:1px solid var(--border); color:var(--ink-soft); }
+.ks-cost-table td:last-child { text-align:right; font-weight:700; color:var(--ink); }
+.ks-cost-table tr:last-child td { border-bottom:none; }
+
+/* ── S10: USE THIS SCRIPT ── */
+.ks-script-box { border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; margin-bottom:10px; }
+.ks-script-toggle {
+  width:100%; display:flex; justify-content:space-between; align-items:center;
+  padding:12px 16px; background:var(--surface-2); border:none; cursor:pointer;
+  font-family:"Exo 2",sans-serif; font-size:.8rem; font-weight:700; color:var(--ink);
+}
+.ks-script-toggle:hover { background:var(--border); }
+.ks-chevron { transition:transform .2s; flex-shrink:0; }
+.ks-script-body { overflow:hidden; transition:max-height .3s ease; }
+.ks-script-text {
+  font-size:.82rem; color:var(--ink-soft); line-height:1.7;
+  padding:14px 16px; font-style:italic;
+  border-top:1px solid var(--border);
+}
+.ks-script-copy {
+  font-family:"Exo 2",sans-serif; font-size:.7rem; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  background:transparent; border:1.5px solid var(--accent);
+  color:var(--accent); border-radius:99px; padding:7px 20px;
+  cursor:pointer; transition:all .18s;
+}
+.ks-script-copy:hover { background:var(--accent); color:#fff; }
+
+/* ── S11: NEXT STEPS ── */
+.ks-next-btns { display:flex; flex-wrap:wrap; gap:10px; }
+.ks-next-btn {
+  font-family:"Exo 2",sans-serif; font-size:.76rem; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  padding:11px 22px; border-radius:var(--r-sm); cursor:pointer;
+  text-decoration:none; border:none; transition:all .18s; text-align:center;
+}
+.ks-next-primary { background:var(--accent); color:#fff; flex:1 1 160px; }
+.ks-next-primary:hover { background:var(--accent-h); }
+.ks-next-secondary { background:var(--surface-2); color:var(--ink-soft); border:1.5px solid var(--border); flex:1 1 120px; }
+.ks-next-secondary:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
+
+/* ── ESTIMATE BANNER (reused) ── */
+.ks-estimate-banner {
+  display:flex; gap:12px; align-items:flex-start;
+  padding:14px 18px; background:#FFFBEB;
+  border-bottom:1px solid #FEF08A; font-family:"Exo 2",sans-serif;
+}
+.ks-estimate-banner-icon { font-size:1.2rem; flex-shrink:0; }
+.ks-estimate-banner-title { font-size:.78rem; font-weight:800; color:#92400E; margin-bottom:3px; }
+.ks-estimate-banner-text { font-size:.72rem; color:#78350F; line-height:1.5; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .ks-trust-grid { grid-template-columns:1fr 1fr; }
+  .ks-nego-cols { grid-template-columns:1fr; gap:8px; }
+  .ks-scenarios { grid-template-columns:1fr; }
+  .ks-mood-grid { grid-template-columns:1fr; }
+  .ks-next-btns { flex-direction:column; }
+  .ks-id-card { flex-direction:column; }
+  .ks-id-photo { width:100%; max-width:200px; align-self:center; }
+  .ks-pos-right { flex-direction:row; flex-wrap:wrap; min-width:100%; }
+  .ks-position-card { flex-direction:column; }
+  .ks-section { padding:16px 14px 18px; }
+  .ks-vl-row-label { flex:0 0 120px; }
+}
 
 </style>
 <body>
@@ -7688,654 +8045,487 @@ function buildResult(r,brand,model,year,mileage,asking){
   const stickerPct   = stickerPrice&&pirRng>0 ? Math.max(3,Math.min(97,Math.round(((stickerPrice-rangeMin)/pirRng)*100))) : null;
   const negoPct      = pirRng>0 ? Math.max(3,Math.min(97,Math.round(((negoEntry-rangeMin)/pirRng)*100))) : 20;
 
-  return`<div class="pir-wrap">
+  return `<div class="ks-pir">
 
-  <!-- ESTIMATE NOTICE — shown only for Tier 4 formula results -->
-  ${!_isLive ? `<div class="ks-estimate-banner">
-    <div class="ks-estimate-banner-icon">🤖</div>
-    <div class="ks-estimate-banner-body">
-      <div class="ks-estimate-banner-title">AI Assisted Estimate</div>
-      <div class="ks-estimate-banner-text">Live market data was unavailable. This report uses a formula-based UAE market model — treat as a baseline and verify with Dubizzle or YallaMotor before deciding.</div>
-    </div>
-  </div>` : ''}
+  <!-- ═══ ESTIMATE BANNER ═══ -->
+  ${!_isLive ? `<div class="ks-estimate-banner"><div class="ks-estimate-banner-icon">🤖</div><div class="ks-estimate-banner-body"><div class="ks-estimate-banner-title">AI Assisted Estimate</div><div class="ks-estimate-banner-text">Live market data was unavailable. This report uses a formula-based UAE market model — treat as a baseline and verify with Dubizzle or YallaMotor before deciding.</div></div></div>` : ''}
 
-  <!-- ① REPORT HEADER -->
-  <div class="pir-header">
-    <div class="pir-header-top">
-      <div class="pir-title-block">
-        <div class="pir-eyebrow">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="rgba(212,175,55,0.8)" stroke-width="1"/><circle cx="5" cy="5" r="1.8" fill="rgba(212,175,55,0.9)"/></svg>
-          UAE Car Market
-        </div>
-        <div class="pir-main-title">Price Intelligence Report</div>
-        <div class="pir-sub">Smart estimate using current UAE market data</div>
-      </div>
-      <div class="pir-ref-block">
-        <div class="pir-ref-code">${ref.label}</div>
-        <div class="pir-ref-note" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">${_sourceBadge} ${_tierBadge}${r.cached?" <span style='font-size:.54rem;color:rgba(255,255,255,0.3);font-family:Exo 2,sans-serif;'>· cached</span>":""}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ② VEHICLE IDENTITY -->
-  <div class="pir-vehicle-block">
-    <div class="pir-vehicle-img">
-      <img src="${carImgUrl}" alt="${year} ${brand} ${model||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="pir-img-fallback">
-        <svg viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 28 L12 16 Q14 13 18 13 L28 11 Q32 10 35 12 L50 14 Q55 14 58 17 L67 22 Q70 23 70 26 L70 28 Q70 30 68 30 L60 30 Q58 34 54 34 Q50 34 48 30 L26 30 Q24 34 20 34 Q16 34 14 30 L7 30 Q5 30 5 28Z" fill="rgba(26,43,76,0.12)" stroke="rgba(26,43,76,0.3)" stroke-width="1"/>
-          <circle cx="20" cy="31" r="4" fill="rgba(26,43,76,0.2)" stroke="rgba(26,43,76,0.4)" stroke-width="1"/>
-          <circle cx="54" cy="31" r="4" fill="rgba(26,43,76,0.2)" stroke="rgba(26,43,76,0.4)" stroke-width="1"/>
-        </svg>
-      </div>
-    </div>
-    <div class="pir-vehicle-info">
-      <div class="pir-vehicle-name">${brand} ${model||''} ${year}${trimDisplay?' '+trimDisplay:''}</div>
-      <div class="pir-vehicle-meta">${identLine2Parts.join(' · ')}</div>
-      <div class="pir-vehicle-details">
-        <span>${identLine3Parts.join(' &nbsp;·&nbsp; ')}</span>
-        <span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">${identLine4Parts.join(' &nbsp; ')}</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB NAV -->
-  <div class="pir-tabs-nav">
-    <button class="pir-tnav-btn pir-tnav-active" id="pirTabBtn1" onclick="pirSwitchTab(1)" type="button">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6.5h5M6.5 4v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Verdict
+  <!-- ═══ TAB NAV ═══ -->
+  <div class="ks-tabnav" id="ksPirTabs">
+    <button class="ks-tabnav-btn ks-tabnav-active" id="ksBtnFree" onclick="ksPirTab(1)" aria-selected="true">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M4 4.5h5M4 6.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Free Report
     </button>
-    <button class="pir-tnav-btn" id="pirTabBtn2" onclick="pirSwitchTab(2)" type="button">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M2 6.5h9M2 9.5h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    <button class="ks-tabnav-btn" id="ksBtnPaid" onclick="ksPirTab(2)" aria-selected="false">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L8 4.5H12L9 7l1 4-3.5-2.5L3 11l1-4-3-2.5H5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>
       Full Analysis
     </button>
+    <div class="ks-tabnav-ref">${_sourceBadge} <span class="ks-tabnav-code">${ref.label}</span></div>
   </div>
 
-  <!-- TAB 1: VERDICT (default) -->
-  <div class="pir-tab-panel" id="pirTabVerdict">
+  <!-- ═══════════════════════════════════════════════
+       TAB 1 — FREE REPORT
+  ═══════════════════════════════════════════════ -->
+  <div id="ksPirFree" class="ks-tab-content">
 
-  <!-- ③ MARKET VERDICT RIBBON -->
-  <div class="pir-verdict-ribbon pir-verdict-${vk}">
-    <div class="pir-verdict-badge-wrap">
-      <span class="pir-verdict-pill">${vl}</span>
+  <!-- S1: CAR IDENTITY CARD -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Vehicle</div>
+    <div class="ks-id-card">
+      <div class="ks-id-photo">
+        <img src="${carImgUrl}" alt="${year} ${brand} ${model||''}" class="ks-id-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ks-id-img-fallback">
+          <svg viewBox="0 0 80 40" fill="none" width="80" height="40"><path d="M5 28L12 16Q14 13 18 13L28 11Q32 10 35 12L50 14Q55 14 58 17L67 22Q70 23 70 26L70 28Q70 30 68 30L60 30Q58 34 54 34Q50 34 48 30L26 30Q24 34 20 34Q16 34 14 30L7 30Q5 30 5 28Z" fill="rgba(26,43,76,0.1)" stroke="rgba(26,43,76,0.25)" stroke-width="1"/><circle cx="20" cy="31" r="4" fill="rgba(26,43,76,0.15)"/><circle cx="54" cy="31" r="4" fill="rgba(26,43,76,0.15)"/></svg>
+        </div>
+      </div>
+      <div class="ks-id-info">
+        <div class="ks-id-name">${year} ${brand} ${model||''}${trimDisplay?' · '+trimDisplay:''}</div>
+        <div class="ks-id-meta">${[kmFmt+' km', specVal||'GCC', condVal||'—'].filter(Boolean).join(' · ')}</div>
+        <div class="ks-id-tags">
+          ${qs.accident!==null ? `<span class="ks-id-tag ${qs.accident?'ks-tag-bad':'ks-tag-good'}">${qs.accident?'✗ Accident':'✓ Clean'}</span>` : ''}
+          ${qs.fsh!==null ? `<span class="ks-id-tag ${qs.fsh?'ks-tag-good':'ks-tag-bad'}">${qs.fsh?'✓ Service Hist.':'✗ No Svc Hist.'}</span>` : ''}
+          ${qs.warranty!==null ? `<span class="ks-id-tag ${qs.warranty?'ks-tag-good':'ks-tag-bad'}">${qs.warranty?'✓ Warranty':'✗ No Warranty'}</span>` : ''}
+          ${qs.singleOwner!==null ? `<span class="ks-id-tag ${qs.singleOwner?'ks-tag-good':'ks-tag-mid'}">${qs.singleOwner?'✓ Single Owner':'Multi Owner'}</span>` : ''}
+        </div>
+        <div class="ks-id-footer">
+          <span class="ks-id-ref">${ref.label}</span>
+          ${_sourceBadge}
+          ${_tierBadge}
+        </div>
+      </div>
     </div>
-    <div class="pir-verdict-text">${para}</div>
   </div>
 
-  <!-- ④ PRICE SUMMARY — PRIMARY FOCUS -->
-  <div class="pir-ps-wrap">
-
-    <!-- Handshake price — dominant -->
-    <div class="pir-ps-hero">
-      <div class="pir-ps-hero-label">
-        <span class="pir-ps-hero-dot"></span>
-        Handshake Price
-        <span class="pir-ps-micro" style="display:flex;align-items:center;gap:5px;">${_sourceBadge}</span>
+  <!-- S2: YOUR POSITION -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Quick Deal Snapshot</div>
+    <div class="ks-section-title">Your Position</div>
+    <div class="ks-position-card">
+      <div class="ks-pos-left">
+        <div class="ks-pos-verdict ${dealInfo?.cls==='good'?'ks-verdict-good':dealInfo?.cls==='bad'?'ks-verdict-bad':dealInfo?.cls==='warn'?'ks-verdict-warn':'ks-verdict-neu'}">${ai?.deal_rating||dealInfo?.label||'Fair Price'}</div>
+        <div class="ks-pos-fmv-label">Fair Market Value</div>
+        <div class="ks-pos-fmv" id="ksFmvNum">AED ${avg.toLocaleString()}</div>
+        ${askN ? `<div class="ks-pos-ask-row">
+          <span class="ks-pos-ask-label">Asking:</span>
+          <span class="ks-pos-ask">AED ${askN.toLocaleString()}</span>
+          <span class="ks-pos-delta ${askN>avg?'ks-delta-over':'ks-delta-under'}">${askN>avg?'+':''}${Math.round((askN-avg)/avg*100)}% ${askN>avg?'above':'below'} market</span>
+        </div>` : ''}
+        <div class="ks-pos-summary">${ai?.explanation||para||''}</div>
       </div>
-      <div class="pir-ps-hero-amount" id="priceMain">AED 0</div>
-      ${dealInfo?`<div class="pir-ps-hero-badge pir-deal-${dealInfo.cls}">${dealInfo.label}</div>`:''}
-      <div class="pir-hs-align-note${_hasNegativeRisk?' capped':''}">
-        <span class="align-dot"></span>
-        ${_hasNegativeRisk
-          ? `Handshake capped at market average — negative risk factors present`
-          : `Handshake at or above market average — strong vehicle profile`}
+      <div class="ks-pos-right">
+        <div class="ks-pos-stat">
+          <div class="ks-pos-stat-val">${conf}%</div>
+          <div class="ks-pos-stat-label">Confidence</div>
+        </div>
+        <div class="ks-pos-stat">
+          <div class="ks-pos-stat-val">${comp>0?comp:'Est.'}</div>
+          <div class="ks-pos-stat-label">Listings</div>
+        </div>
+        <div class="ks-pos-stat">
+          <div class="ks-pos-stat-val">${_tsScore}/10</div>
+          <div class="ks-pos-stat-label">Transparency</div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Three secondary price cards -->
-    <div class="pir-ps-cards">
-
-      <!-- Sticker Price -->
-      <div class="pir-ps-card">
-        <div class="pir-ps-card-top">
-          <span class="pir-ps-card-label">Sticker Price</span>
-          <span class="pir-ps-card-def">Seller asking</span>
-        </div>
-        ${stickerPrice
-          ? `<div class="pir-ps-card-val">${stickerPrice.toLocaleString()}<span class="pir-ps-card-aed">AED</span></div>`
-          : `<div class="pir-ps-card-val pir-ps-card-na">Not provided</div>`
-        }
-        ${stickerPrice&&avg?(()=>{
-          const d=stickerPrice-handshake;
-          const pct=Math.round(Math.abs(d)/handshake*100);
-          if(pct<1) return '';
-          return d>0
-            ? `<div class="pir-ps-card-delta pir-ps-delta-over">+${pct}% above fair value</div>`
-            : `<div class="pir-ps-card-delta pir-ps-delta-under">${pct}% below fair value</div>`;
-        })():''}
+  <!-- S3: WHY TRUST THIS -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Data and Transparency</div>
+    <div class="ks-section-title">Why Trust This</div>
+    <div class="ks-trust-grid">
+      <div class="ks-trust-card">
+        <div class="ks-trust-card-label">Transparency Score</div>
+        <div class="ks-trust-card-val" style="color:${_tsScore>=7.5?'#15803D':_tsScore>=5.5?'#92400E':'#991B1B'}">${_tsScore}<span class="ks-trust-denom">/10</span></div>
+        <div class="ks-meter-track"><div class="ks-meter-fill" style="width:${_tsScore*10}%;background:${_tsScore>=7.5?'#16A34A':_tsScore>=5.5?'#D97706':'#DC2626'}"></div></div>
+        <div class="ks-trust-card-sub">${_tsLabel.split('—')[1]?.trim()||_tsLabel}</div>
       </div>
-
-      <!-- Negotiation Price -->
-      <div class="pir-ps-card pir-ps-card-nego">
-        <div class="pir-ps-card-top">
-          <span class="pir-ps-card-label">Negotiation Price</span>
-          <span class="pir-ps-card-def">Smart entry</span>
-        </div>
-        <div class="pir-ps-card-val">${negoEntry.toLocaleString()}<span class="pir-ps-card-aed">AED</span></div>
-        ${nego?`<div class="pir-ps-card-delta pir-ps-delta-tactic">${nego.room}% room to negotiate</div>`:''}
+      <div class="ks-trust-card">
+        <div class="ks-trust-card-label">Data Confidence</div>
+        <div class="ks-trust-card-val" style="color:${conf>=75?'#15803D':conf>=50?'#92400E':'#991B1B'}">${conf}<span class="ks-trust-denom">%</span></div>
+        <div class="ks-meter-track"><div class="ks-meter-fill" style="width:${conf}%;background:${conf>=75?'#16A34A':conf>=50?'#D97706':'#DC2626'}"></div></div>
+        <div class="ks-trust-card-sub">${conf>=75?'High Confidence':conf>=50?'Moderate':'Low — cross-check'}</div>
       </div>
-
-      <!-- Market Range -->
-      <div class="pir-ps-card pir-ps-card-range">
-        <div class="pir-ps-card-top">
-          <span class="pir-ps-card-label">Market Range</span>
-          <span class="pir-ps-card-def">Min → Max</span>
-        </div>
-        <div class="pir-ps-range-vals">
-          <span class="pir-ps-range-min">AED ${rangeMin.toLocaleString()}</span>
-          <span class="pir-ps-range-arrow">→</span>
-          <span class="pir-ps-range-max">AED ${rangeMax.toLocaleString()}</span>
-        </div>
-        <div class="pir-ps-card-delta pir-ps-delta-spread">
-          Spread: AED ${(rangeMax-rangeMin).toLocaleString()}
-        </div>
+      <div class="ks-trust-card">
+        <div class="ks-trust-card-label">Market Demand</div>
+        <div class="ks-trust-card-val" style="color:${(r.demandScore||55)>=70?'#15803D':'#92400E'}">${r.demandScore||55}<span class="ks-trust-denom">%</span></div>
+        <div class="ks-meter-track"><div class="ks-meter-fill" style="width:${r.demandScore||55}%;background:${(r.demandScore||55)>=70?'#16A34A':'#D97706'}"></div></div>
+        <div class="ks-trust-card-sub">${(r.demandScore||55)>=70?'High buyer activity':'Moderate activity'}</div>
       </div>
-
-    </div><!-- /pir-ps-cards -->
-
-    <!-- Micro legend -->
-    <div class="pir-ps-legend">
-      <span><strong>Handshake:</strong> ${_isLive ? "Live market" : "Formula-estimated"} fair closing price</span>
-      <span class="pir-ps-legend-sep">·</span>
-      <span><strong>Sticker:</strong> Seller's listed asking price</span>
-      <span class="pir-ps-legend-sep">·</span>
-      <span><strong>Negotiation:</strong> Smart opening offer</span>
+      <div class="ks-trust-card">
+        <div class="ks-trust-card-label">Data Source</div>
+        <div class="ks-trust-card-val" style="font-size:1rem;font-family:'Exo 2',sans-serif;">${_isLive?'Live':'Estimated'}</div>
+        <div class="ks-meter-track"><div class="ks-meter-fill" style="width:${comp>0?Math.min(100,Math.round(comp/12*100)):30}%;background:#1D7ED8"></div></div>
+        <div class="ks-trust-card-sub">${_tierLabel}${comp>0?' · '+comp+' listings':''}</div>
+      </div>
     </div>
+  </div>
 
-  </div><!-- /pir-ps-wrap -->
-
-  <!-- ⑤⑥ MARKET POSITION + MARKET SIGNALS — unified single box -->
-  <div style="border-bottom:1px solid #E8EBF3;background:linear-gradient(160deg,#F8F9FC 0%,#fff 100%);padding:18px 22px 20px;">
-    <div class="pir-sec-hdr">
-      <div class="pir-sec-hdr-icon pir-sec-hdr-icon-teal">📊</div>
-      Market Position &amp; Signals
-      <div class="pir-sec-hdr-line"></div>
-      <span style="display:flex;align-items:center;gap:5px;">${_sourceBadge}<span style='font-size:.62rem;color:#8A9AB8;'>${comp>0?comp+' listings':'market est.'}</span></span>
-    </div>
-
-    <!-- Price bar -->
+  <!-- S4: MARKET FIT -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Where This Price Sits</div>
+    <div class="ks-section-title">Market Fit</div>
     ${(()=>{
-      const sweetPct = sweetSpot && pirRng > 0 ? Math.max(3, Math.min(97, Math.round(((sweetSpot - rangeMin) / pirRng) * 100))) : null;
-      return `<div style="position:relative;margin:36px 0 14px;">
-      <div class="pir-mp2-pin-v28 pin-nego" style="left:${negoPct}%;bottom:16px;">
-        <div class="pir-mp2-pin-price-v28">AED ${negoEntry.toLocaleString()}</div>
-        <div class="pir-mp2-pin-name-v28">Open Offer</div>
-        <div class="pir-mp2-stem-v28"></div>
-      </div>
-      <div class="pir-mp2-pin-v28 pin-hand" style="left:${handshakePct}%;bottom:16px;">
-        <div class="pir-mp2-pin-price-v28">AED ${handshake.toLocaleString()}</div>
-        <div class="pir-mp2-pin-name-v28">Handshake</div>
-        <div class="pir-mp2-stem-v28"></div>
-      </div>
-      ${stickerPct!==null?`<div class="pir-mp2-pin-v28 pin-stick" style="left:${stickerPct}%;bottom:16px;">
-        <div class="pir-mp2-pin-price-v28">AED ${stickerPrice.toLocaleString()}</div>
-        <div class="pir-mp2-pin-name-v28">Sticker</div>
-        <div class="pir-mp2-stem-v28"></div>
-      </div>`:``}
-      <div class="pir-mp2-bar-wrap-v28">
-        <div class="pir-mp2-dot-v28" style="left:${negoPct}%;background:#D97706;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>
-        <div class="pir-mp2-dot-v28" style="left:${handshakePct}%;background:#008577;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:4;width:18px;height:18px;border:3px solid #fff;"></div>
-        ${stickerPct!==null?`<div class="pir-mp2-dot-v28" style="left:${stickerPct}%;background:#3D5280;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>`:``}
-        ${sweetPct!==null?`<div style="position:absolute;left:${sweetPct}%;top:50%;transform:translate(-50%,-50%);z-index:3;width:14px;height:14px;border-radius:50%;background:#C49A2A;border:2px solid rgba(255,255,255,0.9);box-shadow:0 0 0 2px rgba(196,154,42,0.4);"></div>`:``}
-      </div>
-    </div>
-    <div class="pir-mp2-ends-v28">
-      <span style="color:#22C55E;font-weight:700;">AED ${rangeMin.toLocaleString()}</span>
-      <span></span>
-      <span style="color:#EF4444;font-weight:700;">AED ${rangeMax.toLocaleString()}</span>
-    </div>
-    <div class="pir-mp2-legend-v28" style="margin-bottom:18px;">
-      <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#008577;width:12px;height:12px;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,133,119,0.4);"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Handshake</span></div>
-      <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#D97706"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Open Offer</span></div>
-      ${stickerPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#3D5280"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Sticker</span></div>`:``}
-      ${sweetPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#C49A2A;border:2px solid rgba(255,255,255,0.8);"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Sweet Spot <span style="color:#8A9AB8;font-weight:500;">(AED ${sweetSpot.toLocaleString()})</span></span></div>`:``}
-    </div>`;
+      const _pf = v => rangeMax>rangeMin ? Math.max(2,Math.min(98,Math.round(((v-rangeMin)/(rangeMax-rangeMin))*100))) : 50;
+      const _hP = _pf(handshake);
+      const _sP = sweetSpot ? _pf(sweetSpot) : null;
+      const _aP = askN ? _pf(askN) : null;
+      const _aCls = askN ? (askN>handshake*1.05?'#DC2626':askN<handshake*0.95?'#16A34A':'#1D7ED8') : '#1D7ED8';
+      const _aTxtCls = askN ? (askN>handshake*1.05?'#991B1B':askN<handshake*0.95?'#15803D':'#1E40AF') : '#1E40AF';
+      let _mf = '<div class="ks-mf-wrap"><div class="ks-mf-bar-area"><div class="ks-mf-bar-bg">';
+      if(_sP!==null) _mf += '<div class="ks-mf-pin" style="left:' + _sP + '%"><div class="ks-mf-pin-dot" style="background:#C49A2A"></div><div class="ks-mf-pin-label" style="color:#92400E">Sweet Spot<br><strong>AED ' + sweetSpot.toLocaleString() + '</strong></div></div>';
+      _mf += '<div class="ks-mf-pin" style="left:' + _hP + '%"><div class="ks-mf-pin-dot" style="background:#008577;width:16px;height:16px;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,133,119,0.4)"></div><div class="ks-mf-pin-label" style="color:#155E4C">Handshake<br><strong>AED ' + handshake.toLocaleString() + '</strong></div></div>';
+      if(_aP!==null) _mf += '<div class="ks-mf-pin" style="left:' + _aP + '%"><div class="ks-mf-pin-dot" style="background:' + _aCls + '"></div><div class="ks-mf-pin-label" style="color:' + _aTxtCls + '">Asking<br><strong>AED ' + askN.toLocaleString() + '</strong></div></div>';
+      _mf += '</div><div class="ks-mf-bar-ends"><span class="ks-mf-end-low">AED ' + rangeMin.toLocaleString() + '<br><span class="ks-mf-end-lbl">Market Low</span></span><span class="ks-mf-end-high">AED ' + rangeMax.toLocaleString() + '<br><span class="ks-mf-end-lbl">Market High</span></span></div></div>';
+      _mf += '<div class="ks-mf-legend"><span class="ks-mf-leg"><span class="ks-mf-leg-dot" style="background:#008577"></span>Handshake</span>';
+      if(_sP!==null) _mf += '<span class="ks-mf-leg"><span class="ks-mf-leg-dot" style="background:#C49A2A"></span>Sweet Spot</span>';
+      if(_aP!==null) _mf += '<span class="ks-mf-leg"><span class="ks-mf-leg-dot" style="background:#1D7ED8"></span>Asking Price</span>';
+      _mf += '</div><div class="ks-mf-note">Direct private seller prices are typically 8–10% lower than dealer prices for the same vehicle in the UAE market.</div></div>';
+      return _mf;
     })()}
+  </div>
 
-    <!-- Signals inline below bar — 3 signals in a clean grid -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 20px;padding-top:14px;border-top:1px solid #E8EBF3;">
+  <!-- S5: VALUE LOGIC -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">How the Price Was Built</div>
+    <div class="ks-section-title">Value Logic</div>
+    ${(()=>{
+      const _rows = adjItems && adjItems.length ? adjItems : [];
+      const _posR = _rows.filter(a=>a.positive&&a.amount>0);
+      const _negR = _rows.filter(a=>!a.positive&&a.amount>0);
+      const _posT = _posR.reduce((s,a)=>s+a.amount,0);
+      const _negT = _negR.reduce((s,a)=>s+a.amount,0);
+      const _base = avg || handshake;
+      const _mx = Math.max(1,..._rows.map(a=>a.amount));
+      const _mkRow = (a) => {
+        const _w = Math.max(8, Math.round((a.amount/_mx)*100));
+        const _sign = a.positive ? '+' : '-';
+        const _cls1 = a.positive ? 'ks-bar-pos' : 'ks-bar-neg';
+        const _cls2 = a.positive ? 'ks-amt-pos' : 'ks-amt-neg';
+        const _acls = a.positive ? 'ks-bar-pos' : 'ks-bar-neg';
+        return '<div class="ks-vl-row">'
+          + '<div class="ks-vl-row-label">' + a.name + '</div>'
+          + '<div class="ks-vl-row-bar"><div class="ks-vl-bar-fill ' + _cls1 + '" style="width:' + _w + '%"></div></div>'
+          + '<div class="ks-vl-row-amt ' + _cls2 + '">' + _sign + 'AED ' + a.amount.toLocaleString() + '</div>'
+          + '</div>';
+      };
+      let _out = '<div class="ks-vl-base-row">'
+        + '<span class="ks-vl-base-label">Base Market Value</span>'
+        + '<span class="ks-vl-base-val">AED ' + _base.toLocaleString() + '</span>'
+        + '</div>';
+      if(_posR.length) _out += '<div class="ks-vl-group-label ks-vl-pos-label">Positive Factors <span>+AED ' + _posT.toLocaleString() + '</span></div>' + _posR.map(_mkRow).join('');
+      if(_negR.length) _out += '<div class="ks-vl-group-label ks-vl-neg-label">Negative Factors <span>-AED ' + _negT.toLocaleString() + '</span></div>' + _negR.map(_mkRow).join('');
+      _out += '<div class="ks-vl-net-row"><span class="ks-vl-net-label">Net Adjusted Value</span><span class="ks-vl-net-val">AED ' + avg.toLocaleString() + '</span></div>';
+      _out += '<div class="ks-vl-note">Note: Vehicle colour impact cannot always be calculated due to inconsistent UAE market data availability.</div>';
+      return _out;
+    })()}
+  </div>
 
-      <div class="pir-signal-row-v28" style="margin-bottom:0;">
-        <div class="pir-signal-top-v28">
-          <span class="pir-signal-name-v28" style="font-size:.78rem;">Data Confidence</span>
-          <span class="pir-signal-badge-v28 ${conf>=75?'sig-high':conf>=50?'sig-mid':'sig-low'}">${conf>=75?'High':conf>=50?'Moderate':'Low'}</span>
-        </div>
-        <div class="pir-signal-track-v28">
-          <div class="pir-signal-fill-v28" data-target="${conf}" style="width:0%"></div>
-          <div class="pir-signal-thumb-v28" data-target="${conf}" style="left:0%"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:.65rem;color:#A8B8CC;margin-top:3px;"><span>Low</span><span>${conf}%</span><span>High</span></div>
-      </div>
-
-      <div class="pir-signal-row-v28" style="margin-bottom:0;">
-        <div class="pir-signal-top-v28">
-          <span class="pir-signal-name-v28" style="font-size:.78rem;">Market Demand</span>
-          <span class="pir-signal-badge-v28 ${(r.demandScore||55)>=70?'sig-high':(r.demandScore||55)>=45?'sig-mid':'sig-low'}">${(r.demandScore||55)>=70?'High':(r.demandScore||55)>=45?'Moderate':'Low'}</span>
-        </div>
-        <div class="pir-signal-track-v28">
-          <div class="pir-signal-fill-v28" data-target="${r.demandScore||55}" style="width:0%"></div>
-          <div class="pir-signal-thumb-v28" data-target="${r.demandScore||55}" style="left:0%"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:.65rem;color:#A8B8CC;margin-top:3px;"><span>Low</span><span>${r.demandScore||55}%</span><span>High</span></div>
-      </div>
-
-      ${(() => {
-        const tsColor = _tsScore>=7.5?'#15803D':_tsScore>=5.5?'#92400E':'#991B1B';
-        const tsDots = Array.from({length:10},(_x,i)=>`<div class="pir-ts-dot-v28${i<Math.round(_tsScore)?' on':''}\" style="${i<Math.round(_tsScore)?'background:'+tsColor+';':''}"></div>`).join('');
-        return `<div style="display:flex;flex-direction:column;gap:5px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:.78rem;font-weight:700;color:#2D3F5C;">Transparency Score</span>
-            <span style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:800;color:${tsColor};">${_tsScore}<span style="font-size:.6rem;font-weight:600;color:#8A9AB8;">/10</span></span>
-          </div>
-          <div class="pir-ts-dots-v28">${tsDots}</div>
-          <div style="font-size:.65rem;color:#8A9AB8;">${_tsLabel}</div>
-        </div>`;
-      })()}
-
+  <!-- S6: KEY POINTS -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Strengths and Cautions</div>
+    <div class="ks-section-title">Key Points</div>
+    <div class="ks-kp-wrap">
+      ${gF.length?`<div class="ks-kp-block ks-kp-strengths">
+        <div class="ks-kp-block-label">Strengths</div>
+        ${gF.map(f=>`<div class="ks-kp-item ks-kp-item-good"><span class="ks-kp-dot ks-kp-dot-good"></span><span>${f}</span></div>`).join('')}
+      </div>`:''}
+      ${gF.length&&rF.length?`<div class="ks-kp-sep"></div>`:''}
+      ${rF.length?`<div class="ks-kp-block ks-kp-cautions">
+        <div class="ks-kp-block-label">Cautions</div>
+        ${rF.map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f}</span></div>`).join('')}
+      </div>`:''}
+      ${r.redFlags&&r.redFlags.length?`<div class="ks-kp-block ks-kp-risk" style="margin-top:10px;">
+        <div class="ks-kp-block-label" style="color:#DC2626">Risk Flags</div>
+        ${r.redFlags.map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f}</span></div>`).join('')}
+      </div>`:''}
     </div>
-  </div><!-- /market position + signals -->
-
-  <!-- ROW 2: VALUE ADJUSTMENTS | EXPERT VERDICT + ATTENTION POINTS — unified -->
-  ${(()=>{
-    // ── Shared nego computation used by BOTH tabs ──────────────────
-    const _openOffer   = negoEntry;
-    const _closeTarget = Math.min(nego?.close || handshake, handshake);
-    const _walkAway    = stickerPrice
-      ? Math.round(Math.min(stickerPrice * 0.97, handshake * 1.04) / 500) * 500
-      : Math.round(handshake * 1.04 / 500) * 500;
-    const _safeOpen  = Math.round(Math.min(_openOffer, _closeTarget - 500) / 500) * 500;
-    const _safeClose = Math.round(Math.min(_closeTarget, _walkAway - 500) / 500) * 500;
-    const _safeWalk  = Math.round(Math.max(_walkAway, _safeClose + 500) / 500) * 500;
-
-    const _levers = [];
-    if(qs.fsh===false)         _levers.push('no service history');
-    if(qs.warranty===false)    _levers.push('no active warranty');
-    if(qs.accident===true)     _levers.push('accident on record');
-    if(qs.singleOwner===false) _levers.push('multiple previous owners');
-    const _leverStr = _levers.length ? ` — noting ${_levers.slice(0,2).join(' and ')}` : '';
-    const _rangeCredible = rangeMin > 0 && rangeMax > 0 && _safeOpen <= rangeMax * 1.08;
-    const _carLabel = `${year} ${brand}${model ? ' ' + model : ''}`;
-    // v30: prefer model-generated haggling script (anchored to real market data)
-    const _scriptText = r.hagglingScript || nego?.script || (_rangeCredible
-      ? `"I've reviewed current UAE listings — comparable ${_carLabel} units are selling AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()}. Based on the mileage and condition of this vehicle${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}."`
-      : `"Based on my research of the current UAE market for the ${_carLabel}${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}. This reflects comparable listings and the specifics of this vehicle."`);
-
-    // ── Shared Expert Verdict text ─────────────────────────────────
-    const _isGCC  = specVal==='GCC'||specVal==='GCC Spec';
-    const _fshOk  = qs.fsh===true;
-    const _age    = Math.max(1,new Date().getFullYear()-carYear);
-    const _expKm  = _age*18000;
-    const _highMil = km > _expKm*1.25;
-    const _hasAcc  = accVal==='minor'||accVal==='major';
-    const _advText = ai?.key_factors?.[0]||(_isGCC
-      ? `GCC specification — the most demanded UAE variant. Supports strong resale liquidity and full local parts availability.`
-      : `${brand} ${model||''} — verify parts availability and UAE service coverage before proceeding.`);
-    const _valText = stickerPrice
-      ? (stickerPrice > handshake*1.05
-          ? `Asking price is ${Math.round((stickerPrice-handshake)/handshake*100)}% above fair market — negotiate firmly and reference comparable listings.`
-          : `Asking price is near market value. Counter-offer AED ${handshake.toLocaleString()} — take it or leave it.`)
-      : `Target AED ${handshake.toLocaleString()} as your closing price — take it or leave it at that number.`;
-    const _revText = _hasAcc
-      ? `${accVal==='major'?'Major':'Minor'} accident on record — get an independent inspection. Use this as a strong negotiation lever.`
-      : _highMil
-        ? `Mileage of ${km.toLocaleString()} km is above average for a ${_age}-year-old vehicle — budget for upcoming maintenance and use this in your offer.`
-        : !_fshOk
-          ? `No full service history — request receipts or agency records, and include a pre-purchase inspection in your offer terms.`
-          : qs.singleOwner===false
-            ? `Multiple previous owners — ask why each sold and check for recurring fault patterns in the maintenance records.`
-            : `Standard review: verify RTA clearance, chassis number, and confirm no outstanding loans before transfer.`;
-
-    // ── Shared nego block HTML builder (tab-specific id) ──────────
-    function _negoBlock(tabId){
-      return `<div class="pir-nego-timeline">
-        <div class="pir-nt-hdr">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="rgba(232,208,96,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Negotiation Script
-        </div>
-        <div class="pir-nt-track-wrap">
-          <div class="pir-nt-pins" style="display:flex;justify-content:space-between;margin-bottom:10px;">
-            <div class="pir-nt-pin pir-nt-pin-open" style="align-items:flex-start;">
-              <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:#4ADE80;white-space:nowrap;">AED ${_safeOpen.toLocaleString()}</div>
-              <div class="pir-nt-pin-label" style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(74,222,128,0.7);">Open</div>
-              <div style="width:11px;height:11px;border-radius:50%;background:#22C55E;margin-top:5px;"></div>
-            </div>
-            <div class="pir-nt-pin pir-nt-pin-target" style="align-items:center;">
-              <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:#E8D060;white-space:nowrap;">AED ${_safeClose.toLocaleString()}</div>
-              <div class="pir-nt-pin-label" style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(232,208,96,0.7);">Settle Here</div>
-              <div style="width:11px;height:11px;border-radius:50%;background:#E8D060;margin-top:5px;"></div>
-            </div>
-            <div class="pir-nt-pin pir-nt-pin-walk" style="align-items:flex-end;">
-              <div class="pir-nt-pin-price" style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:#FCA5A5;white-space:nowrap;">AED ${_safeWalk.toLocaleString()}</div>
-              <div class="pir-nt-pin-label" style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(252,165,165,0.7);">Walk Away</div>
-              <div style="width:11px;height:11px;border-radius:50%;background:#EF4444;margin-top:5px;"></div>
-            </div>
-          </div>
-          <div class="pir-nt-track"><div class="pir-nt-track-fill"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,0.3);margin-top:5px;">
-            <span>Opening offer</span><span>Take it or leave it</span><span>Walk away</span>
-          </div>
-        </div>
-        <div class="pir-nt-script" id="haggleScript${tabId}">${_scriptText}</div>
-        <button class="pir-nt-copy-btn" onclick="(function(btn){const el=document.getElementById('haggleScript${tabId}');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Copy Script';btn.classList.remove('copied');},2200);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy Script';},2200);});})(this)">
-          📋 Copy Script
-        </button>
-        ${(()=>{
-          // Zone of Agreement (v30 model)
-          const zoa = r.negotiation_range?.zone_of_agreement;
-          const sc  = r.scenarios;
-          if (!zoa?.low && !sc) return '';
-          return `<div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
-            ${zoa?.low ? `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.22);">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#22C55E" stroke-width="1.3"/><path d="M4.5 7l2 2 3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#22C55E;margin-bottom:2px;">Zone of Agreement</div>
-                <div style="font-size:.82rem;font-weight:700;color:#1A2B4C;">AED ${(zoa.low||0).toLocaleString()} – AED ${(zoa.high||0).toLocaleString()}</div>
-              </div>
-            </div>` : ''}
-            ${sc ? `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-              <div style="padding:8px 10px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;text-align:center;">
-                <div style="font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#16A34A;margin-bottom:3px;">Optimistic</div>
-                <div style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#15803D;">AED ${(sc.optimistic||0).toLocaleString()}</div>
-              </div>
-              <div style="padding:8px 10px;border-radius:8px;background:#FFF7ED;border:1px solid #FED7AA;text-align:center;">
-                <div style="font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C2410C;margin-bottom:3px;">Realistic</div>
-                <div style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#9A3412;">AED ${(sc.realistic||avg).toLocaleString()}</div>
-              </div>
-              <div style="padding:8px 10px;border-radius:8px;background:#FEF2F2;border:1px solid #FECACA;text-align:center;">
-                <div style="font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#DC2626;margin-bottom:3px;">Pessimistic</div>
-                <div style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#991B1B;">AED ${(sc.pessimistic||0).toLocaleString()}</div>
-              </div>
-            </div>` : ''}
-          </div>`;
-        })()}
-      </div>`;
-    }
-
-    // ── Value Adjustments HTML builder (shared) ────────────────────
-    function _vabBlock(){
-      const baseVal=avg||handshake;
-      const isGCC_=specVal==='GCC'||specVal==='GCC Spec';
-      const fshOk_=qs.fsh===true;
-      const age_=Math.max(1,new Date().getFullYear()-carYear);
-      const expKm_=age_*18000;
-      const mDiff_=km-expKm_;
-      const rows_=[];
-      // Stage 5: GCC = 0% baseline (not shown). non-GCC = -5%
-      if(!isGCC_&&specVal) rows_.push({l:'Non-GCC Spec',a:Math.round(baseVal*.05/500)*500,p:false});
-      // Stage 5: excellent +5%, very good +3%, fair -5%, poor -12%
-      if(condVal==='Excellent') rows_.push({l:'Excellent Condition',a:Math.round(baseVal*.05/500)*500,p:true});
-      else if(condVal==='Very Good') rows_.push({l:'Very Good Condition',a:Math.round(baseVal*.03/500)*500,p:true});
-      // Stage 5: fsh yes=0% (no positive shown), fsh no=-2%
-      if(qs.singleOwner===true||ownVal==='1') rows_.push({l:'Single Owner',a:Math.round(baseVal*.02/500)*500,p:true});
-      // Stage 5: warranty active=+2%
-      if(qs.warranty===true||warVal==='active') rows_.push({l:'Active Warranty',a:Math.round(baseVal*.02/500)*500,p:true});
-      // Stage 5: non-GCC=-5%
-      if(!isGCC_&&specVal) rows_.push({l:'Non-GCC Spec',a:Math.round(baseVal*.05/500)*500,p:false});
-      if(condVal==='Fair') rows_.push({l:'Fair Condition',a:Math.round(baseVal*.05/500)*500,p:false});
-      else if(condVal==='Poor') rows_.push({l:'Poor Condition',a:Math.round(baseVal*.12/500)*500,p:false});
-      // Stage 5: mileage above mid -2%, below mid +2%
-      if(mDiff_>expKm_*.3) rows_.push({l:'High Mileage',a:Math.round(baseVal*.02/500)*500,p:false});
-      else if(mDiff_<-expKm_*.3) rows_.push({l:'Low Mileage ✓',a:Math.round(baseVal*.02/500)*500,p:true});
-      // Stage 5: fsh no=-2%
-      if(!fshOk_&&(qs.fsh===false)) rows_.push({l:'No Service History',a:Math.round(baseVal*.02/500)*500,p:false});
-      // Stage 5: accident yes=-8% (no minor/major distinction in model)
-      if(accVal==='major'||accVal==='minor'||qs.accident===true) rows_.push({l:'Accident History',a:Math.round(baseVal*.08/500)*500,p:false});
-      // Stage 5: single_owner no=-2.5%
-      if(qs.singleOwner===false&&!rows_.find(r=>r.l==='Non-GCC Spec')) rows_.push({l:'Multiple Owners',a:Math.round(baseVal*.025/500)*500,p:false});
-      const maxA_=rows_.length?Math.max(...rows_.map(r=>r.a)):1;
-      const posTotal_=rows_.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
-      const negTotal_=rows_.filter(r=>!r.p).reduce((s,r)=>s+r.a,0);
-      const netVal_=Math.round((baseVal+posTotal_-negTotal_)/500)*500;
-      const rowsHtml_=rows_.slice(0,6).map(r=>{
-        const w=Math.max(10,Math.round((r.a/maxA_)*80));
-        return `<div class="pir-vadj-row-v28">
-          <span class="pir-vadj-label-v28">${r.l}</span>
-          <div class="pir-vadj-bar-v28 ${r.p?'pir-vadj-bar-pos':'pir-vadj-bar-neg'}" style="width:${w}px;display:inline-block;vertical-align:middle;height:6px;border-radius:3px;"></div>
-          <span class="pir-vadj-amt-v28 ${r.p?'pir-vadj-amt-pos':'pir-vadj-amt-neg'}">${r.p?'+':'-'}${r.a.toLocaleString()}</span>
-        </div>`;
-      }).join('');
-      return `<div class="pir-vadj-base-row"><span>Base Market</span><span>AED ${baseVal.toLocaleString()}</span></div>
-      ${rowsHtml_}
-      <div class="pir-vadj-net-row"><span>Net Adjusted</span><span style="color:${posTotal_>=negTotal_?'#15803D':'#991B1B'}">AED ${netVal_.toLocaleString()}</span></div>`;
-    }
-
-    // ── Expert Verdict + Attention Points block HTML builder ───────
-    function _evBlock(){
-      const attHtml = rF.length
-        ? `<div style="margin-top:14px;padding-top:12px;border-top:1px solid #E8EBF3;">
-            <div style="font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#D97706;margin-bottom:8px;">🔶 Attention Points <span style="background:rgba(217,119,6,0.12);color:#92400E;border:1px solid rgba(217,119,6,0.2);border-radius:99px;font-size:.65rem;padding:1px 8px;font-weight:700;">${rF.length}</span></div>
-            ${rF.map(f=>`<div style="font-size:.78rem;color:#4A5E7A;line-height:1.5;padding:3px 0 3px 4px;border-left:2px solid #F59E0B;margin-bottom:5px;padding-left:10px;">${f}</div>`).join('')}
-          </div>`
-        : '';
-      return `<div style="font-size:.78rem;color:#2D3F5C;line-height:1.55;">
-        <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;">
-          <span style="font-size:1rem;flex-shrink:0;line-height:1.4;">🚀</span>
-          <div><strong style="display:block;font-size:.78rem;color:#15803D;margin-bottom:2px;">Advantage</strong>${_advText}</div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;">
-          <span style="font-size:1rem;flex-shrink:0;line-height:1.4;">💰</span>
-          <div><strong style="display:block;font-size:.78rem;color:#92400E;margin-bottom:2px;">Value</strong>${_valText}</div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:9px;">
-          <span style="font-size:1rem;flex-shrink:0;line-height:1.4;">⚠️</span>
-          <div><strong style="display:block;font-size:.78rem;color:#991B1B;margin-bottom:2px;">Review</strong>${_revText}</div>
-        </div>
-        ${attHtml}
-      </div>`;
-    }
-
-    return `
-  <div class="pir-row-grid">
-    <div class="pir-row-cell pir-vab-cell">
-      <div class="pir-sec-hdr">
-        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-amber">⚖️</div>
-        Value Adjustments
-        <div class="pir-sec-hdr-line"></div>
-      </div>
-      ${_vabBlock()}
+    <div class="ks-free-upsell">
+      <div class="ks-upsell-icon">★</div>
+      <div class="ks-upsell-text"><strong>Full Analysis</strong> — get negotiation script, 3-year depreciation, and exact deal guidance.</div>
+      <button class="ks-upsell-btn" onclick="ksPirTab(2)">View Full Report →</button>
     </div>
-    <div class="pir-row-cell pir-ev-cell">
-      <div class="pir-sec-hdr">
-        <div class="pir-sec-hdr-icon pir-sec-hdr-icon-purple">🧠</div>
-        Expert Verdict
-        <div class="pir-sec-hdr-line"></div>
+  </div>
+
+  </div><!-- /ksPirFree -->
+
+  <!-- ═══════════════════════════════════════════════
+       TAB 2 — FULL ANALYSIS (Free + Paid)
+  ═══════════════════════════════════════════════ -->
+  <div id="ksPirPaid" class="ks-tab-content" style="display:none">
+
+  <!-- SECTION 1: CAR IDENTITY (same as free) -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Vehicle</div>
+    <div class="ks-id-card">
+      <div class="ks-id-photo">
+        <img src="${carImgUrl}" alt="${year} ${brand} ${model||''}" class="ks-id-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ks-id-img-fallback"><svg viewBox="0 0 80 40" fill="none" width="80" height="40"><path d="M5 28L12 16Q14 13 18 13L28 11Q32 10 35 12L50 14Q55 14 58 17L67 22Q70 23 70 26L70 28Q70 30 68 30L60 30Q58 34 54 34Q50 34 48 30L26 30Q24 34 20 34Q16 34 14 30L7 30Q5 30 5 28Z" fill="rgba(26,43,76,0.1)" stroke="rgba(26,43,76,0.25)" stroke-width="1"/><circle cx="20" cy="31" r="4" fill="rgba(26,43,76,0.15)"/><circle cx="54" cy="31" r="4" fill="rgba(26,43,76,0.15)"/></svg></div>
       </div>
-      ${_evBlock()}
+      <div class="ks-id-info">
+        <div class="ks-id-name">${year} ${brand} ${model||''}${trimDisplay?' · '+trimDisplay:''}</div>
+        <div class="ks-id-meta">${[kmFmt+' km', specVal||'GCC', condVal||'—'].filter(Boolean).join(' · ')}</div>
+        <div class="ks-id-tags">
+          ${qs.accident!==null?`<span class="ks-id-tag ${qs.accident?'ks-tag-bad':'ks-tag-good'}">${qs.accident?'✗ Accident':'✓ Clean'}</span>`:''}
+          ${qs.fsh!==null?`<span class="ks-id-tag ${qs.fsh?'ks-tag-good':'ks-tag-bad'}">${qs.fsh?'✓ Service Hist.':'✗ No Svc Hist.'}</span>`:''}
+          ${qs.warranty!==null?`<span class="ks-id-tag ${qs.warranty?'ks-tag-good':'ks-tag-bad'}">${qs.warranty?'✓ Warranty':'✗ No Warranty'}</span>`:''}
+          ${qs.singleOwner!==null?`<span class="ks-id-tag ${qs.singleOwner?'ks-tag-good':'ks-tag-mid'}">${qs.singleOwner?'✓ Single Owner':'Multi Owner'}</span>`:''}
+        </div>
+        <div class="ks-id-footer"><span class="ks-id-ref">${ref.label}</span>${_sourceBadge}${_tierBadge}</div>
+      </div>
     </div>
-  </div><!-- /row 2 -->
+  </div>
 
-  <!-- NEGOTIATION SCRIPT — Verdict Tab -->
-  ${_negoBlock('Tab1')}
+  <!-- SECTION 2: YOUR POSITION -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Quick Deal Snapshot</div>
+    <div class="ks-section-title">Your Position</div>
+    <div class="ks-position-card">
+      <div class="ks-pos-left">
+        <div class="ks-pos-verdict ${dealInfo?.cls==='good'?'ks-verdict-good':dealInfo?.cls==='bad'?'ks-verdict-bad':dealInfo?.cls==='warn'?'ks-verdict-warn':'ks-verdict-neu'}">${ai?.deal_rating||dealInfo?.label||'Fair Price'}</div>
+        <div class="ks-pos-fmv-label">Fair Market Value</div>
+        <div class="ks-pos-fmv">AED ${avg.toLocaleString()}</div>
+        ${askN?`<div class="ks-pos-ask-row"><span class="ks-pos-ask-label">Asking:</span><span class="ks-pos-ask">AED ${askN.toLocaleString()}</span><span class="ks-pos-delta ${askN>avg?'ks-delta-over':'ks-delta-under'}">${askN>avg?'+':''}${Math.round((askN-avg)/avg*100)}% ${askN>avg?'above':'below'} market</span></div>`:''}
+        <div class="ks-pos-summary">${ai?.explanation||para||''}</div>
+      </div>
+      <div class="ks-pos-right">
+        <div class="ks-pos-stat"><div class="ks-pos-stat-val">${conf}%</div><div class="ks-pos-stat-label">Confidence</div></div>
+        <div class="ks-pos-stat"><div class="ks-pos-stat-val">${comp>0?comp:'Est.'}</div><div class="ks-pos-stat-label">Listings</div></div>
+        <div class="ks-pos-stat"><div class="ks-pos-stat-val">${_tsScore}/10</div><div class="ks-pos-stat-label">Transparency</div></div>
+      </div>
+    </div>
+  </div>
 
-  <!-- TAB 1 FOOTER -->
-  <div class="pir-tab-footer">
-    <a class="pir-tab-footer-link" href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M9 9l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Dubizzle
-    </a>
-    <a class="pir-tab-footer-link" href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M9 9l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      YallaMotor
-    </a>
-    <button class="pir-tab-footer-reset" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5A4.5 4.5 0 1 0 6.5 2M2 2v4.5h4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      New Search
+  <!-- SECTION 3: WHY TRUST THIS -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Data and Transparency</div>
+    <div class="ks-section-title">Why Trust This</div>
+    <div class="ks-trust-grid">
+      <div class="ks-trust-card"><div class="ks-trust-card-label">Transparency Score</div><div class="ks-trust-card-val" style="color:${_tsScore>=7.5?'#15803D':_tsScore>=5.5?'#92400E':'#991B1B'}">${_tsScore}<span class="ks-trust-denom">/10</span></div><div class="ks-meter-track"><div class="ks-meter-fill" style="width:${_tsScore*10}%;background:${_tsScore>=7.5?'#16A34A':_tsScore>=5.5?'#D97706':'#DC2626'}"></div></div><div class="ks-trust-card-sub">${_tsLabel.split('—')[1]?.trim()||_tsLabel}</div></div>
+      <div class="ks-trust-card"><div class="ks-trust-card-label">Data Confidence</div><div class="ks-trust-card-val" style="color:${conf>=75?'#15803D':conf>=50?'#92400E':'#991B1B'}">${conf}<span class="ks-trust-denom">%</span></div><div class="ks-meter-track"><div class="ks-meter-fill" style="width:${conf}%;background:${conf>=75?'#16A34A':conf>=50?'#D97706':'#DC2626'}"></div></div><div class="ks-trust-card-sub">${conf>=75?'High Confidence':conf>=50?'Moderate':'Low — cross-check'}</div></div>
+      <div class="ks-trust-card"><div class="ks-trust-card-label">Market Demand</div><div class="ks-trust-card-val" style="color:${(r.demandScore||55)>=70?'#15803D':'#92400E'}">${r.demandScore||55}<span class="ks-trust-denom">%</span></div><div class="ks-meter-track"><div class="ks-meter-fill" style="width:${r.demandScore||55}%;background:${(r.demandScore||55)>=70?'#16A34A':'#D97706'}"></div></div><div class="ks-trust-card-sub">${(r.demandScore||55)>=70?'High buyer activity':'Moderate activity'}</div></div>
+      <div class="ks-trust-card"><div class="ks-trust-card-label">Data Source</div><div class="ks-trust-card-val" style="font-size:1rem;font-family:'Exo 2',sans-serif;">${_isLive?'Live':'Estimated'}</div><div class="ks-meter-track"><div class="ks-meter-fill" style="width:${comp>0?Math.min(100,Math.round(comp/12*100)):30}%;background:#1D7ED8"></div></div><div class="ks-trust-card-sub">${_tierLabel}${comp>0?' · '+comp+' listings':''}</div></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: MARKET FIT -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Where This Price Sits</div>
+    <div class="ks-section-title">Market Fit</div>
+    ${(()=>{
+      const _pf2 = v => rangeMax>rangeMin ? Math.max(2,Math.min(98,Math.round(((v-rangeMin)/(rangeMax-rangeMin))*100))) : 50;
+      const _h2 = _pf2(handshake);
+      const _s2 = sweetSpot ? _pf2(sweetSpot) : null;
+      const _a2 = askN ? _pf2(askN) : null;
+      const _aC2 = askN ? (askN>handshake*1.05?'#DC2626':askN<handshake*0.95?'#16A34A':'#1D7ED8') : '#1D7ED8';
+      const _aT2 = askN ? (askN>handshake*1.05?'#991B1B':askN<handshake*0.95?'#15803D':'#1E40AF') : '#1E40AF';
+      let _mf2 = '<div class="ks-mf-wrap"><div class="ks-mf-bar-area"><div class="ks-mf-bar-bg">';
+      if(_s2!==null) _mf2 += '<div class="ks-mf-pin" style="left:' + _s2 + '%"><div class="ks-mf-pin-dot" style="background:#C49A2A"></div><div class="ks-mf-pin-label" style="color:#92400E">Sweet Spot<br><strong>AED ' + sweetSpot.toLocaleString() + '</strong></div></div>';
+      _mf2 += '<div class="ks-mf-pin" style="left:' + _h2 + '%"><div class="ks-mf-pin-dot" style="background:#008577;width:16px;height:16px;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,133,119,0.4)"></div><div class="ks-mf-pin-label" style="color:#155E4C">Handshake<br><strong>AED ' + handshake.toLocaleString() + '</strong></div></div>';
+      if(_a2!==null) _mf2 += '<div class="ks-mf-pin" style="left:' + _a2 + '%"><div class="ks-mf-pin-dot" style="background:' + _aC2 + '"></div><div class="ks-mf-pin-label" style="color:' + _aT2 + '">Asking<br><strong>AED ' + askN.toLocaleString() + '</strong></div></div>';
+      _mf2 += '</div><div class="ks-mf-bar-ends"><span class="ks-mf-end-low">AED ' + rangeMin.toLocaleString() + '<br><span class="ks-mf-end-lbl">Market Low</span></span><span class="ks-mf-end-high">AED ' + rangeMax.toLocaleString() + '<br><span class="ks-mf-end-lbl">Market High</span></span></div></div>';
+      _mf2 += '<div class="ks-mf-legend"><span class="ks-mf-leg"><span class="ks-mf-leg-dot" style="background:#008577"></span>Handshake</span>';
+      if(_s2!==null) _mf2 += '<span class="ks-mf-leg"><span class="ks-mf-leg-dot" style="background:#C49A2A"></span>Sweet Spot</span>';
+      if(_a2!==null) _mf2 += '<span class="ks-mf-leg"><span class="ks-mf-leg-dot" style="background:#1D7ED8"></span>Asking Price</span>';
+      _mf2 += '</div><div class="ks-mf-note">Direct private seller prices are typically 8–10% lower than dealer prices for the same vehicle in the UAE market.</div></div>';
+      return _mf2;
+    })()}
+  </div>
+
+  <!-- SECTION 5: VALUE LOGIC -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">How the Price Was Built</div>
+    <div class="ks-section-title">Value Logic</div>
+    ${(()=>{
+      const _r2 = adjItems && adjItems.length ? adjItems : [];
+      const _pos2 = _r2.filter(a=>a.positive&&a.amount>0);
+      const _neg2 = _r2.filter(a=>!a.positive&&a.amount>0);
+      const _pt2 = _pos2.reduce((s,a)=>s+a.amount,0);
+      const _nt2 = _neg2.reduce((s,a)=>s+a.amount,0);
+      const _b2 = avg || handshake;
+      const _mx2 = Math.max(1,..._r2.map(a=>a.amount));
+      const _mk2 = (a) => {
+        const _w2 = Math.max(8, Math.round((a.amount/_mx2)*100));
+        const _sg = a.positive ? '+' : '-';
+        const _c1 = a.positive ? 'ks-bar-pos' : 'ks-bar-neg';
+        const _c2 = a.positive ? 'ks-amt-pos' : 'ks-amt-neg';
+        return '<div class="ks-vl-row">'
+          + '<div class="ks-vl-row-label">' + a.name + '</div>'
+          + '<div class="ks-vl-row-bar"><div class="ks-vl-bar-fill ' + _c1 + '" style="width:' + _w2 + '%"></div></div>'
+          + '<div class="ks-vl-row-amt ' + _c2 + '">' + _sg + 'AED ' + a.amount.toLocaleString() + '</div>'
+          + '</div>';
+      };
+      let _o2 = '<div class="ks-vl-base-row">'
+        + '<span class="ks-vl-base-label">Base Market Value</span>'
+        + '<span class="ks-vl-base-val">AED ' + _b2.toLocaleString() + '</span>'
+        + '</div>';
+      if(_pos2.length) _o2 += '<div class="ks-vl-group-label ks-vl-pos-label">Positive Factors <span>+AED ' + _pt2.toLocaleString() + '</span></div>' + _pos2.map(_mk2).join('');
+      if(_neg2.length) _o2 += '<div class="ks-vl-group-label ks-vl-neg-label">Negative Factors <span>-AED ' + _nt2.toLocaleString() + '</span></div>' + _neg2.map(_mk2).join('');
+      _o2 += '<div class="ks-vl-net-row"><span class="ks-vl-net-label">Net Adjusted Value</span><span class="ks-vl-net-val">AED ' + avg.toLocaleString() + '</span></div>';
+      _o2 += '<div class="ks-vl-note">Note: Vehicle colour impact cannot always be calculated due to inconsistent UAE market data availability.</div>';
+      return _o2;
+    })()}
+  </div>
+
+  <!-- SECTION 6: KEY POINTS -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Strengths and Cautions</div>
+    <div class="ks-section-title">Key Points</div>
+    <div class="ks-kp-wrap">
+      ${gF.length?`<div class="ks-kp-block"><div class="ks-kp-block-label">Strengths</div>${gF.map(f=>`<div class="ks-kp-item ks-kp-item-good"><span class="ks-kp-dot ks-kp-dot-good"></span><span>${f}</span></div>`).join('')}</div>`:''}
+      ${gF.length&&rF.length?`<div class="ks-kp-sep"></div>`:''}
+      ${rF.length?`<div class="ks-kp-block"><div class="ks-kp-block-label">Cautions</div>${rF.map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f}</span></div>`).join('')}</div>`:''}
+    </div>
+  </div>
+
+  <!-- ═══ PAID DIVIDER ═══ -->
+  <div class="ks-paid-divider">
+    <div class="ks-paid-divider-line"></div>
+    <div class="ks-paid-divider-label">Full Analysis</div>
+    <div class="ks-paid-divider-line"></div>
+  </div>
+
+  <!-- SECTION 7: BEST MOVE -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Negotiation Guidance</div>
+    <div class="ks-section-title">Best Move</div>
+    <div class="ks-nego-cols">
+      <div class="ks-nego-col ks-nego-open">
+        <div class="ks-nego-col-label">Open With</div>
+        <div class="ks-nego-col-val" style="color:#1E40AF">AED ${(nego?.offer||Math.round(avg*0.97/500)*500).toLocaleString()}</div>
+        <div class="ks-nego-col-sub">Your first offer</div>
+      </div>
+      <div class="ks-nego-col ks-nego-settle">
+        <div class="ks-nego-col-label">Settle Here</div>
+        <div class="ks-nego-col-val" style="color:#15803D">AED ${(nego?.close||handshake).toLocaleString()}</div>
+        <div class="ks-nego-col-sub">Target close price</div>
+      </div>
+      <div class="ks-nego-col ks-nego-walk">
+        <div class="ks-nego-col-label">Walk Away At</div>
+        <div class="ks-nego-col-val" style="color:#DC2626">AED ${(nego?.walk||Math.round(avg*1.04/500)*500).toLocaleString()}</div>
+        <div class="ks-nego-col-sub">Your hard limit</div>
+      </div>
+    </div>
+    ${(()=>{
+      const _zoa = r.negotiation_range && r.negotiation_range.zone_of_agreement ? r.negotiation_range.zone_of_agreement : null;
+      const _sc = r.scenarios || null;
+      let _nb = '';
+      if(_zoa && _zoa.low) {
+        const _zL = Math.max(2,Math.min(98,Math.round(((_zoa.low-rangeMin)/(rangeMax-rangeMin||1))*100)));
+        const _zR = Math.max(2,Math.min(98,100-Math.round(((_zoa.high-rangeMin)/(rangeMax-rangeMin||1))*100)));
+        _nb += '<div class="ks-zoa-bar-wrap">'
+          + '<div class="ks-zoa-label">Zone of Agreement</div>'
+          + '<div class="ks-zoa-bar"><div class="ks-zoa-fill" style="left:' + _zL + '%;right:' + _zR + '%"></div></div>'
+          + '<div class="ks-zoa-ends"><span>AED ' + (_zoa.low||0).toLocaleString() + '</span><span>AED ' + (_zoa.high||0).toLocaleString() + '</span></div>'
+          + '<div class="ks-zoa-note">' + (_zoa.note||'Deal typically closes inside this band') + '</div>'
+          + '</div>';
+      }
+      if(_sc) {
+        _nb += '<div class="ks-scenarios">'
+          + '<div class="ks-scenario ks-sc-opt"><div class="ks-sc-label">Optimistic</div><div class="ks-sc-val">AED ' + (_sc.optimistic||0).toLocaleString() + '</div></div>'
+          + '<div class="ks-scenario ks-sc-real"><div class="ks-sc-label">Realistic</div><div class="ks-sc-val">AED ' + (_sc.realistic||avg).toLocaleString() + '</div></div>'
+          + '<div class="ks-scenario ks-sc-pess"><div class="ks-sc-label">Pessimistic</div><div class="ks-sc-val">AED ' + (_sc.pessimistic||0).toLocaleString() + '</div></div>'
+          + '</div>';
+      }
+      return _nb;
+    })()}
+    ${nego?.tactic?`<div class="ks-nego-tactic">${nego.tactic}</div>`:''}
+  </div>
+
+  <!-- SECTION 8: MARKET MOOD -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Current Activity</div>
+    <div class="ks-section-title">Market Mood</div>
+    <div class="ks-mood-grid">
+      <div class="ks-mood-card">
+        <div class="ks-mood-card-label">Market Demand</div>
+        <div class="ks-mood-card-val" style="color:${(r.demandScore||55)>=70?'#15803D':'#92400E'}">${r.demandScore||55}<span style="font-size:.7em">%</span></div>
+        <div class="ks-meter-track" style="margin-top:6px"><div class="ks-meter-fill" style="width:${r.demandScore||55}%;background:${(r.demandScore||55)>=70?'#16A34A':'#D97706'}"></div></div>
+        <div class="ks-mood-card-sub">${(r.demandScore||55)>=70?'High activity':'Moderate activity'}</div>
+      </div>
+      <div class="ks-mood-card">
+        <div class="ks-mood-card-label">Days to Sell</div>
+        <div class="ks-mood-card-val" style="color:#1E40AF;font-size:1.1rem">${_modelDts||'14–30 days'}</div>
+        <div class="ks-mood-card-sub">at sweet spot price</div>
+      </div>
+      <div class="ks-mood-card">
+        <div class="ks-mood-card-label">Comparable Listings</div>
+        <div class="ks-mood-card-val" style="color:#1E40AF">${comp>0?comp:'Est.'}</div>
+        <div class="ks-mood-card-sub">${comp>0?`AED ${rangeMin.toLocaleString()} – ${rangeMax.toLocaleString()}`:'Market estimate'}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: OWNERSHIP OUTLOOK -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Three-Year View</div>
+    <div class="ks-section-title">Ownership Outlook</div>
+    ${(()=>{
+      const _dMax = Math.max(handshake,..._deprRows.map(d=>d.endVal));
+      const _bH = 80;
+      let _dc = '<div class="ks-depr-chart">';
+      _dc += '<div class="ks-depr-col">'
+        + '<div class="ks-depr-bar-wrap" style="height:' + _bH + 'px"><div class="ks-depr-bar" style="height:' + _bH + 'px;background:#008577"></div></div>'
+        + '<div class="ks-depr-year">Today</div>'
+        + '<div class="ks-depr-val">AED ' + handshake.toLocaleString() + '</div>'
+        + '<div class="ks-depr-loss" style="color:#008577">FMV</div>'
+        + '</div>';
+      _deprRows.forEach(function(d) {
+        const _pH = Math.round((d.endVal/_dMax)*_bH);
+        _dc += '<div class="ks-depr-col">'
+          + '<div class="ks-depr-bar-wrap" style="height:' + _bH + 'px"><div class="ks-depr-bar" style="height:' + _pH + 'px;background:#1D7ED8"></div></div>'
+          + '<div class="ks-depr-year">' + d.year + '</div>'
+          + '<div class="ks-depr-val">AED ' + d.endVal.toLocaleString() + '</div>'
+          + '<div class="ks-depr-loss" style="color:#DC2626">-' + d.rate + '%/yr</div>'
+          + '</div>';
+      });
+      _dc += '</div>';
+      _dc += '<table class="ks-cost-table">'
+        + '<tr><td>First-year ownership costs</td><td>AED ' + (cost.rtaOnly||2000).toLocaleString() + '</td></tr>'
+        + '<tr><td>RTA registration + transfer</td><td>AED 940</td></tr>'
+        + '<tr><td>Insurance (est.)</td><td>AED ' + (cost.ins||1200).toLocaleString() + '</td></tr>'
+        + '<tr><td>Annual maintenance (est.)</td><td>AED ' + (cost.maint||1500).toLocaleString() + '</td></tr>'
+        + '<tr><td>Fuel (monthly est.)</td><td>AED 900</td></tr>'
+        + (_deprRows[0] ? '<tr><td>Year 1 depreciation</td><td style="color:#DC2626">-AED ' + (_deprRows[0].cumLoss||0).toLocaleString() + '</td></tr>' : '')
+        + '</table>';
+      return _dc;
+    })()}
+  </div>
+
+  <!-- SECTION 10: USE THIS SCRIPT -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Confident and Polite</div>
+    <div class="ks-section-title">Use This Script</div>
+    <div class="ks-script-box" id="ksScriptBox">
+      <button class="ks-script-toggle" onclick="(function(btn){const box=document.getElementById('ksScriptBody');const open=box.style.maxHeight&&box.style.maxHeight!=='0px';box.style.maxHeight=open?'0px':box.scrollHeight+'px';btn.querySelector('.ks-chevron').style.transform=open?'':'rotate(180deg)';})(this)" aria-expanded="true">
+        <span>Negotiation Script</span>
+        <svg class="ks-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" style="transition:transform .2s"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ks-script-body" id="ksScriptBody" style="max-height:200px;overflow:hidden;transition:max-height .3s ease">
+        <div class="ks-script-text" id="ksScriptText">${r.hagglingScript||nego?.script||`"I've reviewed the current UAE market for this vehicle — comparable listings are sitting around AED ${avg.toLocaleString()}. I'd like to offer AED ${(nego?.offer||Math.round(avg*0.97/500)*500).toLocaleString()} — can we work together on that?"`}</div>
+      </div>
+    </div>
+    <button class="ks-script-copy" onclick="(function(btn){const el=document.getElementById('ksScriptText');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='Copy Script',2200);}).catch(()=>{const t=document.createElement('textarea');t.value=el.textContent||'';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='Copy Script',2200);});})(this)">
+      Copy Script
     </button>
   </div>
 
-  </div><!-- /pir-tab-verdict -->
-
-  <!-- ════════════════════════════════════════════════════════
-       TAB 2: FULL ANALYSIS
-       Verdict section identical to Tab 1, then extended below
-  ════════════════════════════════════════════════════════ -->
-  <div class="pir-tab-panel" id="pirTabAnalysis" style="display:none">
-
-  <!-- ── VERDICT CLONE (same sections as Tab 1, injected by JS) ── -->
-  <div id="pirTab2VerdictClone"></div>
-
-  <!-- ── EXTENDED ANALYSIS SEPARATOR ── -->
-  <div class="pir-t2-clone-sep">Extended Analysis</div>
-
-  <!-- ── EXTENDED ANALYSIS BLOCK ── -->
-  <div class="pir-ext-wrap">
-
-    <div class="pir-ext-header">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2.5" stroke="#008577" stroke-width="1.3"/><path d="M4 7h6M7 4v6" stroke="#008577" stroke-width="1.4" stroke-linecap="round"/></svg>
-      Full Market Report
-      <span class="pir-ext-ref">${ref.label}</span>
+  <!-- SECTION 11: NEXT STEPS -->
+  <div class="ks-section ks-next-steps">
+    <div class="ks-section-eyebrow">Continue</div>
+    <div class="ks-section-title">Next Steps</div>
+    <div class="ks-next-btns">
+      <a href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener" class="ks-next-btn ks-next-primary">View Live Listings →</a>
+      <a href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener" class="ks-next-btn ks-next-secondary">YallaMotor Search</a>
+      <button class="ks-next-btn ks-next-secondary" onclick="window.print()">Print Report</button>
+      <button class="ks-next-btn ks-next-secondary" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})">New Search</button>
     </div>
+  </div>
 
-    <!-- A: RATINGS ROW -->
-    ${(()=>{
-      const _dealScore = stickerPrice
-        ? (stickerPrice<handshake*0.92?10:stickerPrice<handshake*0.96?9:stickerPrice<handshake*1.00?7:stickerPrice<handshake*1.05?6:stickerPrice<handshake*1.10?4:stickerPrice<handshake*1.20?3:2) : 5;
-      const _demScore  = Math.round((r.demandScore||55)/10);
-      const _tsInt     = Math.round(_tsScore);
-      const _confScore = Math.round(conf/12);
-      function _ratingDots(score,color){ return Array.from({length:10},(_,i)=>`<div class="pir-rdot${i<score?' on':''}" style="${i<score?'background:'+color+';':''}"></div>`).join(''); }
-      function _gauge(label,score,max,color,sub){ return `<div class="pir-rating-cell"><div class="pir-rating-label">${label}</div><div class="pir-rating-score" style="color:${color};">${score}<span style="font-size:.52rem;font-weight:600;color:#8A9AB8;">/${max}</span></div><div class="pir-rating-dots" style="color:${color};">${_ratingDots(score,color)}</div><div class="pir-rating-sub">${sub}</div></div>`; }
-      const _dc=_dealScore>=8?'#15803D':_dealScore>=5?'#92400E':'#991B1B';
-      const _dd=_demScore>=8?'#15803D':_demScore>=5?'#92400E':'#991B1B';
-      const _dt=_tsInt>=8?'#15803D':_tsInt>=6?'#92400E':'#991B1B';
-      const _df=_confScore>=7?'#008577':_confScore>=4?'#92400E':'#991B1B';
-      const _dealSub=stickerPrice?(_dealScore>=8?'Strong Deal':_dealScore>=6?'Fair Price':_dealScore>=4?'Above Market':'Overpriced'):'No sticker';
-      return `<div class="pir-ratings-row">
-        ${_gauge('Deal Score',_dealScore,10,_dc,_dealSub)}
-        ${_gauge('Market Demand',_demScore,10,_dd,_demScore>=8?'High':_demScore>=5?'Moderate':'Low')}
-        ${_gauge('Transparency',_tsInt,10,_dt,_tsLabel.split(' — ')[0])}
-        ${_gauge('Data Confidence',_confScore,10,_df,conf+'% '+(_confScore>=7?'High':_confScore>=4?'Moderate':'Low'))}
-      </div>`;
-    })()}
+  </div><!-- /ksPirPaid -->
 
-    <!-- B: MARKET INTELLIGENCE + VALUE ADJUSTMENTS -->
-    <div class="pir-ext-2col">
-      <div class="pir-ext-col">
-        <div class="pir-ext-col-title">Market Intelligence</div>
-        <table class="pir-kv-table">
-          <tr><td>Handshake (FMV)</td><td class="pir-kv-accent">AED ${handshake.toLocaleString()}</td></tr>
-          ${stickerPrice?`<tr><td>Seller Asking</td><td>AED ${stickerPrice.toLocaleString()}</td></tr>`:''}
-          ${stickerPrice?`<tr><td>Price vs Market</td><td class="${stickerPrice>handshake?'pir-kv-bad':'pir-kv-good'}">${stickerPrice>handshake?'+':''}${Math.round((stickerPrice-handshake)/handshake*100)}%</td></tr>`:''}
-          <tr><td>Market Low</td><td class="pir-kv-good">AED ${rangeMin.toLocaleString()}</td></tr>
-          <tr><td>Market High</td><td class="pir-kv-bad">AED ${rangeMax.toLocaleString()}</td></tr>
-          <tr><td>Market Spread</td><td>AED ${(rangeMax-rangeMin).toLocaleString()}</td></tr>
-          <tr><td>Comparable Listings</td><td>${comp>0?comp+' found':'Estimated'}</td></tr>
-          <tr><td>Data Confidence</td><td>${conf}% — ${conf>=75?'High':conf>=50?'Moderate':'Low'}</td></tr>
-          <tr><td>Market Demand</td><td>${r.demandScore||55}% — ${(r.demandScore||55)>=70?'High':'Moderate'}</td></tr>
-          <tr><td>Transparency Score</td><td>${_tsScore}/10 — ${_tsLabel}</td></tr>
-          <tr><td>Est. Days to Sell</td><td>${_modelDts || ('~'+Math.max(7,Math.min(90,Math.round(45-(r.demandScore||55-50)*0.4)))+' days at FMV')}</td></tr>
-          ${sweetSpot ? `<tr><td>Sweet Spot Price</td><td class="pir-kv-good">AED ${sweetSpot.toLocaleString()}</td></tr>` : ''}
-        </table>
-      </div>
-      <div class="pir-ext-col">
-        <div class="pir-ext-col-title">Value Adjustments</div>
-        ${(()=>{
-          const bv=avg||handshake,isG=specVal==='GCC'||specVal==='GCC Spec',ag=Math.max(1,new Date().getFullYear()-carYear),ek=ag*18000,md=km-ek,rws=[];
-          // Stage 5 exact percentages:
-          // GCC=0% (baseline, not shown as positive), non-GCC=-5%
-          if(!isG&&specVal) rws.push({l:'Non-GCC Spec',a:Math.round(bv*.05/500)*500,p:false});
-          // condition: excellent +5%, very good +3%, fair -5%, poor -12%
-          if(condVal==='Excellent') rws.push({l:'Excellent Condition',a:Math.round(bv*.05/500)*500,p:true});
-          else if(condVal==='Very Good') rws.push({l:'Very Good Condition',a:Math.round(bv*.03/500)*500,p:true});
-          else if(condVal==='Fair') rws.push({l:'Fair Condition',a:Math.round(bv*.05/500)*500,p:false});
-          else if(condVal==='Poor') rws.push({l:'Poor Condition',a:Math.round(bv*.12/500)*500,p:false});
-          // mileage: below mid +2%, above mid -2%
-          if(md>ek*.3) rws.push({l:'High Mileage',a:Math.round(bv*.02/500)*500,p:false});
-          else if(md<-ek*.3) rws.push({l:'Low Mileage ✓',a:Math.round(bv*.02/500)*500,p:true});
-          // fsh: yes=0% (not shown), no=-2%
-          if(qs.fsh===false) rws.push({l:'No Service Hist.',a:Math.round(bv*.02/500)*500,p:false});
-          // warranty: active=+2%
-          if(qs.warranty===true) rws.push({l:'Active Warranty',a:Math.round(bv*.02/500)*500,p:true});
-          // single_owner: yes=+2%, no=-2.5%
-          if(qs.singleOwner===true) rws.push({l:'Single Owner',a:Math.round(bv*.02/500)*500,p:true});
-          else if(qs.singleOwner===false) rws.push({l:'Multi Owner',a:Math.round(bv*.025/500)*500,p:false});
-          // accident: yes=-8%
-          if(qs.accident===true) rws.push({l:'Accident History',a:Math.round(bv*.08/500)*500,p:false});
-          const mx=rws.length?Math.max(...rws.map(r=>r.a)):1,pt=rws.filter(r=>r.p).reduce((s,r)=>s+r.a,0),nt=rws.filter(r=>!r.p).reduce((s,r)=>s+r.a,0),nv=Math.round((bv+pt-nt)/500)*500;
-          return `<table class="pir-adj-table">
-            <tr><td class="pir-adj-name-cell" style="color:#1A1610;font-weight:700;">Base Market</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:#1A1610;font-weight:700;">AED ${bv.toLocaleString()}</td></tr>
-            ${rws.map(r=>{const w=Math.max(8,Math.round((r.a/mx)*80));return `<tr><td class="pir-adj-name-cell">${r.l}</td><td class="pir-adj-bar-cell"><div class="pir-adj-bar-track"><div class="pir-adj-bar-fill ${r.p?'pir-adj-bar-pos':'pir-adj-bar-neg'}" style="width:${w}px;${r.p?'':'float:right'}"></div></div></td><td class="pir-adj-amt-cell ${r.p?'pir-adj-pos-amt':'pir-adj-neg-amt'}">${r.p?'+':'-'}AED ${r.a.toLocaleString()}</td></tr>`;}).join('')}
-            <tr class="pir-adj-net-row"><td class="pir-adj-name-cell">Net Adjusted</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:${pt>=nt?'#15803D':'#991B1B'};">AED ${nv.toLocaleString()}</td></tr>
-          </table>`;
-        })()}
-      </div>
-    </div>
+</div><!-- /ks-pir -->`;
 
-    <!-- C: 3-YEAR DEPRECIATION + FIRST YEAR COSTS -->
-    <div class="pir-ext-2col">
-      <div class="pir-ext-col">
-        <div class="pir-ext-col-title">3-Year Depreciation</div>
-        <table class="pir-depr-table">
-          <thead><tr><th style="text-align:left;">Year</th><th>Rate</th><th>Value</th><th>Annual Loss</th></tr></thead>
-          <tbody>
-            ${_deprRows.map(dr=>`<tr>
-              <td>${dr.year}</td><td>${dr.rate}%</td>
-              <td>AED ${dr.endVal.toLocaleString()}</td>
-              <td class="pir-depr-loss-val">−AED ${Math.abs(dr.endVal-(dr.year===cy+1?handshake:_deprRows[_deprRows.indexOf(dr)-1]?.endVal||handshake)).toLocaleString()}</td>
-            </tr>`).join('')}
-            <tr style="border-top:1.5px solid #D4C8B0;">
-              <td colspan="2" style="color:#7A8FA8;font-size:.72rem;">3-yr total loss</td>
-              <td><strong>AED ${(_deprRows[2]?.endVal||handshake).toLocaleString()}</strong></td>
-              <td class="pir-depr-loss-val" style="font-weight:800;">−AED ${(handshake-(_deprRows[2]?.endVal||handshake)).toLocaleString()}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="margin-top:10px;">
-          ${[{yr:'Now',v:handshake},{yr:cy+1+'',v:_deprRows[0]?.endVal||0},{yr:cy+2+'',v:_deprRows[1]?.endVal||0},{yr:cy+3+'',v:_deprRows[2]?.endVal||0}].map((p,i)=>{
-            const w=handshake>0?Math.round((p.v/handshake)*100):0;
-            const clr=i===0?'#008577':i===1?'#C49A2A':i===2?'#D97706':'#DC2626';
-            return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:.72rem;">
-              <span style="width:30px;color:#7A8FA8;">${p.yr}</span>
-              <div style="flex:1;height:7px;background:#F0EBE0;border-radius:3px;overflow:hidden;"><div style="width:${w}%;height:100%;background:${clr};border-radius:3px;"></div></div>
-              <span style="width:64px;text-align:right;font-weight:700;color:${clr};">AED ${p.v.toLocaleString()}</span>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-      <div class="pir-ext-col">
-        <div class="pir-ext-col-title">First Year Cost</div>
-        <table class="pir-kv-table" style="margin-bottom:14px;">
-          <tr><td>RTA Inspection</td><td>AED 170</td></tr>
-          <tr><td>Registration</td><td>AED 420</td></tr>
-          <tr><td>Transfer Fee</td><td>AED 350</td></tr>
-          <tr><td>Insurance (est.)</td><td>AED ${cost.ins.toLocaleString()}</td></tr>
-          <tr><td style="font-weight:800;">RTA + Insurance</td><td style="font-weight:800;color:#1A1610;">AED ${cost.rtaOnly.toLocaleString()}</td></tr>
-          <tr><td>Year-1 Depreciation</td><td class="pir-kv-bad">−AED ${(_deprRows[0]?(handshake-_deprRows[0].endVal):deprAmt).toLocaleString()}</td></tr>
-          <tr><td style="font-weight:800;color:#1A1610;">True Year-1 Cost</td><td style="font-weight:800;color:#991B1B;">−AED ${(cost.rtaOnly+(_deprRows[0]?(handshake-_deprRows[0].endVal):deprAmt)).toLocaleString()}</td></tr>
-        </table>
-        <div class="pir-ext-col-title">Buyer Checklist</div>
-        <table class="pir-chk-table">
-          ${gF.map(f=>`<tr><td class="pir-chk-icon">✅</td><td class="pir-chk-text">${f}</td></tr>`).join('')}
-          ${rF.map(f=>`<tr><td class="pir-chk-icon">🔶</td><td class="pir-chk-text">${f}</td></tr>`).join('')}
-          ${gF.length===0&&rF.length===0?`<tr><td colspan="2" style="color:#8A9AB8;font-size:.78rem;padding:4px 0;font-style:italic;">Enter details above to generate checklist.</td></tr>`:''}
-        </table>
-      </div>
-    </div>
-
-    <!-- D: NEGOTIATION SCRIPT — Full Analysis Tab (same logic, unique id) -->
-    ${_negoBlock('Tab2')}
-
-    <!-- E: ACTION BUTTONS -->
-    <div class="pir-ext-actions">
-      <a class="pir-ext-btn" href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener">🔍 Dubizzle</a>
-      <a class="pir-ext-btn" href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener">🚗 YallaMotor</a>
-      <button class="pir-ext-btn" onclick="window.print()" type="button">🖨 Print Report</button>
-      <button class="pir-ext-btn pir-ext-btn-primary" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})" type="button">↺ New Search</button>
-      <span style="margin-left:auto;display:flex;align-items:center;gap:6px;">${_sourceBadge} ${_tierBadge}</span>
-    </div>
-
-    <!-- F: DISCLAIMER -->
-    <div style="padding:8px 20px;font-size:.65rem;color:#A8B8CC;line-height:1.6;text-align:center;border-top:1px solid #F0EBE0;">
-      Price estimates are based on UAE market data and AI analysis. Always verify with an independent inspection and current listings before any purchase or sale decision.
-    </div>
-
-  </div><!-- /pir-ext-wrap -->
-
-  </div><!-- /pir-tab-analysis -->
-`;
-  })()}
-
-</div><!-- /pir-wrap -->`;
 }
 
 async function checkCarPrice(){
@@ -8536,15 +8726,16 @@ function displayValuationResult(data){
     source:           data.source          || '',
     cached:           data.cached          || false,
     cacheAge:         data.cacheAge        || '',
-    confidenceScore:  data.confidenceScore || 0,
+    confidenceScore:  data.confidence_score || Math.round((data.confidence||0)*100) || 0,
     demandScore:      data.demandScore     || 55,
-    confidence:       (data.confidenceScore || 0) / 100,
+    confidence:       data.confidence      || (data.confidence_score || 0) / 100,
     rtaFees:          data.rtaFees         || null,
     depreciation:     data.depreciation    || [],
     redFlags:         data.redFlags        || [],
     avr:              data.avr             || {},
     hagglingScript:   data.hagglingScript  || '',
     sourceLinks:      data.sourceLinks     || [],
+    ref:              data.ref              || '',
     comparisonToAsking: data.comparisonToAsking || null,
     valuationNotes:   data.valuationNotes  || '',
     ai:               data.ai || (data.avr && (data.avr.review || data.avr.advantage || data.avr.value) ? {
@@ -8567,6 +8758,7 @@ function displayValuationResult(data){
     days_to_sell_estimate:data.days_to_sell_estimate || '',
     adjustments:          data.adjustments           || null,
     listings_snapshot:    data.listings_snapshot     || [],
+    _model:               data._model                || '',
   };
 
   const brand   = data.brand   || g('brand')?.value   || '';
@@ -9706,40 +9898,26 @@ window.checkCarPrice = checkCarPrice;
 window.resetForm = resetForm;
 window.displayValuationResult = displayValuationResult;
 
-/* ── TAB SWITCHER ──────────────────────────────────────── */
-function pirSwitchTab(n){
-  const v=document.getElementById('pirTabVerdict');
-  const a=document.getElementById('pirTabAnalysis');
-  const b1=document.getElementById('pirTabBtn1');
-  const b2=document.getElementById('pirTabBtn2');
-  if(!v||!a)return;
+/* ── KS PIR TAB SWITCHER ─────────────────────────────────── */
+function ksPirTab(n){
+  const free=document.getElementById('ksPirFree');
+  const paid=document.getElementById('ksPirPaid');
+  const b1=document.getElementById('ksBtnFree');
+  const b2=document.getElementById('ksBtnPaid');
+  if(!free||!paid)return;
   if(n===1){
-    v.style.display='';a.style.display='none';
-    b1&&b1.classList.add('pir-tnav-active');
-    b2&&b2.classList.remove('pir-tnav-active');
+    free.style.display='';paid.style.display='none';
+    b1&&b1.classList.add('ks-tabnav-active');b2&&b2.classList.remove('ks-tabnav-active');
+    b1&&b1.setAttribute('aria-selected','true');b2&&b2.setAttribute('aria-selected','false');
   }else{
-    v.style.display='none';a.style.display='';
-    b2&&b2.classList.add('pir-tnav-active');
-    b1&&b1.classList.remove('pir-tnav-active');
-    // Clone Verdict into top of Full Analysis (once only)
-    const clone=document.getElementById('pirTab2VerdictClone');
-    if(clone&&!clone.hasChildNodes()){
-      clone.innerHTML=v.innerHTML;
-      // Remove the Tab 1 footer links from the clone (avoid duplicate buttons)
-      clone.querySelectorAll('.pir-tab-footer').forEach(el=>el.remove());
-      // Re-trigger animated bars in clone
-      clone.querySelectorAll('.pir-signal-fill-v28[data-target],.pir-signal-fill-ryg[data-target]').forEach(fill=>{
-        const target=Math.min(100,parseInt(fill.dataset.target)||0);
-        const thumb=fill.nextElementSibling;
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          fill.style.width=target+'%';
-          if(thumb&&(thumb.classList.contains('pir-signal-thumb-v28')||thumb.classList.contains('pir-signal-thumb')))
-            thumb.style.left=target+'%';
-        }));
-      });
-    }
+    free.style.display='none';paid.style.display='';
+    b2&&b2.classList.add('ks-tabnav-active');b1&&b1.classList.remove('ks-tabnav-active');
+    b2&&b2.setAttribute('aria-selected','true');b1&&b1.setAttribute('aria-selected','false');
   }
 }
+window.ksPirTab=ksPirTab;
+function pirSwitchTab(n){ ksPirTab(n); }
+
 
 /* ── PRICE COUNT-UP ────────────────────────────────────── */
 function pirCountUp(el,target,dur=900){
