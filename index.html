@@ -2822,7 +2822,7 @@
     .rpt-vehicle-title { font-size: clamp(1.05rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 5px; letter-spacing: -.01em; }
     .rpt-vehicle-sub { font-size: .72rem; color: rgba(255,255,255,0.65); }
     .rpt-car-img-wrap { width: clamp(130px, 32%, 240px); flex-shrink: 0; position: relative; align-self: flex-end; }
-    .rpt-car-img { width: 100%; height: 110px; object-fit: contain; object-position: bottom right; display: block; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); clip-path: inset(0 0 18px 0); }
+    .rpt-car-img { width: 100%; height: 110px; object-fit: contain; object-position: bottom right; display: block; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); clip-path: inset(0 0 26px 0); }
     .rpt-car-placeholder { width: 100%; height: 110px; display: none; align-items: center; justify-content: center; }
     .rpt-car-ph-k { font-family: "Orbitron", sans-serif; font-size: 3rem; font-weight: 900; color: rgba(212,175,55,0.25); }
 
@@ -6234,6 +6234,82 @@
     }
     .pir-ps-hero-amount { animation: priceRevealV29 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both !important; }
 
+/* ── BODY RESULT ACTIVE STATE ─────────────────────────── */
+body.ks-result-active .hero,
+body.ks-result-active .snav,
+body.ks-result-active .mob-fixed-header,
+body.ks-result-active .mob-tab-bar,
+body.ks-result-active .back-to-inputs,
+body.ks-result-active .disc { display: none !important; }
+
+/* ── FULLSCREEN CONTAINERS ─────────────────────────────── */
+#ks-fullscreen-load, #ks-fullscreen-result {
+  font-family: "Exo 2", system-ui, sans-serif;
+}
+#ks-fullscreen-result .ks-tabnav {
+  border-radius: 0;
+  top: 0;
+}
+
+/* ── PRINT / PDF — A4 LAYOUT ──────────────────────────── */
+@media print {
+  @page { size: A4 portrait; margin: 12mm 14mm; }
+
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body, html { background: #fff !important; font-size: 10px !important; }
+
+  /* Hide everything except the fullscreen result */
+  body > *:not(#ks-fullscreen-result) { display: none !important; }
+  #ks-fullscreen-result { display: block !important; min-height: auto !important; background: #fff !important; }
+  #ks-fullscreen-result > div { padding: 0 !important; max-width: 100% !important; }
+  #ks-fullscreen-result > div > div:first-child { display: none !important; } /* hide top bar */
+
+  /* Compress sections for A4 */
+  .ks-section { padding: 8px 10px 10px !important; }
+  .ks-section-title { font-size: .85rem !important; margin-bottom: 8px !important; }
+  .ks-section-eyebrow { font-size: .55rem !important; margin-bottom: 1px !important; }
+  .ks-tabnav { display: none !important; }
+  .ks-upsell-btn, .ks-free-upsell { display: none !important; }
+  .ks-next-btns button:not(.ks-print-btn), .ks-next-btn { font-size: .65rem !important; padding: 6px 12px !important; }
+  .ks-trust-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+  .ks-trust-card { padding: 8px 10px !important; }
+  .ks-trust-card-val { font-size: 1.1rem !important; }
+  .ks-nego-cols { gap: 6px !important; }
+  .ks-nego-col { padding: 8px 8px !important; }
+  .ks-mood-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px !important; }
+  .ks-mood-card { padding: 8px 10px !important; }
+  .ks-mood-card-val { font-size: 1.1rem !important; }
+  .ks-scenarios { gap: 6px !important; }
+  .ks-id-card { padding: 8px !important; gap: 10px !important; }
+  .ks-id-photo { width: 100px !important; }
+  .ks-id-img { height: 70px !important; }
+  .ks-pos-fmv { font-size: 1.6rem !important; }
+  .ks-cost-table td { padding: 4px 2px !important; font-size: .75rem !important; }
+  .ks-depr-chart { gap: 6px !important; padding: 6px 0 10px !important; }
+  .ks-depr-col { min-width: 48px !important; }
+  .ks-mf-bar-area { padding: 36px 0 0 !important; }
+  .ks-vl-row { padding: 4px 0 !important; }
+  .ks-paid-divider { padding: 8px 10px !important; }
+  .ks-script-box { margin-bottom: 6px !important; }
+  .ks-estimate-banner { padding: 8px 12px !important; }
+
+  /* FREE TAB = 1 page: hide paid sections */
+  #ksPirFree { display: block !important; }
+  #ksPirPaid { display: none !important; }
+  .ks-paid-divider { page-break-before: avoid !important; }
+
+  /* Page breaks */
+  .ks-section:nth-child(5) { page-break-after: always; }
+}
+
+/* ── PAID PDF — 2 pages ───────────────────────────────── */
+@media print {
+  body.ks-print-paid #ksPirFree { display: none !important; }
+  body.ks-print-paid #ksPirPaid { display: block !important; }
+  body.ks-print-paid .ks-section:nth-child(4) { page-break-after: always !important; }
+}
+
 /* ═══════════════════════════════════════════════════════
    KS PIR v30 — TWO-TAB REPORT SYSTEM
 ═══════════════════════════════════════════════════════ */
@@ -6299,9 +6375,13 @@
   background:var(--surface); display:flex; align-items:center; justify-content:center;
 }
 .ks-id-img {
-  width:100%; height:90px; object-fit:contain;
-  object-position:center; display:block;
-  clip-path:inset(0 0 18px 0);
+  width:100%; height:90px; object-fit:cover;
+  object-position:center 30%; display:block;
+}
+.ks-id-photo { overflow:hidden !important; position:relative; }
+.ks-id-photo::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:24px;
+  background:var(--color-background-secondary); pointer-events:none; z-index:2;
 }
 .ks-id-img-fallback {
   display:none; align-items:center; justify-content:center;
@@ -7027,6 +7107,40 @@
 <!-- MOBILE OVERLAY -->
 <div class="mob-overlay" id="mobOverlay" onclick="closeMobResult()"></div>
 
+<!-- FULL-SCREEN LOADING (all devices) -->
+<div id="ks-fullscreen-load" style="display:none;position:fixed;inset:0;z-index:300;background:var(--surface);flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;">
+  <div style="max-width:520px;width:100%;">
+    <div class="rld-steps-wrap">
+      <div class="rld-steps-header">
+        <span class="rld-steps-eyebrow">Analysing UAE market data</span>
+        <span class="rld-steps-pct" id="fsRldPct">0%</span>
+      </div>
+      <div class="rld-master-bar"><div class="rld-master-fill" id="fsRldFill" style="width:0%"></div></div>
+      <ol class="rld-step-list">
+        <li class="rld-step-item" id="fsstep0"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg></span><span class="rld-step-lbl">Scanning live UAE listings — Dubizzle &amp; YallaMotor…</span><span class="rld-step-state"></span></li>
+        <li class="rld-step-item" id="fsstep1"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="rld-step-lbl">Filtering comparable listings &amp; removing outliers…</span><span class="rld-step-state"></span></li>
+        <li class="rld-step-item" id="fsstep2"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12L5 8L8 10L11 5L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rld-step-lbl" id="fsstep2lbl">Calculating depreciation &amp; adjustments…</span><span class="rld-step-state"></span></li>
+        <li class="rld-step-item" id="fsstep3"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Applying 6-stage handshake price model…</span><span class="rld-step-state"></span></li>
+        <li class="rld-step-item" id="fsstep4"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Building your Price Intelligence Report…</span><span class="rld-step-state"></span></li>
+      </ol>
+      <div class="rld-fact-wrap" id="rldFactWrap" style="margin-top:20px">
+        <div class="rld-fact-text" id="rldFactText"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL-SCREEN RESULT (all devices) -->
+<div id="ks-fullscreen-result" style="display:none;min-height:100vh;background:var(--surface);">
+  <div style="max-width:800px;margin:0 auto;padding:16px 16px 48px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:0;">
+      <div style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:900;color:var(--ink);">KAM<span style="color:var(--gold);">·</span>SAYARA</div>
+      <button onclick="resetForm()" style="font-family:'Exo 2',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--surface-2);border:1.5px solid var(--border);color:var(--ink-soft);border-radius:99px;padding:7px 16px;cursor:pointer;">↺ New Search</button>
+    </div>
+    <div id="ks-result-inner"></div>
+  </div>
+</div>
+
 <!-- MOBILE BOTTOM SHEET RESULT -->
 <div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
   <!-- Mobile result header strip — matches hero strip style -->
@@ -7370,18 +7484,94 @@ function setYN(key,val,btn){
 }
 
 /* ── SHOW STATE ─────────────────────────────────────────── */
-function showState(st,mobile=false){
-  const ph=g('rph'),ld=mobile?g('mobLoad'):g('rld'),ct=mobile?g('mobContent'):g('rcontent');
-  if(mobile){
-    if(ld)ld.style.display=st==='loading'?'flex':'none';
-    if(ct)ct.style.display=st==='content'?'block':'none';
-  }else{
-    if(ph)ph.style.display=st==='placeholder'?'flex':'none';
-    if(ld)ld.style.display=st==='loading'?'flex':'none';
-    if(ct){
-      ct.style.display=st==='content'?'block':'none';
-      if(st==='content'){ct.style.animation='none';ct.offsetHeight;ct.style.animation='fIn .38s var(--ease) both';}
-    }
+function showState(st, mobile=false){
+  // Universal — same behaviour on all screen sizes
+  const layout   = document.querySelector('.layout');
+  const formCard = g('formCard');
+  const fullLoad = g('ks-fullscreen-load');
+  const fullRes  = g('ks-fullscreen-result');
+  const ph       = g('rph');
+  const rld      = g('rld');
+  const rct      = g('rcontent');
+  const page     = document.querySelector('.page');
+  const hero     = document.querySelector('.hero');
+  const snav     = g('stickyNav');
+  const disc     = document.querySelector('.disc');
+  const backBtn  = g('backToInputs');
+  const mobToast = g('mobToast');
+  const mobOverl = g('mobOverlay');
+  const mobTabBar= document.querySelector('.mob-tab-bar');
+  const mobHdr   = document.querySelector('.mob-fixed-header');
+
+  if(st === 'placeholder'){
+    // Show form, hide report
+    if(formCard)  formCard.style.display = '';
+    if(layout)    layout.style.display   = '';
+    if(hero)      hero.style.display     = '';
+    if(disc)      disc.style.display     = '';
+    if(fullLoad)  fullLoad.style.display = 'none';
+    if(fullRes)   fullRes.style.display  = 'none';
+    if(ph)  ph.style.display  = 'flex';
+    if(rld) rld.style.display = 'none';
+    if(rct) rct.style.display = 'none';
+    if(backBtn) backBtn.style.display    = 'none';
+    if(mobToast){ mobToast.classList.remove('open'); }
+    if(mobOverl){ mobOverl.classList.remove('show'); }
+    if(mobTabBar) mobTabBar.style.display = '';
+    if(mobHdr)    mobHdr.style.display    = '';
+    document.body.classList.remove('ks-result-active');
+
+  } else if(st === 'loading'){
+    // Hide form, show full-screen loading
+    if(formCard)  formCard.style.display  = 'none';
+    if(layout)    layout.style.display    = 'none';
+    if(hero)      hero.style.display      = 'none';
+    if(disc)      disc.style.display      = 'none';
+    if(fullLoad)  { fullLoad.style.display = 'flex'; }
+    if(fullRes)   fullRes.style.display   = 'none';
+    if(mobToast){ mobToast.classList.remove('open'); }
+    if(mobOverl){ mobOverl.classList.remove('show'); }
+    if(backBtn) backBtn.style.display     = 'none';
+    if(mobTabBar) mobTabBar.style.display = 'none';
+    if(mobHdr)    mobHdr.style.display    = 'none';
+    document.body.classList.add('ks-result-active');
+    // Also update legacy rld for step tracker sync
+    if(rld) rld.style.display = 'flex';
+    if(ph)  ph.style.display  = 'none';
+    if(rct) rct.style.display = 'none';
+
+  } else if(st === 'content'){
+    // Hide form, show full-screen result
+    if(formCard)  formCard.style.display  = 'none';
+    if(layout)    layout.style.display    = 'none';
+    if(hero)      hero.style.display      = 'none';
+    if(disc)      disc.style.display      = 'none';
+    if(fullLoad)  fullLoad.style.display  = 'none';
+    // Write result into full-screen container
+    const fsInner = document.getElementById('ks-result-inner');
+    if(fsInner && rct) fsInner.innerHTML = rct.innerHTML;
+    if(fullRes)   fullRes.style.display   = 'block';
+    if(rld) rld.style.display = 'none';
+    if(ph)  ph.style.display  = 'none';
+    if(rct) rct.style.display = 'none'; // keep hidden (source)
+    if(mobToast){ mobToast.classList.remove('open'); }
+    if(mobOverl){ mobOverl.classList.remove('show'); }
+    if(backBtn) backBtn.style.display     = 'none';
+    if(mobTabBar) mobTabBar.style.display = 'none';
+    if(mobHdr)    mobHdr.style.display    = 'none';
+    document.body.classList.add('ks-result-active');
+    window.scrollTo({top:0, behavior:'instant'});
+    // Re-trigger animated elements in the new container
+    setTimeout(()=>{
+      const el=document.getElementById('ksFmvNum');
+      if(el){ const v=parseInt(el.textContent.replace(/[^0-9]/g,'')); if(v) pirCountUp(el,v,700); }
+      pirAnimateStatBars();
+      // Re-bind ksPirTab
+      const b1=document.getElementById('ksBtnFree');
+      const b2=document.getElementById('ksBtnPaid');
+      if(b1) b1.onclick=()=>ksPirTab(1);
+      if(b2) b2.onclick=()=>ksPirTab(2);
+    }, 50);
   }
 }
 
@@ -7416,15 +7606,15 @@ function buildLoadSteps(mobile){
 }
 
 function _setStep(idx){
-  // Drive both desktop and mobile step lists
+  // Drive all step lists — desktop, mobile, and fullscreen
   document.querySelectorAll('.rld-step-item').forEach((el,i)=>{
     el.classList.remove('active','done');
     if(i < idx)  el.classList.add('done');
     if(i === idx) el.classList.add('active');
   });
   const pct = LOAD_STEPS_DEF[Math.min(idx, LOAD_STEPS_DEF.length-1)].pct;
-  ['rldMasterFill','mobRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
-  ['rldPct','mobRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pct+'%';});
+  ['rldMasterFill','mobRldFill','fsRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
+  ['rldPct','mobRldPct','fsRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pct+'%';});
 }
 
 function _rotateFact(idx){
@@ -7448,7 +7638,7 @@ function startLoad(mobile=false){
   const year    = (document.getElementById('year')||{}).value||'';
   const mileage = (document.getElementById('mileage')||{}).value;
   const carLabel= [year,brand,model].filter(Boolean).join(' ')||'this vehicle';
-  ['lstep2lbl','mlstep2lbl'].forEach(id=>{
+  ['lstep2lbl','mlstep2lbl','fsstep2lbl'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){const km=mileage?parseInt(mileage).toLocaleString()+' km ':'';el.textContent=`Calculating depreciation for ${km}${carLabel}…`;}
   });
@@ -8535,7 +8725,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-next-btns">
       <a href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener" class="ks-next-btn ks-next-primary">View Live Listings →</a>
       <a href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener" class="ks-next-btn ks-next-secondary">YallaMotor Search</a>
-      <button class="ks-next-btn ks-next-secondary" onclick="window.print()">Print Report</button>
+      <button class="ks-next-btn ks-next-secondary ks-print-btn" onclick="document.body.classList.add('ks-print-paid');window.print();setTimeout(()=>document.body.classList.remove('ks-print-paid'),1000)">Print Report (A4)</button>
       <button class="ks-next-btn ks-next-secondary" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})">New Search</button>
     </div>
   </div>
@@ -8803,7 +8993,8 @@ function displayValuationResult(data){
   const asking  = g('asking')?.value || '';
 
   // Render full Price Intelligence Report
-  resultContainer.innerHTML = buildResult(r, brand, model, year, mileage, asking);
+  const _builtReport = buildResult(r, brand, model, year, mileage, asking);
+  resultContainer.innerHTML = _builtReport;
 
   showState('content');
 
@@ -8894,13 +9085,29 @@ function resetForm(){
   if(stage1)stage1.style.display='flex';
   if(stage2)stage2.style.display='none';
   showState('placeholder');
+  // Clear fullscreen result panel
+  const fullRes = g('ks-fullscreen-result');
+  if(fullRes) fullRes.innerHTML = '';
+  document.body.classList.remove('ks-result-active');
   // Reset ref stamps
   const refEl=g('resultRef');
   if(refEl){refEl.textContent='';refEl.classList.remove('on');}
   const mobRefEl=g('mobRef');
   if(mobRefEl){mobRefEl.textContent='';mobRefEl.classList.remove('on');}
   updateReadiness();
-  g('formCard').scrollIntoView({behavior:'smooth'});
+  window.scrollTo({top:0, behavior:'smooth'});
+  // Restore mobile UI
+  const mobTabBar=document.querySelector('.mob-tab-bar');
+  const mobHdr=document.querySelector('.mob-fixed-header');
+  if(mobTabBar) mobTabBar.style.display='';
+  if(mobHdr) mobHdr.style.display='';
+  // Show form card again
+  const fc=g('formCard');
+  const lay=document.querySelector('.layout');
+  if(fc) fc.style.display='';
+  if(lay) lay.style.display='';
+  const hero=document.querySelector('.hero');
+  if(hero) hero.style.display='';
   SHARE_ICONS.forEach(id=>{const el=document.getElementById('sico-'+id);if(el)el.classList.add('share-dimmed');});
   // Mobile cleanup: clear stale result and lock tab
   const mobC = g('mobContent');
