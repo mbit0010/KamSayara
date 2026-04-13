@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v28 (April 2026) — kamsayara_v28.html
-    Paired worker: kamsayara_worker27.js (V15)
+    VERSION: v30 (April 2026) — kamsayara_v30.html
+    Paired worker: kamsayara_worker30.js — 6-Stage Pricing Model
 
     FIXES APPLIED IN v27 (from audit):
       FIX #1  — Removed duplicate pirToggle() definition that overwrote the correct
@@ -7547,16 +7547,39 @@ function buildResult(r,brand,model,year,mileage,asking){
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
   const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai);
   const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,'','',accVal,ownVal,warVal);
-  const nego=buildNegoGuide(askN,avg,condVal,accVal);
+  // ── Negotiation: prefer v30 model output, fall back to local buildNegoGuide ──
+  const _modelNego = r.negotiation_range?.buyer?.open ? (() => {
+    const bn = r.negotiation_range.buyer;
+    const sn = r.negotiation_range.seller;
+    return {
+      offer: bn.open,
+      close: bn.target,
+      walk:  bn.walk_away,
+      room:  askN ? Math.max(0, Math.round((1 - bn.open / askN) * 100)) : 0,
+      tactic: r.negotiation_range.zone_of_agreement
+        ? `Zone of agreement: AED ${(r.negotiation_range.zone_of_agreement.low||0).toLocaleString()} – AED ${(r.negotiation_range.zone_of_agreement.high||0).toLocaleString()}. ${r.negotiation_range.zone_of_agreement.note||''}`
+        : '',
+    };
+  })() : null;
+  const nego = _modelNego || buildNegoGuide(askN,avg,condVal,accVal);
   const cost=buildOwnershipCost(askN||avg,deprAmt,carYear,r.rtaFees);
 
+  // ── Days to sell: prefer v30 model string, fall back to bracket logic ──────
+  const _modelDts = r.days_to_sell_estimate || '';
+
+  // ── Sweet spot from v30 model (3% below market mid) ──────────────────────
+  const sweetSpot = r.sweet_spot || Math.round(avg * 0.97 / 500) * 500;
+
   // ── Handshake defined HERE — required by _deprRows before it is computed ──
+  // v30: adjusted_price IS the handshake (all stages already applied server-side)
+  // v29 fallback: local condition/accident adjustment
   const condAdj = condVal==='Excellent'?.02:condVal==='Very Good'?.01:condVal==='Fair'?-.02:condVal==='Poor'?-.05:0;
   const accAdj  = (accVal==='minor'||qs.accident===true)?-.04:(accVal==='major')?-.08:0;
-  // Handshake must not exceed Net Adjusted Market Value when risk factors are present
   const _rawHandshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
   const _hasNegativeRisk = accAdj < 0 || condAdj < 0 || qs.fsh===false || (g('spec')?.value && g('spec').value!=='GCC' && g('spec').value!=='GCC Spec');
-  const handshake = _hasNegativeRisk ? Math.min(_rawHandshake, avg) : _rawHandshake;
+  // If v30 model ran, avg IS already the adjusted_price — use it directly as handshake
+  const handshake = (r._model === 'v30-6stage') ? avg
+    : (_hasNegativeRisk ? Math.min(_rawHandshake, avg) : _rawHandshake);
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
   // r.depreciation is a 3-element array of AED values from applyValuationMath()
@@ -7828,7 +7851,9 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>
 
     <!-- Price bar -->
-    <div style="position:relative;margin:36px 0 14px;">
+    ${(()=>{
+      const sweetPct = sweetSpot && pirRng > 0 ? Math.max(3, Math.min(97, Math.round(((sweetSpot - rangeMin) / pirRng) * 100))) : null;
+      return `<div style="position:relative;margin:36px 0 14px;">
       <div class="pir-mp2-pin-v28 pin-nego" style="left:${negoPct}%;bottom:16px;">
         <div class="pir-mp2-pin-price-v28">AED ${negoEntry.toLocaleString()}</div>
         <div class="pir-mp2-pin-name-v28">Open Offer</div>
@@ -7848,6 +7873,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         <div class="pir-mp2-dot-v28" style="left:${negoPct}%;background:#D97706;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>
         <div class="pir-mp2-dot-v28" style="left:${handshakePct}%;background:#008577;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:4;width:18px;height:18px;border:3px solid #fff;"></div>
         ${stickerPct!==null?`<div class="pir-mp2-dot-v28" style="left:${stickerPct}%;background:#3D5280;top:50%;transform:translate(-50%,-50%);position:absolute;z-index:3;"></div>`:``}
+        ${sweetPct!==null?`<div style="position:absolute;left:${sweetPct}%;top:50%;transform:translate(-50%,-50%);z-index:3;width:14px;height:14px;border-radius:50%;background:#C49A2A;border:2px solid rgba(255,255,255,0.9);box-shadow:0 0 0 2px rgba(196,154,42,0.4);"></div>`:``}
       </div>
     </div>
     <div class="pir-mp2-ends-v28">
@@ -7859,7 +7885,9 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#008577;width:12px;height:12px;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,133,119,0.4);"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Handshake</span></div>
       <div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#D97706"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Open Offer</span></div>
       ${stickerPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#3D5280"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Sticker</span></div>`:``}
-    </div>
+      ${sweetPct!==null?`<div class="pir-mp2-leg-v28"><div class="pir-mp2-leg-dot-v28" style="background:#C49A2A;border:2px solid rgba(255,255,255,0.8);"></div><span style="font-size:.72rem;font-weight:700;color:#2D3F5C;">Sweet Spot <span style="color:#8A9AB8;font-weight:500;">(AED ${sweetSpot.toLocaleString()})</span></span></div>`:``}
+    </div>`;
+    })()}
 
     <!-- Signals inline below bar — 3 signals in a clean grid -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 20px;padding-top:14px;border-top:1px solid #E8EBF3;">
@@ -7924,7 +7952,8 @@ function buildResult(r,brand,model,year,mileage,asking){
     const _leverStr = _levers.length ? ` — noting ${_levers.slice(0,2).join(' and ')}` : '';
     const _rangeCredible = rangeMin > 0 && rangeMax > 0 && _safeOpen <= rangeMax * 1.08;
     const _carLabel = `${year} ${brand}${model ? ' ' + model : ''}`;
-    const _scriptText = nego?.script || (_rangeCredible
+    // v30: prefer model-generated haggling script (anchored to real market data)
+    const _scriptText = r.hagglingScript || nego?.script || (_rangeCredible
       ? `"I've reviewed current UAE listings — comparable ${_carLabel} units are selling AED ${rangeMin.toLocaleString()}–${rangeMax.toLocaleString()}. Based on the mileage and condition of this vehicle${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}."`
       : `"Based on my research of the current UAE market for the ${_carLabel}${_leverStr}, I'd like to offer AED ${_safeOpen.toLocaleString()}. This reflects comparable listings and the specifics of this vehicle."`);
 
@@ -7987,6 +8016,35 @@ function buildResult(r,brand,model,year,mileage,asking){
         <button class="pir-nt-copy-btn" onclick="(function(btn){const el=document.getElementById('haggleScript${tabId}');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 Copy Script';btn.classList.remove('copied');},2200);}).catch(()=>{const ta=document.createElement('textarea');ta.value=el.textContent||'';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy Script';},2200);});})(this)">
           📋 Copy Script
         </button>
+        ${(()=>{
+          // Zone of Agreement (v30 model)
+          const zoa = r.negotiation_range?.zone_of_agreement;
+          const sc  = r.scenarios;
+          if (!zoa?.low && !sc) return '';
+          return `<div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+            ${zoa?.low ? `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.22);">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#22C55E" stroke-width="1.3"/><path d="M4.5 7l2 2 3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#22C55E;margin-bottom:2px;">Zone of Agreement</div>
+                <div style="font-size:.82rem;font-weight:700;color:#1A2B4C;">AED ${(zoa.low||0).toLocaleString()} – AED ${(zoa.high||0).toLocaleString()}</div>
+              </div>
+            </div>` : ''}
+            ${sc ? `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+              <div style="padding:8px 10px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;text-align:center;">
+                <div style="font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#16A34A;margin-bottom:3px;">Optimistic</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#15803D;">AED ${(sc.optimistic||0).toLocaleString()}</div>
+              </div>
+              <div style="padding:8px 10px;border-radius:8px;background:#FFF7ED;border:1px solid #FED7AA;text-align:center;">
+                <div style="font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C2410C;margin-bottom:3px;">Realistic</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#9A3412;">AED ${(sc.realistic||avg).toLocaleString()}</div>
+              </div>
+              <div style="padding:8px 10px;border-radius:8px;background:#FEF2F2;border:1px solid #FECACA;text-align:center;">
+                <div style="font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#DC2626;margin-bottom:3px;">Pessimistic</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#991B1B;">AED ${(sc.pessimistic||0).toLocaleString()}</div>
+              </div>
+            </div>` : ''}
+          </div>`;
+        })()}
       </div>`;
     }
 
@@ -8155,7 +8213,8 @@ function buildResult(r,brand,model,year,mileage,asking){
           <tr><td>Data Confidence</td><td>${conf}% — ${conf>=75?'High':conf>=50?'Moderate':'Low'}</td></tr>
           <tr><td>Market Demand</td><td>${r.demandScore||55}% — ${(r.demandScore||55)>=70?'High':'Moderate'}</td></tr>
           <tr><td>Transparency Score</td><td>${_tsScore}/10 — ${_tsLabel}</td></tr>
-          <tr><td>Est. Days to Sell</td><td>~${Math.max(7,Math.min(90,Math.round(45-(r.demandScore||55-50)*0.4)))} days at FMV</td></tr>
+          <tr><td>Est. Days to Sell</td><td>${_modelDts || ('~'+Math.max(7,Math.min(90,Math.round(45-(r.demandScore||55-50)*0.4)))+' days at FMV')}</td></tr>
+          ${sweetSpot ? `<tr><td>Sweet Spot Price</td><td class="pir-kv-good">AED ${sweetSpot.toLocaleString()}</td></tr>` : ''}
         </table>
       </div>
       <div class="pir-ext-col">
@@ -8482,6 +8541,16 @@ function displayValuationResult(data){
     // v29 tier waterfall fields
     dataSource:       data.dataSource      || (data.isEstimate ? 'estimate' : 'live'),
     tier:             data.tier            || (data.isEstimate ? 4 : 1),
+    // v30 6-stage model fields
+    market_mid:           data.market_mid           || 0,
+    sweet_spot:           data.sweet_spot            || 0,
+    confidence_score:     data.confidence_score      || 0,
+    confidence_flag:      data.confidence_flag       || '',
+    scenarios:            data.scenarios             || null,
+    negotiation_range:    data.negotiation_range     || null,
+    days_to_sell_estimate:data.days_to_sell_estimate || '',
+    adjustments:          data.adjustments           || null,
+    listings_snapshot:    data.listings_snapshot     || [],
   };
 
   const brand   = data.brand   || g('brand')?.value   || '';
