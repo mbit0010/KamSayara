@@ -2822,7 +2822,7 @@
     .rpt-vehicle-title { font-size: clamp(1.05rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 5px; letter-spacing: -.01em; }
     .rpt-vehicle-sub { font-size: .72rem; color: rgba(255,255,255,0.65); }
     .rpt-car-img-wrap { width: clamp(130px, 32%, 240px); flex-shrink: 0; position: relative; align-self: flex-end; }
-    .rpt-car-img { width: 100%; height: 110px; object-fit: contain; object-position: bottom right; display: block; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); }
+    .rpt-car-img { width: 100%; height: 110px; object-fit: contain; object-position: bottom right; display: block; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); clip-path: inset(0 0 18px 0); }
     .rpt-car-placeholder { width: 100%; height: 110px; display: none; align-items: center; justify-content: center; }
     .rpt-car-ph-k { font-family: "Orbitron", sans-serif; font-size: 3rem; font-weight: 900; color: rgba(212,175,55,0.25); }
 
@@ -7259,25 +7259,28 @@ function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPr
   const war=qs.warranty===true?'active':qs.warranty===false?'expired':'';
   const svc='';
   const r=n=>Math.round(n/500)*500;
-  if(specVal==='GCC'||specVal==='GCC Spec') adj.push({name:'GCC Specification',amount:r(avgPrice*.04),positive:true});
-  else if(specVal&&specVal!=='GCC') adj.push({name:'Non-GCC Specification',amount:r(avgPrice*.06),positive:false});
+  // Stage 5 spec: GCC=0% baseline, non-GCC=-5%
+  if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') adj.push({name:'Non-GCC Specification',amount:r(avgPrice*.05),positive:false});
   if(mileageNum>0){
-    if(mileageNum>expected*1.6){const p=Math.min(r(((mileageNum-expected)/10000)*600),r(avgPrice*.18));if(p>0)adj.push({name:'Above-Average Mileage',amount:p,positive:false});}
-    else if(mileageNum<expected*.65) adj.push({name:'Low Mileage for Year',amount:r(avgPrice*.03),positive:true});
-    else if(mileageNum>=expected*.65&&mileageNum<=expected*1.1) adj.push({name:'Average Mileage for Age',amount:0,positive:true});
+    // Stage 5: below bracket mid +2%, above bracket mid -2%
+    if(mileageNum>expected*1.3){const p=Math.min(r(avgPrice*.02),r(((mileageNum-expected)/10000)*400));if(p>0)adj.push({name:'Above-Average Mileage',amount:p,positive:false});}
+    else if(mileageNum<expected*.7) adj.push({name:'Low Mileage for Year',amount:r(avgPrice*.02),positive:true});
+    else adj.push({name:'Average Mileage for Age',amount:0,positive:true});
   }
-  if(conditionVal==='Excellent')     adj.push({name:'Excellent Condition',amount:r(avgPrice*.04),positive:true});
-  else if(conditionVal==='Very Good') adj.push({name:'Very Good Condition',amount:r(avgPrice*.025),positive:true});
-  else if(conditionVal==='Good')      adj.push({name:'Good Condition',amount:r(avgPrice*.015),positive:true});
-  else if(conditionVal==='Fair')      adj.push({name:'Fair Condition',amount:r(avgPrice*.03),positive:false});
-  else if(conditionVal==='Poor')      adj.push({name:'Poor Condition',amount:r(avgPrice*.08),positive:false});
-  if(svc==='Full Agency'||svc==='Agency'||qs.fsh===true) adj.push({name:'Full Service History',amount:r(avgPrice*.035),positive:true});
-  else if(qs.fsh===false||svc==='Non-Agency') adj.push({name:'No Service History',amount:r(avgPrice*.02),positive:false});
-  if(acc==='minor') adj.push({name:'Minor Accident History',amount:r(avgPrice*.06),positive:false});
-  if(acc==='major') adj.push({name:'Major Accident History',amount:r(avgPrice*.14),positive:false});
-  if(own==='1'||qs.singleOwner===true)  adj.push({name:'Single Owner',amount:r(avgPrice*.025),positive:true});
-  if(own==='3'||own==='4+'||qs.singleOwner===false) adj.push({name:'Multiple Owners',amount:r(avgPrice*.03),positive:false});
-  if(war==='active'||qs.warranty===true)  adj.push({name:'Active Warranty',amount:r(avgPrice*.03),positive:true});
+  // Stage 5: excellent +5%, very good +3%, good 0%, fair -5%, poor -12%
+  if(conditionVal==='Excellent')      adj.push({name:'Excellent Condition',amount:r(avgPrice*.05),positive:true});
+  else if(conditionVal==='Very Good') adj.push({name:'Very Good Condition',amount:r(avgPrice*.03),positive:true});
+  else if(conditionVal==='Fair')      adj.push({name:'Fair Condition',amount:r(avgPrice*.05),positive:false});
+  else if(conditionVal==='Poor')      adj.push({name:'Poor Condition',amount:r(avgPrice*.12),positive:false});
+  // Stage 5: fsh yes=0%, fsh no=-2%
+  if(qs.fsh===false||svc==='Non-Agency') adj.push({name:'No Service History',amount:r(avgPrice*.02),positive:false});
+  // Stage 5: accident yes=-8% (no minor/major distinction in model)
+  if(acc==='minor'||acc==='major'||qs.accident===true) adj.push({name:'Accident History',amount:r(avgPrice*.08),positive:false});
+  // Stage 5: single_owner yes=+2%, no=-2.5%
+  if(own==='1'||qs.singleOwner===true)  adj.push({name:'Single Owner',amount:r(avgPrice*.02),positive:true});
+  if(own==='3'||own==='4+'||qs.singleOwner===false) adj.push({name:'Multiple Owners',amount:r(avgPrice*.025),positive:false});
+  // Stage 5: warranty active=+2%
+  if(war==='active'||qs.warranty===true) adj.push({name:'Active Warranty',amount:r(avgPrice*.02),positive:true});
   if(war==='extended') adj.push({name:'Extended Warranty',amount:r(avgPrice*.02),positive:true});
   adj.sort((a,b)=>b.amount-a.amount);
   return adj.slice(0,6);
@@ -7572,9 +7575,9 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   // ── Handshake defined HERE — required by _deprRows before it is computed ──
   // v30: adjusted_price IS the handshake (all stages already applied server-side)
-  // v29 fallback: local condition/accident adjustment
-  const condAdj = condVal==='Excellent'?.02:condVal==='Very Good'?.01:condVal==='Fair'?-.02:condVal==='Poor'?-.05:0;
-  const accAdj  = (accVal==='minor'||qs.accident===true)?-.04:(accVal==='major')?-.08:0;
+  // v29 fallback: Stage 5 exact values — excellent +5%, very good +3%, fair -5%, poor -12%, accident -8%
+  const condAdj = condVal==='Excellent'?.05:condVal==='Very Good'?.03:condVal==='Fair'?-.05:condVal==='Poor'?-.12:0;
+  const accAdj  = (accVal==='minor'||accVal==='major'||qs.accident===true)?-.08:0;
   const _rawHandshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
   const _hasNegativeRisk = accAdj < 0 || condAdj < 0 || qs.fsh===false || (g('spec')?.value && g('spec').value!=='GCC' && g('spec').value!=='GCC Spec');
   // If v30 model ran, avg IS already the adjusted_price — use it directly as handshake
@@ -8057,20 +8060,27 @@ function buildResult(r,brand,model,year,mileage,asking){
       const expKm_=age_*18000;
       const mDiff_=km-expKm_;
       const rows_=[];
-      if(isGCC_) rows_.push({l:'GCC Specification',a:Math.round(baseVal*.04/500)*500,p:true});
-      if(condVal==='Excellent') rows_.push({l:'Excellent Condition',a:Math.round(baseVal*.04/500)*500,p:true});
-      else if(condVal==='Very Good') rows_.push({l:'Very Good Condition',a:Math.round(baseVal*.02/500)*500,p:true});
-      if(fshOk_) rows_.push({l:'Full Service History',a:Math.round(baseVal*.03/500)*500,p:true});
+      // Stage 5: GCC = 0% baseline (not shown). non-GCC = -5%
+      if(!isGCC_&&specVal) rows_.push({l:'Non-GCC Spec',a:Math.round(baseVal*.05/500)*500,p:false});
+      // Stage 5: excellent +5%, very good +3%, fair -5%, poor -12%
+      if(condVal==='Excellent') rows_.push({l:'Excellent Condition',a:Math.round(baseVal*.05/500)*500,p:true});
+      else if(condVal==='Very Good') rows_.push({l:'Very Good Condition',a:Math.round(baseVal*.03/500)*500,p:true});
+      // Stage 5: fsh yes=0% (no positive shown), fsh no=-2%
       if(qs.singleOwner===true||ownVal==='1') rows_.push({l:'Single Owner',a:Math.round(baseVal*.02/500)*500,p:true});
-      if(qs.warranty===true||warVal==='active') rows_.push({l:'Active Warranty',a:Math.round(baseVal*.025/500)*500,p:true});
-      if(!isGCC_&&specVal) rows_.push({l:'Non-GCC Spec',a:Math.round(baseVal*.06/500)*500,p:false});
-      if(condVal==='Fair') rows_.push({l:'Fair Condition',a:Math.round(baseVal*.04/500)*500,p:false});
-      else if(condVal==='Poor') rows_.push({l:'Poor Condition',a:Math.round(baseVal*.09/500)*500,p:false});
-      if(mDiff_>20000) rows_.push({l:'High Mileage',a:Math.round(Math.min(baseVal*.12,(mDiff_/10000)*600)/500)*500,p:false});
-      else if(mDiff_<-15000) rows_.push({l:'Low Mileage ✓',a:Math.round(baseVal*.03/500)*500,p:true});
+      // Stage 5: warranty active=+2%
+      if(qs.warranty===true||warVal==='active') rows_.push({l:'Active Warranty',a:Math.round(baseVal*.02/500)*500,p:true});
+      // Stage 5: non-GCC=-5%
+      if(!isGCC_&&specVal) rows_.push({l:'Non-GCC Spec',a:Math.round(baseVal*.05/500)*500,p:false});
+      if(condVal==='Fair') rows_.push({l:'Fair Condition',a:Math.round(baseVal*.05/500)*500,p:false});
+      else if(condVal==='Poor') rows_.push({l:'Poor Condition',a:Math.round(baseVal*.12/500)*500,p:false});
+      // Stage 5: mileage above mid -2%, below mid +2%
+      if(mDiff_>expKm_*.3) rows_.push({l:'High Mileage',a:Math.round(baseVal*.02/500)*500,p:false});
+      else if(mDiff_<-expKm_*.3) rows_.push({l:'Low Mileage ✓',a:Math.round(baseVal*.02/500)*500,p:true});
+      // Stage 5: fsh no=-2%
       if(!fshOk_&&(qs.fsh===false)) rows_.push({l:'No Service History',a:Math.round(baseVal*.02/500)*500,p:false});
-      if(accVal==='major') rows_.push({l:'Major Accident',a:Math.round(baseVal*.10/500)*500,p:false});
-      else if(accVal==='minor') rows_.push({l:'Minor Accident',a:Math.round(baseVal*.05/500)*500,p:false});
+      // Stage 5: accident yes=-8% (no minor/major distinction in model)
+      if(accVal==='major'||accVal==='minor'||qs.accident===true) rows_.push({l:'Accident History',a:Math.round(baseVal*.08/500)*500,p:false});
+      // Stage 5: single_owner no=-2.5%
       if(qs.singleOwner===false&&!rows_.find(r=>r.l==='Non-GCC Spec')) rows_.push({l:'Multiple Owners',a:Math.round(baseVal*.025/500)*500,p:false});
       const maxA_=rows_.length?Math.max(...rows_.map(r=>r.a)):1;
       const posTotal_=rows_.filter(r=>r.p).reduce((s,r)=>s+r.a,0);
@@ -8221,20 +8231,26 @@ function buildResult(r,brand,model,year,mileage,asking){
         <div class="pir-ext-col-title">Value Adjustments</div>
         ${(()=>{
           const bv=avg||handshake,isG=specVal==='GCC'||specVal==='GCC Spec',ag=Math.max(1,new Date().getFullYear()-carYear),ek=ag*18000,md=km-ek,rws=[];
-          if(isG) rws.push({l:'GCC Specification',a:Math.round(bv*.04/500)*500,p:true});
-          else if(specVal) rws.push({l:'Non-GCC Spec',a:Math.round(bv*.06/500)*500,p:false});
-          if(condVal==='Excellent') rws.push({l:'Excellent Condition',a:Math.round(bv*.04/500)*500,p:true});
-          else if(condVal==='Very Good') rws.push({l:'Very Good Condition',a:Math.round(bv*.02/500)*500,p:true});
-          else if(condVal==='Fair') rws.push({l:'Fair Condition',a:Math.round(bv*.04/500)*500,p:false});
-          else if(condVal==='Poor') rws.push({l:'Poor Condition',a:Math.round(bv*.09/500)*500,p:false});
-          if(md>20000) rws.push({l:'High Mileage',a:Math.round(Math.min(bv*.12,(md/10000)*600)/500)*500,p:false});
-          else if(md<-15000) rws.push({l:'Low Mileage ✓',a:Math.round(bv*.03/500)*500,p:true});
-          if(qs.fsh===true) rws.push({l:'Full Service Hist.',a:Math.round(bv*.03/500)*500,p:true});
-          else if(qs.fsh===false) rws.push({l:'No Service Hist.',a:Math.round(bv*.025/500)*500,p:false});
+          // Stage 5 exact percentages:
+          // GCC=0% (baseline, not shown as positive), non-GCC=-5%
+          if(!isG&&specVal) rws.push({l:'Non-GCC Spec',a:Math.round(bv*.05/500)*500,p:false});
+          // condition: excellent +5%, very good +3%, fair -5%, poor -12%
+          if(condVal==='Excellent') rws.push({l:'Excellent Condition',a:Math.round(bv*.05/500)*500,p:true});
+          else if(condVal==='Very Good') rws.push({l:'Very Good Condition',a:Math.round(bv*.03/500)*500,p:true});
+          else if(condVal==='Fair') rws.push({l:'Fair Condition',a:Math.round(bv*.05/500)*500,p:false});
+          else if(condVal==='Poor') rws.push({l:'Poor Condition',a:Math.round(bv*.12/500)*500,p:false});
+          // mileage: below mid +2%, above mid -2%
+          if(md>ek*.3) rws.push({l:'High Mileage',a:Math.round(bv*.02/500)*500,p:false});
+          else if(md<-ek*.3) rws.push({l:'Low Mileage ✓',a:Math.round(bv*.02/500)*500,p:true});
+          // fsh: yes=0% (not shown), no=-2%
+          if(qs.fsh===false) rws.push({l:'No Service Hist.',a:Math.round(bv*.02/500)*500,p:false});
+          // warranty: active=+2%
           if(qs.warranty===true) rws.push({l:'Active Warranty',a:Math.round(bv*.02/500)*500,p:true});
+          // single_owner: yes=+2%, no=-2.5%
           if(qs.singleOwner===true) rws.push({l:'Single Owner',a:Math.round(bv*.02/500)*500,p:true});
           else if(qs.singleOwner===false) rws.push({l:'Multi Owner',a:Math.round(bv*.025/500)*500,p:false});
-          if(qs.accident===true) rws.push({l:'Accident Declared',a:Math.round(bv*.07/500)*500,p:false});
+          // accident: yes=-8%
+          if(qs.accident===true) rws.push({l:'Accident History',a:Math.round(bv*.08/500)*500,p:false});
           const mx=rws.length?Math.max(...rws.map(r=>r.a)):1,pt=rws.filter(r=>r.p).reduce((s,r)=>s+r.a,0),nt=rws.filter(r=>!r.p).reduce((s,r)=>s+r.a,0),nv=Math.round((bv+pt-nt)/500)*500;
           return `<table class="pir-adj-table">
             <tr><td class="pir-adj-name-cell" style="color:#1A1610;font-weight:700;">Base Market</td><td class="pir-adj-bar-cell"></td><td class="pir-adj-amt-cell" style="color:#1A1610;font-weight:700;">AED ${bv.toLocaleString()}</td></tr>
