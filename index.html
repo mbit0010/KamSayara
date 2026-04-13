@@ -8048,7 +8048,24 @@ function buildResult(r,brand,model,year,mileage,asking){
   return `<div class="ks-pir">
 
   <!-- ═══ ESTIMATE BANNER ═══ -->
-  ${!_isLive ? `<div class="ks-estimate-banner"><div class="ks-estimate-banner-icon">🤖</div><div class="ks-estimate-banner-body"><div class="ks-estimate-banner-title">AI Assisted Estimate</div><div class="ks-estimate-banner-text">Live market data was unavailable. This report uses a formula-based UAE market model — treat as a baseline and verify with Dubizzle or YallaMotor before deciding.</div></div></div>` : ''}
+  ${!_isLive ? `<div class="ks-estimate-banner">
+    <div class="ks-estimate-banner-icon">⚠️</div>
+    <div class="ks-estimate-banner-body">
+      <div class="ks-estimate-banner-title">AI Assisted Estimate — Live Data Unavailable</div>
+      <div class="ks-estimate-banner-text">
+        ${(()=>{
+          const d = r._diag || {};
+          const lines = [];
+          if(d.t1_skipped_no_key) lines.push('Gemini: GEMINI_API_KEY not configured in Cloudflare env vars.');
+          else if(d.t1_error) lines.push('Gemini: ' + d.t1_error + (d.t1_http_status?' (HTTP '+d.t1_http_status+')':''));
+          if(d.t2_skipped_no_key) lines.push('Claude Haiku: ANTHROPIC_API_KEY not configured in Cloudflare env vars.');
+          else if(d.t2_error) lines.push('Claude Haiku: ' + d.t2_error + (d.t2_http_status?' (HTTP '+d.t2_http_status+')':''));
+          if(!lines.length) lines.push('Both AI tiers failed — check Cloudflare Worker logs for details.');
+          return lines.join(' ') + ' Treat this estimate as a baseline only.';
+        })()}
+      </div>
+    </div>
+  </div>` : ''}
 
   <!-- ═══ TAB NAV ═══ -->
   <div class="ks-tabnav" id="ksPirTabs">
@@ -8711,6 +8728,22 @@ function displayValuationResult(data){
   if(!resultContainer) return;
   console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
 
+  // ── DIAGNOSTIC: always log tier decision clearly ─────────────────────────
+  const _d = data._diag || {};
+  const _tierNum = data.tier || 4;
+  console.group(`%c[KamSayara] Tier ${_tierNum} used`, _tierNum===1?'color:#16A34A;font-weight:bold':_tierNum===2?'color:#D97706;font-weight:bold':'color:#DC2626;font-weight:bold;');
+  if (_d.t1_skipped_no_key) console.warn('  T1 Gemini: SKIPPED — GEMINI_API_KEY not set in Cloudflare env vars');
+  else if (_d.t1_json_ok)   console.log('  T1 Gemini: SUCCESS ✓');
+  else                       console.warn('  T1 Gemini: FAILED —', _d.t1_error || 'unknown', '| HTTP', _d.t1_http_status, '| body:', _d.t1_http_body);
+
+  if (_d.t2_skipped_no_key) console.warn('  T2 Haiku:  SKIPPED — ANTHROPIC_API_KEY not set in Cloudflare env vars');
+  else if (_d.t2_json_ok)   console.log('  T2 Haiku:  SUCCESS ✓');
+  else if (_tierNum < 2)    console.log('  T2 Haiku:  not needed (T1 succeeded)');
+  else                      console.warn('  T2 Haiku:  FAILED —', _d.t2_error || 'unknown', '| HTTP', _d.t2_http_status, '| body:', _d.t2_http_body);
+
+  if (_tierNum === 4) console.error('  T4 Formula: BOTH AI tiers failed — report is a formula estimate only');
+  console.groupEnd();
+
   // Map V12 API fields → buildResult() compatible shape
   const r = {
     averagePrice:     data.handshakePrice  || data.averagePrice   || data.stickerPrice || 0,
@@ -8759,6 +8792,7 @@ function displayValuationResult(data){
     adjustments:          data.adjustments           || null,
     listings_snapshot:    data.listings_snapshot     || [],
     _model:               data._model                || '',
+    _diag:                data._diag                 || {},
   };
 
   const brand   = data.brand   || g('brand')?.value   || '';
