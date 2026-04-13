@@ -5170,6 +5170,60 @@
   .pir-deal-bad  { background: rgba(239,68,68,0.15);  color: #FCA5A5; border-color: rgba(252,165,165,0.25); }
   .pir-deal-neutral { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.55); }
 
+  /* ── DATA SOURCE BADGE ─────────────────────────────────────── */
+  .ks-source-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: "Exo 2", sans-serif;
+    font-size: .6rem; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; padding: 3px 10px 3px 7px;
+    border-radius: 99px; border: 1px solid;
+    position: relative; overflow: hidden; cursor: default;
+  }
+  .ks-source-live {
+    background: rgba(34,197,94,0.13); color: #22C55E;
+    border-color: rgba(34,197,94,0.32);
+  }
+  .ks-source-estimate {
+    background: rgba(234,179,8,0.13); color: #EAB308;
+    border-color: rgba(234,179,8,0.32);
+  }
+  .ks-source-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .ks-source-live .ks-source-dot {
+    background: #22C55E;
+    animation: livePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+    70%  { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  }
+  .ks-source-estimate .ks-source-dot { background: #EAB308; }
+
+  /* tier chips inside dark header */
+  .ks-tier-chip {
+    font-size: .54rem; font-weight: 700; letter-spacing: .07em;
+    text-transform: uppercase; padding: 1px 7px;
+    border-radius: 99px; font-family: "Exo 2", sans-serif;
+  }
+  .ks-tier-gemini  { background: rgba(66,133,244,0.18); color: #93C5FD; border: 1px solid rgba(66,133,244,0.3); }
+  .ks-tier-haiku   { background: rgba(167,139,250,0.18); color: #C4B5FD; border: 1px solid rgba(167,139,250,0.3); }
+  .ks-tier-cache   { background: rgba(34,197,94,0.14); color: #86EFAC; border: 1px solid rgba(34,197,94,0.25); }
+  .ks-tier-formula { background: rgba(234,179,8,0.14); color: #FDE68A; border: 1px solid rgba(234,179,8,0.25); }
+
+  /* ── ESTIMATE NOTICE BANNER ────────────────────────────────── */
+  .ks-estimate-banner {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.25);
+    border-radius: 10px; padding: 11px 14px; margin: 0 20px 4px;
+    font-family: "Exo 2", sans-serif;
+  }
+  .ks-estimate-banner-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.3; }
+  .ks-estimate-banner-body { flex: 1; min-width: 0; }
+  .ks-estimate-banner-title { font-size: .72rem; font-weight: 800; color: #D97706; margin-bottom: 3px; }
+  .ks-estimate-banner-text  { font-size: .68rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
   /* Three secondary price cards */
   .pir-ps-cards {
     display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
@@ -6106,7 +6160,81 @@
       .pir-ext-col { border-right: none; border-bottom: 1px solid #E4D9C6; }
     }
 
-    </style>
+    
+    /* ── v29 ESTIMATE BANNER — dark context ───────────────────── */
+    .ks-estimate-banner {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: rgba(234,179,8,0.09); border: 1px solid rgba(234,179,8,0.28);
+      border-radius: 10px; padding: 12px 16px; margin: 12px 16px 0;
+      font-family: "Exo 2", sans-serif;
+    }
+    .ks-estimate-banner-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+    .ks-estimate-banner-title { font-size: .72rem; font-weight: 800; color: #D97706; margin-bottom: 3px; letter-spacing: .03em; }
+    .ks-estimate-banner-text  { font-size: .67rem; color: rgba(255,255,255,0.48); line-height: 1.55; }
+
+    /* ── v29 QC BAR — pulse on unanswered highlight ──────────── */
+    .qcbar-item--unset {
+      animation: qcPulse 0.9s ease-in-out 2 !important;
+    }
+    @keyframes qcPulse {
+      0%,100% { background: transparent; }
+      50%      { background: rgba(192,57,43,0.1); border-radius: 6px; }
+    }
+
+    /* ── v29 BTN GO — improved ready state glow ─────────────── */
+    .btn-go.ready {
+      animation: btnReadyGlow 2.5s ease-in-out infinite;
+    }
+    @keyframes btnReadyGlow {
+      0%,100% { box-shadow: var(--sh-btn); }
+      50%      { box-shadow: 0 6px 28px rgba(0,133,119,0.55), 0 2px 8px rgba(0,0,0,0.1); }
+    }
+
+    /* ── v29 RESULT PANEL — slide-up reveal ─────────────────── */
+    .rcontent { animation: resultSlideUp 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+    @keyframes resultSlideUp {
+      from { opacity:0; transform: translateY(14px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    /* ── v29 SOURCE BADGE IN LIGHT (form area) ───────────────── */
+    .ks-source-badge-light {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: "Exo 2", sans-serif;
+      font-size: .6rem; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; padding: 3px 10px 3px 7px;
+      border-radius: 99px;
+    }
+    .ks-source-badge-light.live {
+      background: rgba(21,128,61,0.1); color: #15803D;
+      border: 1px solid rgba(21,128,61,0.22);
+    }
+    .ks-source-badge-light.estimate {
+      background: rgba(146,64,14,0.1); color: #92400E;
+      border: 1px solid rgba(146,64,14,0.2);
+    }
+
+    /* ── v29 SIGNAL FILL ANIMATION DELAY STAGGER ────────────── */
+    .pir-signal-row-v28:nth-child(1) .pir-signal-fill-v28 { transition-delay: 0.1s; }
+    .pir-signal-row-v28:nth-child(2) .pir-signal-fill-v28 { transition-delay: 0.25s; }
+    .pir-signal-row-v28:nth-child(3) .pir-signal-fill-v28 { transition-delay: 0.4s; }
+
+    /* ── v29 VAB ROW HOVER ───────────────────────────────────── */
+    .pir-vadj-row-v28 {
+      transition: background .14s;
+      border-radius: 5px; padding: 2px 4px; margin: 0 -4px;
+    }
+    .pir-vadj-row-v28:hover { background: rgba(0,133,119,0.05); }
+
+    /* ── v29 PRICE COUNT-UP HIGHLIGHT ───────────────────────── */
+    @keyframes priceRevealV29 {
+      0%   { opacity:0; transform: scale(0.88) translateY(6px); filter: blur(4px); }
+      60%  { opacity:1; transform: scale(1.03) translateY(-2px); filter: blur(0); }
+      100% { opacity:1; transform: none; filter: blur(0); }
+    }
+    .pir-ps-hero-amount { animation: priceRevealV29 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both !important; }
+
+</style>
 <body>
 
 <!-- STICKY NAV -->
@@ -6449,35 +6577,35 @@
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg>
                 </span>
-                <span class="rld-step-lbl">Fetching live UAE auction &amp; listing data…</span>
+                <span class="rld-step-lbl">Scanning live UAE listings — Dubizzle &amp; YallaMotor…</span>
                 <span class="rld-step-state"></span>
               </li>
               <li class="rld-step-item" id="lstep1">
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                 </span>
-                <span class="rld-step-lbl">Adjusting for current UAE market liquidity…</span>
+                <span class="rld-step-lbl">Filtering comparable listings &amp; removing outliers…</span>
                 <span class="rld-step-state"></span>
               </li>
               <li class="rld-step-item" id="lstep2">
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
-                <span class="rld-step-lbl" id="lstep2lbl">Calculating depreciation curves &amp; GCC premiums…</span>
+                <span class="rld-step-lbl" id="lstep2lbl">Calculating depreciation &amp; GCC spec adjustments…</span>
                 <span class="rld-step-state"></span>
               </li>
               <li class="rld-step-item" id="lstep3">
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
                 </span>
-                <span class="rld-step-lbl">Applying market intelligence and pricing logic…</span>
+                <span class="rld-step-lbl">Applying negotiation math &amp; handshake price model…</span>
                 <span class="rld-step-state"></span>
               </li>
               <li class="rld-step-item" id="lstep4">
                 <span class="rld-step-ico" aria-hidden="true">
                   <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg>
                 </span>
-                <span class="rld-step-lbl">Compiling the Price Intelligence Report…</span>
+                <span class="rld-step-lbl">Building your Price Intelligence Report…</span>
                 <span class="rld-step-state"></span>
               </li>
             </ol>
@@ -6563,11 +6691,11 @@
         </div>
         <div class="rld-master-bar"><div class="rld-master-fill" id="mobRldFill"></div></div>
         <ol class="rld-step-list" id="mobRldStepList">
-          <li class="rld-step-item" id="mlstep0"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg></span><span class="rld-step-lbl">Fetching live UAE auction &amp; listing data…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep1"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="rld-step-lbl">Adjusting for current UAE market liquidity…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep2"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rld-step-lbl" id="mlstep2lbl">Calculating depreciation curves &amp; GCC premiums…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep3"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Applying market intelligence and pricing logic…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep4"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Compiling the Price Intelligence Report…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep0"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg></span><span class="rld-step-lbl">Scanning live UAE listings — Dubizzle &amp; YallaMotor…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep1"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="rld-step-lbl">Filtering comparable listings &amp; removing outliers…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep2"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rld-step-lbl" id="mlstep2lbl">Calculating depreciation &amp; GCC spec adjustments…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep3"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Applying negotiation math &amp; handshake price model…</span><span class="rld-step-state"></span></li>
+          <li class="rld-step-item" id="mlstep4"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Building your Price Intelligence Report…</span><span class="rld-step-state"></span></li>
         </ol>
       </div>
     </div>
@@ -7351,6 +7479,15 @@ function buildResult(r,brand,model,year,mileage,asking){
   const cmp    = r.comparisonToAsking || null;
   const script = r.hagglingScript     || '';
 
+  // DATA SOURCE — from worker tier
+  const _dataSource = r.dataSource || (r.isEstimate ? 'estimate' : 'live');
+  const _tier       = r.tier || (r.isEstimate ? 4 : 1);
+  const _isLive     = _dataSource === 'live';
+  const _tierLabel  = _tier===1?'Gemini Search':_tier===2?'Claude Haiku':_tier===3?'Cached Data':'AI Formula';
+  const _tierCls    = _tier===1?'ks-tier-gemini':_tier===2?'ks-tier-haiku':_tier===3?'ks-tier-cache':'ks-tier-formula';
+  const _sourceBadge= '<span class="ks-source-badge ks-source-'+(_isLive?'live':'estimate')+'"><span class="ks-source-dot"></span>'+(_isLive?'Live':'AI Assisted')+'</span>';
+  const _tierBadge  = '<span class="ks-tier-chip '+_tierCls+'">'+_tierLabel+'</span>';
+
   const ref=generateRef(r.ref||null);
   const refEl=document.getElementById('resultRef');
   if(refEl){refEl.textContent=ref.label;refEl.classList.add('on');}
@@ -7527,6 +7664,15 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   return`<div class="pir-wrap">
 
+  <!-- ESTIMATE NOTICE — shown only for Tier 4 formula results -->
+  ${!_isLive ? `<div class="ks-estimate-banner">
+    <div class="ks-estimate-banner-icon">🤖</div>
+    <div class="ks-estimate-banner-body">
+      <div class="ks-estimate-banner-title">AI Assisted Estimate</div>
+      <div class="ks-estimate-banner-text">Live market data was unavailable. This report uses a formula-based UAE market model — treat as a baseline and verify with Dubizzle or YallaMotor before deciding.</div>
+    </div>
+  </div>` : ''}
+
   <!-- ① REPORT HEADER -->
   <div class="pir-header">
     <div class="pir-header-top">
@@ -7540,7 +7686,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       </div>
       <div class="pir-ref-block">
         <div class="pir-ref-code">${ref.label}</div>
-        <div class="pir-ref-note">Based on live UAE market data</div>
+        <div class="pir-ref-note" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">${_sourceBadge} ${_tierBadge}${r.cached?" <span style='font-size:.54rem;color:rgba(255,255,255,0.3);font-family:Exo 2,sans-serif;'>· cached</span>":""}</div>
       </div>
     </div>
   </div>
@@ -7598,7 +7744,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="pir-ps-hero-label">
         <span class="pir-ps-hero-dot"></span>
         Handshake Price
-        <span class="pir-ps-micro">Fair deal · AI-estimated</span>
+        <span class="pir-ps-micro" style="display:flex;align-items:center;gap:5px;">${_sourceBadge}</span>
       </div>
       <div class="pir-ps-hero-amount" id="priceMain">AED 0</div>
       ${dealInfo?`<div class="pir-ps-hero-badge pir-deal-${dealInfo.cls}">${dealInfo.label}</div>`:''}
@@ -7663,7 +7809,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
     <!-- Micro legend -->
     <div class="pir-ps-legend">
-      <span><strong>Handshake:</strong> AI-estimated fair closing price</span>
+      <span><strong>Handshake:</strong> ${_isLive ? "Live market" : "Formula-estimated"} fair closing price</span>
       <span class="pir-ps-legend-sep">·</span>
       <span><strong>Sticker:</strong> Seller's listed asking price</span>
       <span class="pir-ps-legend-sep">·</span>
@@ -7678,7 +7824,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="pir-sec-hdr-icon pir-sec-hdr-icon-teal">📊</div>
       Market Position &amp; Signals
       <div class="pir-sec-hdr-line"></div>
-      <span style="font-size:.65rem;font-weight:600;color:#8A9AB8;letter-spacing:.04em;white-space:nowrap;">${r.isEstimate?'AI Est.':'Live'} · ${comp>0?comp+' listings':'est.'}</span>
+      <span style="display:flex;align-items:center;gap:5px;">${_sourceBadge}<span style='font-size:.62rem;color:#8A9AB8;'>${comp>0?comp+' listings':'market est.'}</span></span>
     </div>
 
     <!-- Price bar -->
@@ -8100,7 +8246,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <a class="pir-ext-btn" href="https://uae.yallamotor.com/used-cars" target="_blank" rel="noopener">🚗 YallaMotor</a>
       <button class="pir-ext-btn" onclick="window.print()" type="button">🖨 Print Report</button>
       <button class="pir-ext-btn pir-ext-btn-primary" onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})" type="button">↺ New Search</button>
-      <span style="margin-left:auto;font-size:.65rem;color:#A8B8CC;font-family:'Exo 2',sans-serif;">${ref.label} · Live UAE market data</span>
+      <span style="margin-left:auto;display:flex;align-items:center;gap:6px;">${_sourceBadge} ${_tierBadge}</span>
     </div>
 
     <!-- F: DISCLAIMER -->
@@ -8333,6 +8479,9 @@ function displayValuationResult(data){
       advice:      data.avr.review || ''
     } : null),
     marketability:    data.marketability   || null,
+    // v29 tier waterfall fields
+    dataSource:       data.dataSource      || (data.isEstimate ? 'estimate' : 'live'),
+    tier:             data.tier            || (data.isEstimate ? 4 : 1),
   };
 
   const brand   = data.brand   || g('brand')?.value   || '';
@@ -9456,13 +9605,14 @@ function pirAnimateStatBars(){
     }));
   });
   // v28 signal fills + thumbs
-  document.querySelectorAll('.pir-signal-fill-v28[data-target]').forEach(fill=>{
+  document.querySelectorAll('.pir-signal-fill-v28[data-target]').forEach((fill,i)=>{
     const target=Math.min(100,parseInt(fill.dataset.target)||0);
     const thumb=fill.nextElementSibling;
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const delay=80+i*120;
+    setTimeout(()=>requestAnimationFrame(()=>{
       fill.style.width=target+'%';
       if(thumb&&thumb.classList.contains('pir-signal-thumb-v28')) thumb.style.left=target+'%';
-    }));
+    }),delay);
   });
 }
 
