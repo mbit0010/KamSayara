@@ -8057,8 +8057,9 @@ function buildResult(r,brand,model,year,mileage,asking){
           const d = r._diag || {};
           const lines = [];
           if(d.t1_skipped_no_key) lines.push('Gemini: GEMINI_API_KEY not configured in Cloudflare env vars.');
+          else if(d.t1_http_status===429) lines.push('Gemini: Free tier quota exhausted for today — resets at midnight Pacific. Haiku taking over.');
           else if(d.t1_error) lines.push('Gemini: ' + d.t1_error + (d.t1_http_status?' (HTTP '+d.t1_http_status+')':''));
-          if(d.t2_skipped_no_key) lines.push('Claude Haiku: ANTHROPIC_API_KEY not configured in Cloudflare env vars.');
+          if(d.t2_skipped_no_key) lines.push('Claude Haiku: ANTHROPIC_API_KEY not in Cloudflare env vars — add it under Workers → Settings → Variables.');
           else if(d.t2_error) lines.push('Claude Haiku: ' + d.t2_error + (d.t2_http_status?' (HTTP '+d.t2_http_status+')':''));
           if(!lines.length) lines.push('Both AI tiers failed — check Cloudflare Worker logs for details.');
           return lines.join(' ') + ' Treat this estimate as a baseline only.';
