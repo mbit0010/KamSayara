@@ -7849,13 +7849,13 @@ function showState(st, mobile=false){
   const mobHdr   = document.querySelector('.mob-fixed-header');
 
   if(st === 'placeholder'){
-    // Show form, hide report
-    if(formCard)  formCard.style.display = '';
+    // Show form, hide report — clean up all transition classes
+    if(formCard)  { formCard.style.display=''; formCard.classList.remove('ks-collapsing','ks-expanding','ks-fading-in','ks-fading-out'); }
     if(layout)    layout.style.display   = '';
-    if(hero)      hero.style.display     = '';
+    if(hero)      { hero.style.display=''; hero.classList.remove('ks-collapsing','ks-expanding'); }
     if(disc)      disc.style.display     = '';
-    if(fullLoad)  fullLoad.style.display = 'none';
-    if(fullRes)   fullRes.style.display  = 'none';
+    if(fullLoad)  { fullLoad.style.display='none'; fullLoad.classList.remove('ks-fading-in','ks-expanding'); }
+    if(fullRes)   { fullRes.style.display='none';  fullRes.classList.remove('ks-fading-in'); }
     if(ph)  ph.style.display  = 'flex';
     if(rld) rld.style.display = 'none';
     if(rct) rct.style.display = 'none';
@@ -7867,19 +7867,26 @@ function showState(st, mobile=false){
     document.body.classList.remove('ks-result-active');
 
   } else if(st === 'loading'){
-    // F22: smooth slide-up collapse — form and hero animate out before loader appears
-    const _collapseDelay = 200;
-    if(formCard)  {
-      formCard.classList.add('ks-collapsing');
-      setTimeout(()=>{ formCard.style.display='none'; formCard.classList.remove('ks-collapsing'); }, 210);
+    // BUGFIX: fullscreen loader is position:fixed;inset:0;z-index:300 —
+    // show it FIRST so it covers the viewport instantly, then clean up
+    // layout/hero behind it. Previous F22 code hid layout at 180ms and
+    // showed the loader at 220ms — 40ms blank flash on desktop, and the
+    // result panel (part of .layout) disappeared before the loader appeared.
+    if(fullLoad) {
+      fullLoad.style.display = 'flex';
+      fullLoad.classList.remove('ks-fading-in');
+      // Trigger reflow then add animation class so it plays from start
+      void fullLoad.offsetWidth;
+      fullLoad.classList.add('ks-fading-in');
     }
-    if(hero)      {
-      hero.classList.add('ks-collapsing');
-      setTimeout(()=>{ hero.style.display='none'; hero.classList.remove('ks-collapsing'); }, 180);
-    }
-    if(layout)    setTimeout(()=>{ layout.style.display='none'; }, 180);
+    // Hide layout/hero AFTER loader is covering them — pure DOM cleanup,
+    // invisible to the user (they're behind z-index:300)
+    setTimeout(()=>{
+      if(formCard) { formCard.style.display='none'; formCard.classList.remove('ks-collapsing'); }
+      if(layout)   layout.style.display = 'none';
+      if(hero)     { hero.style.display='none'; hero.classList.remove('ks-collapsing'); }
+    }, 350);
     if(disc)      disc.style.display      = 'none';
-    if(fullLoad)  { setTimeout(()=>{ fullLoad.style.display='flex'; fullLoad.classList.add('ks-fading-in'); }, _collapseDelay+20); }
     if(fullRes)   fullRes.style.display   = 'none';
     if(mobToast){ mobToast.classList.remove('open'); }
     if(mobOverl){ mobOverl.classList.remove('show'); }
@@ -7887,22 +7894,29 @@ function showState(st, mobile=false){
     if(mobTabBar) mobTabBar.style.display = 'none';
     if(mobHdr)    mobHdr.style.display    = 'none';
     document.body.classList.add('ks-result-active');
-    // Also update legacy rld for step tracker sync
+    // Sync legacy rld for step-progress tracker
     if(rld) rld.style.display = 'flex';
     if(ph)  ph.style.display  = 'none';
     if(rct) rct.style.display = 'none';
 
   } else if(st === 'content'){
-    // FIX #12: smooth crossfade into result
+    // Show result card FIRST (it's full-page, covers loader), then hide loader
     if(formCard)  formCard.style.display  = 'none';
     if(layout)    layout.style.display    = 'none';
     if(hero)      hero.style.display      = 'none';
     if(disc)      disc.style.display      = 'none';
-    if(fullLoad)  fullLoad.style.display  = 'none';
-    // Write result into full-screen container
+    // Write result into the card container
     const fsInner = document.getElementById('ks-result-inner');
     if(fsInner && rct) fsInner.innerHTML = rct.innerHTML;
-    if(fullRes){ fullRes.style.display='block'; fullRes.classList.add('ks-fading-in'); }
+    // Show result with slide-down animation
+    if(fullRes){
+      fullRes.style.display = 'block';
+      fullRes.classList.remove('ks-fading-in');
+      void fullRes.offsetWidth;
+      fullRes.classList.add('ks-fading-in');
+    }
+    // Hide loader AFTER result is visible (loader is behind result anyway)
+    setTimeout(()=>{ if(fullLoad) fullLoad.style.display='none'; }, 320);
     if(rld) rld.style.display = 'none';
     if(ph)  ph.style.display  = 'none';
     if(rct) rct.style.display = 'none'; // keep hidden (source)
