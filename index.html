@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v30 (April 2026) — kamsayara_v30.html
-    Paired worker: kamsayara_worker30.js — 6-Stage Pricing Model
+    VERSION: v31 (April 2026) — kamsayara_v31.html
+    Paired worker: kamsayara_worker31.js — 6-Stage Pricing Model
+    FIX: _animRoot undefined crash — replaced with document.getElementById fallback.
 
     FIXES APPLIED IN v27 (from audit):
       FIX #1  — Removed duplicate pirToggle() definition that overwrote the correct
@@ -9129,7 +9130,7 @@ function displayValuationResult(data){
 
   // Animate confidence footer bar + stat bars
   setTimeout(()=>{
-    const cbarFill = (_animRoot.querySelector('#cbarFill')) || document.getElementById('cbarFill');
+    const cbarFill = document.getElementById('cbarFill');
     const conf = Math.round((r.confidence||0)*100);
     if(cbarFill && conf) cbarFill.style.width = conf+'%';
     pirAnimateStatBars();
