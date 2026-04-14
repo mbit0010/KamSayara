@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v32 (April 2026) — kamsayara_v32.html
+    VERSION: v33 (April 2026) — kamsayara_v33.html
     Paired worker: kamsayara_worker32.js — 6-Stage Pricing Model
-    NOTE: All v32 fixes are in the worker. No HTML-side bugs were identified.
-    FIX (worker v32): dts.match is not a function — String() coercion on days_to_sell_estimate.
-    FIX (worker v32): Haiku JSON parse at ~3631 — lone-surrogate strip + max_tokens 3072.
-    FIX (worker v32): Gemini 429 loop — Tier 1 now also gated on env.KV.
+    FIX (v33) A1: Consolidated .ks-id-photo/.ks-id-img into single block — removed 110px/::after conflict.
+    FIX (v33) A2: Zeroed global .mob-toast-body padding — double-padding with .ks-pir eliminated.
+    FIX (v33) A3: .ks-tabnav top:96px on mobile inside #ks-fullscreen-result — clears .mob-fixed-header.
+    FIX (v33) A4: #backToInputs z-index raised to 300 — no longer ties with .snav at 200.
 
     FIXES APPLIED IN v27 (from audit):
       FIX #1  — Removed duplicate pirToggle() definition that overwrote the correct
@@ -626,7 +626,7 @@
     .mob-toast-title{font-family:"Exo 2",sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
     .mob-toast-close{background:rgba(0,0,0,0.05);border:none;cursor:pointer;color:var(--muted);font-size:.9rem;padding:4px;min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .16s,color .16s;}
     .mob-toast-close:hover{background:rgba(0,0,0,0.1);color:var(--ink);}
-    .mob-toast-body{ padding:12px 14px 16px; max-width:100%; width:100%; }
+    .mob-toast-body{ padding:0; max-width:100%; width:100%; } /* v33: padding moved to .ks-pir to avoid double-padding */
     .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:140;backdrop-filter:blur(2px);}
     .mob-overlay.show{display:block;}
 
@@ -1782,7 +1782,7 @@
         position: fixed !important;
         bottom: 20px !important;
         right: 16px !important;
-        z-index: 200;
+        z-index: 300; /* v33: above .snav (200) to prevent overlap flicker */
         display: none;
         align-items: center;
         justify-content: center;
@@ -6254,6 +6254,12 @@ body.ks-result-active .disc { display: none !important; }
   border-radius: 0;
   top: 0;
 }
+/* v33 Fix A3: inside mobile, tabnav must clear the fixed header (~96px) */
+@media (max-width: 600px) {
+  #ks-fullscreen-result .ks-tabnav {
+    top: 96px;
+  }
+}
 
 /* ── PRINT / PDF — A4 LAYOUT ──────────────────────────── */
 @media print {
@@ -6397,11 +6403,7 @@ body.ks-result-active .disc { display: none !important; }
 .ks-kp-item { display:flex; align-items:flex-start; gap:8px; font-size:.8rem; line-height:1.6; color:var(--ink-soft); padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.04); }
 .ks-kp-item:last-child { border-bottom:none; }
 
-/* ── CAR IMAGE BIGGER ── */
-.ks-id-img { width:100%; height:110px; object-fit:cover; object-position:center 35%; display:block; }
-.ks-id-photo { width:clamp(120px,32%,180px); flex-shrink:0; border-radius:var(--r-sm); overflow:hidden; background:var(--surface); display:flex; align-items:center; justify-content:center; }
-.ks-id-img-fallback { display:none; align-items:center; justify-content:center; width:100%; height:110px; opacity:.4; }
-.ks-id-photo::after { display:none; }
+/* ── CAR IMAGE — consolidated in S1: CAR IDENTITY CARD block below ── */
 
 /* ── DEPRECIATION BAR COLORS ── */
 .ks-depr-bar { width:44px; border-radius:8px 8px 0 0; transition:height .6s ease; }
@@ -6458,20 +6460,17 @@ body.ks-result-active .disc { display: none !important; }
   background:var(--surface-2); border:1px solid var(--border);
   border-radius:var(--r-md); padding:14px; overflow:hidden;
 }
+/* ── CAR IDENTITY: photo/img — single authoritative block (v33) ── */
 .ks-id-photo {
   width:clamp(100px,28%,160px); flex-shrink:0;
-  border-radius:var(--r-sm); overflow:hidden;
+  border-radius:var(--r-sm); overflow:hidden; position:relative;
   background:var(--surface); display:flex; align-items:center; justify-content:center;
 }
 .ks-id-img {
   width:100%; height:90px; object-fit:cover;
   object-position:center 30%; display:block;
 }
-.ks-id-photo { overflow:hidden !important; position:relative; }
-.ks-id-photo::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:24px;
-  background:var(--color-background-secondary); pointer-events:none; z-index:2;
-}
+.ks-id-photo::after { display:none; }
 .ks-id-img-fallback {
   display:none; align-items:center; justify-content:center;
   width:100%; height:90px; opacity:.4;
