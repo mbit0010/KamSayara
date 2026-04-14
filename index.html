@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v31 (April 2026) — kamsayara_v31.html
-    Paired worker: kamsayara_worker31.js — 6-Stage Pricing Model
-    FIX: _animRoot undefined crash — replaced with document.getElementById fallback.
+    VERSION: v32 (April 2026) — kamsayara_v32.html
+    Paired worker: kamsayara_worker32.js — 6-Stage Pricing Model
+    NOTE: All v32 fixes are in the worker. No HTML-side bugs were identified.
+    FIX (worker v32): dts.match is not a function — String() coercion on days_to_sell_estimate.
+    FIX (worker v32): Haiku JSON parse at ~3631 — lone-surrogate strip + max_tokens 3072.
+    FIX (worker v32): Gemini 429 loop — Tier 1 now also gated on env.KV.
 
     FIXES APPLIED IN v27 (from audit):
       FIX #1  — Removed duplicate pirToggle() definition that overwrote the correct
