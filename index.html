@@ -1,12 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v34 (April 2026) — kamsayara_v34.html
-    Paired worker: kamsayara_worker32.js — 6-Stage Pricing Model
+    VERSION: v35 (April 2026) — kamsayara_v35.html
+    Paired worker: kamsayara_worker35.js — Serper+Haiku Primary, Gemini Backup
+    ARCH (v35): Decouple search from analysis. Serper.dev fetches live UAE listings → Haiku analyses.
+                Gemini demoted to Tier 2 backup. Haiku single-shot is Tier 3. Formula is Tier 4.
+                Tier 0 (KV Cache) unchanged. Removes Gemini 429 as a single point of failure.
     FIX (v34) B6: Market Fit labels — stacked legend (top labels, middle bar, bottom AED). No overlap.
     FIX (v34) B7: Strict spacing scale 8/16/24px — .ks-section padding tightened, VL rows reduced.
     FIX (v34) B8: Consistent card widths — max-width 480px on mobile, 0 16px padding.
@@ -551,21 +553,21 @@
 
     /* ── RESTORE CHIPS ───────────────────────────────────────── */
     .restore-chips-wrap{
-      display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;
-      padding:0 2px 2px;
-      scrollbar-width:none;
+      display:flex;align-items:center;gap:5px;flex-wrap:nowrap;overflow:visible;
+      padding:0 2px 2px;width:100%;
     }
-    .restore-chips-wrap::-webkit-scrollbar{display:none;}
     .restore-lbl{
       font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-      color:var(--muted);white-space:nowrap;flex-shrink:0;
+      color:var(--muted);white-space:nowrap;flex-shrink:0;margin-right:2px;
     }
     .restore-chip{
-      display:inline-flex;align-items:center;gap:4px;
+      display:inline-flex;align-items:center;justify-content:center;
       background:var(--accent-soft);border:1.5px solid var(--accent-line);
-      border-radius:99px;padding:3px 10px;cursor:pointer;
-      font-family:"Exo 2",sans-serif;font-size:.65rem;font-weight:700;
-      letter-spacing:.04em;color:var(--accent);white-space:nowrap;flex-shrink:0;
+      border-radius:99px;padding:3px 0;cursor:pointer;
+      font-family:"Exo 2",sans-serif;font-size:.62rem;font-weight:700;
+      letter-spacing:.03em;color:var(--accent);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      flex:1 1 0;min-width:0;max-width:calc((100% - 60px) / 6);
       transition:background .15s,border-color .15s;
     }
     .restore-chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
@@ -5226,6 +5228,7 @@
     text-transform: uppercase; padding: 1px 7px;
     border-radius: 99px; font-family: "Exo 2", sans-serif;
   }
+  .ks-tier-serper  { background: rgba(0,133,119,0.18); color: #5EEAD4; border: 1px solid rgba(0,133,119,0.35); }
   .ks-tier-gemini  { background: rgba(66,133,244,0.18); color: #93C5FD; border: 1px solid rgba(66,133,244,0.3); }
   .ks-tier-haiku   { background: rgba(167,139,250,0.18); color: #C4B5FD; border: 1px solid rgba(167,139,250,0.3); }
   .ks-tier-cache   { background: rgba(34,197,94,0.14); color: #86EFAC; border: 1px solid rgba(34,197,94,0.25); }
@@ -7091,7 +7094,7 @@ body.ks-result-active .disc { display: none !important; }
       <div class="form-body">
 
         <!-- Recent Searches — horizontal pill list above Brand (Fix #11) -->
-        <div id="restoreBar" style="display:none;padding:0 0 8px;">
+        <div id="restoreBar" style="display:none;padding:0 0 8px;width:100%;">
           <div class="restore-chips-wrap" id="restoreChips">
             <span class="restore-lbl">Recent:</span>
           </div>
@@ -8427,10 +8430,10 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   // DATA SOURCE — from worker tier
   const _dataSource = r.dataSource || (r.isEstimate ? 'estimate' : 'live');
-  const _tier       = r.tier || (r.isEstimate ? 4 : 1);
+  const _tier       = r.tier ?? (r.isEstimate ? 4 : 1);
   const _isLive     = _dataSource === 'live';
-  const _tierLabel  = _tier===1?'Gemini Search':_tier===2?'Claude Haiku':_tier===3?'Cached Data':'AI Formula';
-  const _tierCls    = _tier===1?'ks-tier-gemini':_tier===2?'ks-tier-haiku':_tier===3?'ks-tier-cache':'ks-tier-formula';
+  const _tierLabel  = r.cached ? 'Cached Data' : _tier===1?'Live Search':_tier===2?'Gemini Backup':_tier===3?'Haiku Offline':'AI Formula';
+  const _tierCls    = r.cached ? 'ks-tier-cache' : _tier===1?'ks-tier-serper':_tier===2?'ks-tier-gemini':_tier===3?'ks-tier-haiku':'ks-tier-formula';
   const _sourceBadge= '<span class="ks-source-badge ks-source-'+(_isLive?'live':'estimate')+'"><span class="ks-source-dot"></span>'+(_isLive?'Live':'AI Assisted')+'</span>';
   const _tierBadge  = '<span class="ks-tier-chip '+_tierCls+'">'+_tierLabel+'</span>';
 
@@ -9249,18 +9252,27 @@ function displayValuationResult(data){
 
   // ── DIAGNOSTIC: always log tier decision clearly ─────────────────────────
   const _d = data._diag || {};
-  const _tierNum = data.tier || 4;
-  console.group(`%c[KamSayara] Tier ${_tierNum} used`, _tierNum===1?'color:#16A34A;font-weight:bold':_tierNum===2?'color:#D97706;font-weight:bold':'color:#DC2626;font-weight:bold;');
-  if (_d.t1_skipped_no_key) console.warn('  T1 Gemini: SKIPPED — GEMINI_API_KEY not set in Cloudflare env vars');
-  else if (_d.t1_json_ok)   console.log('  T1 Gemini: SUCCESS ✓');
-  else                       console.warn('  T1 Gemini: FAILED —', _d.t1_error || 'unknown', '| HTTP', _d.t1_http_status, '| body:', _d.t1_http_body);
+  const _tierNum = data.tier ?? 4;
+  const _tierName = data.cached?'CACHE':_tierNum===1?'SERPER+HAIKU':_tierNum===2?'GEMINI':_tierNum===3?'HAIKU OFFLINE':'FORMULA';
+  console.group(`%c[KamSayara v35] Tier ${_tierNum} — ${_tierName}`, _tierNum===1?'color:#16A34A;font-weight:bold':_tierNum===2?'color:#3B82F6;font-weight:bold':_tierNum===3?'color:#D97706;font-weight:bold':'color:#DC2626;font-weight:bold;');
+  if (data.cached) {
+    console.log('  T0 Cache: HIT ✓ — result served from KV');
+  } else {
+    if (_d.t1_serper_skipped)      console.warn('  T1 Serper: SKIPPED — SERPER_API_KEY not set');
+    else if (_d.t1_json_ok)        console.log(`  T1 Serper+Haiku: SUCCESS ✓ (${_d.t1_serper_results} results from Serper)`);
+    else                           console.warn('  T1 Serper: FAILED — Serper:', _d.t1_serper_error, '| Haiku:', _d.t1_haiku_error);
 
-  if (_d.t2_skipped_no_key) console.warn('  T2 Haiku:  SKIPPED — ANTHROPIC_API_KEY not set in Cloudflare env vars');
-  else if (_d.t2_json_ok)   console.log('  T2 Haiku:  SUCCESS ✓');
-  else if (_tierNum < 2)    console.log('  T2 Haiku:  not needed (T1 succeeded)');
-  else                      console.warn('  T2 Haiku:  FAILED —', _d.t2_error || 'unknown', '| HTTP', _d.t2_http_status, '| body:', _d.t2_http_body);
+    if (_d.t2_gemini_skipped)      console.warn('  T2 Gemini: SKIPPED — GEMINI_API_KEY not set');
+    else if (_d.t2_json_ok)        console.log('  T2 Gemini: SUCCESS ✓');
+    else if (_tierNum < 2)         console.log('  T2 Gemini: not needed');
+    else                           console.warn('  T2 Gemini: FAILED —', _d.t2_gemini_error);
 
-  if (_tierNum === 4) console.error('  T4 Formula: BOTH AI tiers failed — report is a formula estimate only');
+    if (_d.t3_json_ok)             console.log('  T3 Haiku Single-Shot: SUCCESS ✓');
+    else if (_tierNum < 3)         console.log('  T3 Haiku: not needed');
+    else                           console.warn('  T3 Haiku Single-Shot: FAILED —', _d.t3_haiku_error);
+
+    if (_tierNum === 4)            console.error('  T4 Formula: ALL AI tiers failed — formula estimate only');
+  }
   console.groupEnd();
 
   // Map V12 API fields → buildResult() compatible shape
@@ -9297,9 +9309,9 @@ function displayValuationResult(data){
       advice:      data.avr.review || ''
     } : null),
     marketability:    data.marketability   || null,
-    // v29 tier waterfall fields
+    // v35 tier waterfall fields
     dataSource:       data.dataSource      || (data.isEstimate ? 'estimate' : 'live'),
-    tier:             data.tier            || (data.isEstimate ? 4 : 1),
+    tier:             data.tier            ?? (data.isEstimate ? 4 : 1),
     // v30 6-stage model fields
     market_mid:           data.market_mid           || 0,
     sweet_spot:           data.sweet_spot            || 0,
