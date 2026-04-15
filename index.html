@@ -550,21 +550,21 @@
 
     /* ── RESTORE CHIPS ───────────────────────────────────────── */
     .restore-chips-wrap{
-      display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;
-      padding:0 2px 2px;
-      scrollbar-width:none;
+      display:flex;align-items:center;gap:5px;flex-wrap:nowrap;overflow:visible;
+      padding:0 2px 2px;width:100%;
     }
-    .restore-chips-wrap::-webkit-scrollbar{display:none;}
     .restore-lbl{
       font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-      color:var(--muted);white-space:nowrap;flex-shrink:0;
+      color:var(--muted);white-space:nowrap;flex-shrink:0;margin-right:2px;
     }
     .restore-chip{
-      display:inline-flex;align-items:center;gap:4px;
+      display:inline-flex;align-items:center;justify-content:center;
       background:var(--accent-soft);border:1.5px solid var(--accent-line);
-      border-radius:99px;padding:3px 10px;cursor:pointer;
-      font-family:"Exo 2",sans-serif;font-size:.65rem;font-weight:700;
-      letter-spacing:.04em;color:var(--accent);white-space:nowrap;flex-shrink:0;
+      border-radius:99px;padding:3px 0;cursor:pointer;
+      font-family:"Exo 2",sans-serif;font-size:.62rem;font-weight:700;
+      letter-spacing:.03em;color:var(--accent);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      flex:1 1 0;min-width:0;max-width:calc((100% - 60px) / 6);
       transition:background .15s,border-color .15s;
     }
     .restore-chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
@@ -576,6 +576,19 @@
     /* ── FOCUS OUTLINES ──────────────────────────────────────── */
     *:focus-visible{outline:3px solid var(--accent);outline-offset:2px;box-shadow:0 0 0 5px var(--accent-glow2);}
     select:focus-visible,input:focus-visible{outline:none;}/* handled by existing focus styles */
+
+    /* ══ LAYOUT: INPUT + OUTPUT ONLY — hide all other sections ══ */
+    .snav,
+    .hero,
+    .mob-fixed-header,
+    .share-strip,
+    .disc,
+    .back-to-inputs {
+      display: none !important;
+    }
+    body { padding-top: 0 !important; }
+    .page { padding-top: 20px !important; }
+    .mob-overlay { display: none !important; }
 
     /* ── FORM CARD FOCUS-WITHIN GRADIENT BORDER ─────────────── */
     .form-card{transition:box-shadow .3s var(--ease);}
@@ -6732,49 +6745,62 @@ body.ks-result-active .disc { display: none !important; }
 .ks-trust-card-sub { font-size:.68rem; color:var(--muted); margin-top:5px; }
 
 /* ── S4: MARKET FIT (v34 stacked legend — no overlap) ── */
-.ks-mf-wrap { display:flex; flex-direction:column; gap:0; }
+.ks-mf-wrap { display:flex; flex-direction:column; gap:0; overflow:hidden; }
 /* Row 1: label legend */
 .ks-mf-legend-row {
-  display:flex; justify-content:space-between; gap:4px;
-  margin-bottom:8px; flex-wrap:wrap;
+  display:flex; justify-content:center; gap:12px;
+  margin-bottom:10px; flex-wrap:wrap;
 }
 .ks-mf-leg-item {
   display:flex; align-items:center; gap:5px;
   font-size:.62rem; font-weight:700; color:var(--ink-soft); white-space:nowrap;
-  flex:1; min-width:0; justify-content:center;
 }
 .ks-mf-leg-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-/* Row 2: the bar with dots */
-.ks-mf-bar-area { position:relative; padding:0; }
-.ks-mf-bar-bg {
-  height:11px; background:linear-gradient(90deg,var(--good-bg) 0%,var(--warn-bg) 50%,var(--bad-bg) 100%);
-  border-radius:99px; border:1px solid var(--border); position:relative;
+/* Row 2: the bar with dots — extra vertical padding to contain staggered dots */
+.ks-mf-bar-area {
+  position:relative;
+  padding: 16px 0 30px; /* top: room for above-bar dots; bottom: room for AED labels */
+  margin: 0 4px;        /* prevent edge-dots clipping */
 }
+.ks-mf-bar-bg {
+  height:11px;
+  background:linear-gradient(90deg,rgba(26,140,107,0.25) 0%,rgba(196,154,42,0.2) 50%,rgba(220,38,38,0.18) 100%);
+  border-radius:99px; border:1px solid var(--border); position:relative;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.08);
+}
+/* Pin sits on the bar; translateY shifts dot above or below bar center */
 .ks-mf-pin {
   position:absolute; top:50%; transform:translate(-50%,-50%);
-  display:flex; flex-direction:column; align-items:center; gap:0;
+  display:flex; flex-direction:column; align-items:center;
+  /* vertical stagger applied via inline style translateY on pin-dot wrapper */
 }
 .ks-mf-pin-dot {
   width:14px; height:14px; border-radius:50%;
-  border:2.5px solid #fff; box-shadow:0 0 0 1.5px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.15);
-  flex-shrink:0;
+  border:2.5px solid #fff;
+  box-shadow:0 0 0 1.5px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.15);
+  flex-shrink:0; display:block;
+}
+/* Stem line connecting staggered dot back to bar */
+.ks-mf-pin-stem {
+  width:2px; background:currentColor; opacity:0.35;
+  flex-shrink:0; display:block;
 }
 /* pin labels hidden — legend row above handles it */
 .ks-mf-pin-label { display:none; }
-/* Row 3: AED values below each pin */
-.ks-mf-aed-row { position:relative; height:28px; margin-top:2px; }
+/* Row 3: AED price labels — absolutely positioned but spread by JS */
+.ks-mf-aed-row { position:relative; height:22px; }
 .ks-mf-aed-val {
   position:absolute; transform:translateX(-50%);
-  font-size:.62rem; font-weight:800; white-space:nowrap;
-  font-family:"Exo 2",sans-serif; line-height:1;
-  top:4px;
+  font-size:.60rem; font-weight:800; white-space:nowrap;
+  font-family:"Exo 2",sans-serif; line-height:1; top:0;
+  transition:left .25s ease;
 }
 /* Row 4: market range endpoints */
 .ks-mf-bar-ends {
   display:flex; justify-content:space-between;
-  margin-top:4px; font-size:.65rem; font-weight:600; color:var(--muted);
+  margin-top:4px; font-size:.62rem; font-weight:600; color:var(--muted);
 }
-.ks-mf-end-lbl { font-size:.56rem; font-weight:600; color:var(--muted); display:block; }
+.ks-mf-end-lbl { font-size:.54rem; font-weight:600; color:var(--muted); display:block; }
 .ks-mf-end-low { text-align:left; }
 .ks-mf-end-high { text-align:right; }
 .ks-mf-note { font-size:.66rem; color:var(--muted); padding:8px 12px; margin-top:8px; background:var(--surface-2); border-radius:var(--r-sm); border-left:3px solid var(--border); line-height:1.5; }
@@ -7090,7 +7116,7 @@ body.ks-result-active .disc { display: none !important; }
       <div class="form-body">
 
         <!-- Recent Searches — horizontal pill list above Brand (Fix #11) -->
-        <div id="restoreBar" style="display:none;padding:0 0 8px;">
+        <div id="restoreBar" style="display:none;padding:0 0 8px;width:100%;">
           <div class="restore-chips-wrap" id="restoreChips">
             <span class="restore-lbl">Recent:</span>
           </div>
@@ -8776,35 +8802,131 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-eyebrow">Where This Price Sits</div>
     <div class="ks-section-title">Market Fit</div>
     ${(()=>{
+      // ── helpers ──────────────────────────────────────────────────────────
       const _pf = v => rangeMax>rangeMin ? Math.max(2,Math.min(98,Math.round(((v-rangeMin)/(rangeMax-rangeMin))*100))) : 50;
       const _hP = _pf(handshake);
       const _sP = sweetSpot ? _pf(sweetSpot) : null;
       const _aP = askN ? _pf(askN) : null;
       const _aCls = askN ? (askN>handshake*1.05?'#DC2626':askN<handshake*0.95?'#16A34A':'#1D7ED8') : '#1D7ED8';
       const _aTxtCls = askN ? (askN>handshake*1.05?'#991B1B':askN<handshake*0.95?'#15803D':'#1E40AF') : '#1E40AF';
-      // v34: stacked legend — top labels, middle bar, bottom AED values (no overlap)
+
+      // ── build pin list (sorted by position for stagger logic) ────────────
+      // Each entry: { pct, color, txtColor, label, isMain }
+      const _pins = [];
+      _pins.push({ pct:_hP, color:'#008577', txtColor:'#008577', label:'AED '+handshake.toLocaleString(), isMain:true });
+      if(_sP!==null) _pins.push({ pct:_sP, color:'#C49A2A', txtColor:'#92400E', label:'AED '+sweetSpot.toLocaleString(), isMain:false });
+      if(_aP!==null) _pins.push({ pct:_aP, color:_aCls, txtColor:_aTxtCls, label:'AED '+askN.toLocaleString(), isMain:false });
+
+      // Sort by pct so we can do adjacency checks
+      _pins.sort((a,b)=>a.pct-b.pct);
+
+      // ── vertical stagger: assign level -1 (above) or +1 (below bar) ───────
+      // Pins within 8% of each other alternate above/below
+      const MIN_PCT_GAP = 8;
+      _pins.forEach((p,i)=>{ p.level = 0; }); // default: on-bar
+      for(let i=0;i<_pins.length;i++){
+        for(let j=i+1;j<_pins.length;j++){
+          if(Math.abs(_pins[j].pct-_pins[i].pct)<MIN_PCT_GAP){
+            // stagger: put one above bar, one below
+            if(_pins[i].level===0){ _pins[i].level=-1; } // above
+            if(_pins[j].level===0){ _pins[j].level=1;  } // below
+            else if(_pins[j].level===-1){ _pins[j].level=1; }
+          }
+        }
+      }
+      // Level offset in px (relative to bar centre, i.e. top:50% in .ks-mf-bar-area)
+      const levelY = { '-1': -18, '0': 0, '1': 18 }; // px above/below bar centre
+      const stemH  = { '-1': 11, '0': 0, '1': 11  };  // stem height px
+
+      // ── Row 1: legend ─────────────────────────────────────────────────────
       let _mf = '<div class="ks-mf-wrap">';
-      // Row 1: legend
       _mf += '<div class="ks-mf-legend-row">';
       _mf += '<div class="ks-mf-leg-item"><span class="ks-mf-leg-dot" style="background:#008577"></span>Handshake</div>';
       if(_sP!==null) _mf += '<div class="ks-mf-leg-item"><span class="ks-mf-leg-dot" style="background:#C49A2A"></span>Sweet Spot</div>';
       if(_aP!==null) _mf += '<div class="ks-mf-leg-item"><span class="ks-mf-leg-dot" style="background:'+_aCls+'"></span>Asking</div>';
       _mf += '</div>';
-      // Row 2: bar with dots
+
+      // ── Row 2: bar + staggered dots ───────────────────────────────────────
       _mf += '<div class="ks-mf-bar-area"><div class="ks-mf-bar-bg">';
-      if(_sP!==null) _mf += '<div class="ks-mf-pin" style="left:'+_sP+'%"><div class="ks-mf-pin-dot" style="background:#C49A2A"></div></div>';
-      _mf += '<div class="ks-mf-pin" style="left:'+_hP+'%"><div class="ks-mf-pin-dot" style="background:#008577;width:16px;height:16px;box-shadow:0 0 0 3px rgba(0,133,119,0.3)"></div></div>';
-      if(_aP!==null) _mf += '<div class="ks-mf-pin" style="left:'+_aP+'%"><div class="ks-mf-pin-dot" style="background:'+_aCls+'"></div></div>';
+      _pins.forEach(p=>{
+        const yOff = levelY[String(p.level)];
+        const sh   = stemH[String(p.level)];
+        const dotSize = p.isMain ? '16px' : '13px';
+        const dotGlow = p.isMain ? ';box-shadow:0 0 0 3px '+p.color+'44,0 2px 6px rgba(0,0,0,0.18)' : '';
+        // The pin wrapper is centred on the bar (top:50%) then shifted by yOff
+        _mf += '<div class="ks-mf-pin" style="left:'+p.pct+'%;transform:translate(-50%,calc(-50% + '+yOff+'px))">';
+        // stem line between dot and bar when staggered
+        if(sh>0){
+          const stemDir = p.level<0 ? 'margin-top' : 'margin-bottom';
+          const stemOrder = p.level<0
+            ? '<div class="ks-mf-pin-dot" style="background:'+p.color+';width:'+dotSize+';height:'+dotSize+dotGlow+'"></div><div class="ks-mf-pin-stem" style="height:'+sh+'px;background:'+p.color+';margin-top:1px"></div>'
+            : '<div class="ks-mf-pin-stem" style="height:'+sh+'px;background:'+p.color+';margin-bottom:1px"></div><div class="ks-mf-pin-dot" style="background:'+p.color+';width:'+dotSize+';height:'+dotSize+dotGlow+'"></div>';
+          _mf += stemOrder;
+        } else {
+          _mf += '<div class="ks-mf-pin-dot" style="background:'+p.color+';width:'+dotSize+';height:'+dotSize+dotGlow+'"></div>';
+        }
+        _mf += '</div>';
+      });
       _mf += '</div>';
-      // Row 3: AED values positioned below each pin
-      _mf += '<div class="ks-mf-aed-row">';
-      _mf += '<div class="ks-mf-aed-val" style="left:'+_hP+'%;color:#008577">AED '+handshake.toLocaleString()+'</div>';
-      if(_sP!==null) _mf += '<div class="ks-mf-aed-val" style="left:'+_sP+'%;color:#92400E">AED '+sweetSpot.toLocaleString()+'</div>';
-      if(_aP!==null) _mf += '<div class="ks-mf-aed-val" style="left:'+_aP+'%;color:'+_aTxtCls+'">AED '+askN.toLocaleString()+'</div>';
+
+      // ── Row 3: AED labels — spread algorithm to prevent overlap ─────────
+      // We'll use data-pct attributes and run a JS spread pass after render
+      _mf += '<div class="ks-mf-aed-row" id="ksMfAedRow_'+_hP+'">';
+      _pins.forEach(p=>{
+        _mf += '<div class="ks-mf-aed-val" data-pct="'+p.pct+'" style="left:'+p.pct+'%;color:'+p.txtColor+'">'+p.label+'</div>';
+      });
       _mf += '</div>';
+
+      // ── Row 4: market range endpoints ────────────────────────────────────
       _mf += '<div class="ks-mf-bar-ends"><span class="ks-mf-end-low">AED '+rangeMin.toLocaleString()+'<br><span class="ks-mf-end-lbl">Market Low</span></span><span class="ks-mf-end-high">AED '+rangeMax.toLocaleString()+'<br><span class="ks-mf-end-lbl">Market High</span></span></div>';
-      _mf += '</div>';
+      _mf += '</div>'; // /ks-mf-bar-area
+
       _mf += '<div class="ks-mf-note">Private seller prices are typically 8–10% lower than dealer prices for the same vehicle in the UAE.</div></div>';
+
+      // ── Inline script: spread AED labels after DOM settles ───────────────
+      _mf += `<script>(function(){
+  function spreadMfLabels(){
+    var rows=document.querySelectorAll('.ks-mf-aed-row');
+    rows.forEach(function(row){
+      var labels=Array.from(row.querySelectorAll('.ks-mf-aed-val'));
+      if(!labels.length)return;
+      var W=row.offsetWidth; if(!W)return;
+      // Convert pct → px centre positions
+      var items=labels.map(function(el){
+        var pct=parseFloat(el.dataset.pct)||50;
+        return{el:el, x:pct/100*W, w:el.offsetWidth||60};
+      });
+      // Sort by x
+      items.sort(function(a,b){return a.x-b.x;});
+      // Iterative spread: push apart until no overlap (max 20 passes)
+      var MIN_GAP=4;
+      for(var pass=0;pass<20;pass++){
+        var moved=false;
+        for(var i=0;i<items.length-1;i++){
+          var a=items[i], b=items[i+1];
+          var aRight=a.x+a.w/2+MIN_GAP;
+          var bLeft =b.x-b.w/2;
+          if(aRight>bLeft){
+            var overlap=(aRight-bLeft)/2;
+            a.x-=overlap; b.x+=overlap; moved=true;
+          }
+        }
+        if(!moved)break;
+      }
+      // Clamp to container bounds
+      items.forEach(function(it){
+        var half=it.w/2;
+        it.x=Math.max(half,Math.min(W-half,it.x));
+        it.el.style.left=(it.x/W*100)+'%';
+      });
+    });
+  }
+  // Run after paint + after any result animations
+  requestAnimationFrame(function(){requestAnimationFrame(spreadMfLabels);});
+  setTimeout(spreadMfLabels,350);
+  window._spreadMfLabels=spreadMfLabels;
+})();<\/script>`;
+
       return _mf;
     })()}
   </div>
@@ -9662,9 +9784,7 @@ function printValuation(){
 /* scrollToForm removed — hero button removed */
 
 /* ── STICKY NAV ─────────────────────────────────────────── */
-new IntersectionObserver(([e])=>{
-  g('stickyNav').classList.toggle('on',!e.isIntersecting);
-},{threshold:0}).observe(g('heroTop'));
+/* Sticky nav hidden — input/output-only layout */
 
 /* ── ENHANCED SEARCHABLE DROPDOWN SYSTEM ────────────────── */
 const _ksMap=new Map();
