@@ -6684,6 +6684,108 @@ body.ks-result-active .disc { display: none !important; }
 .ks-mf-legend { display:none; }
 .ks-mf-leg { display:flex; align-items:center; gap:5px; font-size:.68rem; color:var(--ink-soft); font-weight:600; }
 
+/* ══ S4 v2: ZONE BAR + INTERACTIVE PRICE GRID ══════════════════ */
+.ks-mf2-wrap { display:flex; flex-direction:column; gap:0; }
+
+/* ── Zone gradient bar ── */
+.ks-mf2-bar-shell {
+  position:relative; height:20px; margin-bottom:6px;
+}
+.ks-mf2-bar-gradient {
+  position:absolute; inset:0;
+  background:linear-gradient(90deg,
+    #DC2626 0%,
+    #F59E0B 22%,
+    #16A34A 50%,
+    #F59E0B 78%,
+    #DC2626 100%);
+  border-radius:99px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.12);
+}
+/* zone labels under the bar */
+.ks-mf2-zones {
+  display:flex; justify-content:space-between;
+  font-size:.52rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--muted); padding:0 2px; margin-bottom:14px;
+}
+
+/* ── Animated sliding marker ── */
+.ks-mf2-marker {
+  position:absolute; top:50%; transform:translate(-50%,-50%);
+  display:flex; flex-direction:column; align-items:center;
+  transition:left .55s cubic-bezier(0.34,1.56,0.64,1);
+  z-index:10; pointer-events:none;
+}
+.ks-mf2-marker-ring {
+  width:22px; height:22px; border-radius:50%;
+  border:3px solid #fff;
+  box-shadow:0 0 0 2px var(--mf2-ring,#16A34A), 0 2px 8px rgba(0,0,0,0.22);
+  background:var(--mf2-ring,#16A34A);
+  transition:background .35s, box-shadow .35s;
+}
+@keyframes ksMfPulse {
+  0%,100% { box-shadow:0 0 0 2px var(--mf2-ring,#16A34A),0 2px 8px rgba(0,0,0,0.22); }
+  50%      { box-shadow:0 0 0 6px rgba(22,163,74,0.25),0 0 0 2px var(--mf2-ring,#16A34A),0 2px 8px rgba(0,0,0,0.22); }
+}
+.ks-mf2-marker-ring { animation:ksMfPulse 2s ease-in-out infinite; }
+.ks-mf2-marker-tip {
+  width:0; height:0;
+  border-left:5px solid transparent; border-right:5px solid transparent;
+  border-top:6px solid var(--mf2-ring,#16A34A);
+  margin-top:-1px; transition:border-top-color .35s;
+}
+.ks-mf2-marker-label {
+  margin-top:3px; font-family:"Exo 2",sans-serif;
+  font-size:.58rem; font-weight:800; white-space:nowrap;
+  color:var(--mf2-ring,#16A34A); letter-spacing:.02em;
+  transition:color .35s;
+}
+
+/* ── Interactive price grid ── */
+.ks-mf2-grid {
+  display:flex; flex-direction:column; gap:5px; margin-bottom:10px;
+}
+.ks-mf2-row {
+  display:grid; grid-template-columns:10px 1fr 80px 90px;
+  align-items:center; gap:8px;
+  padding:7px 10px; border-radius:8px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:background .18s, border-color .18s, transform .12s;
+  user-select:none;
+}
+.ks-mf2-row:hover { background:var(--surface-2); transform:translateX(2px); }
+.ks-mf2-row.ks-mf2-active {
+  background:var(--mf2-bg,rgba(22,163,74,0.07));
+  border-color:var(--mf2-ring,#16A34A);
+}
+.ks-mf2-row-dot {
+  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,0.6);
+  box-shadow:0 0 0 1px rgba(0,0,0,0.12);
+}
+.ks-mf2-row-label {
+  font-size:.68rem; font-weight:700; color:var(--ink-soft); white-space:nowrap;
+}
+.ks-mf2-row.ks-mf2-active .ks-mf2-row-label { color:var(--ink); }
+.ks-mf2-row-track {
+  height:5px; background:var(--border); border-radius:99px; overflow:hidden;
+}
+.ks-mf2-row-fill { height:100%; border-radius:99px; transition:width .4s ease; }
+.ks-mf2-row-val {
+  font-family:"Exo 2",sans-serif; font-size:.72rem; font-weight:800;
+  color:var(--ink); text-align:right; white-space:nowrap;
+}
+.ks-mf2-row.ks-mf2-active .ks-mf2-row-val { color:var(--mf2-ring,#16A34A); }
+.ks-mf2-note {
+  font-size:.62rem; color:var(--muted); line-height:1.5; font-style:italic;
+  padding:6px 0 0; border-top:1px solid var(--border);
+}
+@media(max-width:600px){
+  .ks-mf2-row { grid-template-columns:10px 1fr 60px 80px; gap:6px; padding:7px 8px; }
+  .ks-mf2-row-val { font-size:.66rem; }
+}
+
 /* ── S5: VALUE LOGIC ── */
 .ks-vl-base-row {
   display:flex; justify-content:space-between; align-items:center;
@@ -8678,36 +8780,71 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-eyebrow">Where This Price Sits</div>
     <div class="ks-section-title">Market Fit</div>
     ${(()=>{
+      // ── percentage position helper (2–98% clamped) ──
       const _pf = v => rangeMax>rangeMin ? Math.max(2,Math.min(98,Math.round(((v-rangeMin)/(rangeMax-rangeMin))*100))) : 50;
-      const _hP = _pf(handshake);
-      const _sP = sweetSpot ? _pf(sweetSpot) : null;
-      const _aP = askN ? _pf(askN) : null;
-      const _aCls = askN ? (askN>handshake*1.05?'#DC2626':askN<handshake*0.95?'#16A34A':'#1D7ED8') : '#1D7ED8';
-      const _aTxtCls = askN ? (askN>handshake*1.05?'#991B1B':askN<handshake*0.95?'#15803D':'#1E40AF') : '#1E40AF';
-      // v34: stacked legend — top labels, middle bar, bottom AED values (no overlap)
-      let _mf = '<div class="ks-mf-wrap">';
-      // Row 1: legend
-      _mf += '<div class="ks-mf-legend-row">';
-      _mf += '<div class="ks-mf-leg-item"><span class="ks-mf-leg-dot" style="background:#008577"></span>Handshake</div>';
-      if(_sP!==null) _mf += '<div class="ks-mf-leg-item"><span class="ks-mf-leg-dot" style="background:#C49A2A"></span>Sweet Spot</div>';
-      if(_aP!==null) _mf += '<div class="ks-mf-leg-item"><span class="ks-mf-leg-dot" style="background:'+_aCls+'"></span>Asking</div>';
-      _mf += '</div>';
-      // Row 2: bar with dots
-      _mf += '<div class="ks-mf-bar-area"><div class="ks-mf-bar-bg">';
-      if(_sP!==null) _mf += '<div class="ks-mf-pin" style="left:'+_sP+'%"><div class="ks-mf-pin-dot" style="background:#C49A2A"></div></div>';
-      _mf += '<div class="ks-mf-pin" style="left:'+_hP+'%"><div class="ks-mf-pin-dot" style="background:#008577;width:16px;height:16px;box-shadow:0 0 0 3px rgba(0,133,119,0.3)"></div></div>';
-      if(_aP!==null) _mf += '<div class="ks-mf-pin" style="left:'+_aP+'%"><div class="ks-mf-pin-dot" style="background:'+_aCls+'"></div></div>';
-      _mf += '</div>';
-      // Row 3: AED values positioned below each pin
-      _mf += '<div class="ks-mf-aed-row">';
-      _mf += '<div class="ks-mf-aed-val" style="left:'+_hP+'%;color:#008577">AED '+handshake.toLocaleString()+'</div>';
-      if(_sP!==null) _mf += '<div class="ks-mf-aed-val" style="left:'+_sP+'%;color:#92400E">AED '+sweetSpot.toLocaleString()+'</div>';
-      if(_aP!==null) _mf += '<div class="ks-mf-aed-val" style="left:'+_aP+'%;color:'+_aTxtCls+'">AED '+askN.toLocaleString()+'</div>';
-      _mf += '</div>';
-      _mf += '<div class="ks-mf-bar-ends"><span class="ks-mf-end-low">AED '+rangeMin.toLocaleString()+'<br><span class="ks-mf-end-lbl">Market Low</span></span><span class="ks-mf-end-high">AED '+rangeMax.toLocaleString()+'<br><span class="ks-mf-end-lbl">Market High</span></span></div>';
-      _mf += '</div>';
-      _mf += '<div class="ks-mf-note">Private seller prices are typically 8–10% lower than dealer prices for the same vehicle in the UAE.</div></div>';
-      return _mf;
+
+      // ── colour helper based on position vs handshake ──
+      const _colOf = (v) => {
+        const ratio = v / handshake;
+        if (ratio > 1.06) return { ring:'#DC2626', bg:'rgba(220,38,38,0.07)' };
+        if (ratio < 0.94) return { ring:'#1D7ED8', bg:'rgba(29,126,216,0.07)' };
+        if (ratio > 1.02) return { ring:'#F59E0B', bg:'rgba(245,158,11,0.07)' };
+        return { ring:'#16A34A', bg:'rgba(22,163,74,0.07)' };
+      };
+
+      // ── build price-point rows (sorted ascending by value) ──
+      const _pts = [];
+      _pts.push({ label:'Market Low',  val:rangeMin,  clr:'#6B7280', bg:'rgba(107,114,128,0.07)', fixed:true });
+      if(sweetSpot) _pts.push({ label:'Sweet Spot', val:sweetSpot, clr:'#C49A2A', bg:'rgba(196,154,42,0.07)' });
+      _pts.push({ label:'Handshake',   val:handshake, clr:'#16A34A', bg:'rgba(22,163,74,0.07)' });
+      if(askN)      { const ac=_colOf(askN); _pts.push({ label:'Asking Price', val:askN, clr:ac.ring, bg:ac.bg, isAsk:true }); }
+      _pts.push({ label:'Market High', val:rangeMax,  clr:'#6B7280', bg:'rgba(107,114,128,0.07)', fixed:true });
+      _pts.sort((a,b)=>a.val-b.val);
+
+      // ── active point: asking if present, else handshake ──
+      const _activeVal = askN || handshake;
+      const _activePt  = _pts.find(p=>p.val===_activeVal) || _pts.find(p=>p.label==='Handshake');
+      const _activeClr = _activePt.clr;
+      const _activePct = _pf(_activeVal);
+
+      // ── unique ID for this render (avoids collisions on re-render) ──
+      const _uid = 'mf'+Date.now();
+
+      // ── build row HTML ──
+      const _rows = _pts.map(p=>{
+        const _pct   = _pf(p.val);
+        const _isAct = p.val === _activeVal;
+        const _rowClr= _isAct ? p.clr : p.clr;
+        return `<div class="ks-mf2-row${_isAct?' ks-mf2-active':''}"
+          style="${_isAct?`--mf2-ring:${p.clr};--mf2-bg:${p.bg};`:''}"
+          data-pct="${_pct}" data-val="AED ${p.val.toLocaleString()}" data-clr="${p.clr}" data-bg="${p.bg}"
+          onclick="ksMf2Activate('${_uid}',this)">
+          <span class="ks-mf2-row-dot" style="background:${p.clr}"></span>
+          <span class="ks-mf2-row-label">${p.label}${p.isAsk?' <span style="font-size:.56rem;opacity:.7">(yours)</span>':''}</span>
+          <div class="ks-mf2-row-track"><div class="ks-mf2-row-fill" style="width:${_pct}%;background:${p.clr}"></div></div>
+          <span class="ks-mf2-row-val">AED ${p.val.toLocaleString()}</span>
+        </div>`;
+      }).join('');
+
+      return `<div class="ks-mf2-wrap">
+        <!-- Zone gradient bar with animated marker -->
+        <div class="ks-mf2-bar-shell">
+          <div class="ks-mf2-bar-gradient"></div>
+          <div class="ks-mf2-marker" id="${_uid}_marker"
+               style="left:2%;--mf2-ring:${_activeClr}"
+               data-mf2-pct="${_activePct}">
+            <div class="ks-mf2-marker-ring"></div>
+            <div class="ks-mf2-marker-tip"></div>
+            <div class="ks-mf2-marker-label" id="${_uid}_mlbl">AED ${_activeVal.toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="ks-mf2-zones">
+          <span>Underpriced</span><span>Sweet Zone</span><span>Overpriced</span>
+        </div>
+        <!-- Interactive price grid -->
+        <div class="ks-mf2-grid" id="${_uid}_grid">${_rows}</div>
+        <div class="ks-mf2-note">Private seller prices are typically 8–10% lower than dealer prices for the same vehicle in the UAE.</div>
+      </div>`;
     })()}
   </div>
 
@@ -9255,6 +9392,7 @@ function displayValuationResult(data){
     const conf = Math.round((r.confidence||0)*100);
     if(cbarFill && conf) cbarFill.style.width = conf+'%';
     pirAnimateStatBars();
+    ksMf2Init();
   }, 80);
 
   // D17: Car image — activate skeleton shimmer + 3-second timeout fallback
@@ -10358,6 +10496,43 @@ function _updateStage2(){
 // Reset hook — full form clear + restore stage 1
 // (primary resetForm defined earlier at line ~5143 handles field clearing)
 // This block adds the stage-2 panel reset on top.
+
+/* ── MARKET FIT v2: interactive row → marker sync ──────────── */
+function ksMf2Init(){
+  // Slide every rendered marker from its start position to its data-mf2-pct target
+  document.querySelectorAll('.ks-mf2-marker[data-mf2-pct]').forEach(m=>{
+    const pct = m.dataset.mf2Pct;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      m.style.left = pct + '%';
+    }));
+  });
+}
+window.ksMf2Init = ksMf2Init;
+function ksMf2Activate(uid, rowEl){
+  const grid   = document.getElementById(uid+'_grid');
+  const marker = document.getElementById(uid+'_marker');
+  const mlbl   = document.getElementById(uid+'_mlbl');
+  if(!grid||!marker) return;
+  // Deactivate all rows
+  grid.querySelectorAll('.ks-mf2-row').forEach(r=>{
+    r.classList.remove('ks-mf2-active');
+    r.style.removeProperty('--mf2-ring');
+    r.style.removeProperty('--mf2-bg');
+  });
+  // Activate clicked row
+  const clr = rowEl.dataset.clr;
+  const bg  = rowEl.dataset.bg;
+  const pct = rowEl.dataset.pct;
+  const val = rowEl.dataset.val;
+  rowEl.classList.add('ks-mf2-active');
+  rowEl.style.setProperty('--mf2-ring', clr);
+  rowEl.style.setProperty('--mf2-bg',   bg);
+  // Slide marker
+  marker.style.setProperty('--mf2-ring', clr);
+  marker.style.left = pct + '%';
+  if(mlbl) mlbl.textContent = val;
+}
+window.ksMf2Activate = ksMf2Activate;
 
 /* ── PIR INTERACTIVE: collapsible sections ────────────────── */
 function pirToggle(section){
