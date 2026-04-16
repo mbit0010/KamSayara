@@ -5843,40 +5843,95 @@
 
 /* ── PRINT / PDF — A4 LAYOUT ──────────────────────────── */
 @media print {
-  @page { size: A4 portrait; margin: 12mm 14mm; }
+  /* ── PAGE SETUP ─────────────────────────────────────────── */
+  @page { size: A4 portrait; margin: 15mm 14mm 12mm 14mm; }
+  @page :first { margin-top: 18mm; } /* extra top on page 1 — prevents header displacement */
+
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body, html { background: #fff !important; font-size: 10px !important; }
-  /* Show the inline result, hide non-essential chrome */
+  html, body { background: #fff !important; font-size: 10px !important; margin: 0 !important; padding: 0 !important; }
+
+  /* ── HIDE NON-REPORT CHROME ─────────────────────────────── */
   .snav, .hero, .restoreBar, #restoreBar, .share-strip, .ffoot, .form-card,
-  .mob-fixed-header, .mob-result-toast, .mob-overlay, .ks-upsell-btn,
-  .ks-free-upsell, .rph, .rld { display: none !important; }
-  .layout { display: block !important; }
-  .result-panel { display: block !important; border: none !important; box-shadow: none !important; }
-  #rcontent { display: block !important; }
-  /* Compress sections for A4 */
-  .ks-section { padding: 8px 10px 10px !important; }
-  .ks-section-title { font-size: .85rem !important; margin-bottom: 8px !important; }
-  .ks-section-eyebrow { font-size: .55rem !important; margin-bottom: 1px !important; }
-  .ks-tabnav { display: none !important; }
-  .ks-next-btns button, .ks-next-btn { font-size: .65rem !important; padding: 6px 12px !important; }
-  .ks-trust-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
-  .ks-trust-card { padding: 8px 10px !important; }
-  .ks-trust-card-val { font-size: 1.1rem !important; }
-  .ks-nego-cols { gap: 6px !important; }
-  .ks-nego-col { padding: 8px 8px !important; }
-  .ks-mood-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px !important; }
-  .ks-mood-card { padding: 8px 10px !important; }
-  .ks-id-card { padding: 8px !important; gap: 10px !important; }
-  .ks-pos-fmv { font-size: 1.6rem !important; }
-  .ks-vl-row { padding: 4px 0 !important; }
-  .ks-paid-divider { padding: 8px 10px !important; page-break-before: avoid !important; }
-  .ks-script-box { margin-bottom: 6px !important; }
-  /* C13+C15: show all sections in print */
-  #ksPirShared   { display: block !important; }
-  #ksPirFreeOnly { display: none  !important; }
-  #ksPirPaidOnly { display: block !important; }
+  .mob-fixed-header, .mob-result-toast, .mob-overlay,
+  .ks-upsell-btn, .ks-free-upsell, .rph, .rld,
+  .ks-tabnav, .ks-script-toggle, .ks-script-copy,
+  .ks-next-micro-row, .ks-next-primary-row, .ks-next-value-prop,
+  .ks-next-steps, .ks-mf2-zones { display: none !important; }
+
+  /* ── LAYOUT ─────────────────────────────────────────────── */
+  .layout       { display: block !important; }
+  .result-panel { display: block !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
+  #rcontent     { display: block !important; }
+
+  /* ── REPORT HEADER: anchor to page top ──────────────────── */
+  .ks-report-header { margin-top: 0 !important; padding-top: 12px !important; page-break-inside: avoid !important; page-break-after: avoid !important; }
+
+  /* ── SECTION BASE: tight and scannable ──────────────────── */
+  .ks-section { padding: 7px 10px 8px !important; border-bottom: 1px solid #E0E0E0 !important; page-break-inside: avoid !important; }
+  .ks-section-title   { font-size: .82rem !important; margin-bottom: 5px !important; }
+  .ks-section-eyebrow { font-size: .54rem !important; margin-bottom: 1px !important; }
+
+  /* ── PRICE POSITION: tighten dead space ─────────────────── */
+  .ks-price-compare   { gap: 6px !important; margin-bottom: 6px !important; }
+  .ks-price-box       { padding: 8px 10px !important; }
+  .ks-pos-verdict-row { padding: 6px 0 5px !important; }
+  .ks-pos-stats-row   { margin-top: 6px !important; }
+  .ks-pos-stat        { padding: 6px 4px !important; }
+  .ks-pos-stat-val    { font-size: .95rem !important; }
+  .ks-pos-summary     { font-size: .72rem !important; line-height: 1.45 !important; }
+
+  /* ── DATA & TRANSPARENCY: remove gap ────────────────────── */
+  .ks-trust-grid    { grid-template-columns: 1fr 1fr !important; gap: 5px !important; }
+  .ks-trust-card    { padding: 6px 8px !important; }
+  .ks-trust-card-val{ font-size: 1rem !important; }
+  .ks-trust-card-sub{ font-size: .58rem !important; }
+  .ks-meter-track   { height: 3px !important; margin-top: 4px !important; }
+
+  /* ── MARKET FIT: compact ─────────────────────────────────── */
+  .ks-mf2-bar-shell { height: 14px !important; margin-bottom: 4px !important; }
+  .ks-mf2-grid      { gap: 3px !important; margin-bottom: 6px !important; }
+  .ks-mf2-row       { padding: 4px 8px !important; }
+  .ks-mf2-row-val   { font-size: .66rem !important; }
+
+  /* ── VALUE LOGIC: keep entire block together ─────────────── */
+  .ks-vl-base-row    { padding: 5px 8px !important; margin-bottom: 5px !important; page-break-after: avoid !important; }
+  .ks-vl-group-label { page-break-after: avoid !important; font-size: .68rem !important; padding: 3px 0 !important; }
+  .ks-vl-row         { padding: 2px 0 !important; page-break-inside: avoid !important; }
+  .ks-vl-row-bar     { height: 5px !important; }
+  .ks-vl-net-row     { padding: 5px 8px !important; margin-top: 5px !important; page-break-inside: avoid !important; }
+
+  /* ── NEGOTIATION: compact ────────────────────────────────── */
+  .ks-nego-cols   { gap: 5px !important; }
+  .ks-nego-col    { padding: 7px 8px !important; }
+  .ks-nego-col-val{ font-size: 1rem !important; }
+
+  /* ── SCRIPT: inline compact, no buttons ─────────────────── */
+  .ks-script-box  { margin-bottom: 0 !important; border: 1px solid #ddd !important; border-radius: 6px !important; }
+  .ks-script-body { max-height: none !important; overflow: visible !important; }
+  .ks-script-text { font-size: .72rem !important; padding: 8px 10px !important; line-height: 1.55 !important; }
+
+  /* ── KEY POINTS ──────────────────────────────────────────── */
+  .ks-kp-item  { padding: 2px 0 !important; font-size: .72rem !important; }
+  .ks-kp-block { margin-bottom: 4px !important; }
+
+  /* ── MOOD / MARKET ───────────────────────────────────────── */
+  .ks-mood-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 5px !important; }
+  .ks-mood-card { padding: 6px 8px !important; }
+
+  /* ── DEPRECIATION ────────────────────────────────────────── */
+  .ks-depr-chart { page-break-inside: avoid !important; }
+  .ks-cost-table { page-break-inside: avoid !important; }
+
+  /* ── PAGE BREAKS ─────────────────────────────────────────── */
+  .ks-section:nth-child(3) { page-break-after: always !important; } /* break after price position */
+  .ks-section, .ks-trust-card, .ks-nego-col, .ks-kp-block, .ks-depr-chart { page-break-inside: avoid !important; }
+
+  /* ── SHOW CORRECT CONTENT ────────────────────────────────── */
+  #ksPirShared     { display: block !important; }
+  #ksPirFreeOnly   { display: none  !important; }
+  #ksPirPaidOnly   { display: block !important; }
   #ksPirDisclaimer { display: block !important; }
-  .ks-section:nth-child(5) { page-break-after: always; }
+  .ks-paid-divider { page-break-before: avoid !important; padding: 5px 8px !important; }
 }
 
 /* ═══════════════════════════════════════════════════════
