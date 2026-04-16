@@ -6688,7 +6688,7 @@
 
           <div class="ig">
             <label for="year">Year <span class="rq">*</span></label>
-            <select id="year" onchange="markFilled(this);updateReadiness()" aria-required="true"><option value="">Select…</option></select>
+            <select id="year" onchange="markFilled(this);updateReadiness();_checkMileagePlausibility()" aria-required="true"><option value="">Select…</option></select>
             <span class="errmsg" id="err-year">Select a year</span>
           </div>
 
@@ -6714,8 +6714,8 @@
           <div class="ig">
             <label for="mileage">Mileage <span class="rq">*</span></label>
             <div class="prefix-wrap">
-              <span class="prefix-lbl">KM</span>
-              <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this);updateReadiness()" onkeydown="blockNonNumeric(event)" aria-required="true">
+              <span class="prefix-lbl" id="mileagePrefixLbl">KM</span>
+              <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this);updateReadiness();_checkMileagePlausibility()" onkeydown="blockNonNumeric(event)" aria-required="true">
             </div>
             <span class="errmsg" id="err-mileage">Enter mileage</span>
           </div>
@@ -7221,6 +7221,26 @@ function initRestoreBar(){
 /* ── VALUATION COUNTER ─────────────────────────────────── */
 function initValuationCounter(){
   /* Counter badge removed from UI */
+}
+
+/* ── MILEAGE PLAUSIBILITY — red prefix warning, zero layout change ── */
+function _checkMileagePlausibility(){
+  const lbl     = document.getElementById('mileagePrefixLbl');
+  if(!lbl) return;
+  const year    = parseInt(g('year')?.value||'0');
+  const mileage = parseInt(g('mileage')?.value||'0');
+  if(!year||!mileage){ lbl.textContent='KM'; lbl.style.color=''; return; }
+  const age          = Math.max(1, new Date().getFullYear() - year + 1);
+  const maxPlausible = age * 30000;
+  if(mileage > maxPlausible){
+    lbl.textContent = '⚠ KM';
+    lbl.style.color = '#C0392B';
+    lbl.title       = `Unusually high for a ${year} model — please verify`;
+  } else {
+    lbl.textContent = 'KM';
+    lbl.style.color = '';
+    lbl.title       = '';
+  }
 }
 
 /* ── NUMERIC-ONLY INPUT GUARD ─────────────────────────── */
@@ -7788,7 +7808,7 @@ function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,
   if(conditionVal==='Excellent'||conditionVal==='Very Good') pros.push(`${conditionVal.toLowerCase()} condition supports the asking price`);
   if(hasAccident)  cons.push(`${accidentVal} accident history is a negotiation lever and a resale risk`);
   if(multiOwner)   cons.push('multiple previous owners can affect buyer confidence');
-  if(!isGCC)       cons.push('non-GCC spec limits your local resale audience');
+  if(!isGCC)       cons.push('non-GCC spec limits the local resale audience');
   if(noFSH)        cons.push('no service history — harder to verify maintenance records');
   if(mileageNum>expected*1.5) cons.push(`${mileageNum.toLocaleString()} km is high for this age`);
   let para=pc+' ';
@@ -7878,11 +7898,11 @@ function buildNegoGuide(askN,avg,conditionVal,accidentVal){
   const room  = hasAsk ? Math.max(0, Math.round((1 - offer / askN) * 100)) : 0;
 
   let tactic = '';
-  if(af > 0)            tactic = 'The accident history is your primary leverage — use it to justify a firm reduction.';
+  if(af > 0)            tactic = 'The accident history is the primary leverage point — use it to justify a firm reduction.';
   else if(qs.fsh===false && qs.warranty===false) tactic = 'No service history and no warranty — use both gaps to push for a lower price.';
   else if(qs.fsh===false)  tactic = 'Missing service history is a legitimate negotiation point.';
   else if(mktDisc > 0.08)  tactic = `Listed ${Math.round(mktDisc*200)}% above market. Reference the AED ${avg.toLocaleString()} fair value and negotiate from there.`;
-  else if(disc > 0.02)     tactic = 'Use mileage and condition as your reason for a counter-offer.';
+  else if(disc > 0.02)     tactic = 'Use mileage and condition as grounds for a counter-offer.';
   else                     tactic = 'Already close to market — a 2–3% counter is reasonable without risking the deal.';
 
   return { offer, close, walk, room, tactic };
@@ -7934,11 +7954,11 @@ function _kpGuidance(text, type) {
     if(t.includes('multiple owner')||t.includes('owners')) return 'ask seller for reason — fleet cars often have high multi-owner records';
     if(t.includes('non-gcc'))     return 'factor in potential parts delays and lower resale pool';
     if(t.includes('mileage')&&(t.includes('high')||t.includes('above'))) return 'budget for timing belt, fluids, and brake inspection';
-    if(t.includes('warranty'))    return 'factor repair costs into your offer or walk-away price';
+    if(t.includes('warranty'))    return 'factor repair costs into the offer or walk-away price';
     if(t.includes('confidence'))  return 'cross-check at least 5 comparable Dubizzle listings before offering';
     if(t.includes('trim'))        return 'values here use the broader model — trim premium may not be captured';
     if(t.includes('condition'))   return 'get a pre-purchase inspection to quantify repair costs';
-    return 'factor this into your negotiation strategy';
+    return 'factor this into the negotiation strategy';
   }
   return 'verify before finalising the deal';
 }
@@ -8349,7 +8369,7 @@ function buildResult(r,brand,model,year,mileage,asking){
           data-pct="${_pct}" data-val="AED ${p.val.toLocaleString()}" data-clr="${p.clr}" data-bg="${p.bg}"
           onclick="ksMf2Activate('${_uid}',this)">
           <span class="ks-mf2-row-dot" style="background:${p.clr}"></span>
-          <span class="ks-mf2-row-label">${p.label}${p.isAsk?' <span style="font-size:.56rem;opacity:.7">(yours)</span>':''}</span>
+          <span class="ks-mf2-row-label">${p.label}${p.isAsk?' <span style="font-size:.56rem;opacity:.7">(entered)</span>':''}</span>
           <div class="ks-mf2-row-track"><div class="ks-mf2-row-fill" style="width:${_pct}%;background:${p.clr}"></div></div>
           <span class="ks-mf2-row-val">AED ${p.val.toLocaleString()}</span>
         </div>`;
@@ -8568,7 +8588,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- SECTION 10: USE THIS SCRIPT -->
   <div class="ks-section">
-    <div class="ks-section-eyebrow">Confident and Polite</div>
+    <div class="ks-section-eyebrow">Negotiation Guidance</div>
     <div class="ks-section-title">Use This Script</div>
     <div class="ks-script-box" id="ksScriptBox">
       <button class="ks-script-toggle" onclick="(function(btn){const box=document.getElementById('ksScriptBody');const open=box.style.maxHeight&&box.style.maxHeight!=='0px';box.style.maxHeight=open?'0px':box.scrollHeight+'px';btn.querySelector('.ks-chevron').style.transform=open?'':'rotate(180deg)';})(this)" aria-expanded="true">
@@ -8576,7 +8596,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         <svg class="ks-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" style="transition:transform .2s"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="ks-script-body" id="ksScriptBody" style="max-height:200px;overflow:hidden;transition:max-height .3s ease">
-        <div class="ks-script-text" id="ksScriptText">${r.hagglingScript||nego?.script||`"I've reviewed the current UAE market for this vehicle — comparable listings are sitting around AED ${avg.toLocaleString()}. I'd like to offer AED ${(nego?.offer||Math.round(avg*0.97/500)*500).toLocaleString()} — can we work together on that?"`}</div>
+        <div class="ks-script-text" id="ksScriptText">${r.hagglingScript||nego?.script||`"Based on current UAE market data, comparable listings for this vehicle are sitting around AED ${avg.toLocaleString()}. An offer of AED ${(nego?.offer||Math.round(avg*0.97/500)*500).toLocaleString()} reflects that — is there room to work on the price?"`}</div>
       </div>
     </div>
     <button class="ks-script-copy" onclick="(function(btn){const el=document.getElementById('ksScriptText');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='Copy Script',2200);}).catch(()=>{const t=document.createElement('textarea');t.value=el.textContent||'';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='Copy Script',2200);});})(this)">
@@ -8589,7 +8609,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-eyebrow">Continue</div>
     <div class="ks-section-title">Next Steps</div>
     <!-- Value prop — one line -->
-    <div class="ks-next-value-prop">Verify against live listings before making any offer.</div>
+    <div class="ks-next-value-prop">Verify against live listings before transacting.</div>
     <!-- Primary actions — 2-col grid -->
     <div class="ks-next-primary-row">
       <a href="https://www.dubizzle.com/motors/cars/used/" target="_blank" rel="noopener"
