@@ -514,17 +514,8 @@
     .rfooter{font-size:.58rem;color:var(--good);text-align:center;padding:7px 10px;background:var(--good-bg);border-radius:var(--r-sm);border:1px solid var(--good-line);margin-top:8px;margin-left:auto;margin-right:auto;width:100%;}
 
     /* ── REFERENCE STAMP — outside scroll, always visible ────── */
-    .ref-stamp{
-      flex-shrink:0;
-      font-family:"Exo 2",sans-serif;font-size:.52rem;
-      color:var(--muted);letter-spacing:.06em;
-      text-align:right;padding:5px 14px;
-      border-top:1px solid var(--border);
-      background:var(--surface);
-      border-radius:0 0 var(--r-xl) var(--r-xl);
-      display:none;
-    }
-    .ref-stamp.on{display:block;}
+    .ref-stamp{ display:none !important; }
+    .ref-stamp.on{ display:none !important; }
     /* Mobile sheet — ref sits in the handle bar */
     .mob-ref{
       font-family:"Exo 2",sans-serif;font-size:.5rem;
@@ -2533,7 +2524,7 @@
   .form-card{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;max-height:none!important;width:100%!important;display:flex!important;flex-direction:column!important;transform:none!important;opacity:1!important;pointer-events:auto!important;order:0!important;}
   .form-card.mob-card-behind{transform:none!important;opacity:1!important;pointer-events:auto!important;}
   /* result-panel: always visible on all breakpoints */
-  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;order:2!important;}
+  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:hidden!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;order:2!important;}
   /* When layout is hidden by JS (loading/content fullscreen states), result-panel is moot */
   .layout[style*="display: none"] .result-panel,
   .layout[style*="display:none"] .result-panel { display:none!important; }
@@ -2718,12 +2709,17 @@
     width:100%!important;overflow:hidden!important;
   }
   .restore-lbl{color:#8090A8!important;font-size:.60rem!important;white-space:nowrap!important;flex-shrink:0!important;}
-  /* Chips stretch equally to fill the row — justified */
+  /* Chips: equal share of row, one line, adaptive labels via JS + ellipsis safety net */
   .restore-chip{
     flex:1 1 0!important;min-width:0!important;max-width:none!important;
-    text-align:center!important;overflow:hidden!important;text-overflow:ellipsis!important;
-    background:#EEF1F7!important;border-color:#CDD2DE!important;color:#1A2B4C!important;font-size:.60rem!important;
-    padding:4px 6px!important;border-radius:99px!important;border-width:1.5px!important;border-style:solid!important;
+    text-align:center!important;overflow:hidden!important;
+    text-overflow:ellipsis!important;white-space:nowrap!important;
+    background:#EEF1F7!important;border-color:#CDD2DE!important;color:#1A2B4C!important;
+    font-size:clamp(.52rem,.9vw,.62rem)!important;
+    padding:4px 6px!important;border-radius:99px!important;
+    border-width:1.5px!important;border-style:solid!important;
+    cursor:pointer!important;font-family:"Exo 2",sans-serif!important;font-weight:700!important;
+    transition:background .15s,border-color .15s!important;
   }
   .restore-chip:hover{background:#1A2B4C!important;color:#D4AF37!important;border-color:#1A2B4C!important;}
 
@@ -6974,8 +6970,6 @@
         <div class="rcontent" id="rcontent" style="display:none"></div>
 
       </div>
-      <!-- Ref stamp — outside scroll area, always visible at bottom -->
-      <div class="ref-stamp" id="resultRef"></div>
     </div>
 
   </div><!-- /layout -->
@@ -7152,30 +7146,75 @@ function restoreValuation(idx){
 
 function restoreLastValuation(){restoreValuation(0);}
 
+/* ── RECENT SEARCHES — offline-first, single-row, adaptive labels ──────────
+   Works with zero network. Reads ks_hist from localStorage at boot.
+   Labels shrink on narrow screens: "2022 Toyota Camry" → "Toyota Camry" → "Camry"
+   Sequence and row are always identical across desktop / tablet / mobile.
+──────────────────────────────────────────────────────────────────────────── */
+function _buildChipLabel(h, mode){
+  // mode: 'full' | 'mid' | 'short'
+  const yr  = h.year  || '';
+  const br  = h.brand || '';
+  const mo  = h.model || '';
+  if(mode==='full')  return [yr,br,mo].filter(Boolean).join(' ');
+  if(mode==='mid')   return [br,mo].filter(Boolean).join(' ');
+  if(mode==='short') return mo||br||yr||'Search';
+  return [yr,br,mo].filter(Boolean).join(' ');
+}
+
+function _applyChipLabels(){
+  const bar = g('restoreBar');
+  if(!bar||bar.style.display==='none') return;
+  const chips = [...bar.querySelectorAll('.restore-chip')];
+  if(!chips.length) return;
+  const barW = bar.offsetWidth;
+  // Estimate available width per chip (subtract "Recent:" label ~52px + gaps)
+  const labelW = 52;
+  const gapW   = 6 * (chips.length - 1);
+  const avail  = (barW - labelW - gapW) / chips.length;
+  // Pick mode based on available width per chip
+  const mode = avail >= 110 ? 'full' : avail >= 72 ? 'mid' : 'short';
+  chips.forEach(c => {
+    c.textContent = _buildChipLabel(c._histEntry, mode);
+  });
+}
+
 function initRestoreBar(){
   try{
     let hist=[];
     try{hist=JSON.parse(localStorage.getItem('ks_hist')||'[]');}catch{}
-    // Fallback: migrate old ks_last
+    // Migrate old ks_last format
     if(!hist.length){
       const old=JSON.parse(localStorage.getItem('ks_last')||'null');
-      if(old&&old.brand)hist=[old];
+      if(old&&old.brand) hist=[old];
     }
-    if(!hist.length)return;
+    if(!hist.length) return;
     const wrap=g('restoreChips');
-    if(!wrap)return;
-    // Clear existing chips (keep the label)
+    if(!wrap) return;
+    // Clear existing chips, keep the label span
     [...wrap.querySelectorAll('.restore-chip')].forEach(c=>c.remove());
     hist.slice(0,6).forEach((h,i)=>{
       const chip=document.createElement('button');
       chip.className='restore-chip';
-      const label=[h.brand,h.model,h.year].filter(Boolean).join(' ');
-      chip.textContent=label||'Search '+i;
-      chip.title='↩ Restore this search';
+      chip.title='↩ '+[h.year,h.brand,h.model].filter(Boolean).join(' ');
+      chip._histEntry=h; // store for label re-render
+      chip.textContent=_buildChipLabel(h,'full');
       chip.onclick=()=>restoreValuation(i);
       wrap.appendChild(chip);
     });
-    g('restoreBar').style.display='block';
+    const bar=g('restoreBar');
+    bar.style.display='block';
+    // Adapt labels to current width immediately
+    requestAnimationFrame(_applyChipLabels);
+    // Re-adapt on resize (covers rotate, window drag, zoom)
+    if(!bar._roInited){
+      bar._roInited=true;
+      if(typeof ResizeObserver!=='undefined'){
+        new ResizeObserver(_applyChipLabels).observe(bar);
+      } else {
+        window.addEventListener('resize',_applyChipLabels,{passive:true});
+      }
+    }
   }catch(e){}
 }
 
@@ -8169,7 +8208,6 @@ function buildResult(r,brand,model,year,mileage,asking){
         <span class="ks-star">★</span> Full Analysis
       </button>
     </div>
-    <div class="ks-tabnav-ref"><span class="ks-tabnav-code">${ref.label}</span></div>
   </div>
 
   <!-- C13: SHARED sections S1-S6 (single DOM instance — no duplication) -->
@@ -9566,16 +9604,10 @@ function activateShareStrip(){
 }
 
 function buildShareMsg(){
-  if(!_lastValuationData) return {text:'Check any car value free at www.kamsayara.com', url:'https://www.kamsayara.com'};
-  const d   = _lastValuationData;
-  // Parse year / brand / model from carName (e.g. "2023 Hyundai Elantra")
-  const parts   = (d.carName||'').trim().split(' ');
-  const yearStr  = parts[0] || '';
-  const brandStr = parts[1] || '';
-  const modelStr = parts.slice(2).join(' ') || '';
-  const refNo    = d.ref || '';
-  const text = `If you're looking for a car in the UAE, use this first. I finally found something real and live... no more guessing. I just checked the market for a ${yearStr} ${brandStr} ${modelStr} (Ref: ${refNo}) and the data is spot on. Best part is it's actually FREE. Check any car value here: www.kamsayara.com`;
-  return {text, url:'https://www.kamsayara.com'};
+  if(!_lastValuationData)return{text:'Check any car free at www.KamSayara.com',url:'https://www.KamSayara.com'};
+  const d=_lastValuationData;
+  const text=`\uD83D\uDE97 ${d.carName} \u00B7 UAE Market Value: AED ${d.avg.toLocaleString()} \u00B7 Valued free on KamSayara \u2014 www.KamSayara.com`;
+  return{text,url:'https://www.KamSayara.com'};
 }
 
 async function captureResultAsBlob(){
@@ -9595,39 +9627,53 @@ async function captureResultAsBlob(){
 
 async function shareVia(platform){
   if(!_lastValuationData)return;
-  if(platform==='pdf'){printValuation();return;}
   const {text,url}=buildShareMsg();
   const encodedText=encodeURIComponent(text);
+  const encodedUrl=encodeURIComponent(url);
 
-  // ── Try native share sheet first (ambassador message) ──
-  if(navigator.share){
-    try{
-      await navigator.share({text});
-      return;
-    }catch(e){
-      // User cancelled or share failed — fall through to platform URLs
-      if(e.name==='AbortError')return;
+  if(platform==='pdf'){printValuation();return;}
+
+  const nativeSharePlatforms=['wa','ig','tt'];
+  if(nativeSharePlatforms.includes(platform)&&navigator.canShare){
+    const blob=await captureResultAsBlob();
+    if(blob){
+      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
+      if(navigator.canShare({files:[file]})){
+        try{
+          await navigator.share({title:'KamSayara UAE Price Report',text,files:[file]});
+          return;
+        }catch(e){}
+      }
     }
   }
 
-  // ── Fallback: platform-specific URLs ──
   let shareUrl='';
-  if(platform==='wa')        shareUrl=`https://wa.me/?text=${encodedText}`;
-  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
-  else if(platform==='fb')   shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
+  if(platform==='wa')      shareUrl=`https://wa.me/?text=${encodedText}`;
+  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Price Report \u2013 KamSayara')}&body=${encodedText}`;
+  else if(platform==='fb')   shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
   else if(platform==='ig'){
+    const blob=await captureResultAsBlob();
+    if(blob&&navigator.share){
+      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
+      try{await navigator.share({title:'KamSayara',text,files:[file]});return;}catch{}
+    }
     try{await navigator.clipboard.writeText(text);}catch{}
-    _showToast('Caption copied — open Instagram and paste when posting.');
+    _showToast('Caption copied \u2014 open Instagram and paste when posting.');
     return;
   }
   else if(platform==='tt'){
+    const blob=await captureResultAsBlob();
+    if(blob&&navigator.share){
+      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
+      try{await navigator.share({title:'KamSayara',text,files:[file]});return;}catch{}
+    }
     try{await navigator.clipboard.writeText(text);}catch{}
-    _showToast('Caption copied — open TikTok and paste when posting.');
+    _showToast('Caption copied \u2014 open TikTok and paste when posting.');
     return;
   }
-  else if(platform==='x')    shareUrl=`https://x.com/intent/tweet?text=${encodedText}`;
+  else if(platform==='x') shareUrl=`https://x.com/intent/tweet?text=${encodedText}`;
 
-  if(shareUrl) window.open(shareUrl,'_blank','noopener,noreferrer');
+  if(shareUrl)window.open(shareUrl,'_blank','noopener,noreferrer');
 }
 
 function _showToast(msg){
