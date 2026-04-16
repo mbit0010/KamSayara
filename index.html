@@ -749,10 +749,10 @@
     @media print{
       .snav,.hero,.ffoot,.qc,.nxt,.share-row,.why-toggle,.rfooter,
       #restoreBar,.mob-overlay,.mob-result-toast{display:none!important;}
-      body{background:#fff;font-size:12px;}
+      body{background:#fff;}
       .layout{display:block;}
-      .result-panel{position:static;height:auto;max-height:none;box-shadow:none;border:1px solid #ddd;}
-      .form-card{box-shadow:none;border:1px solid #ddd;}
+      .result-panel{position:static;height:auto;max-height:none;box-shadow:none;border:none;}
+      .form-card{display:none!important;}
       .pblock,.ai-block,.tags{break-inside:avoid;}
     }
 
@@ -1378,10 +1378,10 @@
     @media print {
       .snav,.hero,.ffoot,.qc,.nxt,.share-row,.why-toggle,.rfooter,
       #restoreBar,.mob-overlay,.mob-result-toast { display:none !important; }
-      body { background:#fff; font-size:12px; }
+      body { background:#fff; }
       .layout { display:block; }
-      .result-panel { position:static; height:auto; max-height:none; box-shadow:none; }
-      .form-card { box-shadow:none; border:1px solid #ddd; }
+      .result-panel { position:static; height:auto; max-height:none; box-shadow:none; border:none; }
+      .form-card { display:none !important; }
       .pblock,.ai-block,.tags { break-inside:avoid; }
     }
 
@@ -5630,7 +5630,7 @@
     /* ── C15 FIX: Print mode — consistent with new shared/free-only/paid-only structure ── */
     .ks-print-tab-label { display: none; }
     @media print {
-      @page { size: A4; margin: 8mm 10mm; }
+      /* @page handled by the single authoritative print block below — not repeated here */
       body { font-size: 9.5px !important; background: #fff !important; }
       .snav, .hero, .mob-fixed-header, .form-card, #restoreBar,
       .pir-tab-footer, .pir-ext-actions, .pir-tabs-nav, .ks-tabnav { display: none !important; }
@@ -9679,76 +9679,51 @@ function activateShareStrip(){
 }
 
 function buildShareMsg(){
-  if(!_lastValuationData)return{text:'Check any car free at www.KamSayara.com',url:'https://www.KamSayara.com'};
-  const d=_lastValuationData;
-  const text=`\uD83D\uDE97 ${d.carName} \u00B7 UAE Market Value: AED ${d.avg.toLocaleString()} \u00B7 Valued free on KamSayara \u2014 www.KamSayara.com`;
-  return{text,url:'https://www.KamSayara.com'};
-}
-
-async function captureResultAsBlob(){
-  const target=isMobile()
-    ?document.getElementById('mobContent')
-    :document.getElementById('rcontent');
-  if(!target||typeof html2canvas==='undefined'){console.warn('KamSayara: html2canvas not available');return null;}
-  try{
-    const canvas=await html2canvas(target,{
-      scale:2,useCORS:true,logging:false,
-      backgroundColor:'#ffffff',
-      ignoreElements:el=>el.classList&&el.classList.contains('share-strip')
-    });
-    return await new Promise(res=>canvas.toBlob(res,'image/jpeg',0.92));
-  }catch(e){return null;}
+  if(!_lastValuationData) return {text:'Check any car value free at www.kamsayara.com', url:'https://www.kamsayara.com'};
+  const d    = _lastValuationData;
+  const parts = (d.carName||'').trim().split(' ');
+  const yr   = parts[0]||'';
+  const br   = parts[1]||'';
+  const mo   = parts.slice(2).join(' ')||'';
+  const ref  = d.ref||'';
+  const text = `If you're looking for a car in the UAE, use this first. I finally found something real and live... no more guessing. I just checked the market for a ${yr} ${br} ${mo} (Ref: ${ref}) and the data is spot on. Best part is it's actually FREE. Check any car value here: www.kamsayara.com`;
+  return {text, url:'https://www.kamsayara.com'};
 }
 
 async function shareVia(platform){
-  if(!_lastValuationData)return;
-  const {text,url}=buildShareMsg();
-  const encodedText=encodeURIComponent(text);
-  const encodedUrl=encodeURIComponent(url);
-
+  if(!_lastValuationData) return;
   if(platform==='pdf'){printValuation();return;}
 
-  const nativeSharePlatforms=['wa','ig','tt'];
-  if(nativeSharePlatforms.includes(platform)&&navigator.canShare){
-    const blob=await captureResultAsBlob();
-    if(blob){
-      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
-      if(navigator.canShare({files:[file]})){
-        try{
-          await navigator.share({title:'KamSayara UAE Price Report',text,files:[file]});
-          return;
-        }catch(e){}
-      }
+  const {text, url} = buildShareMsg();
+  const encodedText = encodeURIComponent(text);
+
+  // ── Try native share sheet first on all platforms (mobile) ──
+  if(navigator.share){
+    try{
+      await navigator.share({text});
+      return;
+    }catch(e){
+      if(e.name==='AbortError') return; // user cancelled — stop
+      // Other error — fall through to platform-specific URL
     }
   }
 
-  let shareUrl='';
-  if(platform==='wa')      shareUrl=`https://wa.me/?text=${encodedText}`;
-  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Price Report \u2013 KamSayara')}&body=${encodedText}`;
-  else if(platform==='fb')   shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
-  else if(platform==='ig'){
-    const blob=await captureResultAsBlob();
-    if(blob&&navigator.share){
-      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
-      try{await navigator.share({title:'KamSayara',text,files:[file]});return;}catch{}
-    }
-    try{await navigator.clipboard.writeText(text);}catch{}
-    _showToast('Caption copied \u2014 open Instagram and paste when posting.');
+  // ── Desktop fallback: platform-specific URLs, same ambassador text ──
+  let shareUrl = '';
+  if     (platform==='wa')   shareUrl = `https://wa.me/?text=${encodedText}`;
+  else if(platform==='mail') shareUrl = `mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
+  else if(platform==='fb')   shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
+  else if(platform==='x')    shareUrl = `https://x.com/intent/tweet?text=${encodedText}`;
+  else if(platform==='ig' || platform==='tt'){
+    // Instagram and TikTok have no direct web share URL — copy to clipboard
+    try{ await navigator.clipboard.writeText(text); }catch{}
+    _showToast(platform==='ig'
+      ? 'Caption copied — open Instagram and paste when posting.'
+      : 'Caption copied — open TikTok and paste when posting.');
     return;
   }
-  else if(platform==='tt'){
-    const blob=await captureResultAsBlob();
-    if(blob&&navigator.share){
-      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
-      try{await navigator.share({title:'KamSayara',text,files:[file]});return;}catch{}
-    }
-    try{await navigator.clipboard.writeText(text);}catch{}
-    _showToast('Caption copied \u2014 open TikTok and paste when posting.');
-    return;
-  }
-  else if(platform==='x') shareUrl=`https://x.com/intent/tweet?text=${encodedText}`;
 
-  if(shareUrl)window.open(shareUrl,'_blank','noopener,noreferrer');
+  if(shareUrl) window.open(shareUrl, '_blank', 'noopener,noreferrer');
 }
 
 function _showToast(msg){
@@ -10241,6 +10216,6 @@ function setMobCardTops(){ /* unified layout — no card tops needed */ }
 setMobCardTops();
 window.addEventListener('resize',setMobCardTops);
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+<!-- html2canvas removed — share uses navigator.share text-only -->
 </body>
 </html>
