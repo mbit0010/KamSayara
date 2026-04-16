@@ -187,7 +187,7 @@
     @keyframes hIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
     /* ── PAGE SHELL ─────────────────────────────────────────── */
-    .page{max-width:1120px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;box-sizing:border-box;width:100%;}
+    .page{max-width:960px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;box-sizing:border-box;width:100%;}
 
     /* ── MAIN LAYOUT ────────────────────────────────────────── */
     /*
@@ -553,13 +553,13 @@
 
     /* ── RESTORE CHIPS ───────────────────────────────────────── */
     .restore-chips-wrap{
-      display:flex;align-items:center;gap:5px;flex-wrap:nowrap;overflow:visible;
-      padding:0 2px 2px;width:100%;
+      display:flex;align-items:center;gap:6px;flex-wrap:nowrap;
+      width:100%;overflow:hidden;
     }
     #restoreBar{
-      max-width:1120px;margin:0 auto;
-      padding:6px clamp(16px,3vw,32px) 4px;
       width:100%;box-sizing:border-box;
+      padding:8px 0 6px;
+      order:1; /* sits between form-card (order:0) and result-panel (order:2) in flex layout */
     }
     .restore-lbl{
       font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
@@ -751,7 +751,6 @@
     .sico:hover{transform:scale(1.15);box-shadow:0 3px 10px rgba(0,0,0,0.2);}
     .sico-wa{background:#25D366;}
     .sico-mail{background:#EA4335;}
-    .sico-pdf{background:var(--accent);}
     .sico-copy{background:var(--ink-soft);}
     .sico svg{width:15px;height:15px;fill:#fff;flex-shrink:0;}
 
@@ -1138,455 +1137,21 @@
       .ks-trigger { height: 34px !important; }
     }
 
-    /* ══════════════════════════════════════════════════════════
-       DESKTOP ≥ 901px  —  30 / 70  Control-Center Split
-    ══════════════════════════════════════════════════════════ */
-    @media (min-width: 901px) {
-
-      .page { padding: 0 20px 48px; }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        grid-template-areas: "form result";
-        gap: 0;
-        margin-top: clamp(-20px,-4vw,-10px);
-        align-items: start;
-      }
-
-      /* ── LEFT: Navy Input Panel ── */
-      .form-card {
-        grid-area: form;
-        background: var(--navy) !important;
-        border-radius: 16px 0 0 16px;
-        border: none;
-        box-shadow: 4px 0 24px rgba(10,37,64,0.24);
-        display: flex;
-        flex-direction: column;
-        position: static;
-        top: auto;
-        max-height: none;
-        overflow-y: visible;
-        overflow-x: visible;
-        z-index: 10;
-      }
-
-      /* ── RIGHT: White Output Panel — same height as form card ── */
-      .layout { align-items: stretch !important; }
-      .result-panel {
-        grid-area: result;
-        background: var(--panel-bg) !important;
-        border-radius: 0 16px 16px 0;
-        border: none;
-        border-left: 1px solid var(--border);
-        box-shadow: var(--card-shadow-deep);
-        min-height: 0;
-        align-self: stretch;
-        overflow: visible;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-      .rpanel-inner { flex: 1; display: flex; flex-direction: column; }
-      /* Idle + loading fill the panel cleanly, centred, no box */
-      .rph  { flex: 1; border: none !important; background: transparent !important; box-shadow: none !important; }
-      .rld  { flex: 1; border: none !important; background: transparent !important; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 20px; }
-
-      /* ── FORM HEADER ── */
-      .form-header {
-        padding: 14px 14px 10px;
-        border-bottom: 1px solid rgba(255,255,255,0.12);
-        border-radius: 16px 0 0 0;
-        background: linear-gradient(138deg,rgba(0,38,32,0.93) 0%,rgba(0,82,68,0.95) 30%,rgba(140,105,8,0.89) 68%,rgba(196,154,42,0.96) 100%);
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 8px;
-        flex-shrink: 0;
-      }
-      .form-header-title {
-        font-size: 0.58rem;
-        font-weight: 800;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: #E8D060;
-      }
-      .form-body { padding: 8px 12px 6px; flex: 1; }
-      .sec-label { display: none; }
-
-      /* Labels on navy */
-      .ig label {
-        font-size: 0.6rem;
-        font-weight: 700;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        color: var(--navy-text);
-        margin-bottom: 3px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.2;
-      }
-      .ig:focus-within label { color: var(--gold); }
-      .rq { color: var(--gold) !important; }
-
-      /* 2-col grid on the narrow panel */
-      .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 8px; margin-bottom: 6px; align-items: end; }
-
-      /* Inputs: white on navy */
-      select, input[type="number"], input[type="text"] {
-        height: 32px !important;
-        font-size: 0.76rem !important;
-        padding: 0 0.55rem !important;
-        background: rgba(255,255,255,0.96) !important;
-        border: 1px solid rgba(255,255,255,0.18) !important;
-        border-radius: 7px !important;
-        color: var(--navy) !important;
-        font-family: "Exo 2", sans-serif;
-        font-weight: 600;
-        width: 100%;
-        transition: border-color 0.16s, box-shadow 0.16s;
-      }
-      select:focus, input[type="number"]:focus, input[type="text"]:focus {
-        border-color: var(--gold) !important;
-        box-shadow: 0 0 0 2px var(--gold-soft) !important;
-        background: #fff !important;
-        outline: none;
-      }
-      select.filled, input.filled {
-        border-color: var(--gold-bdr) !important;
-        background: rgba(255,255,255,0.99) !important;
-      }
-
-      /* KS triggers on navy */
-      .ks-trigger {
-        height: 32px !important;
-        font-size: 0.76rem !important;
-        background: rgba(255,255,255,0.96) !important;
-        border: 1px solid rgba(255,255,255,0.18) !important;
-        border-radius: 7px !important;
-        color: var(--navy) !important;
-        font-weight: 600;
-        transition: border-color 0.16s, box-shadow 0.16s;
-      }
-      .ks-trigger.ks-filled { border-color: var(--gold-bdr) !important; background: #fff !important; }
-      .ks-wrap.open .ks-trigger { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; background: #fff !important; }
-      .ks-panel { background: #fff !important; border: 1px solid var(--border) !important; box-shadow: 0 8px 28px rgba(10,37,64,0.16) !important; border-radius: 0 0 10px 10px !important; }
-
-      /* Prefix labels */
-      .ig .prefix-wrap .prefix-lbl { color: rgba(255,255,255,0.38); font-size: 0.68rem; }
-      .asking-field-wrap .prefix-lbl { color: var(--gold) !important; }
-      .asking-field-wrap label       { color: var(--gold) !important; }
-      .asking-field-wrap input       { border-color: var(--gold-bdr) !important; }
-
-      /* Error messages */
-      .errmsg { color: #FCA5A5 !important; font-size: 0.58rem; }
-
-      /* QC row — 4-col single line, individual bordered cards */
-      .qc-row { grid-template-columns: repeat(4,1fr) !important; gap: 4px !important; }
-      .qc-item { flex-direction: column !important; justify-content: center !important; gap: 4px; padding: 5px 3px !important; }
-      .qc-name { font-size: 0.52rem !important; }
-
-      /* Form footer — force single row no wrap */
-      .ffoot { /* overridden by unified block below */ }
-      .ffoot-hint { font-size: 0.56rem; }
-
-      /* Get Valuation — overridden by unified block */
-      .btn-go { /* overridden by unified block */ }
-      .btn-go:hover:not(:disabled) { }
-      .btn-go.ready { }
-      @keyframes goldPulse { 0%,100% { box-shadow: 0 4px 14px rgba(184,150,10,0.38); } 50% { box-shadow: 0 6px 22px rgba(184,150,10,0.60); } }
-      .btn-go:disabled { }
-
-      /* Reset button */
-      .btn-reset { }
-
-      /* Restore chips on navy */
-      .restore-lbl { color: rgba(255,255,255,0.32) !important; font-size: 0.56rem; }
-      .restore-chip { background: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.10) !important; color: rgba(255,255,255,0.60) !important; font-size: 0.58rem; }
-      .restore-chip:hover { background: var(--gold) !important; color: var(--navy) !important; border-color: var(--gold) !important; }
-      .smart-hint { color: rgba(255,255,255,0.38) !important; }
-
-      /* ── RESULT PANEL INTERIOR ── */
-      .rcontent { padding: 0; animation: fIn 0.38s var(--ease) both; }
-
-      /* Output sections — generous padding & card subdivision */
-      .r-price-section {
-        background: var(--navy) !important;
-        border-radius: 0 16px 0 0 !important;
-        padding: 22px 26px 18px !important;
-        border-bottom: 2px solid var(--gold-bdr) !important;
-      }
-      .r-price-lbl   { color: rgba(255,255,255,0.48) !important; font-size: 0.55rem; }
-      .r-price-main  { color: var(--gold) !important; font-size: clamp(1.9rem,3vw,2.5rem) !important; }
-      .r-price-range { color: rgba(255,255,255,0.52) !important; font-size: 0.64rem; }
-      .r-badge       { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.14) !important; color: rgba(255,255,255,0.72) !important; }
-      .r-badge.live  { background: rgba(74,222,128,0.14) !important; border-color: rgba(74,222,128,0.24) !important; color: #4ADE80 !important; }
-      .r-badge.warn  { background: rgba(252,165,165,0.14) !important; border-color: rgba(252,165,165,0.24) !important; color: #FCA5A5 !important; }
-
-      .r-vs-section      { background: var(--panel-bg2) !important; padding: 12px 26px !important; border-bottom: 1px solid var(--border) !important; }
-      .r-bar-section     { padding: 16px 26px 14px !important; border-bottom: 1px solid var(--border) !important; }
-      .r-metrics-section { padding: 16px 26px !important; border-bottom: 1px solid var(--border) !important; }
-      .r-ai-section      { padding: 18px 26px !important; background: #fff; }
-      .r-sep             { background: var(--border) !important; }
-
-      /* NEW REPORT: cancel all legacy overrides inside .rpt-wrap on desktop */
-      .rpt-wrap .r-price-section {
-        background: #fff !important; border-radius: 0 !important;
-        padding: 16px 16px 18px 18px !important; border-bottom: none !important;
-        border-right: 1px solid #eef0f4 !important;
-      }
-      .rpt-wrap .r-price-lbl  { color: #64748B !important; font-size: inherit; }
-      .rpt-wrap .r-price-main { color: #1A2B4C !important; font-size: inherit !important; }
-      .rpt-wrap .r-price-range{ color: #8C7D68 !important; font-size: inherit; }
-      .rpt-wrap .r-vs-section { background: #fafbfc !important; padding: 16px 18px 18px 14px !important; border-bottom: none !important; }
-      .rpt-wrap .r-bar-section{ padding: 0 !important; border-bottom: none !important; }
-      .rpt-wrap .r-metrics-section { padding: 12px 18px 14px !important; border-bottom: none !important; }
-      .rpt-wrap .r-ai-section { padding: 12px 18px 14px !important; background: #fff !important; }
-      .rpt-wrap .r-sep        { display: none !important; }
-
-      .r-metric-lbl  { color: var(--navy) !important; opacity: 0.55; font-size: 0.57rem; }
-      .r-metric-bar.accuracy { background: linear-gradient(90deg,#FCA5A5,#FCD34D,#4ADE80) !important; }
-      .r-metric-bar.mkt      { background: linear-gradient(90deg,#FCA5A5,var(--gold-lt),#4ADE80) !important; }
-      .r-mkt-badge.good { background: var(--gold-soft) !important; color: #7A5A0A !important; border: 1px solid var(--gold-bdr); }
-      .r-mkt-badge.hot  { background: rgba(74,222,128,0.10) !important; color: #166534 !important; }
-
-      .r-factor::before      { color: var(--gold) !important; }
-      .r-insight-box         { border-left-color: var(--gold) !important; background: var(--gold-soft) !important; }
-      .r-insight-lbl         { color: var(--gold) !important; }
-      .r-verdict-label.good  { background: var(--gold-soft) !important; color: var(--navy) !important; border: 1px solid var(--gold-bdr); }
-      .r-rec-row             { background: var(--gold-soft) !important; border: 1px solid var(--gold-bdr); border-radius: 8px; }
-      .r-rec-lbl, .r-rec-price { color: var(--navy) !important; }
-
-      .ref-stamp { border-radius: 0 0 16px 0; background: var(--panel-bg2); border-top: 1px solid var(--border); padding: 8px 24px; font-size: 0.52rem; color: var(--muted); text-align: right; display: none; }
-      .ref-stamp.on { display: block; }
-
-      /* Placeholder */
-      .rph { padding: 48px 32px; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
-      .rph-title { color: var(--gold) !important; font-size: 0.78rem; }
-      .rph p { font-size: 0.76rem; color: var(--muted); max-width: 240px; }
-
-      /* Accordion hidden on desktop */
-      .accord-card { display: contents; }
-      .accord-head { display: none; }
-      .accord-body { display: contents; }
-
-      /* Output subcard wrapper — groups sections with subtle shadow */
-      .r-card-group {
-        margin: 14px 16px;
-        background: var(--panel-bg);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(10,37,64,0.06);
-        overflow: hidden;
-      }
-      .r-card-group > * { border-radius: 0 !important; }
-      .r-card-group > *:last-child { border-bottom: none !important; }
-
-    } /* end @media min-width:901px */
-
 
     /* ══════════════════════════════════════════════════════════
-       TABLET  601–900px  —  Accordion Stack
+       DESKTOP ≥ 901px  /  TABLET 601–900px
+       Visual design, layout, and all field styles are fully
+       handled by the FINAL AUTHORITATIVE block below.
+       These stubs only suppress legacy chrome elements that
+       should never appear on these breakpoints.
     ══════════════════════════════════════════════════════════ */
-    @media (min-width: 601px) and (max-width: 900px) {
-
-      .layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-areas: "form" "result";
-        gap: 0;
-        margin-top: 0;
-        align-items: start;
-      }
-
-      /* Form card — navy full width */
-      .form-card {
-        grid-area: form;
-        background: var(--navy) !important;
-        border-radius: 14px 14px 0 0;
-        border: none;
-        box-shadow: 0 4px 20px rgba(10,37,64,0.18);
-        display: flex;
-        flex-direction: column;
-        position: static;
-        max-height: none;
-        overflow: visible;
-        z-index: 10;
-      }
-
-      /* Result panel */
-      .result-panel {
-        grid-area: result;
-        background: var(--panel-bg) !important;
-        border-radius: 0 0 14px 14px;
-        border: none;
-        border-top: 1px solid var(--border);
-        box-shadow: var(--card-shadow);
-        min-height: auto;
-        overflow: visible;
-        display: flex;
-        flex-direction: column;
-      }
-
-      /* Form header */
-      .form-header {
-        padding: 14px 18px 10px;
-        border-bottom: 1px solid rgba(255,255,255,0.12);
-        border-radius: 14px 14px 0 0;
-        background: linear-gradient(138deg,rgba(0,38,32,0.93) 0%,rgba(0,82,68,0.95) 30%,rgba(140,105,8,0.89) 68%,rgba(196,154,42,0.96) 100%);
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-      }
-      .form-header-title { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #E8D060; }
-      .form-body { padding: 12px 18px 8px; }
-      .sec-label { display: none; }
-
-      /* Labels */
-      .ig label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--navy-text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .ig:focus-within label { color: var(--gold); }
-      .rq { color: var(--gold) !important; }
-
-      /* 3-column grid */
-      .fg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 10px; margin-bottom: 8px; align-items: end; }
-      .asking-field-wrap { grid-column: unset; }
-      .more-field { display: flex !important; }
-
-      /* Inputs — height matches desktop (34px) per global consistency standard */
-      select, input[type="number"], input[type="text"] {
-        height: 34px !important; font-size: 0.82rem !important; padding: 0 0.7rem !important;
-        background: rgba(255,255,255,0.96) !important;
-        border: 1px solid rgba(255,255,255,0.20) !important;
-        border-radius: 8px !important; color: var(--navy) !important;
-        font-family: "Exo 2", sans-serif; font-weight: 600; width: 100%;
-        transition: border-color 0.16s;
-      }
-      select:focus, input:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; outline: none; background: #fff !important; }
-      select.filled, input.filled { border-color: var(--gold-bdr) !important; background: #fff !important; }
-
-      /* Tablet trigger — height mirrors desktop cell size (34px) per global standard */
-      .ks-trigger { height: 34px !important; font-size: 0.82rem !important; background: rgba(255,255,255,0.96) !important; border: 1px solid rgba(255,255,255,0.20) !important; border-radius: 8px !important; color: var(--navy) !important; font-weight: 600; }
-      .ks-trigger.ks-filled { border-color: var(--gold-bdr) !important; }
-      .ks-wrap.open .ks-trigger { border-color: var(--gold) !important; box-shadow: 0 0 0 2px var(--gold-soft) !important; }
-      /* Tablet panel — absolute positioning works since form-card is static+overflow:visible.
-         JS _ksPositionPanel still handles viewport-edge detection and opens downward. */
-      .ks-panel { background: #fff !important; border: 1.5px solid var(--accent-line) !important; box-shadow: 0 8px 28px rgba(10,37,64,0.18), 0 2px 8px rgba(0,0,0,0.06) !important; z-index: 999999 !important; position: absolute !important; border-radius: var(--r-md) !important; top: calc(100% + 3px) !important; left: 0 !important; right: 0 !important; bottom: auto !important; overflow: visible !important; }
-      .ks-search-row { border-radius: var(--r-md) var(--r-md) 0 0 !important; overflow: hidden !important; }
-      /* Ensure 6-item list with right-side scrollbar on tablet */
-      .ks-list { max-height: 192px !important; overflow-y: scroll !important; scrollbar-width: thin !important; border-radius: 0 0 var(--r-md) var(--r-md) !important; }
-      .ks-list::-webkit-scrollbar { width: 6px !important; display: block !important; }
-      .ks-list::-webkit-scrollbar-thumb { background: rgba(0,133,119,0.45) !important; border-radius: 3px !important; }
-
-      .ig .prefix-wrap .prefix-lbl { color: rgba(255,255,255,0.36); font-size: 0.72rem; }
-      .asking-field-wrap .prefix-lbl { color: var(--gold) !important; }
-      .asking-field-wrap label { color: var(--gold) !important; }
-      .asking-field-wrap input { border-color: var(--gold-bdr) !important; }
-      .errmsg { color: #FCA5A5 !important; font-size: 0.62rem; }
-
-      /* QC row — 4-col single line tablet */
-      .qc-row { grid-template-columns: repeat(4,1fr) !important; gap: 5px !important; }
-      .qc-item { flex-direction: column !important; justify-content: center !important; gap: 4px; padding: 6px 4px !important; }
-      .qc-name { font-size: 0.57rem !important; }
-
-      /* Form footer tablet — handled by unified block */
-      .ffoot-hint strong { color: #1A2B4C !important; }
-      .ffoot-hint.ready-hint strong { color: #1A8C6B !important; }
-
-      /* Gold button */
-      .btn-go { background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold) 100%) !important; color: var(--navy) !important; font-weight: 800; font-size: 0.82rem; padding: 0 18px; min-height: 38px; border-radius: 8px; box-shadow: 0 3px 14px rgba(196,154,42,0.42); white-space: nowrap; }
-      .btn-go:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px var(--gold-glow) !important; }
-      .btn-go.ready { animation: goldPulse 2.4s ease-in-out infinite; }
-      .btn-go:disabled { background: rgba(255,255,255,0.10) !important; color: rgba(255,255,255,0.28) !important; box-shadow: none !important; }
-
-      .btn-reset { color: rgba(255,255,255,0.35) !important; border-color: rgba(255,255,255,0.10) !important; font-size: 0.66rem; padding: 0.42rem 0.75rem; border-radius: 7px; }
-      .btn-reset:hover { color: var(--gold) !important; border-color: var(--gold-bdr) !important; background: var(--gold-soft) !important; }
-      .restore-lbl { color: rgba(255,255,255,0.35) !important; font-size: 0.58rem; }
-      .restore-chip { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.12) !important; color: rgba(255,255,255,0.65) !important; font-size: 0.6rem; }
-      .restore-chip:hover { background: var(--gold) !important; color: var(--navy) !important; border-color: var(--gold) !important; }
-      .smart-hint { color: rgba(255,255,255,0.40) !important; }
-
-      /* ── TABLET ACCORDION — output sections ── */
-      .accord-wrap { display: flex; flex-direction: column; gap: 0; }
-      .accord-card {
-        border-bottom: 1px solid var(--border);
-        overflow: hidden;
-      }
-      .accord-card:last-child { border-bottom: none; }
-      .accord-head {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-        padding: 13px 20px;
-        cursor: pointer;
-        background: var(--panel-bg);
-        transition: background 0.15s;
-        user-select: none;
-      }
-      .accord-head:hover { background: var(--panel-bg2); }
-      .accord-card.open .accord-head { background: linear-gradient(135deg, rgba(10,37,64,0.03), rgba(196,154,42,0.04)); }
-      .accord-title {
-        font-size: 0.68rem;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--navy);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .accord-dot {
-        width: 7px; height: 7px;
-        border-radius: 50%;
-        background: var(--border);
-        flex-shrink: 0;
-        transition: background 0.2s;
-      }
-      .accord-card.open .accord-dot { background: var(--gold); }
-      .accord-icon {
-        font-size: 1.1rem;
-        color: var(--gold);
-        font-weight: 700;
-        line-height: 1;
-        transition: transform 0.22s var(--ease);
-        flex-shrink: 0;
-      }
-      .accord-card.open .accord-icon { transform: rotate(45deg); }
-      .accord-body {
-        display: none !important;
-        padding: 0 0 4px;
-      }
-      .accord-card.open .accord-body { display: block !important; }
-
-      /* Section padding inside accordion */
-      .r-price-section { padding: 16px 22px 14px !important; }
-      .r-vs-section    { padding: 10px 22px !important; background: var(--panel-bg2) !important; }
-      .r-bar-section   { padding: 14px 22px 12px !important; }
-      .r-metrics-section { padding: 14px 22px !important; }
-      .r-ai-section    { padding: 16px 22px !important; }
-
-      /* Price section on tablet — keep navy hero style */
-      .r-price-section {
-        background: var(--navy) !important;
-        border-radius: 0 !important;
-      }
-      .r-price-lbl   { color: rgba(255,255,255,0.48) !important; }
-      .r-price-main  { color: var(--gold) !important; }
-      .r-price-range { color: rgba(255,255,255,0.52) !important; }
-
-      /* NEW REPORT: cancel legacy overrides inside rpt-wrap on tablet */
-      .rpt-wrap .r-price-section { background: #fff !important; padding: 16px 16px 18px 18px !important; border-bottom: none !important; }
-      .rpt-wrap .r-vs-section    { background: #fafbfc !important; padding: 16px 18px 18px 14px !important; }
-      .rpt-wrap .r-bar-section   { padding: 0 !important; }
-      .rpt-wrap .r-price-lbl     { color: #64748B !important; }
-      .rpt-wrap .r-price-main    { color: #1A2B4C !important; }
-
-      /* Placeholder */
-      .rph { padding: 30px 24px; }
-      .rph-title { color: var(--gold) !important; }
-
-    } /* end tablet */
-
+    @media (min-width: 601px) {
+      .mob-fixed-header  { display: none !important; }
+      .mob-tab-bar       { display: none !important; }
+      .mob-result-toast  { display: none !important; }
+      .mob-overlay       { display: none !important; }
+      #backToInputs      { display: none !important; }
+    }
 
     /* ══════════════════════════════════════════════════════════
        MOBILE ≤ 600px  —  Two-Section Simplified View
@@ -1635,10 +1200,10 @@
         flex: 1;
       }
 
-      /* ── OUTPUT PANEL — white, rounded bottom, always visible ── */
+      /* ── OUTPUT PANEL — always visible, identical to desktop/tablet ── */
       .result-panel {
         grid-area: result;
-        display: flex !important;
+        display: flex;
         flex-direction: column;
         background: var(--panel-bg) !important;
         border-radius: 0 0 14px 14px !important;
@@ -2525,7 +2090,6 @@
     .sico-ig   { background: linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); }
     .sico-tt   { background: #010101; }
     .sico-x    { background: #000; }
-    .sico-pdf  { background: var(--navy); }
     .sico::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: rgba(10,37,64,0.90); color: #fff; font-family: "Exo 2", sans-serif; font-size: 0.52rem; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap; padding: 3px 7px; border-radius: 5px; pointer-events: none; opacity: 0; transition: opacity 0.14s; }
     .sico:hover::after { opacity: 1; }
 
@@ -2959,13 +2523,20 @@
   .hero::after{background:#E8ECF2!important;}
   .page{max-width:960px!important;margin:0 auto!important;padding:0 16px 48px!important;position:relative!important;z-index:1!important;}
 
-  /* Stacked layout — form top, result bottom */
-  .layout{display:flex!important;flex-direction:column!important;gap:16px!important;margin-top:clamp(-20px,-4vw,-10px)!important;align-items:stretch!important;}
+  /* Stacked layout — form top, recent searches middle, result bottom */
+  .layout{display:flex!important;flex-direction:column!important;gap:0!important;margin-top:clamp(-20px,-4vw,-10px)!important;align-items:stretch!important;}
+  .form-card{order:0!important;}
+  #restoreBar{order:1!important;}
+  .result-panel{order:2!important;}
 
   /* Both cards: white, fully rounded all 4 corners, static */
-  .form-card{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;max-height:none!important;width:100%!important;display:flex!important;flex-direction:column!important;transform:none!important;opacity:1!important;pointer-events:auto!important;}
+  .form-card{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;max-height:none!important;width:100%!important;display:flex!important;flex-direction:column!important;transform:none!important;opacity:1!important;pointer-events:auto!important;order:0!important;}
   .form-card.mob-card-behind{transform:none!important;opacity:1!important;pointer-events:auto!important;}
-  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;}
+  /* result-panel: always visible on all breakpoints */
+  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;order:2!important;}
+  /* When layout is hidden by JS (loading/content fullscreen states), result-panel is moot */
+  .layout[style*="display: none"] .result-panel,
+  .layout[style*="display:none"] .result-panel { display:none!important; }
 
   /* Form header */
   .form-header{background:linear-gradient(138deg,rgba(0,38,32,0.93) 0%,rgba(0,82,68,0.95) 30%,rgba(140,105,8,0.89) 68%,rgba(196,154,42,0.96) 100%)!important;border-bottom:1px solid rgba(255,255,255,0.12)!important;border-radius:16px 16px 0 0!important;padding:11px 16px 10px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;flex-shrink:0!important;}
@@ -3106,7 +2677,8 @@
   .ks-wrap.open .ks-trigger,.ks-trigger:focus{border-color:#1A2B4C!important;box-shadow:0 0 0 3px rgba(26,43,76,.10)!important;background:#fff!important;outline:none!important;}
   .ks-trigger.ks-err{border-color:#C0392B!important;background:#FEF2F2!important;}
   .ks-trigger::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;}
-  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:99999!important;overflow:visible!important;}
+  .ks-wrap{position:relative!important;overflow:visible!important;}
+  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:999999!important;overflow:visible!important;position:absolute!important;left:0!important;right:0!important;bottom:auto!important;width:100%!important;}
   .ks-search-row{border-radius:10px 10px 0 0!important;overflow:hidden!important;}
   .ks-list{max-height:192px!important;overflow-y:scroll!important;overflow-x:hidden!important;direction:ltr!important;scrollbar-width:thin!important;scrollbar-color:rgba(26,43,76,.38) #F4F6FA!important;border-radius:0 0 10px 10px!important;}
   .ks-list::-webkit-scrollbar{width:6px!important;display:block!important;}
@@ -3136,13 +2708,27 @@
   .btn-go:disabled{background:#D0D5E0!important;color:#8A96A8!important;box-shadow:none!important;cursor:not-allowed!important;}
   @keyframes gPulse{0%,100%{box-shadow:0 4px 14px rgba(184,150,10,.35);}50%{box-shadow:0 6px 22px rgba(184,150,10,.58);}}
 
-  /* Restore chips */
-  .restore-lbl{color:#8090A8!important;font-size:.60rem!important;}
-  .restore-chip{background:#EEF1F7!important;border-color:#CDD2DE!important;color:#1A2B4C!important;font-size:.60rem!important;}
+  /* Restore bar — between input and output, full layout width */
+  #restoreBar{
+    order:1!important;padding:8px 0 8px!important;
+    background:transparent!important;border:none!important;width:100%!important;box-sizing:border-box!important;
+  }
+  .restore-chips-wrap{
+    display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important;
+    width:100%!important;overflow:hidden!important;
+  }
+  .restore-lbl{color:#8090A8!important;font-size:.60rem!important;white-space:nowrap!important;flex-shrink:0!important;}
+  /* Chips stretch equally to fill the row — justified */
+  .restore-chip{
+    flex:1 1 0!important;min-width:0!important;max-width:none!important;
+    text-align:center!important;overflow:hidden!important;text-overflow:ellipsis!important;
+    background:#EEF1F7!important;border-color:#CDD2DE!important;color:#1A2B4C!important;font-size:.60rem!important;
+    padding:4px 6px!important;border-radius:99px!important;border-width:1.5px!important;border-style:solid!important;
+  }
   .restore-chip:hover{background:#1A2B4C!important;color:#D4AF37!important;border-color:#1A2B4C!important;}
 
   /* Result panel */
-  .rcontent{background:#fff!important;padding:0!important;}
+  .rcontent{background:#fff!important;padding:0!important;display:none;overflow-y:auto;flex:1;}
   .rph{background:#fff!important;}
   .share-strip{border-radius:0 0 16px 16px!important;border-top:1px solid #E2E6EE!important;background:#F4F6FA!important;}
   .rpt-wrap{border-radius:0!important;overflow:visible!important;}
@@ -3190,6 +2776,17 @@
     .layout{gap:14px!important;}
     .form-body{padding:12px 16px 6px!important;}
     .ffoot{padding:10px 16px 12px!important;}
+  }
+
+  /* Desktop ≥901px — stacked layout enforced; two-column rules are overridden */
+  @media(min-width:901px){
+    .layout{display:flex!important;flex-direction:column!important;gap:16px!important;}
+    .form-card{border-radius:16px!important;overflow:visible!important;}
+    .result-panel{border-radius:16px!important;}
+    /* Form header: top corners match form-card, no corner mismatch */
+    .form-header{border-radius:16px 16px 0 0!important;}
+    .ffoot{border-radius:0 0 16px 16px!important;}
+    .page{padding:0 20px 48px!important;}
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -6148,12 +5745,12 @@
     }
     .pir-ps-hero-amount { animation: priceRevealV29 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both !important; }
 
-/* ── OUTPUT CARD: report header clips to card border-radius ── */
-#ks-result-card .ks-report-header {
+/* ── OUTPUT PANEL: report header clips to panel border-radius ── */
+.result-panel .ks-report-header {
   border-radius: 16px 16px 0 0 !important;
 }
-/* Bottom of card — disclaimer rounds the bottom corners */
-#ks-result-card #ksPirDisclaimer {
+/* Bottom of panel — disclaimer */
+.result-panel #ksPirDisclaimer {
   border-radius: 0 0 16px 16px !important;
   overflow: hidden;
 }
@@ -6163,25 +5760,16 @@
   border-bottom: none !important;
   border-top: none !important;
 }
-/* tabnav inside card — sticky still works (no overflow:hidden on card) */
-#ks-result-card .ks-tabnav {
-  border-radius: 0 !important; /* flat inside card; card supplies the radius */
-}
-/* Print: card border stays for A4 */
-@media print {
-  #ks-result-card {
-    border: 1px solid #ddd !important;
-    border-radius: 8px !important;
-    box-shadow: none !important;
-  }
+/* tabnav inside panel */
+.result-panel .ks-tabnav {
+  border-radius: 0 !important;
 }
 @keyframes ksSlideUp   { from{opacity:1;transform:translateY(0);}    to{opacity:0;transform:translateY(-12px);} }
 @keyframes ksSlideDown { from{opacity:0;transform:translateY(8px);}  to{opacity:1;transform:none;} }
 .ks-collapsing { animation:ksSlideUp 0.22s cubic-bezier(0.4,0,0.2,1) forwards; pointer-events:none; }
 .ks-expanding  { animation:ksSlideDown 0.28s cubic-bezier(0.16,1,0.3,1) both; }
 /* result panels use the slide-down version */
-#ks-fullscreen-load.ks-fading-in,
-#ks-fullscreen-result.ks-fading-in { animation:ksSlideDown 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+.rcontent.ks-fading-in { animation:ksSlideDown 0.32s cubic-bezier(0.16,1,0.3,1) both; }
 
 /* ── E20 FIX: Unified gradient palette ─────────────────────────────────────
    Positive / confidence bars: Deep Navy #0F1E38 → Dark Teal #008577
@@ -6226,13 +5814,6 @@
 .ks-id-img-fallback svg,
 .rph-car-svg,
 .rph-idle-car svg { stroke-width: inherit !important; }
-/* Requires viewport-fit=cover on the meta viewport tag         */
-#ks-fullscreen-load {
-  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-}
-#ks-fullscreen-result {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
 /* snav top safe area (notch devices in landscape) */
 .snav {
   padding-top: env(safe-area-inset-top, 0px);
@@ -6249,11 +5830,6 @@
 }
 
 /* ── D16: JS-injected toast (copyLink / share feedback) ─────── */
-/* Handled inline in JS using CSS variable — see script below   */
-#ks-fullscreen-load,
-#ks-fullscreen-result {
-  transition: opacity 0.22s ease;
-}
 /* Page elements fade when loading state activates */
 .ks-fading-out {
   opacity: 0;
@@ -6267,50 +5843,26 @@
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }
 }
-body.ks-result-active .hero,
-body.ks-result-active .snav,
-body.ks-result-active .mob-fixed-header,
-body.ks-result-active .mob-tab-bar,
-body.ks-result-active .back-to-inputs,
-body.ks-result-active .disc { display: none !important; }
-
-/* ── FULLSCREEN CONTAINERS ─────────────────────────────── */
-#ks-fullscreen-load, #ks-fullscreen-result {
-  font-family: "Exo 2", system-ui, sans-serif;
-}
-#ks-fullscreen-result .ks-tabnav {
-  border-radius: 0;
-  top: 0;
-}
-/* v33 Fix A3: inside mobile, tabnav must clear the fixed header (~96px) */
-@media (max-width: 600px) {
-  #ks-fullscreen-result .ks-tabnav {
-    top: 96px;
-  }
-}
+/* ── FULLSCREEN CONTAINERS — removed; results render inline ── */
 
 /* ── PRINT / PDF — A4 LAYOUT ──────────────────────────── */
 @media print {
   @page { size: A4 portrait; margin: 12mm 14mm; }
-
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
   body, html { background: #fff !important; font-size: 10px !important; }
-
-  /* Hide everything except the fullscreen result */
-  body > *:not(#ks-fullscreen-result) { display: none !important; }
-  #ks-fullscreen-result { display: block !important; min-height: auto !important; background: #fff !important; padding: 0 !important; }
-  #ks-result-card { border: 1px solid #ccc !important; border-radius: 8px !important; box-shadow: none !important; }
-  #ks-fullscreen-result > div { padding: 0 !important; max-width: 100% !important; }
-  #ks-fullscreen-result > div > div:first-child { display: none !important; } /* hide top bar */
-
+  /* Show the inline result, hide non-essential chrome */
+  .snav, .hero, .restoreBar, #restoreBar, .share-strip, .ffoot, .form-card,
+  .mob-fixed-header, .mob-result-toast, .mob-overlay, .ks-upsell-btn,
+  .ks-free-upsell, .rph, .rld { display: none !important; }
+  .layout { display: block !important; }
+  .result-panel { display: block !important; border: none !important; box-shadow: none !important; }
+  #rcontent { display: block !important; }
   /* Compress sections for A4 */
   .ks-section { padding: 8px 10px 10px !important; }
   .ks-section-title { font-size: .85rem !important; margin-bottom: 8px !important; }
   .ks-section-eyebrow { font-size: .55rem !important; margin-bottom: 1px !important; }
   .ks-tabnav { display: none !important; }
-  .ks-upsell-btn, .ks-free-upsell { display: none !important; }
-  .ks-next-btns button:not(.ks-print-btn), .ks-next-btn { font-size: .65rem !important; padding: 6px 12px !important; }
+  .ks-next-btns button, .ks-next-btn { font-size: .65rem !important; padding: 6px 12px !important; }
   .ks-trust-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
   .ks-trust-card { padding: 8px 10px !important; }
   .ks-trust-card-val { font-size: 1.1rem !important; }
@@ -6318,34 +5870,17 @@ body.ks-result-active .disc { display: none !important; }
   .ks-nego-col { padding: 8px 8px !important; }
   .ks-mood-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px !important; }
   .ks-mood-card { padding: 8px 10px !important; }
-  .ks-mood-card-val { font-size: 1.1rem !important; }
-  .ks-scenarios { gap: 6px !important; }
   .ks-id-card { padding: 8px !important; gap: 10px !important; }
-  .ks-id-photo { width: 100px !important; aspect-ratio: 16/9 !important; min-height: 56px !important; }
-  .ks-id-img { height: auto !important; opacity: 1 !important; }
   .ks-pos-fmv { font-size: 1.6rem !important; }
-  .ks-cost-table td { padding: 4px 2px !important; font-size: .75rem !important; }
-  .ks-depr-chart { gap: 6px !important; padding: 6px 0 10px !important; }
-  .ks-depr-col { min-width: 48px !important; }
   .ks-vl-row { padding: 4px 0 !important; }
-  .ks-paid-divider { padding: 8px 10px !important; }
+  .ks-paid-divider { padding: 8px 10px !important; page-break-before: avoid !important; }
   .ks-script-box { margin-bottom: 6px !important; }
-  .ks-estimate-banner { padding: 8px 12px !important; }
-
-  /* C13+C15: shared sections always show; paid-only always shows in print */
+  /* C13+C15: show all sections in print */
   #ksPirShared   { display: block !important; }
   #ksPirFreeOnly { display: none  !important; }
   #ksPirPaidOnly { display: block !important; }
   #ksPirDisclaimer { display: block !important; }
-  .ks-paid-divider { page-break-before: avoid !important; }
-
-  /* Page breaks */
   .ks-section:nth-child(5) { page-break-after: always; }
-}
-
-/* ── PAID PDF — 2 pages (ks-print-paid class adds no extra IDs needed) ── */
-@media print {
-  body.ks-print-paid .ks-section:nth-child(4) { page-break-after: always !important; }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -6361,7 +5896,6 @@ body.ks-result-active .disc { display: none !important; }
   .ks-section { padding:14px 14px 16px; }
   .ks-report-header { padding:14px 14px 12px; }
   .ks-tabnav { padding:8px 12px; }
-  #ks-result-card { padding:0 !important; }
 }
 
 /* ── REPORT HEADER ── */
@@ -6651,11 +6185,11 @@ body.ks-result-active .disc { display: none !important; }
 .ks-pos-verdict-row .ks-pos-summary {
   font-size:.78rem; color:var(--ink-soft); line-height:1.6; flex:1;
 }
-/* Stats row */
+/* Stats row — contained rounded box, no negative-margin dependency */
 .ks-pos-stats-row {
-  display:flex; gap:0; border-top:1px solid var(--border);
-  border-radius:0 0 var(--r-md) var(--r-md); overflow:hidden;
-  margin:0 -16px -16px; /* bleed to section edges */
+  display:flex; gap:0; border:1px solid var(--border);
+  border-radius:var(--r-md); overflow:hidden;
+  margin-top:12px;
 }
 .ks-pos-stats-row .ks-pos-stat {
   flex:1; text-align:center; padding:10px 8px;
@@ -6665,7 +6199,6 @@ body.ks-result-active .disc { display: none !important; }
 .ks-pos-stats-row .ks-pos-stat:last-child { border-right:none; }
 @media(max-width:480px){
   .ks-price-compare { grid-template-columns:1fr; }
-  .ks-pos-stats-row { margin:0 -14px -16px; }
 }
 
 /* ── S3: WHY TRUST THIS ── */
@@ -7130,6 +6663,7 @@ body.ks-result-active .disc { display: none !important; }
 
 <!-- PAGE -->
 <div class="page" id="howworks">
+
   <div class="layout">
 
     <!-- ── FORM PANEL ──────────────────────────────────────── -->
@@ -7298,9 +6832,14 @@ body.ks-result-active .disc { display: none !important; }
       </div>
     </div><!-- /form-card -->
 
-    <!-- Restore bar moved inside form-body (Fix #11) -->
+    <!-- ── RECENT SEARCHES — between input and output sections ── -->
+    <div id="restoreBar" style="display:none;" aria-label="Recent searches">
+      <div class="restore-chips-wrap" id="restoreChips">
+        <span class="restore-lbl">Recent:</span>
+      </div>
+    </div>
 
-    <!-- ── RESULT PANEL (desktop + tablet) ────────────────── -->
+    <!-- ── RESULT PANEL ────────────────────────────────────── -->
     <div class="result-panel" id="resultPanel" role="region" aria-label="Valuation result" aria-live="polite">
       <div class="rpanel-inner" id="rpanelInner">
 
@@ -7342,10 +6881,6 @@ body.ks-result-active .disc { display: none !important; }
               </div>
             </div>
             <div class="rph-idle-label">Enter vehicle details to get a Price Report</div>
-            <div class="rph-idle-hint">
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2v5l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
-              Fill the form and hit <strong>Get Price Report</strong>
-            </div>
           </div>
         </div><!-- /rph-stage1 -->
 
@@ -7445,13 +6980,6 @@ body.ks-result-active .disc { display: none !important; }
 
   </div><!-- /layout -->
 
-  <!-- ── RECENT SEARCHES BAR — outside layout, between input/output panels ── -->
-  <div id="restoreBar" style="display:none;" aria-label="Recent searches">
-    <div class="restore-chips-wrap" id="restoreChips">
-      <span class="restore-lbl">Recent:</span>
-    </div>
-  </div>
-
   <!-- ── CENTERED SHARE STRIP ──────────────────────────────── -->
   <div class="share-strip" id="shareStrip">
     <span class="share-strip-lbl">Share:</span>
@@ -7480,10 +7008,6 @@ body.ks-result-active .disc { display: none !important; }
       <button class="sico sico-x share-dimmed" id="sico-x" onclick="shareVia('x')" data-tip="X / Twitter" aria-label="Share on X">
         <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.727-8.835L1.254 2.25H8.08l4.261 5.631 5.903-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </button>
-      <!-- PDF -->
-      <button class="sico sico-pdf share-dimmed" id="sico-pdf" onclick="shareVia('pdf')" data-tip="Download PDF" aria-label="Download PDF">
-        <svg viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg>
-      </button>
     </div>
   </div>
 
@@ -7496,47 +7020,7 @@ body.ks-result-active .disc { display: none !important; }
 <div class="mob-overlay" id="mobOverlay" onclick="closeMobResult()"></div>
 
 <!-- FULL-SCREEN LOADING (all devices) -->
-<div id="ks-fullscreen-load" style="display:none;position:fixed;inset:0;z-index:300;background:var(--surface);flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;">
-  <div style="max-width:520px;width:100%;">
-    <div class="rld-steps-wrap">
-      <div class="rld-steps-header">
-        <span class="rld-steps-eyebrow">Analysing UAE market data</span>
-        <span class="rld-steps-pct" id="fsRldPct">0%</span>
-      </div>
-      <div class="rld-master-bar"><div class="rld-master-fill" id="fsRldFill" style="width:0%"></div></div>
-      <ol class="rld-step-list">
-        <li class="rld-step-item" id="fsstep0"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg></span><span class="rld-step-lbl">Scanning live UAE listings — Dubizzle &amp; YallaMotor…</span><span class="rld-step-state"></span></li>
-        <li class="rld-step-item" id="fsstep1"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="rld-step-lbl">Filtering comparable listings &amp; removing outliers…</span><span class="rld-step-state"></span></li>
-        <li class="rld-step-item" id="fsstep2"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12L5 8L8 10L11 5L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rld-step-lbl" id="fsstep2lbl">Calculating depreciation &amp; adjustments…</span><span class="rld-step-state"></span></li>
-        <li class="rld-step-item" id="fsstep3"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Applying 6-stage handshake price model…</span><span class="rld-step-state"></span></li>
-        <li class="rld-step-item" id="fsstep4"><span class="rld-step-ico"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Building the Price Intelligence Report…</span><span class="rld-step-state"></span></li>
-      </ol>
-      <div class="rld-fact-wrap" id="rldFactWrap" style="margin-top:20px">
-        <div class="rld-fact-text" id="rldFactText"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FULL-SCREEN RESULT (all devices) -->
-<div id="ks-fullscreen-result" style="display:none;min-height:100vh;background:var(--page-bg,#EDF0F5);padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px));">
-  <div style="max-width:800px;margin:0 auto;">
-    <!-- Top bar: logo + new-search — outside the card, same as form header area -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 4px 14px;">
-      <div style="font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:900;color:var(--ink,#1E2D3D);">KAM<span style="color:var(--gold,#C49A2A);">·</span>SAYARA</div>
-      <button onclick="resetForm()" style="font-family:'Exo 2',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#fff;border:1.5px solid var(--border,#DEE3EB);color:var(--ink-soft,#334155);border-radius:99px;padding:6px 14px;cursor:pointer;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor='var(--accent,#008577)';this.style.color='var(--accent,#008577)'" onmouseout="this.style.borderColor='';this.style.color=''">↺ New Search</button>
-    </div>
-    <!-- Output card — border + rounded corners matching input form -->
-    <div id="ks-result-card"
-         style="background:#fff;
-                border:1px solid var(--border,#DEE3EB);
-                border-radius:16px;
-                box-shadow:0 2px 12px rgba(10,37,64,0.08),0 1px 3px rgba(10,37,64,0.05);
-                overflow:visible;">
-      <div id="ks-result-inner"></div>
-    </div>
-  </div>
-</div>
+<!-- fullscreen overlays removed — loading and results render inline in result-panel -->
 
 <!-- MOBILE BOTTOM SHEET RESULT -->
 <div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
@@ -7881,115 +7365,73 @@ function setYN(key,val,btn){
 }
 
 /* ── SHOW STATE ─────────────────────────────────────────── */
-function showState(st, mobile=false){
-  // Universal — same behaviour on all screen sizes
+function showState(st){
+  // All states keep .layout visible — loading and result render inline in result-panel
   const layout   = document.querySelector('.layout');
   const formCard = g('formCard');
-  const fullLoad = g('ks-fullscreen-load');
-  const fullRes  = g('ks-fullscreen-result');
   const ph       = g('rph');
   const rld      = g('rld');
   const rct      = g('rcontent');
-  const page     = document.querySelector('.page');
   const hero     = document.querySelector('.hero');
-  const snav     = g('stickyNav');
   const disc     = document.querySelector('.disc');
-  const backBtn  = g('backToInputs');
+  const resultPanel = g('resultPanel');
+
+  // Always hide legacy overlay elements — they are no longer used
+  const fullLoad = g('ks-fullscreen-load');
+  const fullRes  = g('ks-fullscreen-result');
+  if(fullLoad) fullLoad.style.display = 'none';
+  if(fullRes)  fullRes.style.display  = 'none';
+  // Suppress mobile-specific chrome always
   const mobToast = g('mobToast');
   const mobOverl = g('mobOverlay');
-  const mobTabBar= document.querySelector('.mob-tab-bar');
-  const mobHdr   = document.querySelector('.mob-fixed-header');
+  if(mobToast) mobToast.classList.remove('open','show');
+  if(mobOverl) mobOverl.classList.remove('show');
 
   if(st === 'placeholder'){
-    // Show form, hide report — clean up all transition classes
-    if(formCard)  { formCard.style.display=''; formCard.classList.remove('ks-collapsing','ks-expanding','ks-fading-in','ks-fading-out'); }
-    if(layout)    layout.style.display   = '';
-    if(hero)      { hero.style.display=''; hero.classList.remove('ks-collapsing','ks-expanding'); }
-    if(disc)      disc.style.display     = '';
-    if(fullLoad)  { fullLoad.style.display='none'; fullLoad.classList.remove('ks-fading-in','ks-expanding'); }
-    if(fullRes)   { fullRes.style.display='none';  fullRes.classList.remove('ks-fading-in'); }
+    // Reset — show form + idle result panel
+    if(layout)   layout.style.display    = '';
+    if(formCard) { formCard.style.display=''; formCard.classList.remove('ks-collapsing','ks-expanding'); }
+    if(hero)     { hero.style.display=''; }
+    if(disc)     disc.style.display = '';
     if(ph)  ph.style.display  = 'flex';
     if(rld) rld.style.display = 'none';
     if(rct) rct.style.display = 'none';
-    if(backBtn) backBtn.style.display    = 'none';
-    if(mobToast){ mobToast.classList.remove('open'); }
-    if(mobOverl){ mobOverl.classList.remove('show'); }
-    if(mobTabBar) mobTabBar.style.display = '';
-    if(mobHdr)    mobHdr.style.display    = '';
     document.body.classList.remove('ks-result-active');
 
   } else if(st === 'loading'){
-    // BUGFIX: fullscreen loader is position:fixed;inset:0;z-index:300 —
-    // show it FIRST so it covers the viewport instantly, then clean up
-    // layout/hero behind it. Previous F22 code hid layout at 180ms and
-    // showed the loader at 220ms — 40ms blank flash on desktop, and the
-    // result panel (part of .layout) disappeared before the loader appeared.
-    if(fullLoad) {
-      fullLoad.style.display = 'flex';
-      fullLoad.classList.remove('ks-fading-in');
-      // Trigger reflow then add animation class so it plays from start
-      void fullLoad.offsetWidth;
-      fullLoad.classList.add('ks-fading-in');
-    }
-    // Hide layout/hero AFTER loader is covering them — pure DOM cleanup,
-    // invisible to the user (they're behind z-index:300)
-    setTimeout(()=>{
-      if(formCard) { formCard.style.display='none'; formCard.classList.remove('ks-collapsing'); }
-      if(layout)   layout.style.display = 'none';
-      if(hero)     { hero.style.display='none'; hero.classList.remove('ks-collapsing'); }
-    }, 350);
-    if(disc)      disc.style.display      = 'none';
-    if(fullRes)   fullRes.style.display   = 'none';
-    if(mobToast){ mobToast.classList.remove('open'); }
-    if(mobOverl){ mobOverl.classList.remove('show'); }
-    if(backBtn) backBtn.style.display     = 'none';
-    if(mobTabBar) mobTabBar.style.display = 'none';
-    if(mobHdr)    mobHdr.style.display    = 'none';
-    document.body.classList.add('ks-result-active');
-    // Sync legacy rld for step-progress tracker
-    if(rld) rld.style.display = 'flex';
+    // Keep layout + form visible; show loading steps in result-panel
+    if(layout)   layout.style.display    = '';
+    if(formCard) formCard.style.display  = '';
+    if(hero)     hero.style.display      = '';
     if(ph)  ph.style.display  = 'none';
+    if(rld) rld.style.display = 'flex';
     if(rct) rct.style.display = 'none';
+    // Scroll result-panel into view smoothly
+    if(resultPanel) resultPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    document.body.classList.add('ks-result-active');
 
   } else if(st === 'content'){
-    // Show result card FIRST (it's full-page, covers loader), then hide loader
-    if(formCard)  formCard.style.display  = 'none';
-    if(layout)    layout.style.display    = 'none';
-    if(hero)      hero.style.display      = 'none';
-    if(disc)      disc.style.display      = 'none';
-    // Write result into the card container
-    const fsInner = document.getElementById('ks-result-inner');
-    if(fsInner && rct) fsInner.innerHTML = rct.innerHTML;
-    // Show result with slide-down animation
-    if(fullRes){
-      fullRes.style.display = 'block';
-      fullRes.classList.remove('ks-fading-in');
-      void fullRes.offsetWidth;
-      fullRes.classList.add('ks-fading-in');
-    }
-    // Hide loader AFTER result is visible (loader is behind result anyway)
-    setTimeout(()=>{ if(fullLoad) fullLoad.style.display='none'; }, 320);
+    // Keep layout + form visible; show result in result-panel
+    if(layout)   layout.style.display    = '';
+    if(formCard) formCard.style.display  = '';
+    if(hero)     hero.style.display      = '';
     if(rld) rld.style.display = 'none';
     if(ph)  ph.style.display  = 'none';
-    if(rct) rct.style.display = 'none'; // keep hidden (source)
-    if(mobToast){ mobToast.classList.remove('open'); }
-    if(mobOverl){ mobOverl.classList.remove('show'); }
-    if(backBtn) backBtn.style.display     = 'none';
-    if(mobTabBar) mobTabBar.style.display = 'none';
-    if(mobHdr)    mobHdr.style.display    = 'none';
+    if(rct) { rct.style.display = 'block'; }
+    // Scroll result-panel into view
+    if(resultPanel) resultPanel.scrollIntoView({behavior:'smooth', block:'start'});
     document.body.classList.add('ks-result-active');
-    window.scrollTo({top:0, behavior:'instant'});
-    // Re-trigger animated elements in the new container
+    // Trigger animated elements
     setTimeout(()=>{
       const el=document.getElementById('ksFmvNum');
       if(el){ const v=parseInt(el.textContent.replace(/[^0-9]/g,'')); if(v) pirCountUp(el,v,700); }
       pirAnimateStatBars();
-      // Re-bind ksPirTab
+      ksMf2Init();
       const b1=document.getElementById('ksBtnFree');
       const b2=document.getElementById('ksBtnPaid');
       if(b1) b1.onclick=()=>ksPirTab(1);
       if(b2) b2.onclick=()=>ksPirTab(2);
-    }, 50);
+    }, 80);
   }
 }
 
@@ -8031,8 +7473,8 @@ function _setStep(idx){
     if(i === idx) el.classList.add('active');
   });
   const pct = LOAD_STEPS_DEF[Math.min(idx, LOAD_STEPS_DEF.length-1)].pct;
-  ['rldMasterFill','mobRldFill','fsRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
-  ['rldPct','mobRldPct','fsRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pct+'%';});
+  ['rldMasterFill','mobRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
+  ['rldPct','mobRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pct+'%';});
 }
 
 function _rotateFact(idx){
@@ -8056,7 +7498,7 @@ function startLoad(mobile=false){
   const year    = (document.getElementById('year')||{}).value||'';
   const mileage = (document.getElementById('mileage')||{}).value;
   const carLabel= [year,brand,model].filter(Boolean).join(' ')||'this vehicle';
-  ['lstep2lbl','mlstep2lbl','fsstep2lbl'].forEach(id=>{
+  ['lstep2lbl','mlstep2lbl'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){const km=mileage?parseInt(mileage).toLocaleString()+' km ':'';el.textContent=`Calculating depreciation for ${km}${carLabel}…`;}
   });
@@ -9123,13 +8565,8 @@ function buildResult(r,brand,model,year,mileage,asking){
         YallaMotor
       </a>
     </div>
-    <!-- Micro actions — print + new search as text-link row -->
+    <!-- Micro actions — new search as text-link row -->
     <div class="ks-next-micro-row">
-      <button class="ks-next-micro-btn ks-print-btn"
-              onclick="document.body.classList.add('ks-print-paid');window.print();setTimeout(()=>document.body.classList.remove('ks-print-paid'),1000)">
-        ↓ Save as PDF
-      </button>
-      <div class="ks-next-micro-sep"></div>
       <button class="ks-next-micro-btn"
               onclick="resetForm();window.scrollTo({top:0,behavior:'smooth'})">
         ↺ New Search
@@ -9547,9 +8984,6 @@ function resetForm(){
   if(stage1)stage1.style.display='flex';
   if(stage2)stage2.style.display='none';
   showState('placeholder');
-  // Clear fullscreen result panel
-  const fullRes = g('ks-fullscreen-result');
-  if(fullRes) fullRes.innerHTML = '';
   document.body.classList.remove('ks-result-active');
   // Reset ref stamps
   const refEl=g('resultRef');
@@ -9775,7 +9209,6 @@ const _ksIsMob=()=>false; // Always use inline panel — never open full-screen 
    _ksPositionPanel() detects viewport-edge cases and can flip to open upward if needed.
    It does NOT need to set left/width since CSS handles those (left:0, right:0 = trigger width). */
 function _ksPositionPanel(wrap){
-  if(window.innerWidth > 900) return; // desktop uses CSS row-based positioning only
   const trig = wrap.querySelector('.ks-trigger');
   const panel = wrap.querySelector('.ks-panel');
   if(!trig || !panel) return;
@@ -9942,7 +9375,7 @@ function _ksSort(opts, id){
   });
 }
 
-/* Draw options list with sections and highlighting */
+/* Draw options list — flat sorted list, no section headers */
 function _ksDrawList(sel,list,q){
   list.innerHTML='';
   const q_=q.toLowerCase().trim();
@@ -9954,27 +9387,6 @@ function _ksDrawList(sel,list,q){
     em.innerHTML='No results for "<strong>'+q+'</strong>"';
     const sub=document.createElement('div');sub.className='ks-empty-sub';sub.textContent='Try a different spelling';
     em.appendChild(sub);list.appendChild(em);return;
-  }
-
-  if(!q_){
-    if(sel.id==='brand'){
-      const pop=allOpts.filter(o=>KS_POPULAR.includes(o.value));
-      if(pop.length){
-        _ksSecLabel(list,'Popular in UAE 🇦🇪');
-        _ksSort(pop,sel.id).forEach(o=>_ksAddOpt(list,sel,o,''));
-        _ksDivider(list);
-        _ksSecLabel(list,'All Brands');
-      }
-    }
-    if(sel.id==='model'){
-      const rec=_ksGetRec(sel.id).filter(v=>allOpts.some(o=>o.value===v));
-      if(rec.length){
-        _ksSecLabel(list,'Recently Used');
-        rec.forEach(v=>{const o=allOpts.find(op=>op.value===v);if(o)_ksAddOpt(list,sel,o,'');});
-        _ksDivider(list);
-        _ksSecLabel(list,'All Options');
-      }
-    }
   }
 
   _ksSort(filtered,sel.id).forEach(o=>_ksAddOpt(list,sel,o,q_));
@@ -10154,10 +9566,16 @@ function activateShareStrip(){
 }
 
 function buildShareMsg(){
-  if(!_lastValuationData)return{text:'Check any car free at www.KamSayara.com',url:'https://www.KamSayara.com'};
-  const d=_lastValuationData;
-  const text=`\uD83D\uDE97 ${d.carName} \u00B7 UAE Market Value: AED ${d.avg.toLocaleString()} \u00B7 Valued free on KamSayara \u2014 www.KamSayara.com`;
-  return{text,url:'https://www.KamSayara.com'};
+  if(!_lastValuationData) return {text:'Check any car value free at www.kamsayara.com', url:'https://www.kamsayara.com'};
+  const d   = _lastValuationData;
+  // Parse year / brand / model from carName (e.g. "2023 Hyundai Elantra")
+  const parts   = (d.carName||'').trim().split(' ');
+  const yearStr  = parts[0] || '';
+  const brandStr = parts[1] || '';
+  const modelStr = parts.slice(2).join(' ') || '';
+  const refNo    = d.ref || '';
+  const text = `If you're looking for a car in the UAE, use this first. I finally found something real and live... no more guessing. I just checked the market for a ${yearStr} ${brandStr} ${modelStr} (Ref: ${refNo}) and the data is spot on. Best part is it's actually FREE. Check any car value here: www.kamsayara.com`;
+  return {text, url:'https://www.kamsayara.com'};
 }
 
 async function captureResultAsBlob(){
@@ -10177,53 +9595,39 @@ async function captureResultAsBlob(){
 
 async function shareVia(platform){
   if(!_lastValuationData)return;
+  if(platform==='pdf'){printValuation();return;}
   const {text,url}=buildShareMsg();
   const encodedText=encodeURIComponent(text);
-  const encodedUrl=encodeURIComponent(url);
 
-  if(platform==='pdf'){printValuation();return;}
-
-  const nativeSharePlatforms=['wa','ig','tt'];
-  if(nativeSharePlatforms.includes(platform)&&navigator.canShare){
-    const blob=await captureResultAsBlob();
-    if(blob){
-      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
-      if(navigator.canShare({files:[file]})){
-        try{
-          await navigator.share({title:'KamSayara UAE Price Report',text,files:[file]});
-          return;
-        }catch(e){}
-      }
+  // ── Try native share sheet first (ambassador message) ──
+  if(navigator.share){
+    try{
+      await navigator.share({text});
+      return;
+    }catch(e){
+      // User cancelled or share failed — fall through to platform URLs
+      if(e.name==='AbortError')return;
     }
   }
 
+  // ── Fallback: platform-specific URLs ──
   let shareUrl='';
-  if(platform==='wa')      shareUrl=`https://wa.me/?text=${encodedText}`;
-  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Price Report \u2013 KamSayara')}&body=${encodedText}`;
-  else if(platform==='fb')   shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+  if(platform==='wa')        shareUrl=`https://wa.me/?text=${encodedText}`;
+  else if(platform==='mail') shareUrl=`mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
+  else if(platform==='fb')   shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
   else if(platform==='ig'){
-    const blob=await captureResultAsBlob();
-    if(blob&&navigator.share){
-      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
-      try{await navigator.share({title:'KamSayara',text,files:[file]});return;}catch{}
-    }
     try{await navigator.clipboard.writeText(text);}catch{}
-    _showToast('Caption copied \u2014 open Instagram and paste when posting.');
+    _showToast('Caption copied — open Instagram and paste when posting.');
     return;
   }
   else if(platform==='tt'){
-    const blob=await captureResultAsBlob();
-    if(blob&&navigator.share){
-      const file=new File([blob],'kamsayara-valuation.jpg',{type:'image/jpeg'});
-      try{await navigator.share({title:'KamSayara',text,files:[file]});return;}catch{}
-    }
     try{await navigator.clipboard.writeText(text);}catch{}
-    _showToast('Caption copied \u2014 open TikTok and paste when posting.');
+    _showToast('Caption copied — open TikTok and paste when posting.');
     return;
   }
-  else if(platform==='x') shareUrl=`https://x.com/intent/tweet?text=${encodedText}`;
+  else if(platform==='x')    shareUrl=`https://x.com/intent/tweet?text=${encodedText}`;
 
-  if(shareUrl)window.open(shareUrl,'_blank','noopener,noreferrer');
+  if(shareUrl) window.open(shareUrl,'_blank','noopener,noreferrer');
 }
 
 function _showToast(msg){
@@ -10644,7 +10048,7 @@ window.displayValuationResult = displayValuationResult;
 
 /* C13: ksPirTab — toggles between shared+free-only (tab 1) and shared+paid-only (tab 2)
    Uses querySelectorAll instead of getElementById to handle the case where the report
-   HTML is duplicated between #rcontent (hidden source) and #ks-result-inner (visible display) */
+   Results render directly into #rcontent inside result-panel */
 function ksPirTab(n){
   const freeAll=[...document.querySelectorAll('[id="ksPirFreeOnly"]')];
   const paidAll=[...document.querySelectorAll('[id="ksPirPaidOnly"]')];
