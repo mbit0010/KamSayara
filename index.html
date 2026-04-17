@@ -9210,8 +9210,9 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="ks-report-title">Vehicle Intelligence Report</div>
       <div class="ks-report-subtitle">${year} ${brand}${model?' '+model:''}</div>
     </div>
-    <div class="ks-report-header-right">
+    <div class="ks-report-header-right" style="text-align:right;">
       ${_sourceBadge}
+      <div style="font-size:.58rem;color:rgba(0,0,0,0.35);letter-spacing:.06em;font-family:'Exo 2',monospace;margin-top:4px;font-weight:600;">${ref.label}</div>
     </div>
   </div>
 
@@ -9622,12 +9623,18 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ═══ S7: WHAT YOU SHOULD DO NOW ═══ -->
   ${(()=>{
-    const _sp  = stickerPrice || askN || 0;
-    const _hs  = handshake || avg || 0;
-    const _walk= nego?.walk || Math.round((_hs*1.04)/500)*500;
-    const _dts = r.days_to_sell_estimate || _modelDts || '14–30 days';
-    const _rLo = rangeMin || Math.round(_hs*.92/500)*500;
-    const _rHi = rangeMax || Math.round(_hs*1.05/500)*500;
+    const _hs   = handshake || avg || 0;
+    // Buyer: open BELOW handshake, close AT handshake, walk away ABOVE handshake
+    const _open = nego?.offer || Math.round((_hs*0.93)/500)*500;
+    const _maxPay = nego?.walk || Math.round((_hs*1.05)/500)*500; // max buyer will pay
+    // Seller: list at upper range, accept at handshake
+    const _rLo = rangeMin || Math.round(_hs*.95/500)*500;
+    const _rHi = rangeMax || Math.round(_hs*1.08/500)*500;
+    // Days — ensure "days" unit is always present
+    const _dtsRaw = r.days_to_sell_estimate || _modelDts || '';
+    const _dts = _dtsRaw
+      ? (_dtsRaw.toString().toLowerCase().includes('day') ? _dtsRaw : _dtsRaw + ' days')
+      : '14–30 days';
 
     return `
     <div class="ks-section">
@@ -9636,7 +9643,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div style="padding:10px 13px;border-radius:9px;border:1.5px solid #BFDBFE;background:rgba(30,64,175,0.05);display:flex;align-items:flex-start;gap:10px;">
           <span style="font-size:.72rem;font-weight:800;color:#1E40AF;white-space:nowrap;padding-top:1px;">IF BUYER</span>
-          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">Offer Handshake price or less — AED ${_hs.toLocaleString()}. Walk away if seller won't go below AED ${_walk.toLocaleString()}.</span>
+          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">Open at AED ${_open.toLocaleString()}. Target close at Handshake — AED ${_hs.toLocaleString()}. Walk away if seller won't go below AED ${_maxPay.toLocaleString()}.</span>
         </div>
         <div style="padding:10px 13px;border-radius:9px;border:1.5px solid #FDE68A;background:rgba(180,83,9,0.05);display:flex;align-items:flex-start;gap:10px;">
           <span style="font-size:.72rem;font-weight:800;color:#B45309;white-space:nowrap;padding-top:1px;">IF SELLER</span>
@@ -9891,13 +9898,8 @@ async function checkCarPrice(){
   const btn = g('btnCheck');
   if(btn) btn.disabled = true;
 
-  // ── Generate reference number immediately on click ──
+  // ── Generate reference number — stored for result panel only ──
   const _preRef = generateRef(null);
-  const refEl = g('resultRef');
-  if(refEl){ refEl.textContent = _preRef.label; refEl.style.display='inline'; }
-  const mobRefEl = g('mobRef');
-  if(mobRefEl){ mobRefEl.textContent = _preRef.label; mobRefEl.classList.add('on'); }
-  // Store so buildResult can pick it up
   window._preGeneratedRef = _preRef.label;
 
   // Gentle scroll — move down ~40% of viewport so user sees loading section
