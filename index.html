@@ -9496,26 +9496,6 @@ function buildResult(r,brand,model,year,mileage,asking){
     })()}
   </div>
 
-  <!-- S6: KEY POINTS -->
-  <div class="ks-section">
-    <div class="ks-section-eyebrow">Strengths and Cautions</div>
-    <div class="ks-section-title">Key Points</div>
-    <div class="ks-kp-wrap">
-      ${gF.length?`<div class="ks-kp-block ks-kp-strengths">
-        <div class="ks-kp-block-label" style="color:#15803D">Strengths</div>
-        ${gF.map(f=>`<div class="ks-kp-item ks-kp-item-good"><span class="ks-kp-dot ks-kp-dot-good"></span><span>${f} — <em class="ks-kp-guidance">${_kpGuidance(f,'good')}</em></span></div>`).join('')}
-      </div>`:''}
-      ${gF.length&&rF.length?`<div class="ks-kp-sep"></div>`:''}
-      ${rF.length?`<div class="ks-kp-block ks-kp-cautions">
-        <div class="ks-kp-block-label" style="color:#B8780A">Cautions</div>
-        ${rF.map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f} — <em class="ks-kp-guidance">${_kpGuidance(f,'bad')}</em></span></div>`).join('')}
-      </div>`:''}
-      ${r.redFlags&&r.redFlags.length?`<div class="ks-kp-sep" style="margin-top:8px"></div><div class="ks-kp-block ks-kp-risk">
-        <div class="ks-kp-block-label" style="color:#DC2626">Risk Flags</div>
-        ${r.redFlags.filter(f=>!rF.some(x=>x.toLowerCase().includes(f.toLowerCase().slice(0,20)))).map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f} — <em class="ks-kp-guidance">${_kpGuidance(f,'risk')}</em></span></div>`).join('')}
-      </div>`:''}
-    </div>
-
   </div>  <!-- /ksPirShared -->
 
   <!-- C14 FREE-ONLY: upsell CTA (separate from disclaimer) -->
@@ -9523,7 +9503,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ═══ S5: PRICE COMPARISON ═══ -->
   ${(()=>{
-    const _sp  = stickerPrice || askN || 0;
+    const _sp  = r.stickerPrice || askN || 0;
     const _hs  = handshake || avg || 0;
     const _lo  = low  || rangeMin || 0;
     const _hi  = high || rangeMax || 0;
@@ -9582,11 +9562,12 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>`;
   })()}
 
-  <!-- ═══ S6: VERDICT ═══ -->
+  <!-- ═══ S6: VERDICT + KEY POINTS ═══ -->
   ${(()=>{
-    const _sp = stickerPrice || askN || 0;
+    // Canonical sticker: use API-processed value first, then form input
+    const _sp = r.stickerPrice || askN || 0;
     const _hs = handshake || avg || 0;
-    const _gap = _sp && _hs ? (_sp - _hs) : null;
+    const _gap = (_sp && _hs) ? (_sp - _hs) : null;
     const _gapAbs = _gap !== null ? Math.abs(_gap) : 0;
     const _gapPct = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
     const _within5 = _gap !== null && _gapAbs / (_hs||1) <= 0.05;
@@ -9598,14 +9579,30 @@ function buildResult(r,brand,model,year,mileage,asking){
       _vExplain='No asking price was entered. Enter a sticker price to get a verdict.';
     } else if(_within5){
       _vLabel='FAIRLY PRICED'; _vEmoji='🟡'; _vColor='#B45309'; _vBg='rgba(217,119,6,0.07)'; _vBorder='#FCD34D';
-      _vExplain=`Sticker price is within 5% of Handshake price. Both parties get a fair deal. No significant advantage or disadvantage for either side. Transaction is balanced.`;
+      _vExplain=`Sticker AED ${_sp.toLocaleString()} is within 5% of Handshake AED ${_hs.toLocaleString()}. Both parties get a fair deal. No significant advantage or disadvantage for either side. Transaction is balanced.`;
     } else if(_gap > 0){
       _vLabel='OVERPRICED'; _vEmoji='🔴'; _vColor='#DC2626'; _vBg='rgba(220,38,38,0.07)'; _vBorder='#FCA5A5';
-      _vExplain=`Sticker price is AED ${_gapAbs.toLocaleString()} above Handshake price. Buyer pays ${_gapPct}% more than fair market value. Seller benefits from the higher asking price. Risk: Car may sit unsold for 90+ days at this price.`;
+      _vExplain=`Sticker AED ${_sp.toLocaleString()} is AED ${_gapAbs.toLocaleString()} above Handshake AED ${_hs.toLocaleString()}. Buyer pays ${_gapPct}% more than fair market value. Seller benefits from the higher asking price. Risk: Car may sit unsold for 90+ days at this price.`;
     } else {
       _vLabel='UNDERPRICED'; _vEmoji='🟢'; _vColor='#15803D'; _vBg='rgba(21,163,74,0.07)'; _vBorder='#6EE7B7';
-      _vExplain=`Sticker price is AED ${_gapAbs.toLocaleString()} below Handshake price. Buyer saves ${_gapPct}% compared to fair market value. Seller loses potential AED ${_gapAbs.toLocaleString()}. Risk: Car will sell very quickly — seller misses out on value.`;
+      _vExplain=`Sticker AED ${_sp.toLocaleString()} is AED ${_gapAbs.toLocaleString()} below Handshake AED ${_hs.toLocaleString()}. Buyer is paying ${_gapPct}% below fair market value — a strong deal. Seller loses potential AED ${_gapAbs.toLocaleString()}. Risk: Car will sell very quickly — seller misses out on value.`;
     }
+
+    // ── KEY POINTS (Strengths / Cautions / Risk Flags) ──
+    const _kpHtml = `
+      ${gF.length?`<div class="ks-kp-block ks-kp-strengths" style="margin-top:10px;">
+        <div class="ks-kp-block-label" style="color:#15803D;font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Strengths</div>
+        ${gF.map(f=>`<div class="ks-kp-item ks-kp-item-good"><span class="ks-kp-dot ks-kp-dot-good"></span><span>${f} — <em class="ks-kp-guidance">${_kpGuidance(f,'good')}</em></span></div>`).join('')}
+      </div>`:''}
+      ${gF.length&&rF.length?`<div class="ks-kp-sep"></div>`:''}
+      ${rF.length?`<div class="ks-kp-block ks-kp-cautions" style="margin-top:6px;">
+        <div class="ks-kp-block-label" style="color:#B8780A;font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Cautions</div>
+        ${rF.map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f} — <em class="ks-kp-guidance">${_kpGuidance(f,'bad')}</em></span></div>`).join('')}
+      </div>`:''}
+      ${r.redFlags&&r.redFlags.length?`<div class="ks-kp-sep" style="margin-top:8px;"></div><div class="ks-kp-block ks-kp-risk" style="margin-top:6px;">
+        <div class="ks-kp-block-label" style="color:#DC2626;font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Risk Flags</div>
+        ${r.redFlags.filter(f=>!rF.some(x=>x.toLowerCase().includes(f.toLowerCase().slice(0,20)))).map(f=>`<div class="ks-kp-item ks-kp-item-bad"><span class="ks-kp-dot ks-kp-dot-bad"></span><span>${f} — <em class="ks-kp-guidance">${_kpGuidance(f,'risk')}</em></span></div>`).join('')}
+      </div>`:''}`;
 
     return `
     <div class="ks-section">
@@ -9613,7 +9610,12 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="ks-section-title" style="margin-bottom:10px;">Verdict</div>
       <div style="padding:12px 14px;border-radius:10px;border:1.5px solid ${_vBorder};background:${_vBg};">
         <div style="font-size:clamp(.88rem,2.8vw,1.05rem);font-weight:900;color:${_vColor};letter-spacing:.03em;margin-bottom:8px;">${_vEmoji} VERDICT: ${_vLabel}</div>
-        <div style="font-size:.76rem;line-height:1.6;color:#374151;">${_vExplain}</div>
+        <div style="font-size:.76rem;line-height:1.6;color:#374151;margin-bottom:${gF.length||rF.length||r.redFlags?.length?'10px':'0'}">${_vExplain}</div>
+        ${(gF.length||rF.length||(r.redFlags&&r.redFlags.length))?`
+        <div style="border-top:1px solid ${_vBorder};padding-top:10px;">
+          <div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Key Points</div>
+          <div class="ks-kp-wrap">${_kpHtml}</div>
+        </div>`:''}
       </div>
     </div>`;
   })()}
