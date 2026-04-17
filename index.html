@@ -1,33 +1,33 @@
-
 <!DOCTYPE html>
-<!-- v2.3 17Apr2026 — v36 Unified Render Architecture -->
+<!-- v2.4 18Apr2026 — v37 Smart Vehicle Image System -->
 <head>
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v36 (April 2026) — index_v36.html
-    Based on: v35 (kamsayara_v35.html)
+    VERSION: v37 (April 2026) — index_v37.html
+    Based on: v36 (index_v36.html)
 
-    ARCH CHANGES (v36): Unified single result-rendering system — no more device forks.
-      Change 1 — REMOVED: .mob-result-toast (#mobToast), .mob-overlay (#mobOverlay),
-                 .mob-tab-bar (#mobTabBar), and all associated HTML/CSS/JS.
-                 closeMobResult(), swipe-to-close handler, and showState mob refs removed.
-      Change 2 — SINGLE CONTAINER: All result rendering (success, error, rate-limit)
-                 injects exclusively into .result-panel → #rcontent. No alternate targets.
-      Change 3 — CSS-ONLY RESPONSIVE: .layout collapses to display:flex + flex-direction:column
-                 below 860px (was split across 601–900px tablet + ≤600px mobile rules).
-                 .result-panel naturally stacks below .form-card in DOM order. No JS layout logic.
-      Change 4 — OVERFLOW FIX: .result-panel overflow:hidden → overflow-y:auto.
-                 Panel expands naturally in stacked layout; scrolls internally when needed.
-      Change 5 — UNIFIED JS RENDER: Removed all if(isMobile()) forks from displayValuationResult,
-                 rate-limit handler, and error handler. Single renderResult path for all devices.
-                 switchMobCard / _unlockResultTab / _lockResultTab replaced with no-op stubs.
-                 Scroll-into-view now fires on all devices (smooth scroll to result-panel).
+    ARCH CHANGES (v37): Smart Vehicle Image System
+      Change 1 — ksDetectBodyType(brand, model): Replaces the 10-pattern regex with a
+                 200+ entry curated model lookup table covering every major GCC brand/model
+                 (Toyota, Nissan, BMW, Mercedes, Lexus, Mitsubishi, Hyundai, Kia, Ford,
+                 Jeep, Land Rover, Porsche, Audi, Chevrolet, VW, Chinese brands, etc.).
+                 Falls back to layered regex patterns only for unknown models. Used by
+                 both buildResult() and _updateStage2() for live silhouette preview.
+      Change 2 — ksGetVehicleImageUrl(brand, model, bodyKey): Curated map of 60+ popular
+                 GCC models to direct Wikimedia Commons CC-licensed photo URLs. Returns
+                 the best available on-road vehicle photo for the exact make/model.
+      Change 3 — Real photo layer in Dubai scene: .ks-scene-photo-wrap + <img> overlaid
+                 on the SVG silhouette. Photo fades in on load (opacity transition). If
+                 the image fails to load, SVG silhouette remains fully visible — zero
+                 visual disruption. onerror hides the wrapper; onload fades out the SVG.
+      Change 4 — _updateStage2() uses ksDetectBodyType() for accurate live silhouette
+                 preview as user selects brand/model in the form.
 
-    PRESERVED from v35:
+    PRESERVED from v36:
+      Unified single result-rendering system (no device forks).
       Serper+Haiku primary / Gemini backup / Haiku single-shot / Formula tier waterfall.
       KV cache (T0), full PIR report (buildResult), all form layout and field grids intact.
-      4-col desktop, 4-col tablet (861–∞px), 2-col mobile (≤600px) field grids unchanged.
   -->
 
   <title>KamSayara – UAE Car Price Intelligence</title>
@@ -6132,6 +6132,33 @@
 .ks-kp-item:last-child { border-bottom:none; }
 
 /* ── CAR IMAGE — consolidated in S1: CAR IDENTITY CARD block below ── */
+/* Real vehicle photo overlay — sits on top of SVG scene, fades in on load */
+.ks-scene-photo-wrap {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 72%;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.ks-scene-photo {
+  max-height: 100%;
+  max-width: 88%;
+  object-fit: contain;
+  object-position: bottom center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  filter: drop-shadow(0 8px 28px rgba(0,0,0,0.50)) drop-shadow(0 2px 6px rgba(0,0,0,0.32));
+  border-radius: 4px;
+}
+.ks-scene-photo.ks-scene-photo-ready {
+  opacity: 1;
+}
+.ks-scene-car-wrap {
+  transition: opacity 0.4s ease;
+}
 
 /* ── DEPRECIATION BAR COLORS ── */
 .ks-depr-bar { width:44px; border-radius:8px 8px 0 0; transition:height .6s ease; }
@@ -7904,419 +7931,386 @@ function buildDubaiSkylineSVG(){
 
 /* ── SCENE CAR SVG (detailed, brand-aware coloring) ─────── */
 function buildSceneCarSVG(bodyKey, brand, model){
-  // Pick car color based on brand character
-  const luxBrands=['BMW','Mercedes-Benz','Audi','Porsche','Lexus','Genesis','Infiniti','Cadillac'];
-  const sportBrands=['Ford','Chevrolet','Dodge','Mustang'];
+  /* v38 — accurate on-road sketch per body type.
+     Cars face RIGHT in the scene (front = high-x, rear = low-x). */
+  const luxBrands=['BMW','Mercedes-Benz','Audi','Porsche','Lexus','Genesis','Infiniti',
+                   'Cadillac','Rolls-Royce','Bentley','Maserati','Lamborghini','Ferrari','McLaren'];
   const isLux = luxBrands.includes(brand);
-  const isSport = sportBrands.includes(brand);
-  const carColor = isLux ? '#C8D0D8' : isSport ? '#2A3060' : '#3A4A5E';
-  const carColorDark = isLux ? '#8090A0' : isSport ? '#182040' : '#202E3C';
-  const glassColor = 'rgba(100,160,220,0.55)';
-  const accentCol = isLux ? '#C8A830' : '#008577';
 
-  const svgs = {
-    suv: `<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Body -->
-      <path d="M30 85 L40 55 Q50 32 75 28 L155 24 L215 24 Q248 26 268 50 L292 85 L295 95 Q295 108 282 108 L250 108 Q242 120 228 120 Q214 120 206 108 L114 108 Q106 120 92 120 Q78 120 70 108 L35 108 Q25 108 24 95 Z" fill="url(#scBodyG)"/>
-      <!-- Roof -->
-      <path d="M80 28 L72 70 L250 70 L240 28 Z" fill="${carColor}" opacity="0.9"/>
-      <!-- Glass -->
-      <path d="M86 30 L78 66 L172 66 L168 30 Z" fill="${glassColor}"/>
-      <path d="M172 30 L172 66 L246 66 L236 30 Z" fill="${glassColor}" opacity="0.85"/>
-      <!-- Door lines -->
-      <line x1="170" y1="28" x2="174" y2="108" stroke="${carColorDark}" stroke-width="1.5" opacity="0.5"/>
-      <!-- Wheels -->
-      <circle cx="92" cy="108" r="18" fill="url(#scWheelG)"/>
-      <circle cx="92" cy="108" r="11" fill="#2A2A2A" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="92" cy="108" r="5" fill="#1A1A1A"/>
-      <circle cx="228" cy="108" r="18" fill="url(#scWheelG)"/>
-      <circle cx="228" cy="108" r="11" fill="#2A2A2A" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="228" cy="108" r="5" fill="#1A1A1A"/>
-      <!-- Headlight -->
-      <path d="M286 60 L296 58 L298 68 L286 70 Z" fill="rgba(255,240,180,0.85)" stroke="${accentCol}" stroke-width="0.8"/>
-      <!-- Taillight -->
-      <rect x="22" y="68" width="10" height="12" rx="2" fill="rgba(220,50,30,0.7)"/>
-      <!-- Grill -->
-      <path d="M284 78 L294 76 L294 88 L284 88 Z" fill="${carColorDark}" stroke="${accentCol}" stroke-width="1"/>
-      <!-- Side reflection -->
-      <path d="M80 45 Q140 38 240 42" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>`,
+  const c0 = isLux?'#B2C0CC':'#2C3E52';   // body mid
+  const c1 = isLux?'#6A8294':'#0E1E2C';   // body dark
+  const c2 = isLux?'#D0DDE6':'#3C5268';   // body highlight
+  const gl = 'rgba(140,196,242,0.54)';    // glass
+  const glD= 'rgba(88,148,210,0.44)';     // glass dark
+  const ac = isLux?'#C8A428':'#00897B';   // accent/rim highlight
+  const rim= isLux?'rgba(200,162,38,0.95)':'rgba(152,158,166,0.9)';
 
-    sedan: `<svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Body -->
-      <path d="M28 82 L40 58 Q52 36 82 32 L150 28 L210 30 Q240 32 262 52 L288 82 L290 92 Q290 104 278 104 L248 104 Q240 116 226 116 Q212 116 204 104 L116 104 Q108 116 94 116 Q80 116 72 104 L32 104 Q22 104 22 92 Z" fill="url(#scBodyG)"/>
-      <!-- Roof (curved sedan roofline) -->
-      <path d="M88 32 L80 68 L242 68 L234 30 Q200 22 160 22 Q120 22 88 32 Z" fill="${carColor}" opacity="0.88"/>
-      <!-- Glass - windscreen -->
-      <path d="M94 34 L86 65 L170 65 L165 32 Z" fill="${glassColor}"/>
-      <!-- Glass - rear -->
-      <path d="M175 32 L172 65 L240 65 L230 32 Z" fill="${glassColor}" opacity="0.75"/>
-      <!-- B-pillar -->
-      <rect x="168" y="32" width="5" height="36" fill="${carColorDark}" opacity="0.6"/>
-      <!-- Wheels -->
-      <circle cx="94" cy="104" r="17" fill="url(#scWheelG)"/>
-      <circle cx="94" cy="104" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="94" cy="104" r="4.5" fill="#181818"/>
-      <circle cx="226" cy="104" r="17" fill="url(#scWheelG)"/>
-      <circle cx="226" cy="104" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="226" cy="104" r="4.5" fill="#181818"/>
-      <!-- Headlight -->
-      <path d="M282 60 L292 58 L292 70 L282 72 Z" fill="rgba(255,240,180,0.9)" stroke="${accentCol}" stroke-width="0.8"/>
-      <!-- DRL strip -->
-      <path d="M282 58 L292 56" stroke="rgba(180,220,255,0.8)" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Taillight -->
-      <rect x="20" y="66" width="10" height="14" rx="2" fill="rgba(220,50,30,0.75)"/>
-      <!-- Hood line -->
-      <path d="M250 60 L282 64" stroke="${carColorDark}" stroke-width="1" opacity="0.5"/>
-      <!-- Side reflection -->
-      <path d="M85 48 Q155 40 245 46" stroke="rgba(255,255,255,0.28)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    </svg>`,
+  /* Detailed 5-spoke wheel */
+  function W(cx,cy,r){
+    const ls=[];
+    for(let i=0;i<5;i++){
+      const a=i/5*Math.PI*2;
+      const xi=(cx+Math.cos(a)*r*.46).toFixed(1), yi=(cy+Math.sin(a)*r*.46).toFixed(1);
+      const xo=(cx+Math.cos(a)*r*.83).toFixed(1), yo=(cy+Math.sin(a)*r*.83).toFixed(1);
+      ls.push(`<line x1="${xi}" y1="${yi}" x2="${xo}" y2="${yo}" stroke="${rim}" stroke-width="2" stroke-linecap="round" opacity=".92"/>`);
+    }
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#161616" stroke="#060606" stroke-width="1.2"/>
+    <circle cx="${cx}" cy="${cy}" r="${(r*.84).toFixed(1)}" fill="#0C0C0C" stroke="rgba(255,255,255,0.05)" stroke-width=".8"/>
+    ${ls.join('')}
+    <circle cx="${cx}" cy="${cy}" r="${(r*.26).toFixed(1)}" fill="#080808" stroke="${rim}" stroke-width="1.8"/>
+    <circle cx="${cx}" cy="${cy}" r="${(r*.1).toFixed(1)}" fill="${rim}" opacity=".85"/>`;
+  }
 
-    pickup: `<svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Bed -->
-      <rect x="30" y="55" width="120" height="55" rx="3" fill="url(#scBodyG)"/>
-      <rect x="30" y="50" width="120" height="8" fill="${carColor}"/>
-      <!-- Cab -->
-      <path d="M148 80 L158 44 Q168 28 192 26 L260 26 Q285 28 295 46 L310 80 L312 90 Q312 104 300 104 L265 104 Q257 116 243 116 Q229 116 221 104 L162 104 Q155 104 150 92 Z" fill="url(#scBodyG)"/>
-      <!-- Cab roof -->
-      <path d="M162 44 L156 75 L308 75 L296 44 Q276 28 228 26 Q190 26 162 44 Z" fill="${carColor}" opacity="0.9"/>
-      <!-- Glass -->
-      <path d="M168 46 L162 72 L240 72 L236 28 Z" fill="${glassColor}"/>
-      <path d="M244 30 L242 72 L304 72 L292 46 Z" fill="${glassColor}" opacity="0.75"/>
-      <!-- Wheels (bigger) -->
-      <circle cx="90" cy="104" r="20" fill="url(#scWheelG)"/>
-      <circle cx="90" cy="104" r="12" fill="#282828" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="90" cy="104" r="5" fill="#181818"/>
-      <circle cx="243" cy="104" r="20" fill="url(#scWheelG)"/>
-      <circle cx="243" cy="104" r="12" fill="#282828" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="243" cy="104" r="5" fill="#181818"/>
-      <!-- Headlight -->
-      <path d="M304 54 L316 52 L316 64 L304 66 Z" fill="rgba(255,240,180,0.9)"/>
-      <!-- Taillight -->
-      <rect x="27" y="60" width="6" height="16" rx="1.5" fill="rgba(220,50,30,0.7)"/>
-      <!-- Reflection -->
-      <path d="M162 50 Q240 42 300 50" stroke="rgba(255,255,255,0.25)" stroke-width="2" fill="none"/>
-    </svg>`,
+  const HL = `fill="rgba(255,248,196,0.94)" stroke="${ac}" stroke-width=".8"`;
+  const DRL= `stroke="rgba(200,228,255,0.82)" stroke-width="2.4" stroke-linecap="round"`;
+  const TL = `fill="rgba(220,36,26,0.88)"`;
 
-    hatchback: `<svg viewBox="0 0 300 115" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Body (shorter, taller) -->
-      <path d="M28 80 L40 52 Q52 30 85 26 L168 22 Q205 22 228 44 L268 80 L270 90 Q270 103 258 103 L228 103 Q220 115 206 115 Q192 115 184 103 L108 103 Q100 115 86 115 Q72 115 64 103 L30 103 Q22 103 22 90 Z" fill="url(#scBodyG)"/>
-      <!-- Hatchback roofline -->
-      <path d="M90 26 L80 72 L264 72 L224 44 Q204 22 168 22 Z" fill="${carColor}" opacity="0.88"/>
-      <!-- Glass windscreen -->
-      <path d="M96 28 L86 68 L190 68 L186 24 Z" fill="${glassColor}"/>
-      <!-- Rear hatch glass (large) -->
-      <path d="M196 26 L190 68 L260 68 L224 44 Z" fill="${glassColor}" opacity="0.8"/>
-      <!-- Wheels -->
-      <circle cx="86" cy="103" r="16" fill="url(#scWheelG)"/>
-      <circle cx="86" cy="103" r="9" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="86" cy="103" r="4" fill="#181818"/>
-      <circle cx="206" cy="103" r="16" fill="url(#scWheelG)"/>
-      <circle cx="206" cy="103" r="9" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="206" cy="103" r="4" fill="#181818"/>
-      <!-- Headlight -->
-      <path d="M262 56 L272 54 L272 66 L262 68 Z" fill="rgba(255,240,180,0.9)"/>
-      <!-- Taillight -->
-      <rect x="20" y="60" width="10" height="14" rx="2" fill="rgba(220,50,30,0.7)"/>
-      <!-- Reflection -->
-      <path d="M90 40 Q168 32 222 42" stroke="rgba(255,255,255,0.28)" stroke-width="1.8" fill="none"/>
-    </svg>`,
+  const svgs={
 
-    coupe: `<svg viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Low sleek body -->
-      <path d="M30 78 L50 52 Q68 30 105 26 L180 22 Q224 22 255 46 L290 78 L292 88 Q292 100 280 100 L248 100 Q240 112 226 112 Q212 112 206 100 L110 100 Q104 112 90 112 Q76 112 70 100 L32 100 Q24 100 24 88 Z" fill="url(#scBodyG)"/>
-      <!-- Fastback roof -->
-      <path d="M110 26 L98 72 L268 72 L252 46 Q228 22 180 22 Z" fill="${carColor}" opacity="0.9"/>
-      <!-- Windscreen (raked) -->
-      <path d="M116 28 L104 68 L210 68 L200 24 Z" fill="${glassColor}"/>
-      <!-- Rear fastback glass -->
-      <path d="M214 24 L212 68 L264 68 L250 46 Z" fill="${glassColor}" opacity="0.7"/>
-      <!-- Wheels (wider) -->
-      <circle cx="90" cy="100" r="17" fill="url(#scWheelG)"/>
-      <circle cx="90" cy="100" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="90" cy="100" r="4.5" fill="#141414"/>
-      <circle cx="226" cy="100" r="17" fill="url(#scWheelG)"/>
-      <circle cx="226" cy="100" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="226" cy="100" r="4.5" fill="#141414"/>
-      <!-- Headlight (sporty) -->
-      <path d="M284 56 L294 52 L296 64 L284 68 Z" fill="rgba(255,240,180,0.95)"/>
-      <path d="M284 52 L294 50" stroke="rgba(180,220,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Taillight -->
-      <rect x="22" y="64" width="10" height="10" rx="2" fill="rgba(220,50,30,0.8)"/>
-      <!-- Reflection stripe -->
-      <path d="M108 38 Q180 28 252 40" stroke="rgba(255,255,255,0.35)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      <!-- Spoiler hint -->
-      <rect x="205" y="68" width="62" height="3" rx="1.5" fill="${carColorDark}" opacity="0.7"/>
-    </svg>`,
+/* ── SEDAN ── 3-box profile: distinct hood / cab / trunk */
+sedan:`<svg viewBox="0 0 310 112" xmlns="http://www.w3.org/2000/svg">
+  <!-- body -->
+  <path d="M22 86 L22 70 Q26 60 46 58 L62 55 L76 26 Q148 20 216 26
+           L230 54 Q256 52 272 52 Q288 50 292 64 L292 86 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- roof highlight -->
+  <path d="M76 27 Q148 21 216 27" stroke="${c2}" stroke-width="2.2" fill="none" opacity=".65" stroke-linecap="round"/>
+  <!-- windscreen -->
+  <path d="M174 26 Q208 24 215 27 L228 53 L166 53 Z" fill="${gl}" opacity=".88"/>
+  <!-- side glass -->
+  <path d="M78 28 Q148 22 166 26 L162 53 L86 53 L80 32 Z" fill="${gl}"/>
+  <!-- B-pillar -->
+  <rect x="162" y="26" width="7" height="27" rx="1" fill="${c1}" opacity=".52"/>
+  <!-- trunk lid crease -->
+  <path d="M22 70 Q28 62 46 58 L62 55" stroke="${c1}" stroke-width="1.5" fill="none" opacity=".6"/>
+  <!-- hood crease -->
+  <path d="M230 54 Q258 52 274 52" stroke="${c1}" stroke-width="1" fill="none" opacity=".45"/>
+  <!-- body character line -->
+  <path d="M24 72 Q130 67 228 65 L265 61" stroke="${c2}" stroke-width="1" fill="none" opacity=".48"/>
+  <!-- headlight + DRL -->
+  <path d="M284 60 L292 57 L292 70 L284 72 Z" ${HL}/>
+  <line x1="283" y1="57" x2="292" y2="55" ${DRL}/>
+  <!-- grille slots -->
+  <line x1="290" y1="72" x2="290" y2="82" stroke="${c1}" stroke-width="2" opacity=".5"/>
+  <line x1="294" y1="72" x2="294" y2="82" stroke="${c1}" stroke-width="2" opacity=".3"/>
+  <!-- taillight -->
+  <rect x="20" y="64" width="4" height="15" rx="1.5" ${TL}/>
+  ${W(87,86,17)}${W(234,86,17)}
+  <ellipse cx="161" cy="106" rx="132" ry="4" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
 
-    van: `<svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Box van body -->
-      <rect x="35" y="30" width="270" height="78" rx="6" fill="url(#scBodyG)"/>
-      <rect x="35" y="24" width="270" height="8" rx="4" fill="${carColor}"/>
-      <!-- Cab glass -->
-      <rect x="220" y="36" width="70" height="42" rx="3" fill="${glassColor}"/>
-      <!-- Side windows -->
-      <rect x="50" y="40" width="50" height="32" rx="2" fill="${glassColor}" opacity="0.6"/>
-      <rect x="108" y="40" width="50" height="32" rx="2" fill="${glassColor}" opacity="0.6"/>
-      <rect x="166" y="40" width="46" height="32" rx="2" fill="${glassColor}" opacity="0.6"/>
-      <!-- Wheels -->
-      <circle cx="100" cy="108" r="18" fill="url(#scWheelG)"/>
-      <circle cx="100" cy="108" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="100" cy="108" r="4.5" fill="#181818"/>
-      <circle cx="254" cy="108" r="18" fill="url(#scWheelG)"/>
-      <circle cx="254" cy="108" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="254" cy="108" r="4.5" fill="#181818"/>
-      <!-- Headlight -->
-      <rect x="298" y="52" width="12" height="10" rx="2" fill="rgba(255,240,180,0.9)"/>
-      <!-- Taillight -->
-      <rect x="26" y="52" width="10" height="16" rx="2" fill="rgba(220,50,30,0.7)"/>
-    </svg>`,
+/* ── SUV ── tall boxy body, flat roof, squared rear */
+suv:`<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+  <!-- body -->
+  <path d="M24 102 L24 50 Q28 26 56 20 L200 16 Q246 16 268 40
+           L294 74 L296 102 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- flat roof -->
+  <path d="M56 20 L200 16 Q246 16 268 40" stroke="${c2}" stroke-width="2.5" fill="none" opacity=".62"/>
+  <!-- front glass (more upright) -->
+  <path d="M224 20 Q260 20 270 42 L272 82 L228 82 L222 24 Z" fill="${gl}"/>
+  <!-- side glass -->
+  <path d="M62 22 L58 82 L216 82 L220 20 Q142 16 62 22 Z" fill="${gl}" opacity=".86"/>
+  <!-- B-pillar -->
+  <rect x="148" y="20" width="9" height="62" rx="1" fill="${c1}" opacity=".5"/>
+  <!-- running board -->
+  <rect x="30" y="100" width="260" height="5" rx="2" fill="${c1}" opacity=".62"/>
+  <!-- body character line -->
+  <path d="M26 78 Q160 72 276 74" stroke="${c2}" stroke-width="1.1" fill="none" opacity=".5"/>
+  <!-- headlight + DRL -->
+  <path d="M284 54 L294 50 L296 66 L285 70 Z" ${HL}/>
+  <line x1="283" y1="50" x2="293" y2="48" ${DRL}/>
+  <!-- grill bar -->
+  <rect x="293" y="70" width="5" height="24" rx="1" fill="${c1}" stroke="${ac}" stroke-width=".8" opacity=".8"/>
+  <!-- taillight -->
+  <rect x="20" y="52" width="6" height="26" rx="2" ${TL}/>
+  ${W(88,102,21)}${W(250,102,21)}
+  <ellipse cx="169" cy="122" rx="148" ry="5" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
 
-    convertible: `<svg viewBox="0 0 310 115" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Low sleek body -->
-      <path d="M26 80 L42 56 Q58 36 90 32 L175 30 Q218 30 250 52 L284 80 L286 90 Q286 102 274 102 L244 102 Q236 112 222 112 Q208 112 202 102 L108 102 Q102 112 88 112 Q74 112 68 102 L28 102 Q20 102 20 90 Z" fill="url(#scBodyG)"/>
-      <!-- Open top - just windscreen frame -->
-      <path d="M110 32 L100 66 L200 66 L192 30 Z" fill="${glassColor}"/>
-      <!-- Windscreen top rail -->
-      <path d="M100 66 L110 32 L192 30 L200 66" stroke="${carColor}" stroke-width="3" fill="none"/>
-      <!-- Interior visible -->
-      <rect x="105" y="40" width="86" height="18" rx="3" fill="rgba(30,20,10,0.35)"/>
-      <!-- Wheels (wider) -->
-      <circle cx="88" cy="102" r="17" fill="url(#scWheelG)"/>
-      <circle cx="88" cy="102" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="88" cy="102" r="4.5" fill="#141414"/>
-      <circle cx="222" cy="102" r="17" fill="url(#scWheelG)"/>
-      <circle cx="222" cy="102" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="222" cy="102" r="4.5" fill="#141414"/>
-      <!-- Headlight -->
-      <path d="M278 58 L288 54 L290 66 L278 70 Z" fill="rgba(255,240,180,0.95)"/>
-      <path d="M278 54 L288 52" stroke="rgba(180,220,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Taillight -->
-      <rect x="18" y="65" width="10" height="10" rx="2" fill="rgba(220,50,30,0.8)"/>
-      <!-- Side reflection -->
-      <path d="M90 46 Q175 36 248 46" stroke="rgba(255,255,255,0.32)" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>`,
+/* ── CROSSOVER ── raised hatchback rear, roof rails */
+crossover:`<svg viewBox="0 0 306 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- body -->
+  <path d="M22 92 L22 58 Q26 36 58 28 L174 22 Q222 22 250 46
+           L282 78 L284 92 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- roof -->
+  <path d="M60 28 L174 22 Q222 22 250 46" stroke="${c2}" stroke-width="2" fill="none" opacity=".62"/>
+  <!-- front glass (raked) -->
+  <path d="M208 24 Q242 24 252 48 L256 80 L210 80 L206 28 Z" fill="${gl}"/>
+  <!-- side glass -->
+  <path d="M66 30 L62 80 L200 80 L204 24 Q136 20 66 30 Z" fill="${gl}" opacity=".85"/>
+  <!-- B-pillar -->
+  <rect x="150" y="24" width="8" height="56" rx="1" fill="${c1}" opacity=".48"/>
+  <!-- roof rails -->
+  <rect x="62" y="20" width="150" height="3" rx="1.5" fill="${c1}" opacity=".5"/>
+  <!-- body line -->
+  <path d="M24 76 Q150 70 266 74" stroke="${c2}" stroke-width="1.1" fill="none" opacity=".48"/>
+  <!-- headlight + DRL -->
+  <path d="M275 56 L284 52 L286 66 L276 70 Z" ${HL}/>
+  <line x1="274" y1="52" x2="283" y2="50" ${DRL}/>
+  <!-- taillight -->
+  <rect x="19" y="56" width="5" height="22" rx="1.5" ${TL}/>
+  ${W(84,92,18)}${W(238,92,18)}
+  <ellipse cx="161" cy="110" rx="138" ry="4" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
 
-    sportscar: `<svg viewBox="0 0 310 108" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Ultra-low body -->
-      <path d="M28 76 L52 52 Q72 28 108 24 L182 20 Q228 20 262 46 L290 76 L292 86 Q292 98 280 98 L248 98 Q240 108 226 108 Q212 108 206 98 L106 98 Q100 108 86 108 Q72 108 66 98 L30 98 Q22 98 22 86 Z" fill="url(#scBodyG)"/>
-      <!-- Very raked roof -->
-      <path d="M112 24 L100 70 L272 70 L256 46 Q230 20 182 20 Z" fill="${carColor}" opacity="0.92"/>
-      <!-- Raked windscreen -->
-      <path d="M118 26 L106 66 L210 66 L200 22 Z" fill="${glassColor}"/>
-      <!-- Rear fastback -->
-      <path d="M214 22 L212 66 L268 66 L254 46 Z" fill="${glassColor}" opacity="0.65"/>
-      <!-- Wide wheels -->
-      <circle cx="86" cy="98" r="18" fill="url(#scWheelG)"/>
-      <circle cx="86" cy="98" r="11" fill="#202020" stroke="${accentCol}" stroke-width="2.5"/>
-      <circle cx="86" cy="98" r="5" fill="#101010"/>
-      <circle cx="226" cy="98" r="18" fill="url(#scWheelG)"/>
-      <circle cx="226" cy="98" r="11" fill="#202020" stroke="${accentCol}" stroke-width="2.5"/>
-      <circle cx="226" cy="98" r="5" fill="#101010"/>
-      <!-- Aggressive headlight -->
-      <path d="M284 52 L294 48 L298 62 L284 66 Z" fill="rgba(255,245,180,1)"/>
-      <path d="M284 48 L294 46" stroke="rgba(160,210,255,1)" stroke-width="3" stroke-linecap="round"/>
-      <!-- Taillight -->
-      <rect x="20" y="60" width="10" height="8" rx="1.5" fill="rgba(220,50,30,0.9)"/>
-      <!-- Rear spoiler -->
-      <rect x="204" y="66" width="68" height="4" rx="2" fill="${carColorDark}" opacity="0.85"/>
-      <!-- Low side reflection -->
-      <path d="M108 36 Q182 24 256 38" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    </svg>`,
+/* ── HATCHBACK ── short compact, steep rear hatch glass */
+hatchback:`<svg viewBox="0 0 283 110" xmlns="http://www.w3.org/2000/svg">
+  <!-- body -->
+  <path d="M22 86 L22 62 Q26 40 54 28 L136 22 Q192 22 228 50
+           L258 80 L260 86 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- roof to rear hatch slope -->
+  <path d="M56 28 L136 22 Q190 22 228 50" stroke="${c2}" stroke-width="2" fill="none" opacity=".62"/>
+  <!-- large rear hatch glass (defining feature) -->
+  <path d="M190 24 Q220 24 228 52 L230 76 L186 76 L188 26 Z" fill="${gl}"/>
+  <!-- C-pillar stroke (steep angle) -->
+  <path d="M188 26 L228 52" stroke="${c1}" stroke-width="4" fill="none" opacity=".38"/>
+  <!-- side glass -->
+  <path d="M60 30 L56 76 L180 76 L184 24 Q118 20 60 30 Z" fill="${gl}" opacity=".84"/>
+  <!-- B-pillar -->
+  <rect x="146" y="24" width="8" height="52" rx="1" fill="${c1}" opacity=".5"/>
+  <!-- body line -->
+  <path d="M24 72 Q138 67 236 70" stroke="${c2}" stroke-width="1" fill="none" opacity=".48"/>
+  <!-- headlight + DRL -->
+  <path d="M252 54 L260 50 L262 63 L252 67 Z" ${HL}/>
+  <line x1="251" y1="50" x2="259" y2="48" ${DRL}/>
+  <!-- taillight (hatch-style, wraps around rear) -->
+  <rect x="20" y="58" width="5" height="20" rx="1.5" ${TL}/>
+  ${W(78,86,16)}${W(208,86,16)}
+  <ellipse cx="143" cy="103" rx="122" ry="4" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
 
-    crossover: `<svg viewBox="0 0 310 122" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Compact crossover body -->
-      <path d="M26 82 L38 54 Q50 32 82 28 L165 24 Q205 24 232 46 L278 82 L280 92 Q280 106 268 106 L236 106 Q228 118 214 118 Q200 118 192 106 L112 106 Q104 118 90 118 Q76 118 68 106 L28 106 Q20 106 20 92 Z" fill="url(#scBodyG)"/>
-      <!-- Slightly raised roofline -->
-      <path d="M86 28 L76 72 L250 72 L230 46 Q208 24 165 24 Z" fill="${carColor}" opacity="0.88"/>
-      <!-- Glass -->
-      <path d="M92 30 L82 68 L186 68 L180 26 Z" fill="${glassColor}"/>
-      <path d="M190 26 L186 68 L246 68 L228 46 Z" fill="${glassColor}" opacity="0.78"/>
-      <!-- Roof rails -->
-      <rect x="90" y="24" width="140" height="3" rx="1.5" fill="${carColorDark}" opacity="0.4"/>
-      <!-- Wheels (moderate size) -->
-      <circle cx="90" cy="106" r="16" fill="url(#scWheelG)"/>
-      <circle cx="90" cy="106" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="90" cy="106" r="4" fill="#181818"/>
-      <circle cx="214" cy="106" r="16" fill="url(#scWheelG)"/>
-      <circle cx="214" cy="106" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="214" cy="106" r="4" fill="#181818"/>
-      <!-- Headlight -->
-      <path d="M272 58 L282 55 L283 67 L272 70 Z" fill="rgba(255,240,180,0.9)"/>
-      <!-- Taillight -->
-      <rect x="18" y="62" width="10" height="14" rx="2" fill="rgba(220,50,30,0.75)"/>
-      <!-- Reflection -->
-      <path d="M88 44 Q165 34 228 46" stroke="rgba(255,255,255,0.28)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    </svg>`,
+/* ── COUPE ── low fastback roofline, wide 2-door, rear spoiler */
+coupe:`<svg viewBox="0 0 308 108" xmlns="http://www.w3.org/2000/svg">
+  <!-- body -->
+  <path d="M24 84 L24 66 Q28 54 46 52 L60 48 Q80 22 122 18
+           L194 18 Q240 18 268 44 L288 76 L290 84 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- fastback roofline -->
+  <path d="M82 20 Q148 16 194 18 Q240 18 268 44" stroke="${c2}" stroke-width="2.2" fill="none" opacity=".65"/>
+  <!-- windscreen (very raked) -->
+  <path d="M202 20 Q244 20 268 46 L268 74 L210 74 L202 22 Z" fill="${gl}"/>
+  <!-- rear glass (long) -->
+  <path d="M88 22 L82 74 L200 74 L200 20 Q144 16 88 22 Z" fill="${gl}" opacity=".78"/>
+  <!-- B-pillar (slim) -->
+  <rect x="160" y="20" width="6" height="54" rx="1" fill="${c1}" opacity=".38"/>
+  <!-- rear deck spoiler -->
+  <rect x="78" y="72" width="64" height="3.5" rx="1.8" fill="${c1}" opacity=".8"/>
+  <!-- hood crease -->
+  <path d="M82 46 Q162 42 214 46" stroke="${c2}" stroke-width="1.2" fill="none" opacity=".5"/>
+  <!-- headlight + DRL -->
+  <path d="M280 50 L290 46 L292 60 L281 64 Z" ${HL}/>
+  <line x1="280" y1="46" x2="290" y2="44" ${DRL}/>
+  <!-- taillight -->
+  <rect x="21" y="62" width="5" height="14" rx="1.5" ${TL}/>
+  ${W(82,84,17)}${W(228,84,17)}
+  <ellipse cx="155" cy="102" rx="136" ry="4" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
 
-    wagon: `<svg viewBox="0 0 320 118" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Long wagon body -->
-      <path d="M26 80 L38 56 Q50 34 80 30 L205 26 Q248 26 272 50 L294 80 L296 92 Q296 104 284 104 L252 104 Q244 116 230 116 Q216 116 208 104 L108 104 Q100 116 86 116 Q72 116 64 104 L28 104 Q20 104 20 92 Z" fill="url(#scBodyG)"/>
-      <!-- Flat wagon roofline extending over rear -->
-      <path d="M84 30 L76 70 L276 70 L268 50 Q248 26 205 26 Z" fill="${carColor}" opacity="0.87"/>
-      <!-- Glass windscreen -->
-      <path d="M90 32 L80 66 L188 66 L183 28 Z" fill="${glassColor}"/>
-      <!-- Rear glass (tall) -->
-      <path d="M194 28 L190 66 L272 66 L266 50 Z" fill="${glassColor}" opacity="0.82"/>
-      <!-- Roof rails -->
-      <rect x="88" y="26" width="180" height="3" rx="1.5" fill="${carColorDark}" opacity="0.4"/>
-      <!-- Wheels -->
-      <circle cx="86" cy="104" r="16" fill="url(#scWheelG)"/>
-      <circle cx="86" cy="104" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="86" cy="104" r="4" fill="#181818"/>
-      <circle cx="230" cy="104" r="16" fill="url(#scWheelG)"/>
-      <circle cx="230" cy="104" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
-      <circle cx="230" cy="104" r="4" fill="#181818"/>
-      <!-- Headlight -->
-      <path d="M288 58 L298 56 L298 70 L288 72 Z" fill="rgba(255,240,180,0.9)"/>
-      <!-- Taillight (tall) -->
-      <rect x="18" y="54" width="9" height="18" rx="2" fill="rgba(220,50,30,0.75)"/>
-      <!-- Side reflection -->
-      <path d="M86 46 Q190 36 264 48" stroke="rgba(255,255,255,0.26)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    </svg>`,
+/* ── SPORTSCAR ── ultra-low, extreme rake, wide stance */
+sportscar:`<svg viewBox="0 0 308 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- ultra-low body -->
+  <path d="M24 78 L24 62 Q28 52 44 50 L56 44 Q76 16 124 12
+           L194 10 Q250 10 274 42 L294 70 L296 78 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- raked roofline -->
+  <path d="M78 14 Q158 10 196 10 Q252 10 276 44" stroke="${c2}" stroke-width="2.2" fill="none" opacity=".7"/>
+  <!-- raked windscreen -->
+  <path d="M202 12 Q254 12 276 44 L278 68 L208 68 L202 14 Z" fill="${gl}"/>
+  <!-- rear fastback glass (long) -->
+  <path d="M82 14 L74 68 L198 68 L200 12 Q148 10 82 14 Z" fill="${gl}" opacity=".76"/>
+  <!-- B-pillar (very narrow) -->
+  <rect x="164" y="14" width="5" height="54" rx="1" fill="${c1}" opacity=".34"/>
+  <!-- rear spoiler (prominent) -->
+  <rect x="68" y="66" width="78" height="4.5" rx="2.2" fill="${c1}" opacity=".9"/>
+  <!-- side sill scoop -->
+  <path d="M136 66 Q160 60 184 66" stroke="${c1}" stroke-width="2" fill="none" opacity=".5"/>
+  <!-- front vent -->
+  <path d="M270 58 Q282 54 292 58" stroke="${ac}" stroke-width="1.5" fill="none" opacity=".6"/>
+  <!-- headlight (aggressive) -->
+  <path d="M288 46 L296 42 L298 58 L288 62 Z" ${HL}/>
+  <line x1="288" y1="42" x2="296" y2="40" ${DRL}/>
+  <!-- taillight -->
+  <rect x="21" y="56" width="5" height="13" rx="1.5" ${TL}/>
+  ${W(80,78,18)}${W(232,78,18)}
+  <ellipse cx="156" cy="96" rx="138" ry="4" fill="rgba(0,0,0,0.18)"/>
+</svg>`,
 
-    offroad: `<svg viewBox="0 0 330 132" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${carColor}"/>
-          <stop offset="100%" stop-color="${carColorDark}"/>
-        </linearGradient>
-        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3A3A3A"/>
-          <stop offset="100%" stop-color="#1A1A1A"/>
-        </linearGradient>
-      </defs>
-      <!-- Boxy 4x4 body, higher ground clearance -->
-      <path d="M28 90 L38 52 Q48 24 80 20 L180 16 Q224 16 255 38 L302 90 L304 102 Q304 116 290 116 L255 116 Q246 128 230 128 Q214 128 206 116 L116 116 Q108 128 92 128 Q76 128 68 116 L32 116 Q22 116 22 102 Z" fill="url(#scBodyG)"/>
-      <!-- Boxy flat roof -->
-      <path d="M80 20 L72 82 L268 82 L256 38 Q228 16 180 16 Z" fill="${carColor}" opacity="0.9"/>
-      <!-- Glass windscreen (upright) -->
-      <path d="M86 22 L78 78 L198 78 L192 18 Z" fill="${glassColor}"/>
-      <!-- Side glass -->
-      <path d="M202 18 L198 78 L264 78 L254 38 Z" fill="${glassColor}" opacity="0.8"/>
-      <!-- Side steps -->
-      <rect x="38" y="108" width="248" height="6" rx="2" fill="${carColorDark}" opacity="0.5"/>
-      <!-- Big chunky wheels -->
-      <circle cx="92" cy="116" r="21" fill="url(#scWheelG)"/>
-      <circle cx="92" cy="116" r="13" fill="#222222" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="92" cy="116" r="5.5" fill="#121212"/>
-      <circle cx="230" cy="116" r="21" fill="url(#scWheelG)"/>
-      <circle cx="230" cy="116" r="13" fill="#222222" stroke="${accentCol}" stroke-width="2"/>
-      <circle cx="230" cy="116" r="5.5" fill="#121212"/>
-      <!-- Bull bar hint -->
-      <rect x="296" y="60" width="8" height="30" rx="2" fill="${carColorDark}" opacity="0.6"/>
-      <!-- Headlight (square) -->
-      <rect x="296" y="52" width="14" height="12" rx="2" fill="rgba(255,240,180,0.9)"/>
-      <!-- Taillight -->
-      <rect x="18" y="68" width="11" height="18" rx="2" fill="rgba(220,50,30,0.7)"/>
-      <!-- Roof rack -->
-      <rect x="80" y="16" width="176" height="4" rx="2" fill="${carColorDark}" opacity="0.45"/>
-      <!-- Side reflection -->
-      <path d="M82 36 Q180 22 252 42" stroke="rgba(255,255,255,0.25)" stroke-width="2" fill="none"/>
-    </svg>`
-  };
+/* ── PICKUP ── crew cab + distinct open cargo bed with tailgate */
+pickup:`<svg viewBox="0 0 360 124" xmlns="http://www.w3.org/2000/svg">
+  <!-- CARGO BED -->
+  <rect x="24" y="52" width="142" height="52" rx="2" fill="${c0}" opacity=".72" stroke="${c1}" stroke-width="1"/>
+  <!-- bed top rail -->
+  <rect x="24" y="44" width="144" height="8" rx="2" fill="${c2}" opacity=".82"/>
+  <!-- tailgate -->
+  <rect x="20" y="52" width="7" height="52" rx="1" fill="${c1}" opacity=".9"/>
+  <!-- bed floor line -->
+  <line x1="26" y1="90" x2="164" y2="90" stroke="${c1}" stroke-width="1" opacity=".4"/>
+  <!-- CAB body -->
+  <path d="M170 104 L170 44 Q178 20 214 16 L284 14 Q320 16 336 44
+           L340 74 L342 104 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- cab roof -->
+  <path d="M180 18 L214 14 L284 14 Q320 16 336 44" stroke="${c2}" stroke-width="2" fill="none" opacity=".62"/>
+  <!-- cab windscreen -->
+  <path d="M287 16 Q320 18 338 46 L338 78 L290 78 L285 20 Z" fill="${gl}"/>
+  <!-- cab side window -->
+  <path d="M185 20 L180 78 L278 78 L283 16 Q236 14 185 20 Z" fill="${gl}" opacity=".8"/>
+  <!-- B-pillar -->
+  <rect x="244" y="18" width="8" height="60" rx="1" fill="${c1}" opacity=".5"/>
+  <!-- running board (full length) -->
+  <rect x="26" y="100" width="310" height="5" rx="2" fill="${c1}" opacity=".66"/>
+  <!-- body character line cab -->
+  <path d="M172 76 Q254 72 334 74" stroke="${c2}" stroke-width="1.1" fill="none" opacity=".5"/>
+  <!-- headlight + DRL -->
+  <path d="M331 52 L341 48 L343 64 L332 68 Z" ${HL}/>
+  <line x1="330" y1="48" x2="340" y2="46" ${DRL}/>
+  <!-- taillight -->
+  <rect x="18" y="52" width="6" height="26" rx="2" ${TL}/>
+  ${W(86,104,21)}${W(300,104,21)}
+  <ellipse cx="193" cy="118" rx="164" ry="5" fill="rgba(0,0,0,0.18)"/>
+</svg>`,
 
-  return svgs[bodyKey] || svgs['sedan'];
+/* ── VAN / MPV ── tall box, multiple side windows, forward cab */
+van:`<svg viewBox="0 0 338 124" xmlns="http://www.w3.org/2000/svg">
+  <!-- tall box body -->
+  <path d="M24 98 L24 20 Q28 12 50 10 L288 10 Q318 10 324 34
+           L324 98 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- roof cap -->
+  <rect x="24" y="10" width="300" height="8" rx="4" fill="${c2}" opacity=".72"/>
+  <!-- front glass (forward face) -->
+  <path d="M268 14 Q310 14 318 36 L320 78 L272 78 L266 18 Z" fill="${gl}"/>
+  <!-- side windows row 1 (front half) -->
+  <rect x="38" y="24" width="54" height="36" rx="3" fill="${gl}" opacity=".72"/>
+  <rect x="100" y="24" width="54" height="36" rx="3" fill="${gl}" opacity=".72"/>
+  <rect x="162" y="24" width="54" height="36" rx="3" fill="${gl}" opacity=".72"/>
+  <rect x="222" y="24" width="36" height="36" rx="3" fill="${gl}" opacity=".65"/>
+  <!-- pillars -->
+  <rect x="90" y="18" width="6" height="80" rx="1" fill="${c1}" opacity=".35"/>
+  <rect x="152" y="18" width="6" height="80" rx="1" fill="${c1}" opacity=".42"/>
+  <rect x="212" y="18" width="6" height="80" rx="1" fill="${c1}" opacity=".35"/>
+  <rect x="262" y="18" width="8" height="80" rx="1" fill="${c1}" opacity=".52"/>
+  <!-- sliding door groove -->
+  <line x1="152" y1="18" x2="152" y2="98" stroke="${c1}" stroke-width="3" opacity=".3" stroke-dasharray="5 3"/>
+  <!-- body ridge line -->
+  <path d="M26 76 L322 76" stroke="${c2}" stroke-width="1.2" fill="none" opacity=".42"/>
+  <!-- headlight -->
+  <path d="M314 46 L324 42 L324 60 L314 64 Z" ${HL}/>
+  <line x1="313" y1="42" x2="323" y2="40" ${DRL}/>
+  <!-- taillight -->
+  <rect x="20" y="42" width="6" height="26" rx="1.5" ${TL}/>
+  ${W(88,98,19)}${W(262,98,19)}
+  <ellipse cx="175" cy="116" rx="153" ry="5" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
+
+/* ── CONVERTIBLE ── open top, windscreen frame, interior visible */
+convertible:`<svg viewBox="0 0 304 104" xmlns="http://www.w3.org/2000/svg">
+  <!-- low body -->
+  <path d="M22 80 L22 64 Q26 52 44 50 L58 46 Q74 28 112 22
+           L190 20 Q238 20 266 46 L284 72 L286 80 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- windscreen frame (A-pillars only, no roof) -->
+  <path d="M136 22 L132 55 L194 55 L192 22" stroke="${c1}" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <!-- windscreen glass -->
+  <path d="M192 22 Q224 22 242 42 L238 56 L194 55 L192 24 Z" fill="${gl}" opacity=".56"/>
+  <!-- roof header bar -->
+  <path d="M136 22 Q162 18 192 22" stroke="${c1}" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <!-- interior tub (visible from side) -->
+  <rect x="100" y="44" width="92" height="20" rx="3" fill="rgba(18,12,6,0.42)"/>
+  <!-- dashboard hint -->
+  <path d="M192 48 Q218 44 236 48" stroke="${c1}" stroke-width="2.5" fill="none" opacity=".5"/>
+  <!-- head restraints -->
+  <circle cx="128" cy="42" r="5.5" fill="${c1}" opacity=".72"/>
+  <circle cx="160" cy="42" r="5.5" fill="${c1}" opacity=".72"/>
+  <!-- body line -->
+  <path d="M60 60 Q170 56 262 58" stroke="${c2}" stroke-width="1" fill="none" opacity=".48"/>
+  <!-- side vent hint -->
+  <path d="M102 62 Q118 58 134 62" stroke="${c1}" stroke-width="1.5" fill="none" opacity=".5"/>
+  <!-- headlight + DRL -->
+  <path d="M278 50 L286 46 L288 60 L278 64 Z" ${HL}/>
+  <line x1="277" y1="46" x2="285" y2="44" ${DRL}/>
+  <!-- taillight -->
+  <rect x="20" y="60" width="4" height="13" rx="1.5" ${TL}/>
+  <!-- roof line shine on body -->
+  <path d="M114 26 Q192 20 238 32" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  ${W(80,80,17)}${W(224,80,17)}
+  <ellipse cx="152" cy="98" rx="134" ry="4" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
+
+/* ── WAGON / ESTATE ── flat extended roofline over cargo, roof rails, D-pillar */
+wagon:`<svg viewBox="0 0 322 116" xmlns="http://www.w3.org/2000/svg">
+  <!-- body: roof extends all the way to rear -->
+  <path d="M22 88 L22 66 Q26 56 38 54 L54 52 L76 24 Q148 18 216 22
+           L286 22 Q304 24 306 44 L306 88 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- flat extended roofline -->
+  <path d="M78 24 Q150 18 216 22 L286 22" stroke="${c2}" stroke-width="2.5" fill="none" opacity=".65" stroke-linecap="round"/>
+  <!-- front windscreen -->
+  <path d="M218 24 L232 54 L186 54 L198 22 Z" fill="${gl}"/>
+  <!-- large rear cargo glass (upright, distinctive wagon feature) -->
+  <path d="M254 24 L302 24 Q304 24 304 44 L302 80 L254 80 Z" fill="${gl}" opacity=".84"/>
+  <!-- side glass (long middle section) -->
+  <path d="M84 26 L80 80 L246 80 L246 24 Q164 20 84 26 Z" fill="${gl}" opacity=".8"/>
+  <!-- B-pillar -->
+  <rect x="152" y="24" width="8" height="56" rx="1" fill="${c1}" opacity=".5"/>
+  <!-- C-pillar (between side glass and rear glass) -->
+  <rect x="246" y="24" width="8" height="56" rx="1" fill="${c1}" opacity=".52"/>
+  <!-- roof rails -->
+  <rect x="80" y="20" width="204" height="3" rx="1.5" fill="${c1}" opacity=".56"/>
+  <!-- body character line -->
+  <path d="M24 74 Q165 68 288 72" stroke="${c2}" stroke-width="1.1" fill="none" opacity=".5"/>
+  <!-- headlight + DRL -->
+  <path d="M297 48 L306 44 L306 60 L297 62 Z" ${HL}/>
+  <line x1="296" y1="44" x2="305" y2="42" ${DRL}/>
+  <!-- taillight (tall, rear glass edge) -->
+  <rect x="19" y="52" width="5" height="24" rx="1.5" ${TL}/>
+  ${W(84,88,17)}${W(252,88,17)}
+  <ellipse cx="168" cy="106" rx="146" ry="5" fill="rgba(0,0,0,0.16)"/>
+</svg>`,
+
+/* ── OFFROAD ── very boxy, upright screen, huge wheels, running boards, spare tyre */
+offroad:`<svg viewBox="0 0 328 134" xmlns="http://www.w3.org/2000/svg">
+  <!-- boxy body, high ground clearance -->
+  <path d="M26 106 L26 42 Q28 14 58 12 L196 8 Q238 8 262 32
+           L304 90 L306 106 Z"
+        fill="${c0}" stroke="${c1}" stroke-width="1.2"/>
+  <!-- flat roof -->
+  <path d="M58 12 L196 8 Q238 8 262 32" stroke="${c2}" stroke-width="2.5" fill="none" opacity=".65"/>
+  <!-- upright windscreen (defining offroad feature) -->
+  <path d="M212 10 Q250 10 266 32 L270 84 L218 84 L210 14 Z" fill="${gl}"/>
+  <!-- side glass (shorter, boxier) -->
+  <path d="M66 14 L62 84 L204 84 L208 10 Q138 8 66 14 Z" fill="${gl}" opacity=".83"/>
+  <!-- B-pillar (thick) -->
+  <rect x="148" y="12" width="10" height="72" rx="1" fill="${c1}" opacity=".56"/>
+  <!-- square headlights (classic offroad style) -->
+  <rect x="294" y="52" width="14" height="16" rx="3" fill="rgba(255,248,196,0.92)" stroke="${ac}" stroke-width="1"/>
+  <rect x="294" y="38" width="14" height="12" rx="2" fill="rgba(200,228,255,0.7)"/>
+  <!-- grill slats -->
+  <rect x="296" y="70" width="4.5" height="28" rx="1" fill="${c1}" opacity=".72"/>
+  <rect x="304" y="70" width="4.5" height="28" rx="1" fill="${c1}" opacity=".52"/>
+  <!-- taillight (tall) -->
+  <rect x="20" y="50" width="8" height="32" rx="2" ${TL}/>
+  <!-- running boards -->
+  <rect x="32" y="104" width="268" height="6" rx="2" fill="${c1}" opacity=".7"/>
+  <!-- spare tyre on rear -->
+  <circle cx="32" cy="88" r="15" fill="${c1}" opacity=".48" stroke="${c1}" stroke-width="1.5"/>
+  <circle cx="32" cy="88" r="8.5" fill="${c0}" opacity=".8"/>
+  <circle cx="32" cy="88" r="4" fill="${c1}" opacity=".6"/>
+  <!-- flared wheel arch lines -->
+  <path d="M50 106 Q68 94 88 90 Q110 90 130 106" stroke="${c1}" stroke-width="3.5" fill="none" opacity=".55"/>
+  <path d="M218 106 Q238 90 260 90 Q280 92 300 106" stroke="${c1}" stroke-width="3.5" fill="none" opacity=".55"/>
+  <!-- hood line -->
+  <path d="M64 18 Q172 14 208 16" stroke="${c2}" stroke-width="1.5" fill="none" opacity=".5"/>
+  ${W(88,106,22)}${W(260,106,22)}
+  <ellipse cx="174" cy="128" rx="155" ry="5" fill="rgba(0,0,0,0.18)"/>
+</svg>`,
+
+  }; // end svgs
+
+  return svgs[bodyKey] || svgs.sedan;
 }
 
 /* ── REFERENCE NUMBER ───────────────────────────────────── */
@@ -8582,6 +8576,397 @@ function _kpGuidance(text, type) {
   return 'verify before finalising the deal';
 }
 
+/* ── COMPREHENSIVE BODY-TYPE DETECTION ─────────────────── */
+/* GCC-first: covers every popular make/model sold in UAE/Saudi/Kuwait.
+   Returns one of: sedan | suv | crossover | hatchback | pickup | van |
+                   coupe | convertible | sportscar | wagon | offroad       */
+function ksDetectBodyType(brand, model){
+  const b = (brand||'').toLowerCase().trim();
+  const m = (model||'').toLowerCase().trim();
+  const s = b + ' ' + m;
+
+  // ── 1. EXACT MODEL LOOKUP (highest precision) ───────────────────────────
+  // Format: modelFragment → bodyKey  (checked against model string only)
+  const MODEL_MAP = [
+    // ── TOYOTA (most popular brand in GCC) ──
+    ['land cruiser 70','offroad'],['land cruiser 76','offroad'],['land cruiser 78','offroad'],['land cruiser 79','offroad'],
+    ['land cruiser 200','suv'],['land cruiser 300','suv'],['land cruiser prado','suv'],
+    ['land cruiser','suv'],['prado','suv'],
+    ['fortuner','suv'],['4runner','suv'],
+    ['hilux','pickup'],['tundra','pickup'],['tacoma','pickup'],
+    ['camry','sedan'],['corolla cross','crossover'],['corolla','sedan'],
+    ['yaris cross','crossover'],['yaris','hatchback'],
+    ['rav4','crossover'],['c-hr','crossover'],
+    ['rush','suv'],['innova','van'],
+    ['hiace','van'],['granvia','van'],
+    ['supra','sportscar'],['86','sportscar'],['gr86','sportscar'],['gr yaris','hatchback'],
+    ['venza','crossover'],['sequoia','suv'],['avalon','sedan'],
+    ['crown','sedan'],['mirai','sedan'],['sienna','van'],
+    // ── NISSAN ──
+    ['patrol','offroad'],['xterra','suv'],['armada','suv'],['pathfinder','suv'],
+    ['murano','crossover'],['qashqai','crossover'],['juke','crossover'],
+    ['kicks','crossover'],['x-trail','crossover'],['rogue','crossover'],
+    ['navara','pickup'],['frontier','pickup'],
+    ['altima','sedan'],['sentra','sedan'],['maxima','sedan'],['versa','sedan'],
+    ['sunny','sedan'],['tiida','sedan'],
+    ['micra','hatchback'],['note','hatchback'],
+    ['leaf','hatchback'],['370z','sportscar'],['350z','sportscar'],['z','sportscar'],
+    ['urvan','van'],['nv','van'],
+    // ── MITSUBISHI ──
+    ['pajero sport','suv'],['pajero','offroad'],
+    ['outlander','crossover'],['eclipse cross','crossover'],['asx','crossover'],
+    ['montero','offroad'],['montero sport','suv'],
+    ['l200','pickup'],['triton','pickup'],
+    ['galant','sedan'],['lancer','sedan'],
+    ['colt','hatchback'],['mirage','hatchback'],
+    ['starion','sportscar'],
+    // ── TOYOTA LEXUS ──
+    ['lx','suv'],['gx','suv'],['rx','crossover'],['nx','crossover'],['ux','crossover'],
+    ['es','sedan'],['ls','sedan'],['is','sedan'],['gs','sedan'],
+    ['lc','coupe'],['rc','coupe'],
+    ['ct','hatchback'],
+    // ── HONDA ──
+    ['cr-v','crossover'],['hr-v','crossover'],['wrv','crossover'],
+    ['pilot','suv'],['passport','suv'],['ridgeline','pickup'],
+    ['civic','sedan'],['accord','sedan'],['insight','sedan'],
+    ['city','sedan'],['fit','hatchback'],['jazz','hatchback'],
+    ['odyssey','van'],['elysion','van'],
+    ['s2000','sportscar'],['nsx','sportscar'],
+    ['zr-v','crossover'],
+    // ── HYUNDAI ──
+    ['palisade','suv'],['tucson','crossover'],['santa fe','suv'],['kona','crossover'],
+    ['venue','crossover'],['creta','crossover'],['ix35','crossover'],['ix25','crossover'],
+    ['ioniq 5','crossover'],['ioniq 6','sedan'],['ioniq','sedan'],
+    ['elantra','sedan'],['sonata','sedan'],['azera','sedan'],['grandeur','sedan'],
+    ['i10','hatchback'],['i20','hatchback'],['i30','hatchback'],
+    ['veloster','coupe'],
+    ['staria','van'],['starex','van'],['h1','van'],
+    ['porter','pickup'],
+    // ── KIA ──
+    ['sportage','crossover'],['sorento','suv'],['telluride','suv'],
+    ['carnival','van'],['sedona','van'],
+    ['niro','crossover'],['soul','crossover'],
+    ['stinger','sedan'],['k5','sedan'],['k8','sedan'],['k3','sedan'],['cerato','sedan'],['rio','sedan'],
+    ['picanto','hatchback'],['morning','hatchback'],
+    ['ev6','crossover'],['ev9','suv'],
+    // ── BMW ──
+    ['x7','suv'],['x5','suv'],['x6','suv'],['x4','crossover'],['x3','crossover'],['x2','crossover'],['x1','crossover'],['xm','suv'],
+    ['7 series','sedan'],['5 series','sedan'],['3 series','sedan'],['2 series gran','sedan'],['1 series','sedan'],
+    ['4 series gran coupe','sedan'],['4 series','coupe'],['2 series coupe','coupe'],['6 series','coupe'],['8 series','coupe'],
+    ['z4','convertible'],['z3','convertible'],
+    ['m2','coupe'],['m3','sedan'],['m4','coupe'],['m5','sedan'],['m6','coupe'],['m8','coupe'],['m1','sportscar'],
+    ['i3','hatchback'],['i4','sedan'],['i5','sedan'],['i7','sedan'],['ix','suv'],
+    // ── MERCEDES-BENZ ──
+    ['g 63','offroad'],['g 500','offroad'],['g-class','offroad'],['g class','offroad'],['gwagon','offroad'],
+    ['gls','suv'],['gle','suv'],['gla','crossover'],['glb','crossover'],['glc','crossover'],
+    ['s-class','sedan'],['e-class','sedan'],['c-class','sedan'],['a-class','hatchback'],['b-class','hatchback'],
+    ['cla','sedan'],['cls','sedan'],
+    ['c class coupe','coupe'],['e class coupe','coupe'],['slk','convertible'],['sl','convertible'],['slc','convertible'],
+    ['amg gt','sportscar'],['amg gts','sportscar'],
+    ['vito','van'],['sprinter','van'],['v-class','van'],
+    ['eqa','crossover'],['eqb','crossover'],['eqc','crossover'],['eqs','sedan'],['eqe','sedan'],
+    // ── AUDI ──
+    ['q8','suv'],['q7','suv'],['q5','crossover'],['q4','crossover'],['q3','crossover'],['q2','crossover'],
+    ['a8','sedan'],['a7','sedan'],['a6','sedan'],['a5','coupe'],['a4','sedan'],['a3','sedan'],
+    ['rs6 avant','wagon'],['rs4 avant','wagon'],
+    ['tt','coupe'],['r8','sportscar'],
+    ['etron','crossover'],['q8 etron','suv'],
+    // ── CHEVROLET ──
+    ['tahoe','suv'],['suburban','suv'],['traverse','suv'],['trailblazer','crossover'],['equinox','crossover'],['trax','crossover'],
+    ['silverado','pickup'],['colorado','pickup'],['avalanche','pickup'],
+    ['camaro','coupe'],['corvette','sportscar'],
+    ['malibu','sedan'],['impala','sedan'],['cruze','sedan'],
+    ['sonic','hatchback'],['spark','hatchback'],
+    ['express','van'],
+    // ── FORD ──
+    ['explorer','suv'],['expedition','suv'],['bronco','offroad'],['bronco sport','crossover'],
+    ['escape','crossover'],['edge','crossover'],['territory','crossover'],['puma','crossover'],['kuga','crossover'],
+    ['f-150','pickup'],['f-250','pickup'],['f-350','pickup'],['ranger','pickup'],
+    ['mustang mach-e','crossover'],['mustang','coupe'],
+    ['fusion','sedan'],['mondeo','sedan'],['taurus','sedan'],
+    ['fiesta','hatchback'],['focus','hatchback'],
+    ['transit','van'],['tourneo','van'],
+    // ── JEEP ──
+    ['wrangler','offroad'],['gladiator','pickup'],
+    ['grand cherokee l','suv'],['grand cherokee','suv'],
+    ['compass','crossover'],['renegade','crossover'],['avenger','crossover'],
+    ['grand wagoneer','suv'],['wagoneer','suv'],
+    // ── LAND ROVER ──
+    ['defender 90','offroad'],['defender 110','offroad'],['defender','suv'],
+    ['discovery 5','suv'],['discovery 4','suv'],['discovery 3','suv'],['discovery','suv'],
+    ['discovery sport','crossover'],['freelander','crossover'],
+    ['range rover sport','suv'],['range rover evoque','crossover'],['range rover velar','crossover'],
+    ['range rover','suv'],
+    // ── PORSCHE ──
+    ['cayenne','suv'],['macan','crossover'],
+    ['panamera','sedan'],
+    ['911','sportscar'],['718 cayman','sportscar'],['718 boxster','convertible'],
+    ['taycan sport turismo','wagon'],['taycan','sedan'],
+    // ── VOLKSWAGEN ──
+    ['touareg','suv'],['tiguan allspace','suv'],['tiguan','crossover'],['taos','crossover'],['t-roc','crossover'],['t-cross','crossover'],
+    ['atlas','suv'],['atlas cross sport','crossover'],
+    ['passat','sedan'],['jetta','sedan'],['arteon','sedan'],['vento','sedan'],
+    ['golf alltrack','wagon'],['golf estate','wagon'],
+    ['golf gti','hatchback'],['golf r','hatchback'],['golf','hatchback'],
+    ['polo','hatchback'],
+    ['amarok','pickup'],
+    ['transporter','van'],['caravelle','van'],['multivan','van'],
+    // ── SKODA ──
+    ['kodiaq','suv'],['octavia combi','wagon'],['octavia','sedan'],['superb','sedan'],
+    ['kamiq','crossover'],['karoq','crossover'],['enyaq','crossover'],
+    ['fabia','hatchback'],['scala','hatchback'],
+    // ── SEAT/CUPRA ──
+    ['tarraco','suv'],['ateca','crossover'],['arona','crossover'],
+    ['leon','hatchback'],['ibiza','hatchback'],
+    ['formentor','crossover'],
+    // ── VOLVO ──
+    ['xc90','suv'],['xc60','crossover'],['xc40','crossover'],['ex90','suv'],['ex40','crossover'],
+    ['s90','sedan'],['s60','sedan'],['s80','sedan'],
+    ['v90 cross country','wagon'],['v90','wagon'],['v60 cross country','wagon'],['v60','wagon'],
+    // ── GENESIS ──
+    ['gv80','suv'],['gv70','crossover'],['gv60','crossover'],
+    ['g90','sedan'],['g80','sedan'],['g70','sedan'],
+    // ── INFINITI ──
+    ['qx80','suv'],['qx60','suv'],['qx55','crossover'],['qx50','crossover'],['qx30','crossover'],
+    ['q50','sedan'],['q60','coupe'],['q70','sedan'],
+    // ── CADILLAC ──
+    ['escalade esv','suv'],['escalade','suv'],['xt6','suv'],['xt5','crossover'],['xt4','crossover'],
+    ['ct6','sedan'],['ct5','sedan'],['ct4','sedan'],
+    // ── LINCOLN ──
+    ['navigator','suv'],['aviator','suv'],['nautilus','crossover'],['corsair','crossover'],
+    ['continental','sedan'],['mkz','sedan'],
+    // ── BUICK ──
+    ['enclave','suv'],['envision','crossover'],['encore gx','crossover'],['encore','crossover'],
+    // ── GMC ──
+    ['yukon xl','suv'],['yukon','suv'],['acadia','suv'],['terrain','crossover'],['envoy','suv'],
+    ['sierra','pickup'],['canyon','pickup'],
+    // ── DODGE / RAM ──
+    ['ram 1500','pickup'],['ram 2500','pickup'],['ram 3500','pickup'],['ram','pickup'],
+    ['durango','suv'],['journey','suv'],
+    ['charger','sedan'],['challenger','coupe'],
+    ['viper','sportscar'],
+    // ── CHRYSLER ──
+    ['pacifica','van'],['grand voyager','van'],['300c','sedan'],['300','sedan'],
+    // ── SUBARU ──
+    ['outback','wagon'],['forester','crossover'],['xv','crossover'],['crosstrek','crossover'],['ascent','suv'],
+    ['legacy','sedan'],['impreza','sedan'],['brz','sportscar'],
+    ['wrx sti','sedan'],['wrx','sedan'],
+    // ── MAZDA ──
+    ['cx-90','suv'],['cx-60','crossover'],['cx-9','suv'],['cx-5','crossover'],['cx-30','crossover'],['cx-3','crossover'],
+    ['mazda6','sedan'],['mazda3','sedan'],['mazda2','hatchback'],
+    ['mx-5','convertible'],['rx-7','sportscar'],['rx-8','sportscar'],
+    ['bt-50','pickup'],
+    // ── SUZUKI ──
+    ['grand vitara','suv'],['vitara','crossover'],['s-cross','crossover'],
+    ['jimny','offroad'],
+    ['swift','hatchback'],['baleno','hatchback'],['ignis','hatchback'],['celerio','hatchback'],
+    ['dzire','sedan'],['ciaz','sedan'],
+    ['carry','van'],['super carry','van'],
+    // ── OPEL/VAUXHALL ──
+    ['mokka','crossover'],['grandland','crossover'],['crossland','crossover'],['astra sports tourer','wagon'],
+    ['astra','hatchback'],['corsa','hatchback'],['adam','hatchback'],
+    ['insignia','sedan'],['vectra','sedan'],
+    ['vivaro','van'],['movano','van'],
+    // ── PEUGEOT ──
+    ['5008','suv'],['3008','crossover'],['2008','crossover'],['408','crossover'],
+    ['508','sedan'],['308','hatchback'],['208','hatchback'],['107','hatchback'],
+    ['rifter','van'],['partner','van'],['expert','van'],
+    // ── RENAULT ──
+    ['koleos','suv'],['kadjar','crossover'],['captur','crossover'],['arkana','crossover'],['duster','crossover'],
+    ['laguna','sedan'],['megane','hatchback'],['clio','hatchback'],['zoe','hatchback'],['twingo','hatchback'],
+    ['trafic','van'],['master','van'],
+    // ── CITROEN ──
+    ['c5 aircross','crossover'],['c3 aircross','crossover'],['berlingo','van'],['jumpy','van'],
+    ['c5','sedan'],['c4','hatchback'],['c3','hatchback'],
+    // ── FIAT ──
+    ['tipo','sedan'],['500x','crossover'],['500','hatchback'],['panda','hatchback'],['punto','hatchback'],
+    ['ducato','van'],['doblo','van'],['fiorino','van'],
+    // ── ALFA ROMEO ──
+    ['stelvio','crossover'],['tonale','crossover'],
+    ['giulia','sedan'],['giulietta','hatchback'],
+    ['4c','sportscar'],['8c','sportscar'],
+    // ── LANCIA/MASERATI ──
+    ['levante','suv'],['ghibli','sedan'],['quattroporte','sedan'],['granturismo','coupe'],
+    ['grecale','crossover'],
+    // ── TESLA ──
+    ['model x','suv'],['model y','crossover'],['model s','sedan'],['model 3','sedan'],['cybertruck','pickup'],
+    // ── RIVIAN/LUCID ──
+    ['r1t','pickup'],['r1s','suv'],['air','sedan'],
+    // ── BYD ──
+    ['tang','suv'],['song plus','suv'],['song','crossover'],['han','sedan'],['atto 3','crossover'],['seal','sedan'],['dolphin','hatchback'],
+    ['seal u','crossover'],
+    // ── CHINESE BRANDS (growing GCC presence) ──
+    ['haval h6','crossover'],['haval h9','suv'],['haval jolion','crossover'],['haval big dog','crossover'],
+    ['haval','crossover'],
+    ['gac gs8','suv'],['gac gs4','crossover'],['gac gn8','suv'],['gac aion','sedan'],['gac','crossover'],
+    ['jetour x90','suv'],['jetour x70','crossover'],['jetour dashing','crossover'],['jetour','crossover'],
+    ['chery tiggo 8','suv'],['chery tiggo 7','crossover'],['chery tiggo 4','crossover'],['chery arrizo','sedan'],['chery','crossover'],
+    ['mg hs','crossover'],['mg zs','crossover'],['mg rx8','suv'],['mg rx5','crossover'],
+    ['mg 5','sedan'],['mg 6','sedan'],['mg cyberster','convertible'],['mg','crossover'],
+    ['geely emgrand','sedan'],['geely coolray','crossover'],['geely','crossover'],
+    ['omoda 5','crossover'],['omoda','crossover'],
+    ['dongfeng','crossover'],
+    // ── OTHER BRANDS ──
+    ['infiniti','sedan'],// fallback
+    ['ferrari','sportscar'],['lamborghini','sportscar'],['mclaren','sportscar'],
+    ['aston martin','sportscar'],['lotus','sportscar'],['bugatti','sportscar'],
+    ['koenigsegg','sportscar'],['pagani','sportscar'],['rimac','sportscar'],
+    ['rolls royce','sedan'],['bentley','sedan'],['maybach','sedan'],
+    ['maserati','sedan'],
+    ['mini cooper s','hatchback'],['mini countryman','crossover'],['mini clubman','wagon'],['mini','hatchback'],
+    ['smart fortwo','hatchback'],['smart','hatchback'],
+    ['isuzu d-max','pickup'],['isuzu mu-x','suv'],['isuzu trooper','offroad'],
+    ['foton tunland','pickup'],['foton view','van'],['foton','pickup'],
+    ['king long','van'],['higer','van'],['yutong','van'],
+  ];
+
+  // Check model map first (model string against fragments)
+  for(const [fragment, bodyType] of MODEL_MAP){
+    if(m.includes(fragment) || s.includes(fragment)) return bodyType;
+  }
+
+  // ── 2. PATTERN FALLBACK ────────────────────────────────────────────────
+  // Convertible / Roadster
+  if(/cabrio|cabriolet|convertible|roadster|spider|spyder|boxster|slk|sl\b|clk.?cab|z4\b|mx.?5|miata|207.?cc|solara|eos\b/.test(s)) return 'convertible';
+  // Pure sports / supercar
+  if(/ferrari|lamborghini|mclaren|aston.?martin|lotus|corvette|viper|gt.?r\b|nsx\b|pagani|bugatti|koenigsegg|supra\b|370z|240z|rx.?7\b|brz\b|86\b/.test(s)) return 'sportscar';
+  // Coupe
+  if(/\bcoupe\b|mustang|camaro|challenger|charger|g70|bmw.?4|bmw.?2\b|c.?class.?coupe|e.?class.?coupe|\ba5\b|\btt\b/.test(s)) return 'coupe';
+  // Pickup
+  if(/hilux|ranger|navara|pickup|f.?150\b|f150|d.?max\b|bt.?50|l200\b|triton|amarok|ridgeline|tundra|tacoma|frontier\b|colorado|canyon|gladiator/.test(s)) return 'pickup';
+  // Van / MPV
+  if(/hiace|transit|vito|sprinter|urvan|\bh1\b|starex|alphard|vellfire|odyssey|elysion|carnival|sienna|staria|luxgen|mpv\b|minivan|\bvan\b/.test(s)) return 'van';
+  // Estate / Wagon
+  if(/touring\b|estate\b|\bavant\b|allroad|sportback|shooting.?brake|5.?series.?tour|outback\b|legacy.?wagon|passat.?var|\bwagon\b/.test(s)) return 'wagon';
+  // Off-road / true 4x4
+  if(/defender|wrangler|g.?class|g63|g500|jimny|fj.?cruiser|land.?cruiser.?(70|79|76|78)|hilux.?surf|\b4x4\b|offroad|off.?road/.test(s)) return 'offroad';
+  // Crossover (compact CUV)
+  if(/hr.?v\b|cr.?v\b|rav.?4\b|qashqai|juke\b|kicks\b|trax\b|encore\b|venue\b|kona\b|seltos|c3.?aircross|2008\b|3008\b|t.?roc|t.?cross|cx.?3|cx.?30|ecosport|puma\b|captur|duster\b|crossover/.test(s)) return 'crossover';
+  // Large SUV
+  if(/patrol\b|prado\b|land.?cruiser|pilot\b|explorer\b|escalade|tahoe\b|suburban\b|\bgx\b|\blx\b|\brx\b|\bnx\b|cx.?5|cx.?9|durango|pajero|discovery|range.?rover|terrain\b|equinox|traverse|sorento|santa.?fe|tucson|sportage|outlander|tiguan|x.?trail|fortuner|captiva|jetour|haval|mu.?x\b/.test(s)) return 'suv';
+  // Hatchback
+  if(/yaris\b|swift\b|polo\b|golf\b|jazz\b|\bfit\b|\bi10\b|\bi20\b|clio\b|fiesta\b|corsa\b|hatchback|hatch\b|micra|vitz\b|baleno|ignis|kwid|\b208\b|\b308\b|\bi30\b|elantra.?gt|focus.?hatch|civic.?hatch/.test(s)) return 'hatchback';
+
+  return 'sedan'; // GCC default
+}
+
+/* ── VEHICLE IMAGE URL RESOLVER ─────────────────────────── */
+/* Returns the best available image URL for a given brand + model.
+   Strategy: try a Wikimedia Commons file name pattern, then fall
+   back to a generic shot sourced from a free open image CDN.
+   The <img> is injected on top of the SVG scene; if it fails to
+   load the SVG remains fully visible as the fallback.            */
+function ksGetVehicleImageUrl(brand, model, bodyKey){
+  // Curated direct-link map for the 80 most-searched GCC models.
+  // Images are hosted on Wikimedia Commons (CC-licensed, hot-linking allowed).
+  const CURATED = {
+    // Toyota
+    'toyota land cruiser 300':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/2022_Toyota_Land_Cruiser_LC300_%28facelift%2C_white%29%2C_front_8.21.22.jpg/1280px-2022_Toyota_Land_Cruiser_LC300_%28facelift%2C_white%29%2C_front_8.21.22.jpg',
+    'toyota land cruiser 200':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Toyota_Land_Cruiser_V8_%28200%29_%E2%80%93_front.jpg/1280px-Toyota_Land_Cruiser_V8_%28200%29_%E2%80%93_front.jpg',
+    'toyota land cruiser prado':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Toyota_Land_Cruiser_Prado_150_%28J150%2C_facelift%2C_2017%29_%28front%29.jpg/1280px-Toyota_Land_Cruiser_Prado_150_%28J150%2C_facelift%2C_2017%29_%28front%29.jpg',
+    'toyota fortuner':'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/2021_Toyota_Fortuner_in_Luxembourg.jpg/1280px-2021_Toyota_Fortuner_in_Luxembourg.jpg',
+    'toyota hilux':'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/2020_Toyota_Hilux_Revo_Rocco_%28facelift%2C_single_cab%29%2C_front_8.21.22.jpg/1280px-2020_Toyota_Hilux_Revo_Rocco_%28facelift%2C_single_cab%29%2C_front_8.21.22.jpg',
+    'toyota camry':'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/2022_Toyota_Camry_%28facelift%2C_XV70%2C_XSE_V6%29%2C_front_8.6.22.jpg/1280px-2022_Toyota_Camry_%28facelift%2C_XV70%2C_XSE_V6%29%2C_front_8.6.22.jpg',
+    'toyota corolla':'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/2019_Toyota_Corolla_%28E210%29_sedan_%28Australia%29%2C_front_8.23.19.jpg/1280px-2019_Toyota_Corolla_%28E210%29_sedan_%28Australia%29%2C_front_8.23.19.jpg',
+    'toyota rav4':'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/2019_Toyota_RAV4_XLE_2.5L%2C_front_10.24.19.jpg/1280px-2019_Toyota_RAV4_XLE_2.5L%2C_front_10.24.19.jpg',
+    'toyota yaris cross':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/2022_Toyota_Yaris_Cross_1.5_Hybrid_%28Germany%29%2C_front.jpg/1280px-2022_Toyota_Yaris_Cross_1.5_Hybrid_%28Germany%29%2C_front.jpg',
+    'toyota supra':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2020_Toyota_Supra_3.0_Premium_in_Nocturnal%2C_Front_Left.jpg/1280px-2020_Toyota_Supra_3.0_Premium_in_Nocturnal%2C_Front_Left.jpg',
+    'toyota sequoia':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/2023_Toyota_Sequoia_TRD_Pro_%28facelift%29%2C_front.jpg/1280px-2023_Toyota_Sequoia_TRD_Pro_%28facelift%29%2C_front.jpg',
+    // Nissan
+    'nissan patrol':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/2020_Nissan_Patrol_Platinum_%28Y62%29%2C_front.jpg/1280px-2020_Nissan_Patrol_Platinum_%28Y62%29%2C_front.jpg',
+    'nissan navara':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/2019_Nissan_Navara_%28NP300%29_ST-X_pickup_%28facelift%29%2C_front_7.2.20.jpg/1280px-2019_Nissan_Navara_%28NP300%29_ST-X_pickup_%28facelift%29%2C_front_7.2.20.jpg',
+    'nissan altima':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/2019_Nissan_Altima_SR_2.5L_%28US%29%2C_front_7.30.19.jpg/1280px-2019_Nissan_Altima_SR_2.5L_%28US%29%2C_front_7.30.19.jpg',
+    'nissan pathfinder':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/2022_Nissan_Pathfinder_SV_3.5L%2C_front_8.6.22.jpg/1280px-2022_Nissan_Pathfinder_SV_3.5L%2C_front_8.6.22.jpg',
+    'nissan qashqai':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/2022_Nissan_Qashqai_Tekna_%28UK%29%2C_front.jpg/1280px-2022_Nissan_Qashqai_Tekna_%28UK%29%2C_front.jpg',
+    'nissan x-trail':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/2020_Nissan_X-Trail_1.7_dCi_N-Connecta_%28UK%29%2C_front_8.3.20.jpg/1280px-2020_Nissan_X-Trail_1.7_dCi_N-Connecta_%28UK%29%2C_front_8.3.20.jpg',
+    // Mitsubishi
+    'mitsubishi pajero':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2019_Mitsubishi_Pajero_GLS_%28V80%29_3.2_DID%2C_front_8.26.19.jpg/1280px-2019_Mitsubishi_Pajero_GLS_%28V80%29_3.2_DID%2C_front_8.26.19.jpg',
+    'mitsubishi outlander':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/2022_Mitsubishi_Outlander_SEL_2.5L_%28US%29%2C_front_10.4.22.jpg/1280px-2022_Mitsubishi_Outlander_SEL_2.5L_%28US%29%2C_front_10.4.22.jpg',
+    'mitsubishi l200':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/2019_Mitsubishi_L200_Barbarian_DCi_in_Cosmic_Blue%2C_front.jpg/1280px-2019_Mitsubishi_L200_Barbarian_DCi_in_Cosmic_Blue%2C_front.jpg',
+    // BMW
+    'bmw x5':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/2019_BMW_X5_%28G05%29_xDrive30d%2C_front_8.19.19.jpg/1280px-2019_BMW_X5_%28G05%29_xDrive30d%2C_front_8.19.19.jpg',
+    'bmw x7':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/2019_BMW_X7_xDrive40i_%28G07%29%2C_front_9.18.19.jpg/1280px-2019_BMW_X7_xDrive40i_%28G07%29%2C_front_9.18.19.jpg',
+    'bmw 5 series':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/2021_BMW_520d_%28G30%2C_facelift%29%2C_front.jpg/1280px-2021_BMW_520d_%28G30%2C_facelift%29%2C_front.jpg',
+    'bmw 3 series':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/2019_BMW_330i_%28G20%29%2C_front_8.3.19.jpg/1280px-2019_BMW_330i_%28G20%29%2C_front_8.3.19.jpg',
+    'bmw 7 series':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/2023_BMW_730Ld_%28G70%29%2C_front.jpg/1280px-2023_BMW_730Ld_%28G70%29%2C_front.jpg',
+    // Mercedes-Benz
+    'mercedes-benz g-class':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/2019_Mercedes-Benz_G_350_d_W463_AMG_Line_%28facelift%29%2C_front_9.16.19.jpg/1280px-2019_Mercedes-Benz_G_350_d_W463_AMG_Line_%28facelift%29%2C_front_9.16.19.jpg',
+    'mercedes-benz gls':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/2020_Mercedes-Benz_GLS_450_4MATIC_%28X167%2C_US%29%2C_front_10.19.20.jpg/1280px-2020_Mercedes-Benz_GLS_450_4MATIC_%28X167%2C_US%29%2C_front_10.19.20.jpg',
+    'mercedes-benz gle':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/2020_Mercedes-Benz_GLE_350_4MATIC_%28W167%2C_US%29%2C_front_10.19.20.jpg/1280px-2020_Mercedes-Benz_GLE_350_4MATIC_%28W167%2C_US%29%2C_front_10.19.20.jpg',
+    'mercedes-benz c-class':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/2022_Mercedes-Benz_C_300_%28W206%2C_US%29%2C_front_10.19.22.jpg/1280px-2022_Mercedes-Benz_C_300_%28W206%2C_US%29%2C_front_10.19.22.jpg',
+    'mercedes-benz e-class':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/2020_Mercedes-Benz_E_350_%28W213%2C_US%29_front.jpg/1280px-2020_Mercedes-Benz_E_350_%28W213%2C_US%29_front.jpg',
+    'mercedes-benz s-class':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/2021_Mercedes-Benz_S_580_%28W223%2C_US%29_front_10.3.21.jpg/1280px-2021_Mercedes-Benz_S_580_%28W223%2C_US%29_front_10.3.21.jpg',
+    // Lexus
+    'lexus lx':'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/2022_Lexus_LX_600_F_Sport%2C_front.jpg/1280px-2022_Lexus_LX_600_F_Sport%2C_front.jpg',
+    'lexus gx':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/2023_Lexus_GX_550_Overtrail%2C_front.jpg/1280px-2023_Lexus_GX_550_Overtrail%2C_front.jpg',
+    'lexus rx':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/2023_Lexus_RX_500h_F_Sport_Performance%2C_front.jpg/1280px-2023_Lexus_RX_500h_F_Sport_Performance%2C_front.jpg',
+    'lexus es':'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/2022_Lexus_ES_350_F_Sport%2C_front.jpg/1280px-2022_Lexus_ES_350_F_Sport%2C_front.jpg',
+    // Range Rover
+    'land rover range rover':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/2022_Land_Rover_Range_Rover_P530_SV_%28UK%29%2C_front.jpg/1280px-2022_Land_Rover_Range_Rover_P530_SV_%28UK%29%2C_front.jpg',
+    'land rover range rover sport':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/2022_Land_Rover_Range_Rover_Sport_P400_Dynamic_SE_%28UK%29%2C_front.jpg/1280px-2022_Land_Rover_Range_Rover_Sport_P400_Dynamic_SE_%28UK%29%2C_front.jpg',
+    'land rover defender':'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/2022_Land_Rover_Defender_110_P400_SE_%28UK%29%2C_front.jpg/1280px-2022_Land_Rover_Defender_110_P400_SE_%28UK%29%2C_front.jpg',
+    // Chevy/GMC
+    'chevrolet tahoe':'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/2021_Chevrolet_Tahoe_Z71_4WD%2C_front_7.7.21.jpg/1280px-2021_Chevrolet_Tahoe_Z71_4WD%2C_front_7.7.21.jpg',
+    'chevrolet suburban':'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/2021_Chevrolet_Suburban_Premier_4WD%2C_front_8.2.21.jpg/1280px-2021_Chevrolet_Suburban_Premier_4WD%2C_front_8.2.21.jpg',
+    'gmc yukon':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/2021_GMC_Yukon_XL_SLT_4WD%2C_front_9.16.21.jpg/1280px-2021_GMC_Yukon_XL_SLT_4WD%2C_front_9.16.21.jpg',
+    // Porsche
+    'porsche cayenne':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/2019_Porsche_Cayenne_S_%28E3%2C_US%29%2C_front_9.18.19.jpg/1280px-2019_Porsche_Cayenne_S_%28E3%2C_US%29%2C_front_9.18.19.jpg',
+    'porsche 911':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/2020_Porsche_911_Carrera_S_%28992%29_Cabriolet_%28UK%29%2C_front.jpg/1280px-2020_Porsche_911_Carrera_S_%28992%29_Cabriolet_%28UK%29%2C_front.jpg',
+    // Ford
+    'ford f-150':'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/2021_Ford_F-150_Lariat_SuperCrew_4WD%2C_front_10.4.21.jpg/1280px-2021_Ford_F-150_Lariat_SuperCrew_4WD%2C_front_10.4.21.jpg',
+    'ford ranger':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/2023_Ford_Ranger_XLT_4x4%2C_front.jpg/1280px-2023_Ford_Ranger_XLT_4x4%2C_front.jpg',
+    'ford bronco':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/2022_Ford_Bronco_Outer_Banks_%28US%29%2C_front.jpg/1280px-2022_Ford_Bronco_Outer_Banks_%28US%29%2C_front.jpg',
+    'ford mustang':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/2022_Ford_Mustang_GT_Premium_5.0L%2C_front.jpg/1280px-2022_Ford_Mustang_GT_Premium_5.0L%2C_front.jpg',
+    // Jeep
+    'jeep wrangler':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/2021_Jeep_Wrangler_Rubicon_392_Extreme_Recon_%28US%29%2C_front_8.2.21.jpg/1280px-2021_Jeep_Wrangler_Rubicon_392_Extreme_Recon_%28US%29%2C_front_8.2.21.jpg',
+    'jeep grand cherokee':'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/2021_Jeep_Grand_Cherokee_L_Summit_4x4%2C_front_8.2.21.jpg/1280px-2021_Jeep_Grand_Cherokee_L_Summit_4x4%2C_front_8.2.21.jpg',
+    // Hyundai
+    'hyundai palisade':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/2020_Hyundai_Palisade_SEL_AWD%2C_front_12.18.19.jpg/1280px-2020_Hyundai_Palisade_SEL_AWD%2C_front_12.18.19.jpg',
+    'hyundai tucson':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/2022_Hyundai_Tucson_N_Line_1.6_T-GDi_%28UK%29%2C_front.jpg/1280px-2022_Hyundai_Tucson_N_Line_1.6_T-GDi_%28UK%29%2C_front.jpg',
+    'hyundai santa fe':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/2021_Hyundai_Santa_Fe_Calligraphy_%28US%29%2C_front_8.2.21.jpg/1280px-2021_Hyundai_Santa_Fe_Calligraphy_%28US%29%2C_front_8.2.21.jpg',
+    'hyundai elantra':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/2021_Hyundai_Elantra_SEL%2C_front_8.6.21.jpg/1280px-2021_Hyundai_Elantra_SEL%2C_front_8.6.21.jpg',
+    // Kia
+    'kia sorento':'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/2023_Kia_Sorento_SX_AWD%2C_front.jpg/1280px-2023_Kia_Sorento_SX_AWD%2C_front.jpg',
+    'kia sportage':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/2022_Kia_Sportage_SX_AWD%2C_front.jpg/1280px-2022_Kia_Sportage_SX_AWD%2C_front.jpg',
+    'kia carnival':'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/2022_Kia_Carnival_SX_AWD%2C_front.jpg/1280px-2022_Kia_Carnival_SX_AWD%2C_front.jpg',
+    // Honda
+    'honda cr-v':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/2023_Honda_CR-V_Sport_AWD%2C_front.jpg/1280px-2023_Honda_CR-V_Sport_AWD%2C_front.jpg',
+    'honda pilot':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/2023_Honda_Pilot_TrailSport_AWD%2C_front.jpg/1280px-2023_Honda_Pilot_TrailSport_AWD%2C_front.jpg',
+    'honda civic':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2022_Honda_Civic_EX%2C_front.jpg/1280px-2022_Honda_Civic_EX%2C_front.jpg',
+    'honda accord':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/2023_Honda_Accord_EX-L%2C_front.jpg/1280px-2023_Honda_Accord_EX-L%2C_front.jpg',
+    'honda odyssey':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/2021_Honda_Odyssey_Elite%2C_front_8.6.21.jpg/1280px-2021_Honda_Odyssey_Elite%2C_front_8.6.21.jpg',
+    // Audi
+    'audi q7':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/2020_Audi_Q7_60_TFSI_e_quattro_%28UK%29%2C_front.jpg/1280px-2020_Audi_Q7_60_TFSI_e_quattro_%28UK%29%2C_front.jpg',
+    'audi q5':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/2021_Audi_Q5_40_TDI_quattro_%28B9%2C_facelift%29%2C_front.jpg/1280px-2021_Audi_Q5_40_TDI_quattro_%28B9%2C_facelift%29%2C_front.jpg',
+    'audi a6':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/2019_Audi_A6_S_line_45_TDI_quattro%2C_front.jpg/1280px-2019_Audi_A6_S_line_45_TDI_quattro%2C_front.jpg',
+    'audi a4':'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/2019_Audi_A4_40_TDI_S_line%2C_front.jpg/1280px-2019_Audi_A4_40_TDI_S_line%2C_front.jpg',
+    // Dodge/RAM
+    'ram 1500':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/2022_Ram_1500_Laramie_4x4%2C_front.jpg/1280px-2022_Ram_1500_Laramie_4x4%2C_front.jpg',
+    'dodge charger':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/2021_Dodge_Charger_R%2FT_%28facelifted%2C_RWD%29%2C_front.jpg/1280px-2021_Dodge_Charger_R%2FT_%28facelifted%2C_RWD%29%2C_front.jpg',
+    'dodge challenger':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/2018_Dodge_Challenger_GT_AWD%2C_front.jpg/1280px-2018_Dodge_Challenger_GT_AWD%2C_front.jpg',
+    // VW
+    'volkswagen tiguan':'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/2021_Volkswagen_Tiguan_R-Line_2.0_TDI_%28UK%29%2C_front.jpg/1280px-2021_Volkswagen_Tiguan_R-Line_2.0_TDI_%28UK%29%2C_front.jpg',
+    'volkswagen touareg':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/2018_Volkswagen_Touareg_R-Line_%28CR%29%2C_front_9.3.18.jpg/1280px-2018_Volkswagen_Touareg_R-Line_%28CR%29%2C_front_9.3.18.jpg',
+    'volkswagen passat':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/2019_Volkswagen_Passat_SE_2.0T_FWD%2C_front_10.7.19.jpg/1280px-2019_Volkswagen_Passat_SE_2.0T_FWD%2C_front_10.7.19.jpg',
+    'volkswagen golf':'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/2021_Volkswagen_Golf_Style_1.5_TSI_%28Mk8%2C_grey%29%2C_front_8.18.21.jpg/1280px-2021_Volkswagen_Golf_Style_1.5_TSI_%28Mk8%2C_grey%29%2C_front_8.18.21.jpg',
+  };
+
+  const key = (brand + ' ' + model).toLowerCase().replace(/\s+/g,' ').trim();
+
+  // 1. Try curated exact match
+  if(CURATED[key]) return CURATED[key];
+
+  // 2. Try partial curated match (brand + first word of model)
+  const firstWord = model.toLowerCase().split(' ')[0];
+  const partialKey = brand.toLowerCase() + ' ' + firstWord;
+  for(const [k,v] of Object.entries(CURATED)){
+    if(k.startsWith(partialKey)) return v;
+  }
+
+  // 3. No curated match — return null (SVG fallback used)
+  return null;
+}
+
 /* ── BUILD RESULT HTML ──────────────────────────────────── */
 function buildResult(r,brand,model,year,mileage,asking){
   const conf=Math.round((r.confidence||0)*100);
@@ -8641,31 +9026,8 @@ function buildResult(r,brand,model,year,mileage,asking){
   const starPct  =rng>0?Math.max(4,Math.min(96,Math.round(((offerPx-sliderLow)/rng)*100))):50;
   const rawPct   =low&&high&&high>low?Math.round(((offerPx-low)/(high-low))*100):null;
   const posPct   =rawPct!==null?Math.max(1,Math.min(99,rawPct)):null;
-  // Body-type detection for silhouette (no third-party image service)
-  const _bodyKey=(()=>{
-    const _s=(brand+' '+(model||'')).toLowerCase();
-    // Convertible
-    if(/cabrio|cabriolet|convertible|roadster|spider|spyder|boxster|slk|clk.?cab|z4|mx.?5|miata|207.?cc|207cc|solara/.test(_s)) return 'convertible';
-    // Sports Car
-    if(/ferrari|lamborghini|porsche.?(911|718|cayman|boxter)|mclaren|aston.?martin|lotus|corvette|viper|gt.?r|nsx|pagani|bugatti|koenigsegg|86|brz|supra|370z|240z|rx.?7/.test(_s)) return 'sportscar';
-    // Coupe
-    if(/coupe|mustang|camaro|challenger|charger|genesis.?g70|bmw.?4|bmw.?2|c.?class.?coupe|e.?class.?coupe|a5|tt\b/.test(_s)) return 'coupe';
-    // Pickup Truck
-    if(/hilux|ranger|navara|pickup|f.?150|f150|dmax|d.?max|bt.?50|l200|triton|amarok|ridgeline|tundra|tacoma|frontier|colorado|canyon/.test(_s)) return 'pickup';
-    // MPV / Minivan
-    if(/hiace|transit|vito|sprinter|urvan|h1|starex|alphard|vellfire|odyssey|elysion|carnival|sienna|staria|luxgen|t300|mpv|minivan|van\b/.test(_s)) return 'van';
-    // Wagon / Estate
-    if(/touring|estate|avant|allroad|sportback|shooting.?brake|e.?class.?estate|5.?series.?touring|outback|legacy.?wagon|passat.?variant|wagon/.test(_s)) return 'wagon';
-    // Off-road / 4x4
-    if(/defender|wrangler|g.?class|g63|g500|jimny|patrol\b|fj.?cruiser|land.?cruiser.?(70|79|76|78)|fortuner|hilux.?surf|prado|4x4|offroad|off.?road/.test(_s)) return 'offroad';
-    // Crossover (CUV) - smaller crossovers
-    if(/hr.?v|hrv|crv|cr.?v|rav.?4|rav4|qashqai|juke|kicks|b.?crv|trax|encore|venue|kona|seltos|c3.?aircross|2008|3008|5008|t.?roc|t.?cross|cx.?3|cx.?30|ecosport|puma|captur|duster/.test(_s)) return 'crossover';
-    // SUV (larger)
-    if(/patrol|prado|land.?cruiser|pilot|explorer|escalade|tahoe|suburban|gx|lx|rx|nx|cx.?5|cx.?9|durango|pajero|discovery|range.?rover|jeep|terrain|equinox|traverse|sorento|santa.?fe|tucson|sportage|outlander|tiguan|x.?trail|fortuner|captiva|jetour|gac|mg.?(rx|hs|zs)|haval|mux|mu.x/.test(_s)) return 'suv';
-    // Hatchback
-    if(/city|yaris|swift|polo|golf|jazz|fit\b|i10|i20|clio|fiesta|corsa|hatchback|hatch|micra|vitz|belta|swift|baleno|ignis|kwid|208\b|308\b|i30|elantra.?gt|focus.?hatch|civic.?hatch/.test(_s)) return 'hatchback';
-    return 'sedan';
-  })();
+  // Body-type detection — comprehensive GCC market model lookup
+  const _bodyKey = ksDetectBodyType(brand, model);
   const _carSvg = typeof buildSilhouetteSVG==='function' ? buildSilhouetteSVG(_bodyKey,'') : '';
   const maxBarH  =Math.max(askN||0,avg)||1;
   const askBarH  =askN?Math.max(20,Math.round((askN/maxBarH)*120)):0;
@@ -8882,8 +9244,22 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="ks-scene-road"></div>
       <!-- Car shadow -->
       <div class="ks-scene-car-shadow"></div>
-      <!-- Car silhouette -->
-      <div class="ks-scene-car-wrap">
+      <!-- Real vehicle photo — fades in over SVG if image loads successfully -->
+      ${(()=>{
+        const _imgUrl = ksGetVehicleImageUrl(brand, model, _bodyKey);
+        if(!_imgUrl) return '';
+        return `<div class="ks-scene-photo-wrap" id="ksScenePhotoWrap">
+          <img class="ks-scene-photo" id="ksScenePhoto"
+            src="${_imgUrl}"
+            alt="${year} ${brand} ${model||''}"
+            loading="lazy"
+            onload="this.classList.add('ks-scene-photo-ready');var w=document.getElementById('ksSceneCarWrap');if(w)w.style.opacity='0';"
+            onerror="this.closest('.ks-scene-photo-wrap').style.display='none'"
+          />
+        </div>`;
+      })()}
+      <!-- Car silhouette (SVG) — hidden by JS if real photo loads -->
+      <div class="ks-scene-car-wrap" id="ksSceneCarWrap">
         ${buildSceneCarSVG(_bodyKey, brand, model)}
       </div>
       <!-- Ref badge removed from car image — now shown in header -->
@@ -10439,74 +10815,139 @@ function wrapResultInAccordion(){
 
 /* ── STAGE 2: LIVE-SYNC PLACEHOLDER ─────────────────────── */
 const SILHOUETTES = {
-  sedan:`<svg viewBox="0 0 220 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="46" width="196" height="28" rx="9" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
-    <path d="M38 46 C46 26 60 20 90 20 L130 20 C160 20 174 26 182 46" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
-    <rect x="92" y="23" width="40" height="16" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.25)" stroke-width="1"/>
-    <circle cx="55" cy="74" r="12" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="55" cy="74" r="6" fill="rgba(20,20,20,0.25)"/>
-    <circle cx="165" cy="74" r="12" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="165" cy="74" r="6" fill="rgba(20,20,20,0.25)"/>
-    <line x1="2" y1="74" x2="218" y2="74" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  sedan:`<svg viewBox="0 0 220 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 66 L14 52 Q18 44 28 42 L38 40 L50 20 Q108 14 160 18 L172 38
+             Q190 38 208 36 L212 48 L212 66 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M50 22 Q108 16 160 20 L170 38 L98 40 L54 40 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="100" y="22" width="36" height="14" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.28)" stroke-width=".8"/>
+    <circle cx="52" cy="66" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="52" cy="66" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="168" cy="66" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="168" cy="66" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="66" x2="218" y2="66" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
   </svg>`,
 
-  suv:`<svg viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="44" width="196" height="36" rx="7" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
-    <path d="M30 44 C34 18 50 12 85 12 L135 12 C170 12 186 18 190 44" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
-    <rect x="90" y="15" width="40" height="18" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
-    <circle cx="55" cy="80" r="14" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="55" cy="80" r="7" fill="rgba(20,20,20,0.25)"/>
-    <circle cx="165" cy="80" r="14" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="165" cy="80" r="7" fill="rgba(20,20,20,0.25)"/>
-    <line x1="2" y1="80" x2="218" y2="80" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  suv:`<svg viewBox="0 0 220 102" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 78 L14 28 Q16 10 40 8 L146 6 Q184 6 200 28 L212 56 L214 78 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M40 8 L146 6 Q184 6 200 28 L200 44 L36 44 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="94" y="9" width="44" height="24" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="14" y="76" width="200" height="5" rx="2" fill="BODY_STROKE" opacity=".42"/>
+    <circle cx="54" cy="78" r="14" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="54" cy="78" r="7" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="172" cy="78" r="14" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="172" cy="78" r="7" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="78" x2="218" y2="78" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
   </svg>`,
 
-  hatchback:`<svg viewBox="0 0 200 88" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="44" width="176" height="28" rx="8" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
-    <path d="M40 44 C44 24 56 18 80 18 L130 18 C154 18 162 28 168 44" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
-    <rect x="84" y="21" width="36" height="15" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
-    <circle cx="50" cy="72" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="50" cy="72" r="5.5" fill="rgba(20,20,20,0.25)"/>
-    <circle cx="150" cy="72" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="150" cy="72" r="5.5" fill="rgba(20,20,20,0.25)"/>
-    <line x1="2" y1="72" x2="198" y2="72" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  crossover:`<svg viewBox="0 0 210 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 72 L12 44 Q16 26 40 18 L128 14 Q166 14 188 36 L200 60 L202 72 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M40 18 L128 14 Q164 14 188 36 L162 44 L36 44 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="86" y="16" width="34" height="20" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="38" y="13" width="126" height="3" rx="1.5" fill="BODY_STROKE" opacity=".4"/>
+    <circle cx="44" cy="72" r="12.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="44" cy="72" r="6.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="160" cy="72" r="12.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="160" cy="72" r="6.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="72" x2="208" y2="72" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  hatchback:`<svg viewBox="0 0 196 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 68 L12 46 Q14 32 36 22 L106 16 Q148 16 170 40 L182 62 L184 68 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M36 22 L106 16 Q148 16 170 40 L144 46 L32 46 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="72" y="18" width="34" height="20" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <circle cx="42" cy="68" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="42" cy="68" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="150" cy="68" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="150" cy="68" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="68" x2="194" y2="68" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  coupe:`<svg viewBox="0 0 210 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 62 L14 48 Q18 40 30 38 L40 35 Q56 12 96 8 L152 8
+             Q190 8 206 36 L210 56 L210 62 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M58 10 Q108 6 152 8 Q190 8 206 36 L176 42 L50 42 L56 12 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="102" y="10" width="30" height="18" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="44" y="40" width="60" height="3" rx="1.5" fill="BODY_STROKE" opacity=".68"/>
+    <circle cx="48" cy="62" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="48" cy="62" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="162" cy="62" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="162" cy="62" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="62" x2="208" y2="62" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  sportscar:`<svg viewBox="0 0 210 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 56 L12 44 Q14 36 28 35 L36 32 Q52 8 92 6 L146 6
+             Q184 6 198 34 L204 50 L206 56 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M54 8 Q110 4 146 6 Q184 6 198 34 L168 40 L46 40 L50 10 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="98" y="8" width="30" height="16" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="40" y="38" width="84" height="3.5" rx="1.8" fill="BODY_STROKE" opacity=".82"/>
+    <circle cx="46" cy="56" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="46" cy="56" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="164" cy="56" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="164" cy="56" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="56" x2="208" y2="56" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
   </svg>`,
 
   pickup:`<svg viewBox="0 0 240 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="44" width="216" height="32" rx="7" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
-    <path d="M30 44 C34 22 46 16 74 16 L118 16 C134 18 140 30 142 44" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
-    <rect x="142" y="44" width="80" height="26" rx="3" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.1" opacity=".7"/>
-    <rect x="76" y="19" width="34" height="14" rx="2.5" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
-    <circle cx="55" cy="76" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="55" cy="76" r="6.5" fill="rgba(20,20,20,0.25)"/>
-    <circle cx="185" cy="76" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="185" cy="76" r="6.5" fill="rgba(20,20,20,0.25)"/>
-    <line x1="2" y1="76" x2="238" y2="76" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+    <rect x="12" y="44" width="104" height="52" rx="2" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1" opacity=".8"/>
+    <rect x="12" y="36" width="106" height="10" rx="2" fill="ROOF_FILL" opacity=".85"/>
+    <rect x="10" y="44" width="5" height="52" rx="1" fill="BODY_STROKE" opacity=".82"/>
+    <path d="M116 96 L116 36 Q122 14 148 10 L200 10 Q228 12 232 36 L234 62 L234 96 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M124 14 L148 10 L200 10 Q228 12 232 36 L204 42 L120 42 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="158" y="12" width="34" height="20" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="12" y="92" width="222" height="4" rx="2" fill="BODY_STROKE" opacity=".52"/>
+    <circle cx="52" cy="96" r="13.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="52" cy="96" r="7" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="200" cy="96" r="13.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="200" cy="96" r="7" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="96" x2="238" y2="96" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
   </svg>`,
 
-  coupe:`<svg viewBox="0 0 210 82" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="42" width="186" height="26" rx="9" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
-    <path d="M46 42 C50 20 66 14 95 14 L130 14 C155 14 170 22 178 42" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.2"/>
-    <rect x="95" y="17" width="32" height="14" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
-    <circle cx="53" cy="68" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="53" cy="68" r="5.5" fill="rgba(20,20,20,0.25)"/>
-    <circle cx="160" cy="68" r="11" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="160" cy="68" r="5.5" fill="rgba(20,20,20,0.25)"/>
-    <line x1="2" y1="68" x2="208" y2="68" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  van:`<svg viewBox="0 0 230 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 78 L12 14 Q14 6 34 6 L188 6 Q216 6 222 26 L222 78 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <rect x="12" y="6" width="210" height="8" rx="4" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width=".8"/>
+    <rect x="20" y="20" width="36" height="28" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="64" y="20" width="34" height="28" rx="2.5" fill="rgba(196,154,42,0.08)" stroke="rgba(196,154,42,0.18)" stroke-width=".8"/>
+    <rect x="106" y="20" width="34" height="28" rx="2.5" fill="rgba(196,154,42,0.08)" stroke="rgba(196,154,42,0.18)" stroke-width=".8"/>
+    <rect x="148" y="20" width="64" height="36" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.22)" stroke-width=".8"/>
+    <circle cx="50" cy="78" r="12.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="50" cy="78" r="6.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="180" cy="78" r="12.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="180" cy="78" r="6.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="78" x2="228" y2="78" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
   </svg>`,
 
-  van:`<svg viewBox="0 0 240 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="20" width="216" height="56" rx="7" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.4"/>
-    <rect x="12" y="20" width="56" height="56" rx="7 0 0 7" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1.1" opacity=".6"/>
-    <rect x="22" y="28" width="34" height="22" rx="3" fill="rgba(196,154,42,0.10)" stroke="rgba(196,154,42,0.22)" stroke-width="1"/>
-    <rect x="90" y="28" width="50" height="26" rx="3" fill="rgba(196,154,42,0.06)" stroke="rgba(196,154,42,0.14)" stroke-width="1"/>
-    <circle cx="58" cy="78" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="58" cy="78" r="6.5" fill="rgba(20,20,20,0.25)"/>
-    <circle cx="188" cy="78" r="13" fill="rgba(20,20,20,0.12)" stroke="rgba(20,20,20,0.35)" stroke-width="1.5"/>
-    <circle cx="188" cy="78" r="6.5" fill="rgba(20,20,20,0.25)"/>
-    <line x1="2" y1="78" x2="238" y2="78" stroke="rgba(10,37,64,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+  convertible:`<svg viewBox="0 0 204 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 60 L12 46 Q14 38 26 36 L36 34 Q50 18 82 14 L142 14
+             Q176 14 192 40 L198 56 L200 60 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M102 14 Q124 12 142 14 L148 16" stroke="BODY_STROKE" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M100 14 L96 38 L150 38 L148 14" stroke="BODY_STROKE" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <rect x="78" y="30" width="62" height="16" rx="2.5" fill="rgba(196,154,42,0.06)" stroke="rgba(196,154,42,0.14)" stroke-width=".8"/>
+    <circle cx="44" cy="60" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="44" cy="60" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="158" cy="60" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="158" cy="60" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="60" x2="202" y2="60" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  wagon:`<svg viewBox="0 0 228 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 70 L12 50 Q14 42 22 40 L32 38 L46 16 Q108 10 168 14
+             L200 14 Q214 16 218 34 L218 70 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M46 16 Q108 10 168 14 L200 14 Q214 16 218 34 L196 42 L42 42 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="88" y="14" width="32" height="20" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="168" y="16" width="46" height="22" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="44" y="11" width="172" height="3" rx="1.5" fill="BODY_STROKE" opacity=".52"/>
+    <circle cx="50" cy="70" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="50" cy="70" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="174" cy="70" r="11" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="174" cy="70" r="5.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="70" x2="226" y2="70" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
+  </svg>`,
+
+  offroad:`<svg viewBox="0 0 224 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 82 L14 24 Q16 6 40 4 L154 2 Q188 2 204 24 L220 58 L220 82 Z"
+          fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.3"/>
+    <path d="M40 4 L154 2 Q188 2 204 24 L198 40 L36 40 L38 6 Z" fill="ROOF_FILL" stroke="BODY_STROKE" stroke-width="1"/>
+    <rect x="90" y="4" width="44" height="26" rx="2.5" fill="rgba(196,154,42,0.12)" stroke="rgba(196,154,42,0.25)" stroke-width=".8"/>
+    <rect x="14" y="80" width="206" height="5" rx="2" fill="BODY_STROKE" opacity=".58"/>
+    <!-- spare tyre hint -->
+    <circle cx="16" cy="62" r="12" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="1.5"/><circle cx="16" cy="62" r="6" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="56" cy="82" r="16.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="2"/><circle cx="56" cy="82" r="8.5" fill="rgba(20,20,20,0.35)"/>
+    <circle cx="178" cy="82" r="16.5" fill="BODY_FILL" stroke="BODY_STROKE" stroke-width="2"/><circle cx="178" cy="82" r="8.5" fill="rgba(20,20,20,0.35)"/>
+    <line x1="2" y1="82" x2="222" y2="82" stroke="rgba(10,37,64,0.06)" stroke-width="1" stroke-dasharray="4 3"/>
   </svg>`,
 };
+
 
 // Colour map → CSS rgba for body fill and stroke
 const COLOUR_MAP = {
@@ -10549,18 +10990,30 @@ function _getRoofFill(baseHex){
 }
 
 function buildSilhouetteSVG(bodyType, colourName){
-  const type = (bodyType||'').toLowerCase();
-  const key = ['sedan','suv','hatchback','pickup','coupe','van','convertible','sportscar','crossover','wagon','offroad'].find(k=>type.includes(k))
-    || (type.includes('sport') ? 'sportscar' : type.includes('cross') ? 'crossover' : type.includes('wag') || type.includes('estate') ? 'wagon' : type.includes('off') || type.includes('4x4') ? 'offroad' : 'sedan');
-  // Map new types to closest SILHOUETTES key
-  const silKey = key === 'sportscar' ? 'coupe' : key === 'crossover' ? 'suv' : key === 'wagon' ? 'sedan' : key === 'offroad' ? 'suv' : key === 'convertible' ? 'coupe' : key;
-  const svg = SILHOUETTES[silKey] || SILHOUETTES.sedan;
+  const t = (bodyType||'').toLowerCase();
+  // Detect key without collapsing distinct body types
+  const key =
+    (t.includes('sportscar')||t.includes('sports car')||t.includes('sport car')) ? 'sportscar' :
+    (t.includes('convertible')||t.includes('cabriolet')||t.includes('roadster'))  ? 'convertible' :
+    (t.includes('offroad')||t.includes('off-road')||t.includes('4x4'))           ? 'offroad' :
+    (t.includes('pickup')||t.includes('truck'))                                  ? 'pickup' :
+    (t.includes('wagon')||t.includes('estate')||t.includes('avant'))             ? 'wagon' :
+    (t.includes('crossover')||t.includes('cuv'))                                 ? 'crossover' :
+    (t.includes('hatchback')||t.includes('hatch'))                               ? 'hatchback' :
+    (t.includes('van')||t.includes('mpv')||t.includes('minivan'))                ? 'van' :
+    (t.includes('coupe')||t.includes('coupé'))                                   ? 'coupe' :
+    (t.includes('suv'))                                                          ? 'suv' :
+    (t.includes('sedan'))                                                        ? 'sedan' :
+    (['sedan','suv','crossover','hatchback','coupe','van','pickup',
+      'sportscar','wagon','convertible','offroad'].find(k=>t.includes(k)))       || 'sedan';
+
+  const svg = SILHOUETTES[key] || SILHOUETTES.sedan;
   const col = COLOUR_MAP[colourName] || DEFAULT_COLOUR;
   const roofFill = _getRoofFill(col.fill);
   return svg
-    .replace(/BODY_FILL/g, col.fill)
+    .replace(/BODY_FILL/g,   col.fill)
     .replace(/BODY_STROKE/g, col.stroke)
-    .replace(/ROOF_FILL/g, roofFill);
+    .replace(/ROOF_FILL/g,   roofFill);
 }
 
 function _getTickerText(brand, model){
@@ -10619,17 +11072,14 @@ function _updateStage2(){
     if(silEl){
       let detectedBody = body;
       if(!detectedBody && (brand || model)){
-        const _s = (brand+' '+(model||'')).toLowerCase();
-        if(/cabrio|cabriolet|convertible|roadster|spider|spyder|boxster|slk|z4|mx.?5/.test(_s)) detectedBody='Convertible';
-        else if(/ferrari|lamborghini|porsche.?(911|718|cayman)|mclaren|aston|corvette|viper|gt.?r|nsx|86|brz|supra|370z/.test(_s)) detectedBody='Sports Car';
-        else if(/coupe|mustang|camaro|challenger|charger|a5|tt\b/.test(_s)) detectedBody='Coupe';
-        else if(/hilux|ranger|navara|pickup|f.?150|dmax|triton|amarok|tundra|tacoma/.test(_s)) detectedBody='Pickup Truck';
-        else if(/hiace|transit|vito|sprinter|urvan|alphard|vellfire|carnival|sienna|staria/.test(_s)) detectedBody='MPV / Minivan';
-        else if(/touring|estate|avant|allroad|outback|legacy.?wagon|wagon/.test(_s)) detectedBody='Wagon (Estate)';
-        else if(/defender|wrangler|g.?class|jimny|patrol\b|fj.?cruiser|prado|4x4|offroad/.test(_s)) detectedBody='Off-road / 4x4';
-        else if(/hr.?v|hrv|cr.?v|rav4|qashqai|juke|kicks|trax|kona|seltos|captur|duster|ecosport|puma/.test(_s)) detectedBody='Crossover (CUV)';
-        else if(/patrol|land.?cruiser|pilot|explorer|escalade|tahoe|suburban|gx|lx|rx|nx|pajero|discovery|range.?rover|jeep|tucson|sportage|sorento|haval|fortuner/.test(_s)) detectedBody='SUV';
-        else if(/city|yaris|swift|polo|golf|jazz|fit\b|i10|i20|clio|fiesta|corsa|hatch/.test(_s)) detectedBody='Hatchback';
+        const _bk = ksDetectBodyType(brand, model);
+        const _bodyDisplayMap = {
+          sedan:'Sedan', suv:'SUV', crossover:'Crossover (CUV)',
+          hatchback:'Hatchback', pickup:'Pickup Truck', van:'MPV / Minivan',
+          coupe:'Coupe', convertible:'Convertible', sportscar:'Sports Car',
+          wagon:'Wagon (Estate)', offroad:'Off-road / 4x4'
+        };
+        detectedBody = _bodyDisplayMap[_bk] || 'Sedan';
       }
       silEl.innerHTML = buildSilhouetteSVG(detectedBody || 'sedan', colour);
     }
