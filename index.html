@@ -8321,9 +8321,10 @@ function generateRef(serverRef){
   const now=new Date();
   const dd=String(now.getDate()).padStart(2,'0');
   const mm=String(now.getMonth()+1).padStart(2,'0');
-  const yyyy=now.getFullYear();
-  const rand=Math.random().toString(36).slice(2,6).toUpperCase();
-  return{ label:`KS-${dd}${mm}${yyyy}-${rand}` };
+  const yy=String(now.getFullYear()).slice(2);
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const rand=Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  return{ label:`${dd}${mm}${yy}-${rand}` };
 }
 
 /* ── HELPERS ─────────────────────────────────────────────── */
@@ -9519,13 +9520,141 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- C14 FREE-ONLY: upsell CTA (separate from disclaimer) -->
   <div id="ksPirFreeOnly" class="ks-tab-content">
-  <div class="ks-section ks-free-upsell-section">
-    <div class="ks-free-upsell">
-      <div class="ks-upsell-icon ks-star-gold">★</div>
-      <div class="ks-upsell-text"><strong>Full Analysis</strong> — negotiation script, 3-year depreciation, and exact deal guidance.</div>
-      <button class="ks-upsell-btn" onclick="ksPirTab(2)">View Full Report →</button>
+
+  <!-- ═══ S5: PRICE COMPARISON ═══ -->
+  ${(()=>{
+    const _sp  = stickerPrice || askN || 0;
+    const _hs  = handshake || avg || 0;
+    const _lo  = low  || rangeMin || 0;
+    const _hi  = high || rangeMax || 0;
+    const _gap = _sp && _hs ? (_sp - _hs) : null;
+    const _gapAbs  = _gap !== null ? Math.abs(_gap) : 0;
+    const _gapPct  = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
+
+    // Sticker card color: red if above handshake, green if below, yellow if null/same
+    const _sCol = !_sp ? '#6B7280'
+      : _sp > _hs ? '#DC2626'
+      : _sp < _hs ? '#15803D'
+      : '#B45309';
+    const _sBg  = !_sp ? 'rgba(107,114,128,0.07)'
+      : _sp > _hs ? 'rgba(220,38,38,0.06)'
+      : _sp < _hs ? 'rgba(21,163,74,0.06)'
+      : 'rgba(180,83,9,0.06)';
+    const _sBorder = !_sp ? '#E5E7EB'
+      : _sp > _hs ? '#FCA5A5'
+      : _sp < _hs ? '#6EE7B7'
+      : '#FCD34D';
+
+    // Gap label
+    let _gapLabel='', _gapColor='#6B7280', _gapBg='rgba(107,114,128,0.07)', _gapBorder='#E5E7EB';
+    if(_gap === null || _gapAbs === 0 || !_sp){
+      _gapLabel = 'No sticker price entered';
+      _gapColor = '#6B7280';
+    } else if(_gap > 0){
+      _gapLabel = `Buyer saves AED ${_gapAbs.toLocaleString()} if negotiated to Handshake`;
+      _gapColor = '#15803D'; _gapBg='rgba(21,163,74,0.07)'; _gapBorder='#6EE7B7';
+    } else {
+      _gapLabel = `Seller loses AED ${_gapAbs.toLocaleString()} — car is underpriced`;
+      _gapColor = '#DC2626'; _gapBg='rgba(220,38,38,0.07)'; _gapBorder='#FCA5A5';
+    }
+
+    const _card = (label,price,sub,color,bg,border) => `
+      <div style="flex:1;min-width:0;border-radius:10px;border:1.5px solid ${border};background:${bg};padding:12px 10px 10px;text-align:center;">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;color:${color};text-transform:uppercase;margin-bottom:4px;">${label}</div>
+        <div style="font-size:clamp(.78rem,2.5vw,1rem);font-weight:800;color:${color};line-height:1.1;">AED<br>${price?Number(price).toLocaleString():'—'}</div>
+        <div style="font-size:.58rem;color:#6B7280;margin-top:4px;">${sub}</div>
+      </div>`;
+
+    return `
+    <div class="ks-section" style="padding-bottom:0;">
+      <div class="ks-section-eyebrow">Section 5</div>
+      <div class="ks-section-title" style="margin-bottom:12px;">Price Comparison</div>
+      <div style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;">
+        ${_card('LOWEST',   _lo, 'Best deal',   '#15803D','rgba(21,163,74,0.06)','#6EE7B7')}
+        ${_card('HANDSHAKE',_hs, 'Fair price',  '#15803D','rgba(21,163,74,0.06)','#6EE7B7')}
+        ${_card('STICKER',  _sp, 'Seller ask',  _sCol,    _sBg,                  _sBorder)}
+        ${_card('HIGHEST',  _hi, 'Worst deal',  '#DC2626','rgba(220,38,38,0.06)','#FCA5A5')}
+      </div>
+      <div style="margin-top:10px;padding:9px 12px;border-radius:8px;border:1.5px solid ${_gapBorder};background:${_gapBg};display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span style="font-size:.68rem;font-weight:800;letter-spacing:.06em;color:${_gapColor};text-transform:uppercase;white-space:nowrap;">PRICE GAP${_gap!==null&&_sp?` AED ${_gapAbs.toLocaleString()}`:''}</span>
+        <span style="font-size:.68rem;color:${_gapColor};">${_gapLabel}</span>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ═══ S6: VERDICT ═══ -->
+  ${(()=>{
+    const _sp = stickerPrice || askN || 0;
+    const _hs = handshake || avg || 0;
+    const _gap = _sp && _hs ? (_sp - _hs) : null;
+    const _gapAbs = _gap !== null ? Math.abs(_gap) : 0;
+    const _gapPct = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
+    const _within5 = _gap !== null && _gapAbs / (_hs||1) <= 0.05;
+
+    let _vLabel, _vColor, _vBg, _vBorder, _vEmoji, _vExplain;
+
+    if(!_sp){
+      _vLabel='NO STICKER'; _vEmoji='—'; _vColor='#6B7280'; _vBg='rgba(107,114,128,0.07)'; _vBorder='#E5E7EB';
+      _vExplain='No asking price was entered. Enter a sticker price to get a verdict.';
+    } else if(_within5){
+      _vLabel='FAIRLY PRICED'; _vEmoji='🟡'; _vColor='#B45309'; _vBg='rgba(217,119,6,0.07)'; _vBorder='#FCD34D';
+      _vExplain=`Sticker price is within 5% of Handshake price. Both parties get a fair deal. No significant advantage or disadvantage for either side. Transaction is balanced.`;
+    } else if(_gap > 0){
+      _vLabel='OVERPRICED'; _vEmoji='🔴'; _vColor='#DC2626'; _vBg='rgba(220,38,38,0.07)'; _vBorder='#FCA5A5';
+      _vExplain=`Sticker price is AED ${_gapAbs.toLocaleString()} above Handshake price. Buyer pays ${_gapPct}% more than fair market value. Seller benefits from the higher asking price. Risk: Car may sit unsold for 90+ days at this price.`;
+    } else {
+      _vLabel='UNDERPRICED'; _vEmoji='🟢'; _vColor='#15803D'; _vBg='rgba(21,163,74,0.07)'; _vBorder='#6EE7B7';
+      _vExplain=`Sticker price is AED ${_gapAbs.toLocaleString()} below Handshake price. Buyer saves ${_gapPct}% compared to fair market value. Seller loses potential AED ${_gapAbs.toLocaleString()}. Risk: Car will sell very quickly — seller misses out on value.`;
+    }
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 6</div>
+      <div class="ks-section-title" style="margin-bottom:10px;">Verdict</div>
+      <div style="padding:12px 14px;border-radius:10px;border:1.5px solid ${_vBorder};background:${_vBg};">
+        <div style="font-size:clamp(.88rem,2.8vw,1.05rem);font-weight:900;color:${_vColor};letter-spacing:.03em;margin-bottom:8px;">${_vEmoji} VERDICT: ${_vLabel}</div>
+        <div style="font-size:.76rem;line-height:1.6;color:#374151;">${_vExplain}</div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ═══ S7: WHAT YOU SHOULD DO NOW ═══ -->
+  ${(()=>{
+    const _sp  = stickerPrice || askN || 0;
+    const _hs  = handshake || avg || 0;
+    const _walk= nego?.walk || Math.round((_hs*1.04)/500)*500;
+    const _dts = r.days_to_sell_estimate || _modelDts || '14–30 days';
+    const _rLo = rangeMin || Math.round(_hs*.92/500)*500;
+    const _rHi = rangeMax || Math.round(_hs*1.05/500)*500;
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 7</div>
+      <div class="ks-section-title" style="margin-bottom:10px;">What You Should Do Now</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="padding:10px 13px;border-radius:9px;border:1.5px solid #BFDBFE;background:rgba(30,64,175,0.05);display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:.72rem;font-weight:800;color:#1E40AF;white-space:nowrap;padding-top:1px;">IF BUYER</span>
+          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">Offer Handshake price or less — AED ${_hs.toLocaleString()}. Walk away if seller won't go below AED ${_walk.toLocaleString()}.</span>
+        </div>
+        <div style="padding:10px 13px;border-radius:9px;border:1.5px solid #FDE68A;background:rgba(180,83,9,0.05);display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:.72rem;font-weight:800;color:#B45309;white-space:nowrap;padding-top:1px;">IF SELLER</span>
+          <span style="font-size:.74rem;color:#4A2E08;line-height:1.5;">Realistic price is AED ${_rLo.toLocaleString()} – ${_rHi.toLocaleString()}. Expect ${_dts} to sell at fair market price.</span>
+        </div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ═══ S8: UPGRADE PROMPT ═══ -->
+  <div class="ks-section" style="border-bottom:none;">
+    <div style="padding:13px 15px;border-radius:10px;border:1.5px solid #D4AF37;background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.03));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:.7rem;font-weight:800;color:#D4AF37;letter-spacing:.07em;margin-bottom:3px;">⭐ UPGRADE TO PAID</div>
+        <div style="font-size:.68rem;color:#6B7280;">Negotiation script · 3-yr depreciation · Deal proof · Market analytics</div>
+      </div>
+      <button class="ks-upsell-btn" onclick="ksPirTab(2)" style="white-space:nowrap;flex-shrink:0;">View Full Report →</button>
     </div>
   </div>
+
   </div><!-- /ksPirFreeOnly -->
 
   <!-- C13 PAID-ONLY: Sections 7–11 (Full Analysis exclusive content) -->
