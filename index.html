@@ -1,49 +1,35 @@
+
 <!DOCTYPE html>
-<!-- v2.1 17Apr2026 -->
+<!-- v2.3 17Apr2026 — v36 Unified Render Architecture -->
 <head>
   <meta charset="UTF-8">
   <!--
     KamSayara – UAE Car Price Intelligence
-    VERSION: v35 (April 2026) — kamsayara_v35.html
-    Paired worker: kamsayara_worker35.js — Serper+Haiku Primary, Gemini Backup
-    ARCH (v35): Decouple search from analysis. Serper.dev fetches live UAE listings → Haiku analyses.
-                Gemini demoted to Tier 2 backup. Haiku single-shot is Tier 3. Formula is Tier 4.
-                Tier 0 (KV Cache) unchanged. Removes Gemini 429 as a single point of failure.
-    FIX (v34) B6: Market Fit labels — stacked legend (top labels, middle bar, bottom AED). No overlap.
-    FIX (v34) B7: Strict spacing scale 8/16/24px — .ks-section padding tightened, VL rows reduced.
-    FIX (v34) B8: Consistent card widths — max-width 480px on mobile, 0 16px padding.
-    FIX (v34) B9: Segmented pill toggle replaces cramped tab buttons (.ks-tabnav-pills wrapper).
-    FIX (v34) B10: Form header updates to "Result for: YEAR BRAND MODEL" post-submit; resets on clear.
-    FIX (v34) B11: Recent Searches moved inside form-body, above Brand — horizontal pill list always visible.
-    FIX (v34) B12: White flash eliminated — opacity fade on layout↔loading↔result state transitions.
-    FIX (v34) C13: S1-S6 deduplication — single #ksPirShared block replaces twin copies across tabs.
-    FIX (v34) C14: Disclaimer separated from upsell CTA — standalone #ksPirDisclaimer always visible.
-    FIX (v34) C15: Print mode consistency — .ks-print-tab-label renders "Full Analysis" heading.
-    FIX (v34) D16: Safe-area insets — viewport-fit=cover + env(safe-area-inset-bottom) on all fixed-bottom elements.
-    FIX (v34) D17: Car image CDN — loading=lazy, aspect-ratio lock, skeleton shimmer, 3s timeout fallback.
-    FIX (v34) E18: Duplicate caution flags — removed double push in buildFlags; API redFlags deduped vs local rF.
-    FIX (v34) E19: Icon stroke consistency — all report SVGs standardized to stroke-width 1.5 via CSS rule.
-    FIX (v34) E20: Gradient palette unified — --grad-positive (navy→teal) + --grad-range (red→amber→green).
-    FIX (v34) E21: Ownership Outlook bars — fixed 80px container height; labels centered under each bar.
-    FIX (v34) F22: Form collapse transition — ksSlideUp/Down keyframes; staggered 210ms collapse before loader.
-    FIX (v34) F23: Next Steps compact — 6-layer hierarchy: eyebrow, title, value prop, 2-col CTAs, micro-row, micro-disc.
+    VERSION: v36 (April 2026) — index_v36.html
+    Based on: v35 (kamsayara_v35.html)
 
-    FIXES APPLIED IN v27 (from audit):
-      FIX #1  — Removed duplicate pirToggle() definition that overwrote the correct
-                one; all PIR collapsible sections were silently broken on click.
-      FIX #6  — Removed dead pirDrawGauge('confGaugeFill',...) calls; those SVG IDs
-                do not exist in buildResult() output — calls were silent no-ops.
-      FIX #7  — Removed duplicate animateCountUp() call on #priceMain; two concurrent
-                count-up animations were racing and causing price display flicker.
-      FIX #10 — setYN() now stores true/false booleans (was storing 'yes'/'no' strings).
-                ALL downstream === true / === false comparisons for QC signals
-                (FSH, warranty, single owner, accident) were silently failing,
-                meaning those signals had zero effect on display logic or
-                worker pricing math. This is the most pervasive fix in the file.
-      FIX #12 — saveLastValuation() now persists QC state (qs object). restoreValuation()
-                now restores tick/cross button visual state. Previously restored searches
-                lost all QC answers.
+    ARCH CHANGES (v36): Unified single result-rendering system — no more device forks.
+      Change 1 — REMOVED: .mob-result-toast (#mobToast), .mob-overlay (#mobOverlay),
+                 .mob-tab-bar (#mobTabBar), and all associated HTML/CSS/JS.
+                 closeMobResult(), swipe-to-close handler, and showState mob refs removed.
+      Change 2 — SINGLE CONTAINER: All result rendering (success, error, rate-limit)
+                 injects exclusively into .result-panel → #rcontent. No alternate targets.
+      Change 3 — CSS-ONLY RESPONSIVE: .layout collapses to display:flex + flex-direction:column
+                 below 860px (was split across 601–900px tablet + ≤600px mobile rules).
+                 .result-panel naturally stacks below .form-card in DOM order. No JS layout logic.
+      Change 4 — OVERFLOW FIX: .result-panel overflow:hidden → overflow-y:auto.
+                 Panel expands naturally in stacked layout; scrolls internally when needed.
+      Change 5 — UNIFIED JS RENDER: Removed all if(isMobile()) forks from displayValuationResult,
+                 rate-limit handler, and error handler. Single renderResult path for all devices.
+                 switchMobCard / _unlockResultTab / _lockResultTab replaced with no-op stubs.
+                 Scroll-into-view now fires on all devices (smooth scroll to result-panel).
+
+    PRESERVED from v35:
+      Serper+Haiku primary / Gemini backup / Haiku single-shot / Formula tier waterfall.
+      KV cache (T0), full PIR report (buildResult), all form layout and field grids intact.
+      4-col desktop, 4-col tablet (861–∞px), 2-col mobile (≤600px) field grids unchanged.
   -->
+
   <title>KamSayara – UAE Car Price Intelligence</title>
   <meta name="description" content="Get an instant, accurate UAE car price intelligence report based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi.">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -215,8 +201,8 @@
     }
     /* form-card must NOT clip — dropdown panels escape it */
     .form-card{overflow:visible;}
-    /* result-panel keeps overflow:hidden for internal scroll */
-    .result-panel{overflow:hidden;}
+    /* Change 4: result-panel uses overflow-y:auto so content never clips */
+    .result-panel{overflow-y:auto;}
     .form-card{display:flex;flex-direction:column;animation:cardIn .55s .08s var(--ease) both;}
     /* Result panel: sticky so it scrolls with page but stays visible;
        height:100% fills the grid row (= same as form card) */
@@ -225,7 +211,7 @@
       animation:cardIn .55s .16s var(--ease) both;
       position:static;
       height:100%;
-      overflow:hidden;
+      overflow-y:auto; /* Change 4: was overflow:hidden — auto allows scroll without clipping */
     }
     @keyframes cardIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
 
@@ -618,37 +604,13 @@
     }
 
     /* ── ENHANCED BOTTOM SHEET ───────────────────────────────── */
-    /* mob-result-toast base — overridden by mobile card stack CSS below */
-    .mob-result-toast{
-      display:none;
-      background:var(--white);
-      padding:0;
-    }
-    .mob-result-toast.show{ display:flex; flex-direction:column; }
-    .mob-toast-handle{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px 18px 12px;border-bottom:1px solid var(--border);
-      position:sticky;top:0;background:var(--white);z-index:1;
-      border-radius:var(--r-xl) var(--r-xl) 0 0;
-    }
-    /* Swipe handle indicator */
-    .mob-toast-handle::before{
-      content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);
-      width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,0.12);
-    }
-    .mob-toast-title{font-family:"Exo 2",sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
-    .mob-toast-close{background:rgba(0,0,0,0.05);border:none;cursor:pointer;color:var(--muted);font-size:.9rem;padding:4px;min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .16s,color .16s;}
-    .mob-toast-close:hover{background:rgba(0,0,0,0.1);color:var(--ink);}
-    .mob-toast-body{ padding:0; max-width:100%; width:100%; } /* v33: padding moved to .ks-pir to avoid double-padding */
-    .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:140;backdrop-filter:blur(2px);}
-    .mob-overlay.show{display:block;}
+    /* Change 1: mob-result-toast, mob-overlay, and all mobile toast chrome removed — unified result-panel only */
+    .mob-result-toast,.mob-overlay,.mob-toast-handle,.mob-toast-body,.mob-toast-title,.mob-toast-close{ display:none!important; }
 
     /* ── ENHANCED RESULT PANEL SHADOW ────────────────────────── */
     @media(min-width:861px){
       .result-panel{box-shadow:0 28px 64px rgba(30,20,5,0.14),0 8px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.7);}
     }
-
-    /* why-toggle removed from result panel */
     .why-toggle { display: none !important; }
 
     /* ── LOADING FACTS (replaces fake interim estimate) ─────── */
@@ -765,7 +727,8 @@
     }
 
     /* ── LOADING MSG STYLES ──────────────────────────────────── */
-    #loadMsg,#mobLoadMsg{font-size:.82rem;color:var(--ink-soft);font-weight:600;}
+    /* Change 9: single loading message — #mobLoadMsg removed with mob toast */
+    #loadMsg{font-size:.82rem;color:var(--ink-soft);font-weight:600;}
 
     /* ── AI ANALYSIS BLOCK ───────────────────────────────────── */
     .ai-block{
@@ -1369,8 +1332,8 @@
     .result-panel .mkt-day-val { font-size: 0.72rem; }
 
     /* ── EQUAL HEIGHT PANELS (large desktop) ─────────────── */
-    @media(min-width:901px){
-      .result-panel { display: flex; flex-direction: column; overflow: visible; }
+    @media(min-width:861px){
+      .result-panel { display: flex; flex-direction: column; overflow-y: auto; }
       .rpanel-inner { flex: 1; overflow: visible; }
     }
 
@@ -1416,18 +1379,10 @@
     .tf-item { display: none !important; }
     .tf-icon { display: none !important; }
 
-    /* ── MOB HEADER / TABS: hide on desktop+tablet ─────────── */
-    .mob-fixed-header  { display: none; }
-    .mob-hero-strip    { display: none; }
-    .mob-tab-bar       { display: none !important; }
-    .mob-result-header { display: none; }
-    @media(max-width:600px){
-      .mob-fixed-header { display: flex; flex-direction: column; }
-      .mob-hero-strip   { display: flex; flex-direction: column; }
-      .mob-result-header { display: flex; }
-      .snav { display: none !important; }
-      .hero { display: none !important; }
-    }
+    /* Change 9: mob-fixed-header suppressed on all viewports — normal hero serves all devices */
+    .mob-fixed-header, .mob-hero-strip, .mob-tab-bar, .mob-result-header { display: none !important; }
+    /* Hide sticky nav on stacked layouts (≤860px) where it overlaps the form */
+    @media(max-width:860px){ .snav { display: none !important; } }
 
     /* ── SMALL MOBILE EDGE CASES ──────────────────────────── */
     @media(max-width:400px){ .fg { grid-template-columns: 1fr 1fr !important; gap: 7px !important; } }
@@ -1793,64 +1748,26 @@
     .snav { background: rgba(26,43,76,0.97) !important; }
 
     /* ══════════════════════════════════════════════════════════
-       TABLET 601–900px — stacked, separate rounded cards
+       Change 3: UNIFIED RESPONSIVE BREAKPOINT ≤860px
+       Single CSS-only rule: .layout collapses to flex column.
+       .result-panel naturally follows the form in DOM order.
+       No JS layout manipulation required on any device.
     ══════════════════════════════════════════════════════════ */
-    @media(min-width:601px) and (max-width:900px){
+    @media(max-width:860px){
+      /* Layout: vertical stack — result-panel appears below form */
       .layout {
         display: flex !important;
         flex-direction: column !important;
         gap: 14px !important;
         margin-top: 0 !important;
       }
-      .form-card {
-        position: static !important; max-height: none !important; overflow: visible !important;
-        border-radius: 16px !important; width: 100% !important;
-        border: 1px solid #D8DCE6 !important; background: #fff !important;
-      }
-      .result-panel {
-        position: static !important; min-height: 180px !important;
-        border-radius: 16px !important; width: 100% !important;
-        border: 1px solid #D8DCE6 !important; background: #fff !important;
-      }
-      .form-header  { border-radius: 16px 16px 0 0 !important; }
-      .ffoot        { border-radius: 0 0 16px 16px !important; }
-      .fg           { grid-template-columns: repeat(4,1fr) !important; gap: 6px 8px !important; }
-      .form-body    { padding: 10px 16px 6px !important; }
-      select, input[type="number"], input[type="text"] { height: 36px !important; font-size: 0.82rem !important; }
-      .ks-trigger   { height: 36px !important; font-size: 0.82rem !important; }
-    }
 
-    /* ══════════════════════════════════════════════════════════
-       MOBILE ≤600px — simple normal stacked layout, NO stack magic
-    ══════════════════════════════════════════════════════════ */
-    @media(max-width:600px){
-      /* Kill ALL mobile card-stack behaviour */
-      .mob-fixed-header  { display: none !important; }
-      .mob-hero-strip    { display: none !important; }
-      .mob-tab-bar       { display: none !important; }
-      .mob-result-toast  { display: none !important; position: static !important; transform: none !important; }
-      .mob-overlay       { display: none !important; }
-      .mob-result-header { display: none !important; }
-      .snav              { display: none !important; }
-
-      /* Show the normal desktop hero */
-      .hero { display: block !important; }
-
-      /* Layout — stacked column */
-      .layout {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 12px !important;
-        margin-top: 0 !important;
-        padding: 0 12px !important;
-      }
-
-      /* Both cards fully rounded, static */
+      /* Both cards: fully rounded, full width, static */
       .form-card {
         position: static !important; top: auto !important;
         transform: none !important; opacity: 1 !important;
         scale: none !important; pointer-events: auto !important;
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         background: #fff !important;
         border: 1px solid #D8DCE6 !important;
         box-shadow: 0 2px 10px rgba(10,37,64,0.08) !important;
@@ -1862,28 +1779,63 @@
       .form-card.mob-card-behind {
         transform: none !important; opacity: 1 !important; scale: none !important; pointer-events: auto !important;
       }
+      /* Change 4: result-panel expands naturally in stacked layout; overflow-y:auto scrolls internally if needed */
       .result-panel {
         position: static !important;
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         background: #fff !important;
         border: 1px solid #D8DCE6 !important;
         box-shadow: 0 2px 10px rgba(10,37,64,0.08) !important;
-        overflow: visible !important;
-        display: block !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
         min-height: 80px !important;
         width: 100% !important;
+        height: auto !important;
       }
-      .form-header  { border-radius: 14px 14px 0 0 !important; padding: 10px 14px 8px !important; }
-      .ffoot        { border-radius: 0 0 14px 14px !important; }
+      .form-header  { border-radius: 16px 16px 0 0 !important; }
+      .ffoot        { border-radius: 0 0 16px 16px !important; }
+      .rcontent     { border-radius: 0 0 16px 16px !important; }
+      .share-strip  { border-radius: 0 0 16px 16px !important; }
+      .rpt-wrap     { border-radius: 0 0 16px 16px !important; }
 
-      /* Mobile: show output in the main result panel, not in toast */
+      /* Ensure result content is always visible */
       #rcontent, #rph, #rld { display: block !important; }
 
-      /* Field grid: 2 col on mobile */
+      /* Tablet (601–860px): keep 4-col field grid */
+      .fg { grid-template-columns: repeat(4,1fr) !important; gap: 6px 8px !important; }
+      .form-body    { padding: 10px 16px 6px !important; }
+      select, input[type="number"], input[type="text"] { height: 36px !important; font-size: 0.82rem !important; }
+      .ks-trigger   { height: 36px !important; font-size: 0.82rem !important; }
+    }
+
+    /* ── MOBILE ≤600px — 2-col field grid + larger touch inputs ── */
+    @media(max-width:600px){
+      /* Kill any remaining legacy mobile chrome */
+      .mob-fixed-header  { display: none !important; }
+      .mob-hero-strip    { display: none !important; }
+      .mob-tab-bar       { display: none !important; }
+      .mob-result-header { display: none !important; }
+      .snav              { display: none !important; }
+      .hero              { display: block !important; }
+
+      /* Tighter layout gap + padding on small screens */
+      .layout { gap: 12px !important; padding: 0 12px !important; }
+
+      /* Slightly smaller card radius on mobile */
+      .form-card    { border-radius: 14px !important; }
+      .result-panel { border-radius: 14px !important; }
+      .form-header  { border-radius: 14px 14px 0 0 !important; padding: 10px 14px 8px !important; }
+      .ffoot        { border-radius: 0 0 14px 14px !important; }
+      .rcontent     { border-radius: 0 0 14px 14px !important; }
+      .share-strip  { border-radius: 0 0 14px 14px !important; }
+      .rpt-wrap     { border-radius: 0 0 14px 14px !important; }
+
+      /* 2-col field grid on mobile */
       .fg { grid-template-columns: 1fr 1fr !important; gap: 7px 8px !important; }
       .form-body { padding: 8px 12px 6px !important; }
 
-      /* Inputs full size, readable */
+      /* Larger touch inputs */
       select, input[type="number"], input[type="text"] {
         height: 40px !important; font-size: 0.85rem !important; padding: 0 0.65rem !important;
       }
@@ -1893,22 +1845,18 @@
       .r-price-section { padding: 16px 16px 12px !important; }
       .r-price-main    { font-size: clamp(1.6rem,8vw,2rem) !important; }
 
-      /* rpt-wrap on mobile */
-      .rpt-wrap { border-radius: 0 0 14px 14px !important; }
+      /* rpt-wrap layout */
       .rpt-body { grid-template-columns: 1fr !important; }
       .rpt-left { border-right: none !important; border-bottom: 1px solid #eef0f4 !important; }
       .rpt-right { background: #fff !important; }
-
-      /* Share strip */
-      .share-strip { border-radius: 0 0 14px 14px !important; }
 
       /* Hero tighter on mobile */
       .hero-inner { padding: 0 14px 36px !important; }
       .page { padding: 0 0 40px !important; }
     }
 
-    /* ── Desktop: keep rounded on right edge of result panel for rpt-wrap ── */
-    @media(min-width:901px){
+    /* ── Desktop ≥861px: rpt-wrap corner rounding ── */
+    @media(min-width:861px){
       .rpt-wrap { border-radius: 0 0 16px 16px !important; }
       .rpt-header { border-radius: 0 !important; }
     }
@@ -2106,7 +2054,7 @@
     }
     .ks-scene-car-wrap {
       position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%);
-      width: 46%; max-width: 300px; min-width: 160px; z-index: 10;
+      width: 42% !important; max-width: 280px !important; min-width: 140px; z-index: 10;
       filter: drop-shadow(0 8px 22px rgba(0,0,0,0.55)) drop-shadow(0 2px 8px rgba(0,0,0,0.35));
       animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
     }
@@ -2651,7 +2599,8 @@
   .form-card{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:visible!important;position:static!important;max-height:none!important;width:100%!important;display:flex!important;flex-direction:column!important;transform:none!important;opacity:1!important;pointer-events:auto!important;order:0!important;}
   .form-card.mob-card-behind{transform:none!important;opacity:1!important;pointer-events:auto!important;}
   /* result-panel: always visible on all breakpoints */
-  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow:hidden!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;order:2!important;}
+  /* Change 4: overflow:hidden → overflow-y:auto — content never clips; scrolls internally when needed */
+  .result-panel{background:#fff!important;border-radius:16px!important;border:1px solid #D4D8E2!important;box-shadow:0 2px 16px rgba(10,37,64,.07)!important;overflow-y:auto!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;display:flex!important;flex-direction:column!important;border-left:none!important;order:2!important;}
   /* When layout is hidden by JS (loading/content fullscreen states), result-panel is moot */
   .layout[style*="display: none"] .result-panel,
   .layout[style*="display:none"] .result-panel { display:none!important; }
@@ -3072,7 +3021,8 @@
   }
 
   /* ── HIDE tips, skeleton, fact rotator ── */
-  #rldFactWrap, #rldSkeleton, #mobLoadTip { display: none !important; }
+  /* Change 8: #mobLoadTip removed with mob toast — only suppress remaining legacy load elements */
+  #rldFactWrap, #rldSkeleton { display: none !important; }
 
   /* ── Named step progress track ── */
   .rld-steps-wrap {
@@ -5887,11 +5837,12 @@
 .result-panel .ks-tabnav {
   border-radius: 0 !important;
 }
+/* Change 8: ksSlide animations are form-card submit transitions only — not mob-toast specific */
 @keyframes ksSlideUp   { from{opacity:1;transform:translateY(0);}    to{opacity:0;transform:translateY(-12px);} }
 @keyframes ksSlideDown { from{opacity:0;transform:translateY(8px);}  to{opacity:1;transform:none;} }
 .ks-collapsing { animation:ksSlideUp 0.22s cubic-bezier(0.4,0,0.2,1) forwards; pointer-events:none; }
 .ks-expanding  { animation:ksSlideDown 0.28s cubic-bezier(0.16,1,0.3,1) both; }
-/* result panels use the slide-down version */
+/* Change 9: .rcontent fade-in applied on all devices uniformly via showState('content') */
 .rcontent.ks-fading-in { animation:ksSlideDown 0.32s cubic-bezier(0.16,1,0.3,1) both; }
 
 /* ── E20 FIX: Unified gradient palette ─────────────────────────────────────
@@ -6828,17 +6779,7 @@
       <span class="mob-ht"><span class="mob-htd"></span>Free</span>
     </div>
   </div>
-  <!-- Card tabs -->
-  <div class="mob-tab-bar" id="mobTabBar" role="navigation" aria-label="Mobile navigation">
-    <button class="mob-tab active" id="tabForm" onclick="switchMobCard('form')" aria-label="Vehicle Info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-      Vehicle Info
-    </button>
-    <button class="mob-tab" id="tabResult" onclick="switchMobCard('result')" aria-label="Price Report" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      Price Report
-    </button>
-  </div>
+  <!-- mob-tab-bar removed (Change 1) — unified result-panel replaces mobile card-stack UI -->
 </div>
 <div class="hero" id="heroTop">
   <div class="hero-inner">
@@ -7225,44 +7166,7 @@
 <!-- Floating back-to-inputs (mobile) -->
 <button class="back-to-inputs" id="backToInputs" onclick="g('formCard').scrollIntoView({behavior:'smooth'})">↑ Inputs</button>
 
-<!-- MOBILE OVERLAY -->
-<div class="mob-overlay" id="mobOverlay" onclick="closeMobResult()"></div>
-
-<!-- FULL-SCREEN LOADING (all devices) -->
-<!-- fullscreen overlays removed — loading and results render inline in result-panel -->
-
-<!-- MOBILE BOTTOM SHEET RESULT -->
-<div class="mob-result-toast" id="mobToast" role="dialog" aria-label="Valuation result">
-  <!-- Mobile result header strip — matches hero strip style -->
-  <div class="mob-result-header">
-    <div class="mob-result-header-title">UAE Market Price Report</div>
-    <span class="mob-ref" id="mobRef"></span>
-  </div>
-  <div class="mob-toast-handle">
-    <span class="mob-toast-title">Price Report</span>
-    <span class="mob-ref" id="mobRefOld"></span>
-    <button class="mob-toast-close" onclick="closeMobResult()" aria-label="Close">✕</button>
-  </div>
-  <div class="mob-toast-body" id="mobBody">
-    <div class="rld" id="mobLoad" style="display:none" role="status" aria-label="Fetching price report">
-      <div class="rld-steps-wrap">
-        <div class="rld-steps-header">
-          <span class="rld-steps-eyebrow">Analysing market data</span>
-          <span class="rld-steps-pct" id="mobRldPct">0%</span>
-        </div>
-        <div class="rld-master-bar"><div class="rld-master-fill" id="mobRldFill"></div></div>
-        <ol class="rld-step-list" id="mobRldStepList">
-          <li class="rld-step-item" id="mlstep0"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg></span><span class="rld-step-lbl">Scanning live UAE listings — Dubizzle &amp; YallaMotor…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep1"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M3 5h10M3 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="rld-step-lbl">Filtering comparable listings &amp; removing outliers…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep2"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rld-step-lbl" id="mlstep2lbl">Calculating depreciation &amp; GCC spec adjustments…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep3"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Applying negotiation math &amp; handshake price model…</span><span class="rld-step-state"></span></li>
-          <li class="rld-step-item" id="mlstep4"><span class="rld-step-ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 4V3a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.3"/></svg></span><span class="rld-step-lbl">Building the Price Intelligence Report…</span><span class="rld-step-state"></span></li>
-        </ol>
-      </div>
-    </div>
-    <div id="mobContent"></div>
-  </div>
-</div>
+<!-- Change 1: mob-overlay and mob-result-toast removed — single unified result-panel is the only render target -->
 
 <script>
 /* ── DATA ─────────────────────────────────────────────────── */
@@ -7655,11 +7559,7 @@ function showState(st){
   const fullRes  = g('ks-fullscreen-result');
   if(fullLoad) fullLoad.style.display = 'none';
   if(fullRes)  fullRes.style.display  = 'none';
-  // Suppress mobile-specific chrome always
-  const mobToast = g('mobToast');
-  const mobOverl = g('mobOverlay');
-  if(mobToast) mobToast.classList.remove('open','show');
-  if(mobOverl) mobOverl.classList.remove('show');
+  // mob-result-toast and mob-overlay have been removed from the DOM (Change 1)
 
   if(st === 'placeholder'){
     // Reset — show form + idle result panel
@@ -7680,8 +7580,15 @@ function showState(st){
     if(ph)  ph.style.display  = 'none';
     if(rld) rld.style.display = 'flex';
     if(rct) rct.style.display = 'none';
-    // Scroll result-panel into view smoothly
-    if(resultPanel) resultPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    // Change 6: scroll result-panel into view — scrollIntoView on stacked, offset on desktop
+    if(resultPanel){
+      if(window.innerWidth <= 860){
+        resultPanel.scrollIntoView({ behavior:'smooth', block:'start' });
+      } else {
+        const _pt = resultPanel.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: _pt - 60, behavior:'smooth' });
+      }
+    }
     document.body.classList.add('ks-result-active');
 
   } else if(st === 'content'){
@@ -7691,9 +7598,16 @@ function showState(st){
     if(hero)     hero.style.display      = '';
     if(rld) rld.style.display = 'none';
     if(ph)  ph.style.display  = 'none';
-    if(rct) { rct.style.display = 'block'; }
-    // Scroll result-panel into view
-    if(resultPanel) resultPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    if(rct) { rct.style.display = 'block'; rct.classList.add('ks-fading-in'); setTimeout(()=>rct.classList.remove('ks-fading-in'), 350); }
+    // Change 6: consistent device-aware scroll — scrollIntoView below 860px, offset above
+    if(resultPanel){
+      if(window.innerWidth <= 860){
+        resultPanel.scrollIntoView({ behavior:'smooth', block:'start' });
+      } else {
+        const _pt = resultPanel.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: _pt - 60, behavior:'smooth' });
+      }
+    }
     document.body.classList.add('ks-result-active');
     // Trigger animated elements
     setTimeout(()=>{
@@ -7740,15 +7654,17 @@ function buildLoadSteps(mobile){
 }
 
 function _setStep(idx){
-  // Drive all step lists — desktop, mobile, and fullscreen
+  // Change 8: single step list in result-panel — mob toast duplicates removed
   document.querySelectorAll('.rld-step-item').forEach((el,i)=>{
     el.classList.remove('active','done');
     if(i < idx)  el.classList.add('done');
     if(i === idx) el.classList.add('active');
   });
   const pct = LOAD_STEPS_DEF[Math.min(idx, LOAD_STEPS_DEF.length-1)].pct;
-  ['rldMasterFill','mobRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
-  ['rldPct','mobRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pct+'%';});
+  const fill = document.getElementById('rldMasterFill');
+  if(fill) fill.style.width = pct+'%';
+  const pctEl = document.getElementById('rldPct');
+  if(pctEl) pctEl.textContent = pct+'%';
 }
 
 function _rotateFact(idx){
@@ -7763,7 +7679,7 @@ function _rotateFact(idx){
   dots.forEach((d,i)=>d.classList.toggle('active', i===(idx % dots.length)));
 }
 
-function startLoad(mobile=false){
+function startLoad(){
   stopLoad();
 
   /* personalise step 2 label based on inputs */
@@ -7772,10 +7688,9 @@ function startLoad(mobile=false){
   const year    = (document.getElementById('year')||{}).value||'';
   const mileage = (document.getElementById('mileage')||{}).value;
   const carLabel= [year,brand,model].filter(Boolean).join(' ')||'this vehicle';
-  ['lstep2lbl','mlstep2lbl'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){const km=mileage?parseInt(mileage).toLocaleString()+' km ':'';el.textContent=`Calculating depreciation for ${km}${carLabel}…`;}
-  });
+  /* Change 8: only update the single desktop step label — mob toast step labels removed */
+  const step2el = document.getElementById('lstep2lbl');
+  if(step2el){ const km=mileage?parseInt(mileage).toLocaleString()+' km ':''; step2el.textContent=`Calculating depreciation for ${km}${carLabel}…`; }
 
   /* reset steps */
   _stepIdx=0;
@@ -7800,8 +7715,8 @@ function startLoad(mobile=false){
     }, 3500);
   }, 1500);
 
-  /* legacy: keep loadMsg/loadStep alive for any code that reads them */
-  const msg=mobile?document.getElementById('mobLoadMsg'):document.getElementById('loadMsg');
+  /* clear load message if element exists */
+  const msg = document.getElementById('loadMsg');
   if(msg) msg.textContent='';
 }
 
@@ -7812,15 +7727,16 @@ function stopLoad(){
   if(_factTimer){clearInterval(_factTimer);_factTimer=null;}
   _stepTimer=null;
 
-  /* mark all steps done */
-  ['rldMasterFill','mobRldFill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width='100%';});
-  ['rldPct','mobRldPct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='100%';});
+  /* Change 8: single progress bar in result-panel — mob equivalents removed with mob toast */
+  const masterFill = document.getElementById('rldMasterFill');
+  if(masterFill) masterFill.style.width='100%';
+  const masterPct = document.getElementById('rldPct');
+  if(masterPct) masterPct.textContent='100%';
   document.querySelectorAll('.rld-step-item').forEach(el=>{
     el.classList.remove('active'); el.classList.add('done');
   });
-  /* legacy tip elements */
-  const tipEl=document.getElementById('loadTip');if(tipEl){tipEl.style.display='none';}
-  const mobTipEl=document.getElementById('mobLoadTip');if(mobTipEl){mobTipEl.style.display='none';}
+  const tipEl=document.getElementById('loadTip');
+  if(tipEl) tipEl.style.display='none';
 }
 
 /* ── DEAL LOGIC (fallback if AI unavailable) ─────────────── */
@@ -9464,7 +9380,7 @@ async function checkCarPrice(){
   }
 
   showState('loading');
-  startLoad(false);
+  startLoad(); /* Change 8: mobile param removed — single load path */
   const btn = g('btnCheck');
   if(btn) btn.disabled = true;
 
@@ -9553,10 +9469,7 @@ async function checkCarPrice(){
                  box-shadow:0 4px 14px rgba(0,133,119,0.3);">↺ Start Fresh</button>
       </div>`;
       showState('content');
-      if(isMobile()){
-        const mob=g('mobContent');
-        if(mob){mob.innerHTML=g('rcontent').innerHTML;_unlockResultTab();switchMobCard('result');}
-      }
+      // Change 5: result always in #rcontent — no mobContent mirror needed
       if(btn) btn.disabled=false;
       updateReadiness();
       return;
@@ -9589,10 +9502,7 @@ async function checkCarPrice(){
     </div>`;
     g('rcontent').innerHTML=errHtml;
     showState('content');
-    if(isMobile()){
-      const mob=g('mobContent');
-      if(mob){mob.innerHTML=errHtml;_unlockResultTab();switchMobCard('result');}
-    }
+    // Change 5: result always in #rcontent — no mobContent mirror needed
   }finally{
     if(btn) btn.disabled=false;
     updateReadiness();
@@ -9688,24 +9598,14 @@ function displayValuationResult(data){
   const mileage = data.mileage != null ? String(data.mileage) : (g('mileage')?.value || '');
   const asking  = g('asking')?.value || '';
 
-  // Render full Price Intelligence Report
+  // Render full Price Intelligence Report into .result-panel → #rcontent (single render path, all devices)
   const _builtReport = buildResult(r, brand, model, year, mileage, asking);
   resultContainer.innerHTML = _builtReport;
 
   showState('content');
 
-  // Mobile: mirror result into mobContent and slide in the result card FIRST
-  // so animations below target the visible element (mobContent) not hidden rcontent
-  if (isMobile()) {
-    const mob = g('mobContent');
-    if (mob) mob.innerHTML = resultContainer.innerHTML;
-    _unlockResultTab();
-    switchMobCard('result');
-  }
-
-  // Animate the dominant Handshake price
-  // FIX #7: Removed duplicate animateCountUp call here — pirCountUp inside requestAnimationFrame below handles this
-  // (two concurrent count-ups on #priceMain caused a janky race condition)
+  // Change 5: No isMobile() fork — result always lives in #rcontent inside .result-panel.
+  // On stacked layouts (≤860px) the panel is naturally below the form in DOM order.
 
   // Animate confidence footer bar + stat bars
   setTimeout(()=>{
@@ -9745,16 +9645,19 @@ function displayValuationResult(data){
     }
   }, 60);
 
-  // Scroll result panel into view (desktop/tablet only — mobile switches card)
-  if (!isMobile()) {
-    setTimeout(()=>{
-      const panel = g('resultPanel') || resultContainer.closest('.result-panel');
-      if(panel){
-        const panelTop = panel.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({top: panelTop - 60, behavior:'smooth'});
-      }
-    }, 120);
-  }
+  // Change 6: Device-aware scroll — scrollIntoView for stacked layouts (≤860px), offset scroll for desktop
+  setTimeout(()=>{
+    const panel = g('resultPanel') || resultContainer.closest('.result-panel');
+    if(!panel) return;
+    if(window.innerWidth <= 860){
+      // Stacked layout: result-panel is below form — scroll it into view cleanly
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      // Side-by-side desktop: offset by sticky nav height
+      const panelTop = panel.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: panelTop - 60, behavior: 'smooth' });
+    }
+  }, 120);
 
   saveLastValuation();
   // FIX #10: Update form header to show result context
@@ -9787,7 +9690,7 @@ function displayValuationResult(data){
   });
 }
 
-/* ── MOBILE BOTTOM SHEET / CARD STACK (no-op in unified layout) ── */
+/* ── MOBILE BOTTOM SHEET / CARD STACK (Change 1: removed — stubs kept for safety) ── */
 function closeMobResult(){
   stopLoad();
   resetForm();
@@ -9823,23 +9726,17 @@ function resetForm(){
   if(stage2)stage2.style.display='none';
   showState('placeholder');
   document.body.classList.remove('ks-result-active');
-  // Reset ref stamps
+  // Reset ref stamp
   const refEl=g('resultRef');
   if(refEl){refEl.textContent='';refEl.style.display='none';}
-  const mobRefEl=g('mobRef');
-  if(mobRefEl){mobRefEl.textContent='';mobRefEl.classList.remove('on');}
+  // mob-ref elements removed with mob-result-toast (Change 1)
   window._preGeneratedRef = null;
   updateReadiness();
   window.scrollTo({top:0, behavior:'smooth'});
   // FIX #10: Reset form header title
   const titleEl = document.getElementById('formHeaderTitle');
   if(titleEl) titleEl.textContent = 'Car Details';
-  // Restore mobile UI
-  const mobTabBar=document.querySelector('.mob-tab-bar');
-  const mobHdr=document.querySelector('.mob-fixed-header');
-  if(mobTabBar) mobTabBar.style.display='';
-  if(mobHdr) mobHdr.style.display='';
-  // Show form card again
+  // Show form card + layout (in case they were hidden during a loading transition)
   const fc=g('formCard');
   const lay=document.querySelector('.layout');
   if(fc) fc.style.display='';
@@ -9847,10 +9744,9 @@ function resetForm(){
   const hero=document.querySelector('.hero');
   if(hero) hero.style.display='';
   SHARE_ICONS.forEach(id=>{const el=document.getElementById('sico-'+id);if(el)el.classList.add('share-dimmed');});
-  // Mobile cleanup: clear stale result and lock tab
-  const mobC = g('mobContent');
-  if (mobC) mobC.innerHTML = '';
-  _lockResultTab();
+  // Change 5: #rcontent is the single result target — clear it on reset
+  const rct=g('rcontent');
+  if(rct) rct.innerHTML='';
 }
 
 /* ── COPY LINK ───────────────────────────────────────────── */
@@ -10356,42 +10252,7 @@ g('btnCheck').addEventListener('click',()=>{
   setTimeout(()=>btn.classList.remove('clicked'),150);
 });
 
-/* ── SWIPE TO CLOSE BOTTOM SHEET ─────────────────────────── */
-(function(){
-  const toast=g('mobToast');
-  if(!toast)return;
-  let startX=0,startY=0,isDragging=false,axisLocked=null;
-  toast.addEventListener('touchstart',e=>{
-    if(e.touches.length!==1)return;
-    startX=e.touches[0].clientX;
-    startY=e.touches[0].clientY;
-    isDragging=true;
-    axisLocked=null;
-    toast.style.transition='none';
-  },{passive:true});
-  toast.addEventListener('touchmove',e=>{
-    if(!isDragging)return;
-    const dx=e.touches[0].clientX-startX;
-    const dy=e.touches[0].clientY-startY;
-    // Lock axis on first significant move
-    if(!axisLocked){
-      if(Math.abs(dx)>Math.abs(dy))axisLocked='x';
-      else axisLocked='y';
-    }
-    // Only handle rightward X swipes; let Y scroll naturally
-    if(axisLocked!=='x'||dx<0)return;
-    toast.style.transform=`translateX(${dx}px)`;
-  },{passive:true});
-  toast.addEventListener('touchend',e=>{
-    if(!isDragging)return;
-    isDragging=false;
-    toast.style.transition='';
-    if(axisLocked!=='x'){return;}
-    const dx=e.changedTouches[0].clientX-startX;
-    if(dx>100){closeMobResult();}
-    else{toast.style.transform='';}
-  });
-})();
+/* ── SWIPE TO CLOSE BOTTOM SHEET (Change 1: mob-result-toast removed — handler removed) ── */
 
 
 /* ── SHARE STRIP ─────────────────────────────────────────── */
@@ -10553,45 +10414,12 @@ function toggleMoreFields(){
   txt.textContent=open?'− Less Details':'+ More Details';
   btn.setAttribute('aria-expanded',open?'true':'false');
 }
-/* ── MOBILE CARD STACK ───────────────────────────────────── */
-let _mobCardActive='form'; // 'form' | 'result'
-
-function switchMobCard(which){
-  if(!isMobile())return;
-  _mobCardActive=which;
-  const form=g('formCard');
-  const toast=g('mobToast');
-  const tabForm=g('tabForm');
-  const tabResult=g('tabResult');
-
-  if(which==='result'){
-    form.classList.add('mob-card-behind');
-    toast.classList.add('show');
-    tabForm.classList.remove('active');
-    tabResult.classList.add('active');
-    document.body.style.overflow='';
-  } else {
-    form.classList.remove('mob-card-behind');
-    toast.classList.remove('show');
-    tabForm.classList.add('active');
-    tabResult.classList.remove('active');
-    document.body.style.overflow='';
-  }
-}
-
-/* Enable the Valuation tab once a result exists */
-function _unlockResultTab(){
-  const tab=g('tabResult');
-  if(tab){tab.disabled=false;tab.removeAttribute('disabled');}
-}
-
-/* Lock it again on reset */
-function _lockResultTab(){
-  const tab=g('tabResult');
-  if(tab){tab.disabled=true;tab.setAttribute('disabled','');}
-  // Also switch back to form card if on result
-  if(_mobCardActive==='result')switchMobCard('form');
-}
+/* ── MOBILE CARD STACK (Change 5: removed — unified result-panel used on all devices) ─── */
+/* Stubs retained for safety in case any legacy callers remain in the file */
+let _mobCardActive='form';
+function switchMobCard(which){ _mobCardActive=which; /* no-op: mob-result-toast removed */ }
+function _unlockResultTab(){ /* no-op: mob tab bar removed */ }
+function _lockResultTab(){   /* no-op: mob tab bar removed */ }
 
 /* ── ACCORDION (tablet only) ────────────────────────────── */
 function wrapResultInAccordion(){
@@ -10786,9 +10614,25 @@ function _updateStage2(){
       stage2.style.display='flex';
       _s2Active=true;
     }
-    // Update silhouette
+    // Update silhouette — detect body from brand+model name if dropdown not set
     const silEl = document.getElementById('rphSilhouette');
-    if(silEl) silEl.innerHTML = buildSilhouetteSVG(body, colour);
+    if(silEl){
+      let detectedBody = body;
+      if(!detectedBody && (brand || model)){
+        const _s = (brand+' '+(model||'')).toLowerCase();
+        if(/cabrio|cabriolet|convertible|roadster|spider|spyder|boxster|slk|z4|mx.?5/.test(_s)) detectedBody='Convertible';
+        else if(/ferrari|lamborghini|porsche.?(911|718|cayman)|mclaren|aston|corvette|viper|gt.?r|nsx|86|brz|supra|370z/.test(_s)) detectedBody='Sports Car';
+        else if(/coupe|mustang|camaro|challenger|charger|a5|tt\b/.test(_s)) detectedBody='Coupe';
+        else if(/hilux|ranger|navara|pickup|f.?150|dmax|triton|amarok|tundra|tacoma/.test(_s)) detectedBody='Pickup Truck';
+        else if(/hiace|transit|vito|sprinter|urvan|alphard|vellfire|carnival|sienna|staria/.test(_s)) detectedBody='MPV / Minivan';
+        else if(/touring|estate|avant|allroad|outback|legacy.?wagon|wagon/.test(_s)) detectedBody='Wagon (Estate)';
+        else if(/defender|wrangler|g.?class|jimny|patrol\b|fj.?cruiser|prado|4x4|offroad/.test(_s)) detectedBody='Off-road / 4x4';
+        else if(/hr.?v|hrv|cr.?v|rav4|qashqai|juke|kicks|trax|kona|seltos|captur|duster|ecosport|puma/.test(_s)) detectedBody='Crossover (CUV)';
+        else if(/patrol|land.?cruiser|pilot|explorer|escalade|tahoe|suburban|gx|lx|rx|nx|pajero|discovery|range.?rover|jeep|tucson|sportage|sorento|haval|fortuner/.test(_s)) detectedBody='SUV';
+        else if(/city|yaris|swift|polo|golf|jazz|fit\b|i10|i20|clio|fiesta|corsa|hatch/.test(_s)) detectedBody='Hatchback';
+      }
+      silEl.innerHTML = buildSilhouetteSVG(detectedBody || 'sedan', colour);
+    }
 
     // Update ticker
     _startTickerAnim(brand, model);
@@ -10817,11 +10661,7 @@ function _updateStage2(){
     const ctaHint = document.getElementById('rphCtaHint');
     if(ctaHint) ctaHint.style.display = (filled===3)?'flex':'none';
 
-    // Silhouette placeholder text when no body type yet
-    const silhouetteEl = document.getElementById('rphSilhouette');
-    if(silhouetteEl && !body){
-      silhouetteEl.innerHTML = buildSilhouetteSVG('sedan', colour||'');
-    }
+    // (silhouette already set above with brand+model detection)
 
   } else {
     if(_s2Active){
