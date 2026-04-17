@@ -56,22 +56,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent:#008577; --accent-h:#006B60; --accent-2:#00A896;
-      --accent-soft:rgba(0,133,119,0.07); --accent-line:rgba(0,133,119,0.18);
-      --accent-glow:rgba(0,133,119,0.28); --accent-glow2:rgba(0,168,150,0.15);
-      --gold:#C49A2A; --gold-light:#E8D060;
-      --ink:#1A1610; --ink-soft:#4A4030; --muted:#8C7D68;
-      --border:#E4D9C6; --surface:#FDFCF8; --surface-2:#FAF7F0; --white:#fff;
-      --good:#1A8C6B; --good-bg:rgba(26,140,107,0.08); --good-line:rgba(26,140,107,0.2);
-      --bad:#C0392B;  --bad-bg:rgba(192,57,43,0.08);   --bad-line:rgba(192,57,43,0.2);
-      --warn:#B8780A; --warn-bg:rgba(184,120,10,0.08); --warn-line:rgba(184,120,10,0.2);
-      --err:#C0392B;  --err-bg:rgba(192,57,43,0.06);
+      --accent:#006B60; --accent-h:#005048; --accent-2:#008577;
+      --accent-soft:rgba(0,107,96,0.09); --accent-line:rgba(0,107,96,0.22);
+      --accent-glow:rgba(0,107,96,0.32); --accent-glow2:rgba(0,133,119,0.18);
+      --gold:#A8800A; --gold-light:#C49A2A;
+      --ink:#0D0D0B; --ink-soft:#2D2518; --muted:#6B5A42;
+      --border:#C8BFAA; --surface:#F5F2EA; --surface-2:#EEE9DC; --white:#fff;
+      --good:#0E6B50; --good-bg:rgba(14,107,80,0.09); --good-line:rgba(14,107,80,0.25);
+      --bad:#9B1C1C;  --bad-bg:rgba(155,28,28,0.09);   --bad-line:rgba(155,28,28,0.25);
+      --warn:#8A5A08; --warn-bg:rgba(138,90,8,0.09); --warn-line:rgba(138,90,8,0.25);
+      --err:#9B1C1C;  --err-bg:rgba(155,28,28,0.07);
       --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
       --ease:cubic-bezier(0.16,1,0.3,1);
       --spring:cubic-bezier(0.34,1.56,0.64,1);
-      --sh-card:0 20px 50px rgba(30,20,5,0.11),0 6px 20px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.7);
-      --sh-field:0 1px 4px rgba(0,0,0,0.04),inset 0 1px 2px rgba(0,0,0,0.03);
-      --sh-btn:0 6px 20px var(--accent-glow),0 2px 6px rgba(0,0,0,0.08);
+      --sh-card:0 20px 50px rgba(20,12,0,0.18),0 6px 20px rgba(0,0,0,0.10),inset 0 1px 0 rgba(255,255,255,0.6);
+      --sh-field:0 1px 4px rgba(0,0,0,0.07),inset 0 1px 2px rgba(0,0,0,0.04);
+      --sh-btn:0 6px 20px var(--accent-glow),0 2px 6px rgba(0,0,0,0.12);
     }
 
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -2071,18 +2071,160 @@
     .share-strip { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px 4px; flex-wrap: wrap; }
     .share-strip-lbl { font-family: "Exo 2", sans-serif; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
     .share-strip-icons { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; justify-content: center; }
-    .sico { width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.16s, box-shadow 0.16s, opacity 0.2s; flex-shrink: 0; text-decoration: none; position: relative; }
-    .sico svg { width: 14px; height: 14px; fill: #fff; flex-shrink: 0; }
-    .sico:hover { transform: scale(1.18); box-shadow: 0 3px 12px rgba(0,0,0,0.22); }
-    .sico.share-dimmed { opacity: 0.32; cursor: default; pointer-events: none; }
-    .sico-wa   { background: #25D366; }
-    .sico-mail { background: #EA4335; }
-    .sico-fb   { background: #1877F2; }
-    .sico-ig   { background: linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); }
-    .sico-tt   { background: #010101; }
-    .sico-x    { background: #000; }
-    .sico::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: rgba(10,37,64,0.90); color: #fff; font-family: "Exo 2", sans-serif; font-size: 0.52rem; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap; padding: 3px 7px; border-radius: 5px; pointer-events: none; opacity: 0; transition: opacity 0.14s; }
+    .sico { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.16s, box-shadow 0.16s, opacity 0.2s; flex-shrink: 0; text-decoration: none; position: relative; }
+    .sico svg { width: 15px; height: 15px; fill: #fff; flex-shrink: 0; }
+    .sico:hover { transform: scale(1.18); box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+    .sico.share-dimmed { opacity: 0.28; cursor: default; pointer-events: none; }
+    .sico-wa   { background: #1DA851; }
+    .sico-mail { background: #C5221F; }
+    .sico-fb   { background: #0B5FCC; }
+    .sico-ig   { background: linear-gradient(135deg,#d4570a,#b01f6b,#6b1fa8,#3d45b8); }
+    .sico-tt   { background: #050505; }
+    .sico-x    { background: #0A0A0A; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
+    .sico::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%); background: rgba(5,15,30,0.95); color: #fff; font-family: "Exo 2", sans-serif; font-size: 0.52rem; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; padding: 4px 9px; border-radius: 6px; pointer-events: none; opacity: 0; transition: opacity 0.14s; border: 1px solid rgba(255,255,255,0.1); }
     .sico:hover::after { opacity: 1; }
+
+    /* ── DUBAI ROAD SCENE ────────────────────────────────────── */
+    .ks-dubai-scene {
+      position: relative; width: 100%; overflow: hidden;
+      background: linear-gradient(180deg,
+        #0D1822 0%, #1A2C4A 12%, #243A5E 24%, #2E4A72 34%,
+        #8BA0B8 50%, #BAC8D4 56%,
+        #D4B878 62%, #B89650 66%, #9A7A38 70%,
+        #6A5A28 76%, #4A4020 82%, #302C14 90%, #201E0C 100%);
+      min-height: 230px;
+    }
+    .ks-scene-skyline { position: absolute; bottom: 36%; left: 0; right: 0; pointer-events: none; z-index: 2; }
+    .ks-scene-road {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 38%;
+      background: linear-gradient(180deg, #4A4438 0%, #3C362C 50%, #2A241A 100%);
+      z-index: 3;
+    }
+    .ks-scene-road::before {
+      content: ''; position: absolute; top: 28%; left: 0; right: 0; height: 3px;
+      background: repeating-linear-gradient(90deg, transparent 0, transparent 55px, rgba(240,200,60,0.75) 55px, rgba(240,200,60,0.75) 110px);
+    }
+    .ks-scene-car-wrap {
+      position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%);
+      width: 58%; max-width: 370px; min-width: 190px; z-index: 10;
+      filter: drop-shadow(0 10px 28px rgba(0,0,0,0.7)) drop-shadow(0 3px 10px rgba(0,0,0,0.5));
+      animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes ksCarIn {
+      from { opacity: 0; transform: translateX(calc(-50% + 70px)); }
+      to   { opacity: 1; transform: translateX(-50%); }
+    }
+    @keyframes ksHazeShimmer {
+      0%,100% { opacity: 0.5; transform: scaleX(1); }
+      50%      { opacity: 1;   transform: scaleX(1.08); }
+    }
+    .ks-scene-car-shadow {
+      position: absolute; bottom: 32%; left: 50%; transform: translateX(-50%);
+      width: 46%; max-width: 280px; height: 20px;
+      background: rgba(0,0,0,0.45); border-radius: 50%;
+      filter: blur(12px); z-index: 9;
+      animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .ks-scene-weather { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+    .ks-scene-ref {
+      position: absolute; top: 10px; right: 10px; z-index: 20;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+      border: 1px solid rgba(196,154,42,0.45); border-radius: 8px;
+      padding: 5px 10px; font-family: "Orbitron", sans-serif;
+      font-size: .58rem; font-weight: 700; color: rgba(196,154,42,0.92);
+      letter-spacing: .08em; white-space: nowrap;
+    }
+    .ks-scene-title {
+      position: absolute; top: 10px; left: 10px; z-index: 20;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+      padding: 5px 10px;
+      font-family: "Exo 2", sans-serif; font-size: .6rem; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+    }
+    /* Spec chips below scene */
+    .ks-spec-road-row {
+      background: linear-gradient(135deg, #0C1728 0%, #142035 55%, #1C2C48 100%);
+      border-top: 2px solid rgba(196,154,42,0.4);
+      padding: 8px 12px;
+      display: flex; align-items: center; gap: 0;
+      overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap;
+    }
+    .ks-spec-road-row::-webkit-scrollbar { display: none; }
+    .ks-spec-chip {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 1px;
+      padding: 5px 10px; border-right: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0; min-width: 58px;
+    }
+    .ks-spec-chip:last-child { border-right: none; }
+    .ks-spec-chip-lbl {
+      font-size: .44rem; font-weight: 800; letter-spacing: .16em;
+      text-transform: uppercase; color: rgba(196,154,42,0.65);
+      white-space: nowrap; font-family: "Exo 2", sans-serif;
+    }
+    .ks-spec-chip-val {
+      font-size: .7rem; font-weight: 700; color: rgba(255,255,255,0.9);
+      white-space: nowrap; font-family: "Exo 2", sans-serif;
+    }
+    .ks-spec-chip-val.good { color: #4ADE80; }
+    .ks-spec-chip-val.warn { color: #FCD34D; }
+    .ks-spec-chip-val.bad  { color: #FCA5A5; }
+
+    /* ── SCENE MOBILE RESPONSIVE ─── */
+    @media(max-width:600px){
+      .ks-dubai-scene { min-height: 175px; }
+      .ks-scene-car-wrap { width: 68%; bottom: 30%; }
+      .ks-scene-car-shadow { width: 56%; bottom: 29%; }
+      .ks-spec-road-row { padding: 6px 8px; }
+      .ks-spec-chip { min-width: 52px; padding: 4px 7px; }
+      .ks-spec-chip-lbl { font-size: .4rem; }
+      .ks-spec-chip-val { font-size: .64rem; }
+    }
+    @media(min-width:1100px){
+      .ks-dubai-scene { min-height: 270px; }
+    }
+
+    /* ── DARK THEME ENHANCEMENTS ──────────────────────────── */
+    body { background: #D8D4CC !important; }
+    .hero::after { background: #D8D4CC !important; }
+    .layout { --panel-bg: #FAFAF8; }
+    .form-card, .result-panel {
+      background: #FFFFFF !important;
+      border-color: #B8B0A0 !important;
+      box-shadow: 0 4px 20px rgba(10,8,0,0.18), 0 1px 4px rgba(0,0,0,0.10) !important;
+    }
+    .ks-pir {
+      box-shadow: 0 4px 24px rgba(5,5,0,0.16) !important;
+    }
+    /* Darker section backgrounds in report */
+    .ks-section { background: #FDFCF9; }
+    .ks-section:nth-child(even) { background: #F7F5F0; }
+    .ks-report-header { background: linear-gradient(138deg, #001A15 0%, #003028 40%, #6A4E00 75%, #A07800 100%) !important; }
+    .pir-header { background: linear-gradient(138deg, #001A15 0%, #003028 40%, #6A4E00 75%, #A07800 100%) !important; }
+    .ks-tabnav { background: #F0EDE6 !important; border-bottom: 2px solid #C8BFA8 !important; }
+    .ks-tabnav-btn { color: #5A4A30 !important; }
+    .ks-tabnav-btn.ks-tabnav-active { color: #004A3F !important; border-bottom-color: #004A3F !important; }
+    /* Darker input fields */
+    select, input[type="number"], input[type="text"] {
+      background: #E8E4DC !important;
+      border-color: #B0A890 !important;
+      color: #0D0D0A !important;
+    }
+    select:focus, input:focus {
+      background: #FDFCF8 !important;
+      border-color: #004A3F !important;
+    }
+    .ks-trigger {
+      background: #E8E4DC !important;
+      border-color: #B0A890 !important;
+      color: #1A1612 !important;
+    }
+    .ks-wrap.open .ks-trigger { background: #FDFCF8 !important; border-color: #004A3F !important; }
+    /* Dark form header */
+    .form-header {
+      background: linear-gradient(138deg, #001A15 0%, #003028 40%, #6A4E00 75%, #A07800 100%) !important;
+    }
 
     /* ── RESET BUTTON ────────────────────────────────────────── */
     .btn-reset { display: inline-flex; align-items: center; gap: 4px; background: none; border: 1.5px solid var(--border); border-radius: 8px; padding: 0.45rem 0.8rem; font-family: "Exo 2", sans-serif; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: all 0.16s; white-space: nowrap; flex-shrink: 0; }
@@ -5863,8 +6005,37 @@
   .result-panel { display: block !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
   #rcontent     { display: block !important; }
 
-  /* ── REPORT HEADER: anchor to page top ──────────────────── */
-  .ks-report-header { margin-top: 0 !important; padding-top: 12px !important; page-break-inside: avoid !important; page-break-after: avoid !important; }
+  /* ── REPORT HEADER: anchor to page top — zero displacement ── */
+  .ks-report-header {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 10px !important;
+    padding-bottom: 8px !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    position: static !important;
+    top: auto !important;
+    transform: none !important;
+  }
+  /* Kill any sticky/fixed positioning in print */
+  .pir-header, .ks-report-header, .ks-tabnav {
+    position: static !important;
+    top: auto !important;
+  }
+  /* Dubai scene: replace with simple header bar in print */
+  .ks-dubai-scene { display: none !important; }
+  .ks-spec-road-row {
+    display: flex !important;
+    background: #f0f4f8 !important;
+    border: 1px solid #dde4ee !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    margin-bottom: 8px !important;
+    flex-wrap: wrap !important;
+  }
+  .ks-spec-chip-lbl { color: #4A5E7A !important; }
+  .ks-spec-chip-val { color: #1A2B4C !important; }
+  .ks-spec-chip { border-right-color: #dde4ee !important; }
 
   /* ── SECTION BASE: tight and scannable ──────────────────── */
   .ks-section { padding: 7px 10px 8px !important; border-bottom: 1px solid #E0E0E0 !important; page-break-inside: avoid !important; }
@@ -7029,33 +7200,37 @@
 
   </div><!-- /layout -->
 
-  <!-- ── CENTERED SHARE STRIP ──────────────────────────────── -->
+
+  <!-- ── SHARE AS POST STRIP ─────────────────────────────────── -->
   <div class="share-strip" id="shareStrip">
-    <span class="share-strip-lbl">Share:</span>
+    <div style="width:100%;text-align:center;margin-bottom:2px;">
+      <span class="share-strip-lbl">Share as Post</span>
+      <span style="font-size:.55rem;color:var(--muted);margin-left:6px;font-family:'Exo 2',sans-serif;">Same report text + image on all platforms</span>
+    </div>
     <div class="share-strip-icons">
       <!-- WhatsApp -->
       <button class="sico sico-wa share-dimmed" id="sico-wa" onclick="shareVia('wa')" data-tip="WhatsApp" aria-label="Share on WhatsApp">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.132.558 4.133 1.532 5.865L.057 23.492a.5.5 0 00.614.603l5.757-1.51A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 110-19.5 9.75 9.75 0 010 19.5z" opacity=".25"/></svg>
       </button>
-      <!-- Gmail / Email -->
-      <button class="sico sico-mail share-dimmed" id="sico-mail" onclick="shareVia('mail')" data-tip="Email" aria-label="Share via Email">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      <!-- X / Twitter -->
+      <button class="sico sico-x share-dimmed" id="sico-x" onclick="shareVia('x')" data-tip="Post on X" aria-label="Post on X">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.727-8.835L1.254 2.25H8.08l4.261 5.631 5.903-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </button>
       <!-- Facebook -->
-      <button class="sico sico-fb share-dimmed" id="sico-fb" onclick="shareVia('fb')" data-tip="Facebook" aria-label="Share on Facebook">
+      <button class="sico sico-fb share-dimmed" id="sico-fb" onclick="shareVia('fb')" data-tip="Post on Facebook" aria-label="Post on Facebook">
         <svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
       </button>
       <!-- Instagram -->
-      <button class="sico sico-ig share-dimmed" id="sico-ig" onclick="shareVia('ig')" data-tip="Instagram" aria-label="Share on Instagram">
+      <button class="sico sico-ig share-dimmed" id="sico-ig" onclick="shareVia('ig')" data-tip="Post on Instagram" aria-label="Post on Instagram">
         <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </button>
       <!-- TikTok -->
-      <button class="sico sico-tt share-dimmed" id="sico-tt" onclick="shareVia('tt')" data-tip="TikTok" aria-label="Share on TikTok">
+      <button class="sico sico-tt share-dimmed" id="sico-tt" onclick="shareVia('tt')" data-tip="Post on TikTok" aria-label="Post on TikTok">
         <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z" fill="#fff"/></svg>
       </button>
-      <!-- X (Twitter) -->
-      <button class="sico sico-x share-dimmed" id="sico-x" onclick="shareVia('x')" data-tip="X / Twitter" aria-label="Share on X">
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.727-8.835L1.254 2.25H8.08l4.261 5.631 5.903-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      <!-- Email -->
+      <button class="sico sico-mail share-dimmed" id="sico-mail" onclick="shareVia('mail')" data-tip="Send via Email" aria-label="Share via Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
       </button>
     </div>
   </div>
@@ -7755,11 +7930,317 @@ function toggleWhy(){
   if(btn)btn.setAttribute('aria-expanded',open);
 }
 
+/* ── DUBAI SKYLINE SVG BUILDER ───────────────────────────── */
+function buildDubaiSkylineSVG(){
+  return `<svg viewBox="0 0 800 160" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+    <defs>
+      <linearGradient id="bldG1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(30,50,90,0.82)"/>
+        <stop offset="100%" stop-color="rgba(18,30,55,0.95)"/>
+      </linearGradient>
+      <linearGradient id="bldG2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(40,65,110,0.75)"/>
+        <stop offset="100%" stop-color="rgba(20,35,65,0.9)"/>
+      </linearGradient>
+      <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(255,170,60,0.0)"/>
+        <stop offset="80%" stop-color="rgba(255,140,40,0.08)"/>
+        <stop offset="100%" stop-color="rgba(255,160,60,0.18)"/>
+      </linearGradient>
+    </defs>
+    <!-- Sky glow / sunset haze -->
+    <rect x="0" y="0" width="800" height="160" fill="url(#skyG)"/>
+    <!-- Sun/moon glow -->
+    <ellipse cx="650" cy="30" rx="28" ry="28" fill="rgba(255,200,80,0.13)"/>
+    <ellipse cx="650" cy="30" rx="16" ry="16" fill="rgba(255,210,100,0.2)"/>
+    <circle cx="650" cy="30" r="8" fill="rgba(255,220,120,0.5)"/>
+    <!-- BURJ KHALIFA (center-right) -->
+    <rect x="478" y="8" width="7" height="152" fill="url(#bldG1)"/>
+    <rect x="474" y="30" width="15" height="130" fill="url(#bldG1)"/>
+    <rect x="470" y="55" width="23" height="105" fill="url(#bldG1)"/>
+    <rect x="466" y="75" width="31" height="85" fill="url(#bldG1)"/>
+    <rect x="462" y="90" width="39" height="70" fill="url(#bldG2)"/>
+    <!-- Burj windows -->
+    <rect x="476" y="35" width="2" height="2" fill="rgba(255,220,100,0.6)" rx="0.5"/>
+    <rect x="480" y="35" width="2" height="2" fill="rgba(255,220,100,0.5)" rx="0.5"/>
+    <rect x="476" y="45" width="2" height="2" fill="rgba(255,220,100,0.4)" rx="0.5"/>
+    <!-- CAYAN TOWER (twisted) -->
+    <polygon points="300,160 308,80 318,80 310,160" fill="url(#bldG2)"/>
+    <polygon points="306,80 310,30 316,32 312,80" fill="url(#bldG1)"/>
+    <!-- EMIRATES TOWERS pair -->
+    <polygon points="200,160 210,55 216,55 220,160" fill="url(#bldG1)"/>
+    <rect x="204" y="55" width="14" height="105" fill="url(#bldG2)"/>
+    <polygon points="230,160 238,70 244,70 248,160" fill="url(#bldG1)"/>
+    <!-- Shorter buildings left cluster -->
+    <rect x="50" y="105" width="28" height="55" fill="url(#bldG2)"/>
+    <rect x="82" y="90" width="22" height="70" fill="url(#bldG1)"/>
+    <rect x="108" y="100" width="18" height="60" fill="url(#bldG2)"/>
+    <rect x="130" y="95" width="25" height="65" fill="url(#bldG1)"/>
+    <rect x="159" y="110" width="20" height="50" fill="url(#bldG2)"/>
+    <!-- Right cluster -->
+    <rect x="540" y="95" width="30" height="65" fill="url(#bldG2)"/>
+    <rect x="574" y="108" width="24" height="52" fill="url(#bldG1)"/>
+    <rect x="602" y="88" width="32" height="72" fill="url(#bldG2)"/>
+    <rect x="638" y="102" width="26" height="58" fill="url(#bldG1)"/>
+    <rect x="668" y="95" width="36" height="65" fill="url(#bldG2)"/>
+    <rect x="708" y="112" width="22" height="48" fill="url(#bldG1)"/>
+    <rect x="734" y="100" width="28" height="60" fill="url(#bldG2)"/>
+    <!-- Cranes -->
+    <line x1="355" y1="160" x2="355" y2="55" stroke="rgba(100,130,180,0.4)" stroke-width="1.5"/>
+    <line x1="355" y1="60" x2="395" y2="70" stroke="rgba(100,130,180,0.35)" stroke-width="1.2"/>
+    <line x1="355" y1="60" x2="320" y2="68" stroke="rgba(100,130,180,0.3)" stroke-width="1"/>
+    <!-- Building windows (scattered) -->
+    <rect x="54" y="112" width="3" height="3" fill="rgba(255,220,100,0.5)" rx="0.5"/>
+    <rect x="60" y="112" width="3" height="3" fill="rgba(255,220,100,0.3)" rx="0.5"/>
+    <rect x="54" y="120" width="3" height="3" fill="rgba(255,220,100,0.4)" rx="0.5"/>
+    <rect x="544" y="100" width="3" height="3" fill="rgba(255,220,100,0.5)" rx="0.5"/>
+    <rect x="550" y="100" width="3" height="3" fill="rgba(255,220,100,0.3)" rx="0.5"/>
+    <rect x="606" y="92" width="4" height="3" fill="rgba(255,220,100,0.4)" rx="0.5"/>
+    <rect x="613" y="92" width="4" height="3" fill="rgba(255,220,100,0.25)" rx="0.5"/>
+    <!-- Ground haze/fade at bottom -->
+    <rect x="0" y="120" width="800" height="40" fill="url(#skyG)" opacity="0.5"/>
+  </svg>`;
+}
+
+/* ── SCENE CAR SVG (detailed, brand-aware coloring) ─────── */
+function buildSceneCarSVG(bodyKey, brand, model){
+  // Pick car color based on brand character
+  const luxBrands=['BMW','Mercedes-Benz','Audi','Porsche','Lexus','Genesis','Infiniti','Cadillac'];
+  const sportBrands=['Ford','Chevrolet','Dodge','Mustang'];
+  const isLux = luxBrands.includes(brand);
+  const isSport = sportBrands.includes(brand);
+  const carColor = isLux ? '#C8D0D8' : isSport ? '#2A3060' : '#3A4A5E';
+  const carColorDark = isLux ? '#8090A0' : isSport ? '#182040' : '#202E3C';
+  const glassColor = 'rgba(100,160,220,0.55)';
+  const accentCol = isLux ? '#C8A830' : '#008577';
+
+  const svgs = {
+    suv: `<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Body -->
+      <path d="M30 85 L40 55 Q50 32 75 28 L155 24 L215 24 Q248 26 268 50 L292 85 L295 95 Q295 108 282 108 L250 108 Q242 120 228 120 Q214 120 206 108 L114 108 Q106 120 92 120 Q78 120 70 108 L35 108 Q25 108 24 95 Z" fill="url(#scBodyG)"/>
+      <!-- Roof -->
+      <path d="M80 28 L72 70 L250 70 L240 28 Z" fill="${carColor}" opacity="0.9"/>
+      <!-- Glass -->
+      <path d="M86 30 L78 66 L172 66 L168 30 Z" fill="${glassColor}"/>
+      <path d="M172 30 L172 66 L246 66 L236 30 Z" fill="${glassColor}" opacity="0.85"/>
+      <!-- Door lines -->
+      <line x1="170" y1="28" x2="174" y2="108" stroke="${carColorDark}" stroke-width="1.5" opacity="0.5"/>
+      <!-- Wheels -->
+      <circle cx="92" cy="108" r="18" fill="url(#scWheelG)"/>
+      <circle cx="92" cy="108" r="11" fill="#2A2A2A" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="92" cy="108" r="5" fill="#1A1A1A"/>
+      <circle cx="228" cy="108" r="18" fill="url(#scWheelG)"/>
+      <circle cx="228" cy="108" r="11" fill="#2A2A2A" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="228" cy="108" r="5" fill="#1A1A1A"/>
+      <!-- Headlight -->
+      <path d="M286 60 L296 58 L298 68 L286 70 Z" fill="rgba(255,240,180,0.85)" stroke="${accentCol}" stroke-width="0.8"/>
+      <!-- Taillight -->
+      <rect x="22" y="68" width="10" height="12" rx="2" fill="rgba(220,50,30,0.7)"/>
+      <!-- Grill -->
+      <path d="M284 78 L294 76 L294 88 L284 88 Z" fill="${carColorDark}" stroke="${accentCol}" stroke-width="1"/>
+      <!-- Side reflection -->
+      <path d="M80 45 Q140 38 240 42" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>`,
+
+    sedan: `<svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Body -->
+      <path d="M28 82 L40 58 Q52 36 82 32 L150 28 L210 30 Q240 32 262 52 L288 82 L290 92 Q290 104 278 104 L248 104 Q240 116 226 116 Q212 116 204 104 L116 104 Q108 116 94 116 Q80 116 72 104 L32 104 Q22 104 22 92 Z" fill="url(#scBodyG)"/>
+      <!-- Roof (curved sedan roofline) -->
+      <path d="M88 32 L80 68 L242 68 L234 30 Q200 22 160 22 Q120 22 88 32 Z" fill="${carColor}" opacity="0.88"/>
+      <!-- Glass - windscreen -->
+      <path d="M94 34 L86 65 L170 65 L165 32 Z" fill="${glassColor}"/>
+      <!-- Glass - rear -->
+      <path d="M175 32 L172 65 L240 65 L230 32 Z" fill="${glassColor}" opacity="0.75"/>
+      <!-- B-pillar -->
+      <rect x="168" y="32" width="5" height="36" fill="${carColorDark}" opacity="0.6"/>
+      <!-- Wheels -->
+      <circle cx="94" cy="104" r="17" fill="url(#scWheelG)"/>
+      <circle cx="94" cy="104" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="94" cy="104" r="4.5" fill="#181818"/>
+      <circle cx="226" cy="104" r="17" fill="url(#scWheelG)"/>
+      <circle cx="226" cy="104" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="226" cy="104" r="4.5" fill="#181818"/>
+      <!-- Headlight -->
+      <path d="M282 60 L292 58 L292 70 L282 72 Z" fill="rgba(255,240,180,0.9)" stroke="${accentCol}" stroke-width="0.8"/>
+      <!-- DRL strip -->
+      <path d="M282 58 L292 56" stroke="rgba(180,220,255,0.8)" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Taillight -->
+      <rect x="20" y="66" width="10" height="14" rx="2" fill="rgba(220,50,30,0.75)"/>
+      <!-- Hood line -->
+      <path d="M250 60 L282 64" stroke="${carColorDark}" stroke-width="1" opacity="0.5"/>
+      <!-- Side reflection -->
+      <path d="M85 48 Q155 40 245 46" stroke="rgba(255,255,255,0.28)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>`,
+
+    pickup: `<svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Bed -->
+      <rect x="30" y="55" width="120" height="55" rx="3" fill="url(#scBodyG)"/>
+      <rect x="30" y="50" width="120" height="8" fill="${carColor}"/>
+      <!-- Cab -->
+      <path d="M148 80 L158 44 Q168 28 192 26 L260 26 Q285 28 295 46 L310 80 L312 90 Q312 104 300 104 L265 104 Q257 116 243 116 Q229 116 221 104 L162 104 Q155 104 150 92 Z" fill="url(#scBodyG)"/>
+      <!-- Cab roof -->
+      <path d="M162 44 L156 75 L308 75 L296 44 Q276 28 228 26 Q190 26 162 44 Z" fill="${carColor}" opacity="0.9"/>
+      <!-- Glass -->
+      <path d="M168 46 L162 72 L240 72 L236 28 Z" fill="${glassColor}"/>
+      <path d="M244 30 L242 72 L304 72 L292 46 Z" fill="${glassColor}" opacity="0.75"/>
+      <!-- Wheels (bigger) -->
+      <circle cx="90" cy="104" r="20" fill="url(#scWheelG)"/>
+      <circle cx="90" cy="104" r="12" fill="#282828" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="90" cy="104" r="5" fill="#181818"/>
+      <circle cx="243" cy="104" r="20" fill="url(#scWheelG)"/>
+      <circle cx="243" cy="104" r="12" fill="#282828" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="243" cy="104" r="5" fill="#181818"/>
+      <!-- Headlight -->
+      <path d="M304 54 L316 52 L316 64 L304 66 Z" fill="rgba(255,240,180,0.9)"/>
+      <!-- Taillight -->
+      <rect x="27" y="60" width="6" height="16" rx="1.5" fill="rgba(220,50,30,0.7)"/>
+      <!-- Reflection -->
+      <path d="M162 50 Q240 42 300 50" stroke="rgba(255,255,255,0.25)" stroke-width="2" fill="none"/>
+    </svg>`,
+
+    hatchback: `<svg viewBox="0 0 300 115" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Body (shorter, taller) -->
+      <path d="M28 80 L40 52 Q52 30 85 26 L168 22 Q205 22 228 44 L268 80 L270 90 Q270 103 258 103 L228 103 Q220 115 206 115 Q192 115 184 103 L108 103 Q100 115 86 115 Q72 115 64 103 L30 103 Q22 103 22 90 Z" fill="url(#scBodyG)"/>
+      <!-- Hatchback roofline -->
+      <path d="M90 26 L80 72 L264 72 L224 44 Q204 22 168 22 Z" fill="${carColor}" opacity="0.88"/>
+      <!-- Glass windscreen -->
+      <path d="M96 28 L86 68 L190 68 L186 24 Z" fill="${glassColor}"/>
+      <!-- Rear hatch glass (large) -->
+      <path d="M196 26 L190 68 L260 68 L224 44 Z" fill="${glassColor}" opacity="0.8"/>
+      <!-- Wheels -->
+      <circle cx="86" cy="103" r="16" fill="url(#scWheelG)"/>
+      <circle cx="86" cy="103" r="9" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="86" cy="103" r="4" fill="#181818"/>
+      <circle cx="206" cy="103" r="16" fill="url(#scWheelG)"/>
+      <circle cx="206" cy="103" r="9" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="206" cy="103" r="4" fill="#181818"/>
+      <!-- Headlight -->
+      <path d="M262 56 L272 54 L272 66 L262 68 Z" fill="rgba(255,240,180,0.9)"/>
+      <!-- Taillight -->
+      <rect x="20" y="60" width="10" height="14" rx="2" fill="rgba(220,50,30,0.7)"/>
+      <!-- Reflection -->
+      <path d="M90 40 Q168 32 222 42" stroke="rgba(255,255,255,0.28)" stroke-width="1.8" fill="none"/>
+    </svg>`,
+
+    coupe: `<svg viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Low sleek body -->
+      <path d="M30 78 L50 52 Q68 30 105 26 L180 22 Q224 22 255 46 L290 78 L292 88 Q292 100 280 100 L248 100 Q240 112 226 112 Q212 112 206 100 L110 100 Q104 112 90 112 Q76 112 70 100 L32 100 Q24 100 24 88 Z" fill="url(#scBodyG)"/>
+      <!-- Fastback roof -->
+      <path d="M110 26 L98 72 L268 72 L252 46 Q228 22 180 22 Z" fill="${carColor}" opacity="0.9"/>
+      <!-- Windscreen (raked) -->
+      <path d="M116 28 L104 68 L210 68 L200 24 Z" fill="${glassColor}"/>
+      <!-- Rear fastback glass -->
+      <path d="M214 24 L212 68 L264 68 L250 46 Z" fill="${glassColor}" opacity="0.7"/>
+      <!-- Wheels (wider) -->
+      <circle cx="90" cy="100" r="17" fill="url(#scWheelG)"/>
+      <circle cx="90" cy="100" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="90" cy="100" r="4.5" fill="#141414"/>
+      <circle cx="226" cy="100" r="17" fill="url(#scWheelG)"/>
+      <circle cx="226" cy="100" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="226" cy="100" r="4.5" fill="#141414"/>
+      <!-- Headlight (sporty) -->
+      <path d="M284 56 L294 52 L296 64 L284 68 Z" fill="rgba(255,240,180,0.95)"/>
+      <path d="M284 52 L294 50" stroke="rgba(180,220,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Taillight -->
+      <rect x="22" y="64" width="10" height="10" rx="2" fill="rgba(220,50,30,0.8)"/>
+      <!-- Reflection stripe -->
+      <path d="M108 38 Q180 28 252 40" stroke="rgba(255,255,255,0.35)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- Spoiler hint -->
+      <rect x="205" y="68" width="62" height="3" rx="1.5" fill="${carColorDark}" opacity="0.7"/>
+    </svg>`,
+
+    van: `<svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Box van body -->
+      <rect x="35" y="30" width="270" height="78" rx="6" fill="url(#scBodyG)"/>
+      <rect x="35" y="24" width="270" height="8" rx="4" fill="${carColor}"/>
+      <!-- Cab glass -->
+      <rect x="220" y="36" width="70" height="42" rx="3" fill="${glassColor}"/>
+      <!-- Side windows -->
+      <rect x="50" y="40" width="50" height="32" rx="2" fill="${glassColor}" opacity="0.6"/>
+      <rect x="108" y="40" width="50" height="32" rx="2" fill="${glassColor}" opacity="0.6"/>
+      <rect x="166" y="40" width="46" height="32" rx="2" fill="${glassColor}" opacity="0.6"/>
+      <!-- Wheels -->
+      <circle cx="100" cy="108" r="18" fill="url(#scWheelG)"/>
+      <circle cx="100" cy="108" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="100" cy="108" r="4.5" fill="#181818"/>
+      <circle cx="254" cy="108" r="18" fill="url(#scWheelG)"/>
+      <circle cx="254" cy="108" r="10" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="254" cy="108" r="4.5" fill="#181818"/>
+      <!-- Headlight -->
+      <rect x="298" y="52" width="12" height="10" rx="2" fill="rgba(255,240,180,0.9)"/>
+      <!-- Taillight -->
+      <rect x="26" y="52" width="10" height="16" rx="2" fill="rgba(220,50,30,0.7)"/>
+    </svg>`
+  };
+
+  return svgs[bodyKey] || svgs['sedan'];
+}
+
 /* ── REFERENCE NUMBER ───────────────────────────────────── */
 function generateRef(serverRef){
-  // Prefer server-generated ref (authoritative, logged in KV).
-  // Fallback: timestamp + random — no localStorage, always unique.
+  // Priority: server ref → pre-generated client ref → fresh timestamp ref
   if(serverRef) return { label: serverRef };
+  if(window._preGeneratedRef) return { label: window._preGeneratedRef };
   const now=new Date();
   const dd=String(now.getDate()).padStart(2,'0');
   const mm=String(now.getMonth()+1).padStart(2,'0');
@@ -8041,7 +8522,9 @@ function buildResult(r,brand,model,year,mileage,asking){
   const _sourceBadge= '<span class="ks-source-badge ks-source-'+(_isLive?'live':'estimate')+'"><span class="ks-source-dot"></span>'+(_isLive?'Live':'AI Assisted')+'</span>';
   const _tierBadge  = '<span class="ks-tier-chip '+_tierCls+'">'+_tierLabel+'</span>';
 
-  const ref=generateRef(r.ref||null);
+  const ref=generateRef(r.ref||window._preGeneratedRef||null);
+  // Clear pre-generated ref now that buildResult has consumed it
+  window._preGeneratedRef = null;
   const refEl=document.getElementById('resultRef');
   if(refEl){refEl.textContent=ref.label;refEl.classList.add('on');}
   const mobRefEl=document.getElementById('mobRef');
@@ -8288,23 +8771,74 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- C13: SHARED sections S1-S6 (single DOM instance — no duplication) -->
   <div id="ksPirShared" class="ks-tab-content">
 
-  <!-- S1: CAR IDENTITY CARD -->
-  <div class="ks-section">
-    <div class="ks-section-eyebrow">Vehicle</div>
-    <div class="ks-id-card">
-      <div class="ks-id-photo ks-id-photo-svg">
-        ${_carSvg||`<svg viewBox="0 0 260 110" fill="none" width="160" height="68"><path d="M28 72L38 48Q48 30 72 28L130 24L178 24Q202 24 218 42L238 72L240 80Q240 90 230 90L200 90Q192 100 180 100Q168 100 160 90L96 90Q88 100 76 100Q64 100 56 90L26 90Q20 90 20 80Z" fill="rgba(0,133,119,0.10)" stroke="rgba(0,133,119,0.35)" stroke-width="1.8"/><circle cx="76" cy="90" r="16" fill="rgba(26,22,16,0.08)" stroke="rgba(0,133,119,0.4)" stroke-width="2"/><circle cx="180" cy="90" r="16" fill="rgba(26,22,16,0.08)" stroke="rgba(0,133,119,0.4)" stroke-width="2"/></svg>`}
+  <!-- S1: CAR IDENTITY CARD — Dubai Road Scene -->
+  <div class="ks-section" style="padding:0;overflow:hidden;border-radius:12px 12px 0 0;">
+    <div class="ks-dubai-scene" id="ksDubaiScene">
+      <!-- Sky / atmosphere -->
+      <div class="ks-scene-weather" id="ksSceneWeather"></div>
+      <!-- Dubai skyline SVG -->
+      <div class="ks-scene-skyline">
+        ${buildDubaiSkylineSVG()}
       </div>
-      <div class="ks-id-info">
-        <div class="ks-id-name">${year} ${brand} ${model||''}${trimDisplay?' · '+trimDisplay:''}</div>
-        <div class="ks-id-meta">${[kmFmt+' km', specVal||'GCC', condVal||'—'].filter(Boolean).join(' · ')}</div>
-        <div class="ks-id-tags">
-          ${qs.accident!==null ? `<span class="ks-id-tag ${qs.accident?'ks-tag-bad':'ks-tag-good'}">${qs.accident?'Accident ✗':'Clean ✓'}</span>` : ''}
-          ${qs.fsh!==null ? `<span class="ks-id-tag ${qs.fsh?'ks-tag-good':'ks-tag-bad'}">${qs.fsh?'Svc Hist. ✓':'No Svc Hist. ✗'}</span>` : ''}
-          ${qs.warranty!==null ? `<span class="ks-id-tag ${qs.warranty?'ks-tag-good':'ks-tag-bad'}">${qs.warranty?'Warranty ✓':'No Warranty ✗'}</span>` : ''}
-          ${qs.singleOwner!==null ? `<span class="ks-id-tag ${qs.singleOwner?'ks-tag-good':'ks-tag-mid'}">${qs.singleOwner?'Single Owner ✓':'Multi Owner ✗'}</span>` : ''}
-        </div>
+      <!-- Road surface -->
+      <div class="ks-scene-road"></div>
+      <!-- Car shadow -->
+      <div class="ks-scene-car-shadow"></div>
+      <!-- Car silhouette -->
+      <div class="ks-scene-car-wrap">
+        ${buildSceneCarSVG(_bodyKey, brand, model)}
       </div>
+      <!-- Title overlay -->
+      <div class="ks-scene-title">Free Report ★ Full Analysis</div>
+      <!-- Ref badge -->
+      <div class="ks-scene-ref" id="ksSceneRef">${ref.label}</div>
+    </div>
+    <!-- Spec chips — all input data in one row -->
+    <div class="ks-spec-road-row">
+      <div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Year</span>
+        <span class="ks-spec-chip-val">${year}</span>
+      </div>
+      <div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Brand</span>
+        <span class="ks-spec-chip-val">${brand}</span>
+      </div>
+      ${model?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Model</span>
+        <span class="ks-spec-chip-val">${model}</span>
+      </div>`:''}
+      ${km?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Mileage</span>
+        <span class="ks-spec-chip-val">${km.toLocaleString()} km</span>
+      </div>`:''}
+      <div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Spec</span>
+        <span class="ks-spec-chip-val ${specVal==='GCC'||specVal==='GCC Spec'?'good':'warn'}">${specVal||'GCC'}</span>
+      </div>
+      ${condVal?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Condition</span>
+        <span class="ks-spec-chip-val ${condVal==='Excellent'||condVal==='Very Good'?'good':condVal==='Fair'||condVal==='Poor'?'warn':''}">${condVal}</span>
+      </div>`:''}
+      ${askN?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Asking</span>
+        <span class="ks-spec-chip-val">AED ${askN.toLocaleString()}</span>
+      </div>`:''}
+      ${qs.accident!==null?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Accident</span>
+        <span class="ks-spec-chip-val ${qs.accident?'bad':'good'}">${qs.accident?'Yes ✗':'No ✓'}</span>
+      </div>`:''}
+      ${qs.fsh!==null?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Svc Hist</span>
+        <span class="ks-spec-chip-val ${qs.fsh?'good':'warn'}">${qs.fsh?'Yes ✓':'No ✗'}</span>
+      </div>`:''}
+      ${qs.warranty!==null?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Warranty</span>
+        <span class="ks-spec-chip-val ${qs.warranty?'good':'warn'}">${qs.warranty?'Active ✓':'None ✗'}</span>
+      </div>`:''}
+      ${qs.singleOwner!==null?`<div class="ks-spec-chip">
+        <span class="ks-spec-chip-lbl">Owners</span>
+        <span class="ks-spec-chip-val ${qs.singleOwner?'good':'warn'}">${qs.singleOwner?'Single ✓':'Multi ✗'}</span>
+      </div>`:''}
     </div>
   </div>
 
@@ -8755,6 +9289,15 @@ async function checkCarPrice(){
   const btn = g('btnCheck');
   if(btn) btn.disabled = true;
 
+  // ── Generate reference number immediately on click ──
+  const _preRef = generateRef(null);
+  const refEl = g('resultRef');
+  if(refEl){ refEl.textContent = _preRef.label; refEl.classList.add('on'); }
+  const mobRefEl = g('mobRef');
+  if(mobRefEl){ mobRefEl.textContent = _preRef.label; mobRefEl.classList.add('on'); }
+  // Store so buildResult can pick it up
+  window._preGeneratedRef = _preRef.label;
+
   // Gentle scroll — move down ~40% of viewport so user sees loading section
   setTimeout(()=>{
     const btn=g('btnCheck');
@@ -8992,6 +9535,9 @@ function displayValuationResult(data){
     if(cbarFill && conf) cbarFill.style.width = conf+'%';
     pirAnimateStatBars();
     ksMf2Init();
+    // ── Animate Dubai scene market position bar ──
+    initDubaiSceneWeather();
+    animateMf2Marker();
   }, 80);
 
   // D17: Car image — activate skeleton shimmer + 3-second timeout fallback
@@ -9103,6 +9649,7 @@ function resetForm(){
   if(refEl){refEl.textContent='';refEl.classList.remove('on');}
   const mobRefEl=g('mobRef');
   if(mobRefEl){mobRefEl.textContent='';mobRefEl.classList.remove('on');}
+  window._preGeneratedRef = null;
   updateReadiness();
   window.scrollTo({top:0, behavior:'smooth'});
   // FIX #10: Reset form header title
@@ -9681,13 +10228,66 @@ function activateShareStrip(){
 function buildShareMsg(){
   if(!_lastValuationData) return {text:'Check any car value free at www.kamsayara.com', url:'https://www.kamsayara.com'};
   const d    = _lastValuationData;
-  const parts = (d.carName||'').trim().split(' ');
-  const yr   = parts[0]||'';
-  const br   = parts[1]||'';
-  const mo   = parts.slice(2).join(' ')||'';
-  const ref  = d.ref||'';
-  const text = `If you're looking for a car in the UAE, use this first. I finally found something real and live... no more guessing. I just checked the market for a ${yr} ${br} ${mo} (Ref: ${ref}) and the data is spot on. Best part is it's actually FREE. Check any car value here: www.kamsayara.com`;
+  const carName = (d.carName||'').trim();
+  const ref  = d.ref || window._preGeneratedRef || '';
+  const avg  = d.avg ? 'AED '+d.avg.toLocaleString() : '';
+  // Same ambassador text for ALL platforms
+  const text = `🚗 Just got a free UAE car price report for a ${carName}${avg?' — Fair Market Value: '+avg:''}.\n\nRef: ${ref}\n\nIf you're buying or selling a car in the UAE, use this first — real live data, not guessing. It's completely free:\n\n👉 www.kamsayara.com\n\n#KamSayara #UAECars #UsedCars #Dubai #CarPrice`;
   return {text, url:'https://www.kamsayara.com'};
+}
+
+/* Build a shareable card as a canvas data URL */
+function buildShareCard(){
+  const d = _lastValuationData;
+  if(!d) return null;
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080; canvas.height = 566;
+    const ctx = canvas.getContext('2d');
+    // Background
+    const bg = ctx.createLinearGradient(0,0,1080,566);
+    bg.addColorStop(0,'#08111F'); bg.addColorStop(0.5,'#0F1E38'); bg.addColorStop(1,'#1A2C4A');
+    ctx.fillStyle = bg; ctx.fillRect(0,0,1080,566);
+    // Gold accent bar top
+    const goldBar = ctx.createLinearGradient(0,0,1080,0);
+    goldBar.addColorStop(0,'transparent'); goldBar.addColorStop(0.15,'#C49A2A');
+    goldBar.addColorStop(0.5,'#E8D060'); goldBar.addColorStop(0.85,'#C49A2A'); goldBar.addColorStop(1,'transparent');
+    ctx.fillStyle = goldBar; ctx.fillRect(0,0,1080,4);
+    // Brand
+    ctx.font = 'bold 42px "Arial Black",Arial'; ctx.fillStyle = '#C49A2A';
+    ctx.fillText('KAM', 60, 80);
+    ctx.font = 'bold 28px Arial'; ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.fillText('SAYARA', 145, 80);
+    // Free report label
+    ctx.font = 'bold 16px Arial'; ctx.fillStyle = 'rgba(196,154,42,0.8)';
+    ctx.fillText('FREE PRICE INTELLIGENCE REPORT', 60, 115);
+    // Car name
+    const carName = d.carName || '';
+    ctx.font = 'bold 52px Arial'; ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(carName, 60, 200);
+    // FMV
+    if(d.avg){
+      ctx.font = 'bold 22px Arial'; ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fillText('FAIR MARKET VALUE', 60, 258);
+      ctx.font = 'bold 72px "Arial Black",Arial'; ctx.fillStyle = '#4ADE80';
+      ctx.fillText('AED '+d.avg.toLocaleString(), 60, 340);
+    }
+    // Range
+    if(d.low && d.high){
+      ctx.font = '20px Arial'; ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fillText(`Market range: AED ${d.low.toLocaleString()} — AED ${d.high.toLocaleString()}`, 60, 385);
+    }
+    // Ref
+    ctx.font = 'bold 18px "Courier New",monospace'; ctx.fillStyle = 'rgba(196,154,42,0.7)';
+    ctx.fillText(d.ref || window._preGeneratedRef || '', 60, 430);
+    // CTA
+    ctx.font = 'bold 26px Arial'; ctx.fillStyle = '#FFFFFF';
+    ctx.fillText('Check yours FREE at www.kamsayara.com', 60, 500);
+    // Border
+    ctx.strokeStyle = 'rgba(196,154,42,0.35)'; ctx.lineWidth = 2;
+    ctx.strokeRect(1,1,1078,564);
+    return canvas.toDataURL('image/png');
+  } catch(e) { return null; }
 }
 
 async function shareVia(platform){
@@ -9697,29 +10297,52 @@ async function shareVia(platform){
   const {text, url} = buildShareMsg();
   const encodedText = encodeURIComponent(text);
 
-  // ── Try native share sheet first on all platforms (mobile) ──
-  if(navigator.share){
+  // ── Try native share sheet (mobile) — includes text for all platforms ──
+  if(navigator.share && platform !== 'mail'){
+    // Try with image card first, fall back to text-only
+    const imgDataUrl = buildShareCard();
+    if(imgDataUrl && navigator.canShare){
+      try{
+        const res = await fetch(imgDataUrl);
+        const blob = await res.blob();
+        const file = new File([blob], 'kamsayara-report.png', {type:'image/png'});
+        if(navigator.canShare({files:[file]})){
+          await navigator.share({files:[file], text});
+          return;
+        }
+      }catch(e){ /* fall through */ }
+    }
     try{
       await navigator.share({text});
       return;
     }catch(e){
-      if(e.name==='AbortError') return; // user cancelled — stop
-      // Other error — fall through to platform-specific URL
+      if(e.name==='AbortError') return;
     }
   }
 
-  // ── Desktop fallback: platform-specific URLs, same ambassador text ──
+  // ── Desktop fallback — same ambassador text on every platform ──
   let shareUrl = '';
-  if     (platform==='wa')   shareUrl = `https://wa.me/?text=${encodedText}`;
+  if(platform==='wa')   shareUrl = `https://wa.me/?text=${encodedText}`;
   else if(platform==='mail') shareUrl = `mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
   else if(platform==='fb')   shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
   else if(platform==='x')    shareUrl = `https://x.com/intent/tweet?text=${encodedText}`;
   else if(platform==='ig' || platform==='tt'){
-    // Instagram and TikTok have no direct web share URL — copy to clipboard
+    // Copy same text + offer image download
     try{ await navigator.clipboard.writeText(text); }catch{}
-    _showToast(platform==='ig'
-      ? 'Caption copied — open Instagram and paste when posting.'
-      : 'Caption copied — open TikTok and paste when posting.');
+    const imgDataUrl = buildShareCard();
+    if(imgDataUrl){
+      const a = document.createElement('a');
+      a.href = imgDataUrl;
+      a.download = `kamsayara-${(d=>d.ref||'report')(_lastValuationData)}.png`;
+      a.click();
+      _showToast(platform==='ig'
+        ? '✓ Caption copied + image downloaded — open Instagram and post!'
+        : '✓ Caption copied + image downloaded — open TikTok and post!');
+    } else {
+      _showToast(platform==='ig'
+        ? '✓ Caption copied — open Instagram and paste when posting.'
+        : '✓ Caption copied — open TikTok and paste when posting.');
+    }
     return;
   }
 
@@ -10202,6 +10825,68 @@ function pirCollExpand(id){
   if(!body)return;
   body.style.maxHeight=body.scrollHeight+'px';
   body.previousElementSibling?.classList.add('open');
+}
+
+/* ── DUBAI SCENE WEATHER ─────────────────────────────────── */
+function initDubaiSceneWeather(){
+  const scene = document.getElementById('ksDubaiScene');
+  const weatherEl = document.getElementById ? document.querySelector('.ks-scene-weather') : null;
+  if(!scene) return;
+
+  // Detect time for weather
+  const hr = new Date().getHours();
+  // Dubai: morning golden, midday haze/heat, evening golden, night dark
+  let weatherType = 'sunny';
+  if(hr >= 7 && hr < 10) weatherType = 'morning';
+  else if(hr >= 10 && hr < 15) weatherType = 'haze';
+  else if(hr >= 15 && hr < 19) weatherType = 'golden';
+  else weatherType = 'night';
+
+  const overlayColors = {
+    morning: 'linear-gradient(180deg, rgba(255,140,50,0.12) 0%, transparent 50%)',
+    sunny:   'linear-gradient(180deg, rgba(255,200,80,0.08) 0%, transparent 60%)',
+    haze:    'linear-gradient(180deg, rgba(220,200,160,0.18) 0%, rgba(220,200,140,0.1) 50%, transparent 100%)',
+    golden:  'linear-gradient(180deg, rgba(255,120,30,0.18) 0%, rgba(255,160,60,0.1) 50%, transparent 100%)',
+    night:   'linear-gradient(180deg, rgba(20,30,60,0.35) 0%, transparent 60%)',
+  };
+
+  if(weatherEl) weatherEl.style.background = overlayColors[weatherType] || overlayColors.sunny;
+
+  // Night: add stars
+  if(weatherType === 'night'){
+    const starsSvg = `<svg style="position:absolute;top:0;left:0;width:100%;height:55%;pointer-events:none" viewBox="0 0 800 130" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      ${Array.from({length:28},(_,i)=>{
+        const x=Math.floor(20+i*28+Math.sin(i*2.3)*15);
+        const y=Math.floor(8+Math.cos(i*1.7)*18+i%3*10);
+        const r=i%5===0?1.2:0.7;
+        const op=0.4+Math.random()*0.5;
+        return `<circle cx="${x}" cy="${y}" r="${r}" fill="white" opacity="${op.toFixed(2)}"/>`;
+      }).join('')}
+    </svg>`;
+    weatherEl.insertAdjacentHTML('beforeend', starsSvg);
+  }
+
+  // Haze: shimmer strip
+  if(weatherType === 'haze'){
+    const hazeEl = document.createElement('div');
+    Object.assign(hazeEl.style, {
+      position:'absolute', bottom:'36%', left:'0', right:'0', height:'20px',
+      background:'linear-gradient(90deg, transparent, rgba(220,200,150,0.22), transparent)',
+      animation:'ksHazeShimmer 4s ease-in-out infinite',
+      pointerEvents:'none', zIndex:'6'
+    });
+    scene.appendChild(hazeEl);
+  }
+}
+
+/* ── MF2 MARKER ANIMATION ────────────────────────────────── */
+function animateMf2Marker(){
+  document.querySelectorAll('[data-mf2-pct]').forEach(marker=>{
+    const pct = parseInt(marker.dataset.mf2Pct||marker.dataset.mf2_pct||0);
+    if(!pct) return;
+    // Small delay then animate to correct position
+    setTimeout(()=>{ marker.style.left = pct+'%'; }, 200);
+  });
 }
 
 /* ── BOOT ───────────────────────────────────────────────── */
