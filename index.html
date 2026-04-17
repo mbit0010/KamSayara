@@ -2088,16 +2088,16 @@
     .ks-dubai-scene {
       position: relative; width: 100%; overflow: hidden;
       background: linear-gradient(180deg,
-        #0D1822 0%, #1A2C4A 12%, #243A5E 24%, #2E4A72 34%,
-        #8BA0B8 50%, #BAC8D4 56%,
-        #D4B878 62%, #B89650 66%, #9A7A38 70%,
-        #6A5A28 76%, #4A4020 82%, #302C14 90%, #201E0C 100%);
-      min-height: 230px;
+        #87CEEB 0%, #9ED5F0 12%, #B8E2F8 22%, #CCE8F4 30%,
+        #DFF0F8 38%, #EEF6FA 44%,
+        #F5E8C0 52%, #EDD68A 58%, #D4B050 64%,
+        #8A7238 72%, #5A4A22 82%, #3A3018 92%, #28240E 100%);
+      min-height: 210px;
     }
     .ks-scene-skyline { position: absolute; bottom: 36%; left: 0; right: 0; pointer-events: none; z-index: 2; }
     .ks-scene-road {
       position: absolute; bottom: 0; left: 0; right: 0; height: 38%;
-      background: linear-gradient(180deg, #4A4438 0%, #3C362C 50%, #2A241A 100%);
+      background: linear-gradient(180deg, #6A6050 0%, #504840 50%, #3A3228 100%);
       z-index: 3;
     }
     .ks-scene-road::before {
@@ -2106,8 +2106,8 @@
     }
     .ks-scene-car-wrap {
       position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%);
-      width: 58%; max-width: 370px; min-width: 190px; z-index: 10;
-      filter: drop-shadow(0 10px 28px rgba(0,0,0,0.7)) drop-shadow(0 3px 10px rgba(0,0,0,0.5));
+      width: 46%; max-width: 300px; min-width: 160px; z-index: 10;
+      filter: drop-shadow(0 8px 22px rgba(0,0,0,0.55)) drop-shadow(0 2px 8px rgba(0,0,0,0.35));
       animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
     }
     @keyframes ksCarIn {
@@ -2120,29 +2120,14 @@
     }
     .ks-scene-car-shadow {
       position: absolute; bottom: 32%; left: 50%; transform: translateX(-50%);
-      width: 46%; max-width: 280px; height: 20px;
-      background: rgba(0,0,0,0.45); border-radius: 50%;
-      filter: blur(12px); z-index: 9;
+      width: 38%; max-width: 240px; height: 18px;
+      background: rgba(0,0,0,0.35); border-radius: 50%;
+      filter: blur(10px); z-index: 9;
       animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
     }
     .ks-scene-weather { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
-    .ks-scene-ref {
-      position: absolute; top: 10px; right: 10px; z-index: 20;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
-      border: 1px solid rgba(196,154,42,0.45); border-radius: 8px;
-      padding: 5px 10px; font-family: "Orbitron", sans-serif;
-      font-size: .58rem; font-weight: 700; color: rgba(196,154,42,0.92);
-      letter-spacing: .08em; white-space: nowrap;
-    }
-    .ks-scene-title {
-      position: absolute; top: 10px; left: 10px; z-index: 20;
-      background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
-      padding: 5px 10px;
-      font-family: "Exo 2", sans-serif; font-size: .6rem; font-weight: 800;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: rgba(255,255,255,0.9);
-    }
+    .ks-scene-ref { display: none; }
+    .ks-scene-title { display: none; }
     /* Spec chips below scene */
     .ks-spec-road-row {
       background: linear-gradient(135deg, #0C1728 0%, #142035 55%, #1C2C48 100%);
@@ -2173,16 +2158,16 @@
 
     /* ── SCENE MOBILE RESPONSIVE ─── */
     @media(max-width:600px){
-      .ks-dubai-scene { min-height: 175px; }
-      .ks-scene-car-wrap { width: 68%; bottom: 30%; }
-      .ks-scene-car-shadow { width: 56%; bottom: 29%; }
+      .ks-dubai-scene { min-height: 160px; }
+      .ks-scene-car-wrap { width: 54%; bottom: 30%; }
+      .ks-scene-car-shadow { width: 44%; bottom: 29%; }
       .ks-spec-road-row { padding: 6px 8px; }
       .ks-spec-chip { min-width: 52px; padding: 4px 7px; }
       .ks-spec-chip-lbl { font-size: .4rem; }
       .ks-spec-chip-val { font-size: .64rem; }
     }
     @media(min-width:1100px){
-      .ks-dubai-scene { min-height: 270px; }
+      .ks-dubai-scene { min-height: 240px; }
     }
 
     /* ── DARK THEME ENHANCEMENTS ──────────────────────────── */
@@ -6875,7 +6860,7 @@
       <p class="hero-sub-line">Smart estimate using current UAE market data</p>
       <div class="hero-trust">
         <div class="ht"><span class="htd"></span>50,000+ real UAE listings</div>
-        <div class="ht"><span class="htd"></span>Live</div>
+        <div class="ht"><span class="htd"></span>Live <span id="resultRef" class="hero-ref-badge" style="display:none;margin-left:6px;font-size:.65rem;font-family:'Exo 2',monospace;letter-spacing:.06em;color:#E8D060;font-weight:700;background:rgba(232,208,96,0.12);padding:1px 6px;border-radius:4px;border:1px solid rgba(232,208,96,0.3);"></span></div>
         <div class="ht"><span class="htd"></span>Free</div>
       </div>
 
@@ -7935,35 +7920,35 @@ function buildDubaiSkylineSVG(){
   return `<svg viewBox="0 0 800 160" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
     <defs>
       <linearGradient id="bldG1" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(30,50,90,0.82)"/>
-        <stop offset="100%" stop-color="rgba(18,30,55,0.95)"/>
+        <stop offset="0%" stop-color="rgba(180,200,220,0.70)"/>
+        <stop offset="100%" stop-color="rgba(140,165,190,0.85)"/>
       </linearGradient>
       <linearGradient id="bldG2" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(40,65,110,0.75)"/>
-        <stop offset="100%" stop-color="rgba(20,35,65,0.9)"/>
+        <stop offset="0%" stop-color="rgba(160,185,210,0.65)"/>
+        <stop offset="100%" stop-color="rgba(120,148,175,0.80)"/>
       </linearGradient>
       <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(255,170,60,0.0)"/>
-        <stop offset="80%" stop-color="rgba(255,140,40,0.08)"/>
-        <stop offset="100%" stop-color="rgba(255,160,60,0.18)"/>
+        <stop offset="0%" stop-color="rgba(135,206,235,0.0)"/>
+        <stop offset="80%" stop-color="rgba(180,220,240,0.05)"/>
+        <stop offset="100%" stop-color="rgba(210,235,245,0.12)"/>
       </linearGradient>
     </defs>
-    <!-- Sky glow / sunset haze -->
+    <!-- Sky atmosphere -->
     <rect x="0" y="0" width="800" height="160" fill="url(#skyG)"/>
-    <!-- Sun/moon glow -->
-    <ellipse cx="650" cy="30" rx="28" ry="28" fill="rgba(255,200,80,0.13)"/>
-    <ellipse cx="650" cy="30" rx="16" ry="16" fill="rgba(255,210,100,0.2)"/>
-    <circle cx="650" cy="30" r="8" fill="rgba(255,220,120,0.5)"/>
+    <!-- Sun in sky -->
+    <ellipse cx="650" cy="22" rx="18" ry="18" fill="rgba(255,220,80,0.18)"/>
+    <ellipse cx="650" cy="22" rx="10" ry="10" fill="rgba(255,228,100,0.30)"/>
+    <circle cx="650" cy="22" r="6" fill="rgba(255,235,120,0.65)"/>
     <!-- BURJ KHALIFA (center-right) -->
     <rect x="478" y="8" width="7" height="152" fill="url(#bldG1)"/>
     <rect x="474" y="30" width="15" height="130" fill="url(#bldG1)"/>
     <rect x="470" y="55" width="23" height="105" fill="url(#bldG1)"/>
     <rect x="466" y="75" width="31" height="85" fill="url(#bldG1)"/>
     <rect x="462" y="90" width="39" height="70" fill="url(#bldG2)"/>
-    <!-- Burj windows -->
-    <rect x="476" y="35" width="2" height="2" fill="rgba(255,220,100,0.6)" rx="0.5"/>
-    <rect x="480" y="35" width="2" height="2" fill="rgba(255,220,100,0.5)" rx="0.5"/>
-    <rect x="476" y="45" width="2" height="2" fill="rgba(255,220,100,0.4)" rx="0.5"/>
+    <!-- Burj windows (subtle day glint) -->
+    <rect x="476" y="35" width="2" height="2" fill="rgba(255,255,255,0.4)" rx="0.5"/>
+    <rect x="480" y="35" width="2" height="2" fill="rgba(255,255,255,0.3)" rx="0.5"/>
+    <rect x="476" y="45" width="2" height="2" fill="rgba(255,255,255,0.25)" rx="0.5"/>
     <!-- CAYAN TOWER (twisted) -->
     <polygon points="300,160 308,80 318,80 310,160" fill="url(#bldG2)"/>
     <polygon points="306,80 310,30 316,32 312,80" fill="url(#bldG1)"/>
@@ -7986,19 +7971,18 @@ function buildDubaiSkylineSVG(){
     <rect x="708" y="112" width="22" height="48" fill="url(#bldG1)"/>
     <rect x="734" y="100" width="28" height="60" fill="url(#bldG2)"/>
     <!-- Cranes -->
-    <line x1="355" y1="160" x2="355" y2="55" stroke="rgba(100,130,180,0.4)" stroke-width="1.5"/>
-    <line x1="355" y1="60" x2="395" y2="70" stroke="rgba(100,130,180,0.35)" stroke-width="1.2"/>
-    <line x1="355" y1="60" x2="320" y2="68" stroke="rgba(100,130,180,0.3)" stroke-width="1"/>
-    <!-- Building windows (scattered) -->
-    <rect x="54" y="112" width="3" height="3" fill="rgba(255,220,100,0.5)" rx="0.5"/>
-    <rect x="60" y="112" width="3" height="3" fill="rgba(255,220,100,0.3)" rx="0.5"/>
-    <rect x="54" y="120" width="3" height="3" fill="rgba(255,220,100,0.4)" rx="0.5"/>
-    <rect x="544" y="100" width="3" height="3" fill="rgba(255,220,100,0.5)" rx="0.5"/>
-    <rect x="550" y="100" width="3" height="3" fill="rgba(255,220,100,0.3)" rx="0.5"/>
-    <rect x="606" y="92" width="4" height="3" fill="rgba(255,220,100,0.4)" rx="0.5"/>
-    <rect x="613" y="92" width="4" height="3" fill="rgba(255,220,100,0.25)" rx="0.5"/>
-    <!-- Ground haze/fade at bottom -->
-    <rect x="0" y="120" width="800" height="40" fill="url(#skyG)" opacity="0.5"/>
+    <line x1="355" y1="160" x2="355" y2="55" stroke="rgba(160,180,200,0.35)" stroke-width="1.5"/>
+    <line x1="355" y1="60" x2="395" y2="70" stroke="rgba(160,180,200,0.30)" stroke-width="1.2"/>
+    <line x1="355" y1="60" x2="320" y2="68" stroke="rgba(160,180,200,0.25)" stroke-width="1"/>
+    <!-- Glass glints on buildings (day) -->
+    <rect x="54" y="112" width="3" height="3" fill="rgba(255,255,255,0.35)" rx="0.5"/>
+    <rect x="60" y="112" width="3" height="3" fill="rgba(255,255,255,0.20)" rx="0.5"/>
+    <rect x="544" y="100" width="3" height="3" fill="rgba(255,255,255,0.30)" rx="0.5"/>
+    <rect x="550" y="100" width="3" height="3" fill="rgba(255,255,255,0.20)" rx="0.5"/>
+    <rect x="606" y="92" width="4" height="3" fill="rgba(255,255,255,0.28)" rx="0.5"/>
+    <rect x="613" y="92" width="4" height="3" fill="rgba(255,255,255,0.18)" rx="0.5"/>
+    <!-- Ground haze at bottom -->
+    <rect x="0" y="120" width="800" height="40" fill="rgba(200,220,230,0.08)" opacity="0.5"/>
   </svg>`;
 }
 
@@ -8230,6 +8214,189 @@ function buildSceneCarSVG(bodyKey, brand, model){
       <rect x="298" y="52" width="12" height="10" rx="2" fill="rgba(255,240,180,0.9)"/>
       <!-- Taillight -->
       <rect x="26" y="52" width="10" height="16" rx="2" fill="rgba(220,50,30,0.7)"/>
+    </svg>`,
+
+    convertible: `<svg viewBox="0 0 310 115" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Low sleek body -->
+      <path d="M26 80 L42 56 Q58 36 90 32 L175 30 Q218 30 250 52 L284 80 L286 90 Q286 102 274 102 L244 102 Q236 112 222 112 Q208 112 202 102 L108 102 Q102 112 88 112 Q74 112 68 102 L28 102 Q20 102 20 90 Z" fill="url(#scBodyG)"/>
+      <!-- Open top - just windscreen frame -->
+      <path d="M110 32 L100 66 L200 66 L192 30 Z" fill="${glassColor}"/>
+      <!-- Windscreen top rail -->
+      <path d="M100 66 L110 32 L192 30 L200 66" stroke="${carColor}" stroke-width="3" fill="none"/>
+      <!-- Interior visible -->
+      <rect x="105" y="40" width="86" height="18" rx="3" fill="rgba(30,20,10,0.35)"/>
+      <!-- Wheels (wider) -->
+      <circle cx="88" cy="102" r="17" fill="url(#scWheelG)"/>
+      <circle cx="88" cy="102" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="88" cy="102" r="4.5" fill="#141414"/>
+      <circle cx="222" cy="102" r="17" fill="url(#scWheelG)"/>
+      <circle cx="222" cy="102" r="10" fill="#242424" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="222" cy="102" r="4.5" fill="#141414"/>
+      <!-- Headlight -->
+      <path d="M278 58 L288 54 L290 66 L278 70 Z" fill="rgba(255,240,180,0.95)"/>
+      <path d="M278 54 L288 52" stroke="rgba(180,220,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Taillight -->
+      <rect x="18" y="65" width="10" height="10" rx="2" fill="rgba(220,50,30,0.8)"/>
+      <!-- Side reflection -->
+      <path d="M90 46 Q175 36 248 46" stroke="rgba(255,255,255,0.32)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>`,
+
+    sportscar: `<svg viewBox="0 0 310 108" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Ultra-low body -->
+      <path d="M28 76 L52 52 Q72 28 108 24 L182 20 Q228 20 262 46 L290 76 L292 86 Q292 98 280 98 L248 98 Q240 108 226 108 Q212 108 206 98 L106 98 Q100 108 86 108 Q72 108 66 98 L30 98 Q22 98 22 86 Z" fill="url(#scBodyG)"/>
+      <!-- Very raked roof -->
+      <path d="M112 24 L100 70 L272 70 L256 46 Q230 20 182 20 Z" fill="${carColor}" opacity="0.92"/>
+      <!-- Raked windscreen -->
+      <path d="M118 26 L106 66 L210 66 L200 22 Z" fill="${glassColor}"/>
+      <!-- Rear fastback -->
+      <path d="M214 22 L212 66 L268 66 L254 46 Z" fill="${glassColor}" opacity="0.65"/>
+      <!-- Wide wheels -->
+      <circle cx="86" cy="98" r="18" fill="url(#scWheelG)"/>
+      <circle cx="86" cy="98" r="11" fill="#202020" stroke="${accentCol}" stroke-width="2.5"/>
+      <circle cx="86" cy="98" r="5" fill="#101010"/>
+      <circle cx="226" cy="98" r="18" fill="url(#scWheelG)"/>
+      <circle cx="226" cy="98" r="11" fill="#202020" stroke="${accentCol}" stroke-width="2.5"/>
+      <circle cx="226" cy="98" r="5" fill="#101010"/>
+      <!-- Aggressive headlight -->
+      <path d="M284 52 L294 48 L298 62 L284 66 Z" fill="rgba(255,245,180,1)"/>
+      <path d="M284 48 L294 46" stroke="rgba(160,210,255,1)" stroke-width="3" stroke-linecap="round"/>
+      <!-- Taillight -->
+      <rect x="20" y="60" width="10" height="8" rx="1.5" fill="rgba(220,50,30,0.9)"/>
+      <!-- Rear spoiler -->
+      <rect x="204" y="66" width="68" height="4" rx="2" fill="${carColorDark}" opacity="0.85"/>
+      <!-- Low side reflection -->
+      <path d="M108 36 Q182 24 256 38" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>`,
+
+    crossover: `<svg viewBox="0 0 310 122" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Compact crossover body -->
+      <path d="M26 82 L38 54 Q50 32 82 28 L165 24 Q205 24 232 46 L278 82 L280 92 Q280 106 268 106 L236 106 Q228 118 214 118 Q200 118 192 106 L112 106 Q104 118 90 118 Q76 118 68 106 L28 106 Q20 106 20 92 Z" fill="url(#scBodyG)"/>
+      <!-- Slightly raised roofline -->
+      <path d="M86 28 L76 72 L250 72 L230 46 Q208 24 165 24 Z" fill="${carColor}" opacity="0.88"/>
+      <!-- Glass -->
+      <path d="M92 30 L82 68 L186 68 L180 26 Z" fill="${glassColor}"/>
+      <path d="M190 26 L186 68 L246 68 L228 46 Z" fill="${glassColor}" opacity="0.78"/>
+      <!-- Roof rails -->
+      <rect x="90" y="24" width="140" height="3" rx="1.5" fill="${carColorDark}" opacity="0.4"/>
+      <!-- Wheels (moderate size) -->
+      <circle cx="90" cy="106" r="16" fill="url(#scWheelG)"/>
+      <circle cx="90" cy="106" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="90" cy="106" r="4" fill="#181818"/>
+      <circle cx="214" cy="106" r="16" fill="url(#scWheelG)"/>
+      <circle cx="214" cy="106" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="214" cy="106" r="4" fill="#181818"/>
+      <!-- Headlight -->
+      <path d="M272 58 L282 55 L283 67 L272 70 Z" fill="rgba(255,240,180,0.9)"/>
+      <!-- Taillight -->
+      <rect x="18" y="62" width="10" height="14" rx="2" fill="rgba(220,50,30,0.75)"/>
+      <!-- Reflection -->
+      <path d="M88 44 Q165 34 228 46" stroke="rgba(255,255,255,0.28)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>`,
+
+    wagon: `<svg viewBox="0 0 320 118" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Long wagon body -->
+      <path d="M26 80 L38 56 Q50 34 80 30 L205 26 Q248 26 272 50 L294 80 L296 92 Q296 104 284 104 L252 104 Q244 116 230 116 Q216 116 208 104 L108 104 Q100 116 86 116 Q72 116 64 104 L28 104 Q20 104 20 92 Z" fill="url(#scBodyG)"/>
+      <!-- Flat wagon roofline extending over rear -->
+      <path d="M84 30 L76 70 L276 70 L268 50 Q248 26 205 26 Z" fill="${carColor}" opacity="0.87"/>
+      <!-- Glass windscreen -->
+      <path d="M90 32 L80 66 L188 66 L183 28 Z" fill="${glassColor}"/>
+      <!-- Rear glass (tall) -->
+      <path d="M194 28 L190 66 L272 66 L266 50 Z" fill="${glassColor}" opacity="0.82"/>
+      <!-- Roof rails -->
+      <rect x="88" y="26" width="180" height="3" rx="1.5" fill="${carColorDark}" opacity="0.4"/>
+      <!-- Wheels -->
+      <circle cx="86" cy="104" r="16" fill="url(#scWheelG)"/>
+      <circle cx="86" cy="104" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="86" cy="104" r="4" fill="#181818"/>
+      <circle cx="230" cy="104" r="16" fill="url(#scWheelG)"/>
+      <circle cx="230" cy="104" r="9.5" fill="#282828" stroke="${accentCol}" stroke-width="1.5"/>
+      <circle cx="230" cy="104" r="4" fill="#181818"/>
+      <!-- Headlight -->
+      <path d="M288 58 L298 56 L298 70 L288 72 Z" fill="rgba(255,240,180,0.9)"/>
+      <!-- Taillight (tall) -->
+      <rect x="18" y="54" width="9" height="18" rx="2" fill="rgba(220,50,30,0.75)"/>
+      <!-- Side reflection -->
+      <path d="M86 46 Q190 36 264 48" stroke="rgba(255,255,255,0.26)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>`,
+
+    offroad: `<svg viewBox="0 0 330 132" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="scBodyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${carColor}"/>
+          <stop offset="100%" stop-color="${carColorDark}"/>
+        </linearGradient>
+        <linearGradient id="scWheelG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A3A3A"/>
+          <stop offset="100%" stop-color="#1A1A1A"/>
+        </linearGradient>
+      </defs>
+      <!-- Boxy 4x4 body, higher ground clearance -->
+      <path d="M28 90 L38 52 Q48 24 80 20 L180 16 Q224 16 255 38 L302 90 L304 102 Q304 116 290 116 L255 116 Q246 128 230 128 Q214 128 206 116 L116 116 Q108 128 92 128 Q76 128 68 116 L32 116 Q22 116 22 102 Z" fill="url(#scBodyG)"/>
+      <!-- Boxy flat roof -->
+      <path d="M80 20 L72 82 L268 82 L256 38 Q228 16 180 16 Z" fill="${carColor}" opacity="0.9"/>
+      <!-- Glass windscreen (upright) -->
+      <path d="M86 22 L78 78 L198 78 L192 18 Z" fill="${glassColor}"/>
+      <!-- Side glass -->
+      <path d="M202 18 L198 78 L264 78 L254 38 Z" fill="${glassColor}" opacity="0.8"/>
+      <!-- Side steps -->
+      <rect x="38" y="108" width="248" height="6" rx="2" fill="${carColorDark}" opacity="0.5"/>
+      <!-- Big chunky wheels -->
+      <circle cx="92" cy="116" r="21" fill="url(#scWheelG)"/>
+      <circle cx="92" cy="116" r="13" fill="#222222" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="92" cy="116" r="5.5" fill="#121212"/>
+      <circle cx="230" cy="116" r="21" fill="url(#scWheelG)"/>
+      <circle cx="230" cy="116" r="13" fill="#222222" stroke="${accentCol}" stroke-width="2"/>
+      <circle cx="230" cy="116" r="5.5" fill="#121212"/>
+      <!-- Bull bar hint -->
+      <rect x="296" y="60" width="8" height="30" rx="2" fill="${carColorDark}" opacity="0.6"/>
+      <!-- Headlight (square) -->
+      <rect x="296" y="52" width="14" height="12" rx="2" fill="rgba(255,240,180,0.9)"/>
+      <!-- Taillight -->
+      <rect x="18" y="68" width="11" height="18" rx="2" fill="rgba(220,50,30,0.7)"/>
+      <!-- Roof rack -->
+      <rect x="80" y="16" width="176" height="4" rx="2" fill="${carColorDark}" opacity="0.45"/>
+      <!-- Side reflection -->
+      <path d="M82 36 Q180 22 252 42" stroke="rgba(255,255,255,0.25)" stroke-width="2" fill="none"/>
     </svg>`
   };
 
@@ -8526,7 +8693,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Clear pre-generated ref now that buildResult has consumed it
   window._preGeneratedRef = null;
   const refEl=document.getElementById('resultRef');
-  if(refEl){refEl.textContent=ref.label;refEl.classList.add('on');}
+  if(refEl){refEl.textContent=ref.label;refEl.style.display='inline';}
   const mobRefEl=document.getElementById('mobRef');
   if(mobRefEl){mobRefEl.textContent=ref.label;mobRefEl.classList.add('on');}
 
@@ -8561,11 +8728,26 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Body-type detection for silhouette (no third-party image service)
   const _bodyKey=(()=>{
     const _s=(brand+' '+(model||'')).toLowerCase();
-    if(/patrol|prado|fortuner|land.?cruiser|rush|rav.?4|crv|hr.?v|x.?trail|pilot|qashqai|tucson|sportage|santa|outlander|tiguan|explorer|escalade|tahoe|suburban|gx|lx|rx|nx|cx.?5|cx.?9|durango|pajero|discovery|defender|range.?rover|jeep|wrangler|terrain|equinox|traverse|sorento|carnival|mux|mu.x|fortuner|captiva|jetour|gac|mg.?(rx|hs|zs)|haval/.test(_s)) return 'suv';
-    if(/hilux|ranger|navara|pickup|f.?150|dmax|d.?max|bt.?50/.test(_s)) return 'pickup';
-    if(/city|yaris|swift|polo|golf|jazz|fit|i10|i20|clio|fiesta|corsa|hatchback|hatch/.test(_s)) return 'hatchback';
-    if(/coupe|mustang|86|brz|supra|370z|camaro|challenger/.test(_s)) return 'coupe';
-    if(/hiace|transit|vito|sprinter|urvan|h1|starex|van/.test(_s)) return 'van';
+    // Convertible
+    if(/cabrio|cabriolet|convertible|roadster|spider|spyder|boxster|slk|clk.?cab|z4|mx.?5|miata|207.?cc|207cc|solara/.test(_s)) return 'convertible';
+    // Sports Car
+    if(/ferrari|lamborghini|porsche.?(911|718|cayman|boxter)|mclaren|aston.?martin|lotus|corvette|viper|gt.?r|nsx|pagani|bugatti|koenigsegg|86|brz|supra|370z|240z|rx.?7/.test(_s)) return 'sportscar';
+    // Coupe
+    if(/coupe|mustang|camaro|challenger|charger|genesis.?g70|bmw.?4|bmw.?2|c.?class.?coupe|e.?class.?coupe|a5|tt\b/.test(_s)) return 'coupe';
+    // Pickup Truck
+    if(/hilux|ranger|navara|pickup|f.?150|f150|dmax|d.?max|bt.?50|l200|triton|amarok|ridgeline|tundra|tacoma|frontier|colorado|canyon/.test(_s)) return 'pickup';
+    // MPV / Minivan
+    if(/hiace|transit|vito|sprinter|urvan|h1|starex|alphard|vellfire|odyssey|elysion|carnival|sienna|staria|luxgen|t300|mpv|minivan|van\b/.test(_s)) return 'van';
+    // Wagon / Estate
+    if(/touring|estate|avant|allroad|sportback|shooting.?brake|e.?class.?estate|5.?series.?touring|outback|legacy.?wagon|passat.?variant|wagon/.test(_s)) return 'wagon';
+    // Off-road / 4x4
+    if(/defender|wrangler|g.?class|g63|g500|jimny|patrol\b|fj.?cruiser|land.?cruiser.?(70|79|76|78)|fortuner|hilux.?surf|prado|4x4|offroad|off.?road/.test(_s)) return 'offroad';
+    // Crossover (CUV) - smaller crossovers
+    if(/hr.?v|hrv|crv|cr.?v|rav.?4|rav4|qashqai|juke|kicks|b.?crv|trax|encore|venue|kona|seltos|c3.?aircross|2008|3008|5008|t.?roc|t.?cross|cx.?3|cx.?30|ecosport|puma|captur|duster/.test(_s)) return 'crossover';
+    // SUV (larger)
+    if(/patrol|prado|land.?cruiser|pilot|explorer|escalade|tahoe|suburban|gx|lx|rx|nx|cx.?5|cx.?9|durango|pajero|discovery|range.?rover|jeep|terrain|equinox|traverse|sorento|santa.?fe|tucson|sportage|outlander|tiguan|x.?trail|fortuner|captiva|jetour|gac|mg.?(rx|hs|zs)|haval|mux|mu.x/.test(_s)) return 'suv';
+    // Hatchback
+    if(/city|yaris|swift|polo|golf|jazz|fit\b|i10|i20|clio|fiesta|corsa|hatchback|hatch|micra|vitz|belta|swift|baleno|ignis|kwid|208\b|308\b|i30|elantra.?gt|focus.?hatch|civic.?hatch/.test(_s)) return 'hatchback';
     return 'sedan';
   })();
   const _carSvg = typeof buildSilhouetteSVG==='function' ? buildSilhouetteSVG(_bodyKey,'') : '';
@@ -8788,10 +8970,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="ks-scene-car-wrap">
         ${buildSceneCarSVG(_bodyKey, brand, model)}
       </div>
-      <!-- Title overlay -->
-      <div class="ks-scene-title">Free Report ★ Full Analysis</div>
-      <!-- Ref badge -->
-      <div class="ks-scene-ref" id="ksSceneRef">${ref.label}</div>
+      <!-- Ref badge removed from car image — now shown in header -->
     </div>
     <!-- Spec chips — all input data in one row -->
     <div class="ks-spec-road-row">
@@ -9292,7 +9471,7 @@ async function checkCarPrice(){
   // ── Generate reference number immediately on click ──
   const _preRef = generateRef(null);
   const refEl = g('resultRef');
-  if(refEl){ refEl.textContent = _preRef.label; refEl.classList.add('on'); }
+  if(refEl){ refEl.textContent = _preRef.label; refEl.style.display='inline'; }
   const mobRefEl = g('mobRef');
   if(mobRefEl){ mobRefEl.textContent = _preRef.label; mobRefEl.classList.add('on'); }
   // Store so buildResult can pick it up
@@ -9646,7 +9825,7 @@ function resetForm(){
   document.body.classList.remove('ks-result-active');
   // Reset ref stamps
   const refEl=g('resultRef');
-  if(refEl){refEl.textContent='';refEl.classList.remove('on');}
+  if(refEl){refEl.textContent='';refEl.style.display='none';}
   const mobRefEl=g('mobRef');
   if(mobRefEl){mobRefEl.textContent='';mobRefEl.classList.remove('on');}
   window._preGeneratedRef = null;
@@ -10543,8 +10722,11 @@ function _getRoofFill(baseHex){
 
 function buildSilhouetteSVG(bodyType, colourName){
   const type = (bodyType||'').toLowerCase();
-  const key = ['sedan','suv','hatchback','pickup','coupe','van'].find(k=>type.includes(k)) || 'sedan';
-  const svg = SILHOUETTES[key] || SILHOUETTES.sedan;
+  const key = ['sedan','suv','hatchback','pickup','coupe','van','convertible','sportscar','crossover','wagon','offroad'].find(k=>type.includes(k))
+    || (type.includes('sport') ? 'sportscar' : type.includes('cross') ? 'crossover' : type.includes('wag') || type.includes('estate') ? 'wagon' : type.includes('off') || type.includes('4x4') ? 'offroad' : 'sedan');
+  // Map new types to closest SILHOUETTES key
+  const silKey = key === 'sportscar' ? 'coupe' : key === 'crossover' ? 'suv' : key === 'wagon' ? 'sedan' : key === 'offroad' ? 'suv' : key === 'convertible' ? 'coupe' : key;
+  const svg = SILHOUETTES[silKey] || SILHOUETTES.sedan;
   const col = COLOUR_MAP[colourName] || DEFAULT_COLOUR;
   const roofFill = _getRoofFill(col.fill);
   return svg
@@ -10833,38 +11015,22 @@ function initDubaiSceneWeather(){
   const weatherEl = document.getElementById ? document.querySelector('.ks-scene-weather') : null;
   if(!scene) return;
 
-  // Detect time for weather
+  // Always daytime — use hour to pick between morning golden, midday bright, afternoon golden
   const hr = new Date().getHours();
-  // Dubai: morning golden, midday haze/heat, evening golden, night dark
   let weatherType = 'sunny';
-  if(hr >= 7 && hr < 10) weatherType = 'morning';
-  else if(hr >= 10 && hr < 15) weatherType = 'haze';
-  else if(hr >= 15 && hr < 19) weatherType = 'golden';
-  else weatherType = 'night';
+  if(hr >= 6 && hr < 10) weatherType = 'morning';
+  else if(hr >= 10 && hr < 16) weatherType = 'haze';
+  else if(hr >= 16 && hr < 20) weatherType = 'golden';
+  else weatherType = 'sunny'; // Late night still renders as daytime scene
 
   const overlayColors = {
-    morning: 'linear-gradient(180deg, rgba(255,140,50,0.12) 0%, transparent 50%)',
-    sunny:   'linear-gradient(180deg, rgba(255,200,80,0.08) 0%, transparent 60%)',
-    haze:    'linear-gradient(180deg, rgba(220,200,160,0.18) 0%, rgba(220,200,140,0.1) 50%, transparent 100%)',
-    golden:  'linear-gradient(180deg, rgba(255,120,30,0.18) 0%, rgba(255,160,60,0.1) 50%, transparent 100%)',
-    night:   'linear-gradient(180deg, rgba(20,30,60,0.35) 0%, transparent 60%)',
+    morning: 'linear-gradient(180deg, rgba(255,140,50,0.10) 0%, transparent 50%)',
+    sunny:   'linear-gradient(180deg, rgba(135,206,235,0.12) 0%, transparent 60%)',
+    haze:    'linear-gradient(180deg, rgba(220,200,160,0.14) 0%, rgba(220,200,140,0.07) 50%, transparent 100%)',
+    golden:  'linear-gradient(180deg, rgba(255,120,30,0.14) 0%, rgba(255,160,60,0.08) 50%, transparent 100%)',
   };
 
   if(weatherEl) weatherEl.style.background = overlayColors[weatherType] || overlayColors.sunny;
-
-  // Night: add stars
-  if(weatherType === 'night'){
-    const starsSvg = `<svg style="position:absolute;top:0;left:0;width:100%;height:55%;pointer-events:none" viewBox="0 0 800 130" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
-      ${Array.from({length:28},(_,i)=>{
-        const x=Math.floor(20+i*28+Math.sin(i*2.3)*15);
-        const y=Math.floor(8+Math.cos(i*1.7)*18+i%3*10);
-        const r=i%5===0?1.2:0.7;
-        const op=0.4+Math.random()*0.5;
-        return `<circle cx="${x}" cy="${y}" r="${r}" fill="white" opacity="${op.toFixed(2)}"/>`;
-      }).join('')}
-    </svg>`;
-    weatherEl.insertAdjacentHTML('beforeend', starsSvg);
-  }
 
   // Haze: shimmer strip
   if(weatherType === 'haze'){
