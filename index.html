@@ -8991,6 +8991,235 @@ function ksGetVehicleImageUrl(brand, model, bodyKey){
 }
 
 /* ── BUILD RESULT HTML ──────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   KAM SAYARA — VALUATION ENGINE v42
+   Combination model: Worker fetches raw market data → Frontend computes
+   all pricing logic deterministically.
+   
+   Input:  raw market data (low, high, comp, listings) + user inputs
+   Output: handshake, adjustments, verdict, bestMove, script, costs
+   ══════════════════════════════════════════════════════════════════════════ */
+function ksComputeValuation(raw, inputs) {
+  const R500 = n => Math.round(n / 500) * 500;
+
+  const mktLow  = raw.lowPrice  || raw.market_low  || 0;
+  const mktHigh = raw.highPrice || raw.market_high || 0;
+  const mktMid  = mktLow && mktHigh ? Math.round((mktLow + mktHigh) / 2 / 500) * 500 : (raw.averagePrice || 0);
+  const range   = Math.max(0, mktHigh - mktLow);
+
+  const { fsh, singleOwner, accident, warranty, condition, spec, mileage, askingPrice, carYear } = inputs;
+  const cy  = new Date().getFullYear();
+  const age = Math.max(1, cy - (carYear || cy - 5));
+
+  // ── ADJUSTMENT FACTORS ──────────────────────────────────────────────────
+  // Each factor pushes handshake toward High (positive) or Low (negative)
+  // Expressed as fraction of the market range
+  const adjustments = [];
+  let delta = 0; // net shift as fraction of range
+
+  // Full Service History
+  if (fsh === true)  { const a = R500(range * 0.08); delta += 0.08; adjustments.push({ label: 'Full service history',    amt: +a, dir: 'pos' }); }
+  if (fsh === false) { const a = R500(range * 0.06); delta -= 0.06; adjustments.push({ label: 'No service history',      amt: -a, dir: 'neg' }); }
+
+  // Single Owner
+  if (singleOwner === true)  { const a = R500(range * 0.05); delta += 0.05; adjustments.push({ label: 'Single owner',          amt: +a, dir: 'pos' }); }
+  if (singleOwner === false) { const a = R500(range * 0.04); delta -= 0.04; adjustments.push({ label: 'Multiple owners',        amt: -a, dir: 'neg' }); }
+
+  // Accident History
+  if (accident === true)  { const a = R500(range * 0.10); delta -= 0.10; adjustments.push({ label: 'Accident history',       amt: -a, dir: 'neg' }); }
+
+  // Warranty
+  if (warranty === true)  { const a = R500(range * 0.04); delta += 0.04; adjustments.push({ label: 'Active warranty',         amt: +a, dir: 'pos' }); }
+  if (warranty === false) { const a = R500(range * 0.02); delta -= 0.02; adjustments.push({ label: 'No warranty',             amt: -a, dir: 'neg' }); }
+
+  // Condition
+  const condMap = { 'Excellent': 0.08, 'Very Good': 0.05, 'Good': 0, 'Fair': -0.06, 'Poor': -0.12 };
+  const condDelta = condMap[condition] ?? 0;
+  if (condDelta !== 0) {
+    const a = R500(Math.abs(range * condDelta));
+    delta += condDelta;
+    adjustments.push({ label: `Condition: ${condition}`, amt: condDelta > 0 ? +a : -a, dir: condDelta > 0 ? 'pos' : 'neg' });
+  }
+
+  // Spec
+  if (spec && spec !== 'GCC' && spec !== 'GCC Spec') {
+    const a = R500(range * 0.05);
+    delta -= 0.05;
+    adjustments.push({ label: 'Non-GCC spec', amt: -a, dir: 'neg' });
+  }
+
+  // Mileage position vs expected for age
+  const expectedKm = age * 15000;
+  if (mileage && mileage < expectedKm * 0.7)       { const a = R500(range * 0.04); delta += 0.04; adjustments.push({ label: 'Below expected mileage', amt: +a, dir: 'pos' }); }
+  else if (mileage && mileage > expectedKm * 1.35) { const a = R500(range * 0.04); delta -= 0.04; adjustments.push({ label: 'Above expected mileage', amt: -a, dir: 'neg' }); }
+
+  // ── COMPUTE HANDSHAKE ────────────────────────────────────────────────────
+  // Start at midpoint, shift by delta fraction of range, clamp to [low, high]
+  const rawHandshake = mktLow + (0.5 + Math.max(-0.45, Math.min(0.45, delta))) * range;
+  const handshake = mktLow && mktHigh
+    ? Math.max(mktLow, Math.min(mktHigh, R500(rawHandshake)))
+    : R500(raw.averagePrice || rawHandshake);
+
+  // Adjustment amounts (recalculate as AED delta from midpoint for display)
+  const baseForAdj = R500(mktLow + 0.5 * range) || handshake;
+  const adjDisplay = adjustments.map(a => ({
+    label: a.label,
+    amt:   a.amt,
+    dir:   a.dir
+  }));
+
+  // ── VERDICT ──────────────────────────────────────────────────────────────
+  const sp    = askingPrice || 0;
+  const gap   = sp ? sp - handshake : null;
+  const gapAbs= gap !== null ? Math.abs(gap) : 0;
+  const gapPct= gap !== null && handshake > 0 ? Math.round(Math.abs(gap) / handshake * 100) : 0;
+  const within5 = gap !== null && gapAbs / (handshake || 1) <= 0.05;
+
+  let verdict, verdictEmoji, verdictColor, verdictBg, verdictBorder, verdictExplain, verdictStrategy;
+
+  if (!sp) {
+    verdict = 'NO STICKER'; verdictEmoji = '—';
+    verdictColor = '#6B7280'; verdictBg = 'rgba(107,114,128,0.07)'; verdictBorder = '#E5E7EB';
+    verdictExplain = 'No asking price entered. Enter sticker price to get verdict and negotiation strategy.';
+    verdictStrategy = '';
+  } else if (within5) {
+    verdict = 'FAIRLY PRICED'; verdictEmoji = '🟡';
+    verdictColor = '#B45309'; verdictBg = 'rgba(217,119,6,0.07)'; verdictBorder = '#FCD34D';
+    verdictExplain = `Sticker AED ${sp.toLocaleString()} is within 5% of Handshake AED ${handshake.toLocaleString()}. Both parties get a fair deal.`;
+    verdictStrategy = 'A small counter-offer is still reasonable. Try opening slightly below to test the seller\'s flexibility.';
+  } else if (gap > 0) {
+    // OVERPRICED — defensive negotiation
+    verdict = 'OVERPRICED'; verdictEmoji = '🔴';
+    verdictColor = '#DC2626'; verdictBg = 'rgba(220,38,38,0.07)'; verdictBorder = '#FCA5A5';
+    verdictExplain = `Sticker AED ${sp.toLocaleString()} is AED ${gapAbs.toLocaleString()} above Handshake AED ${handshake.toLocaleString()}. Buyer pays ${gapPct}% above fair market value. Seller benefits from higher price. Risk: Car may sit unsold for 90+ days.`;
+    verdictStrategy = `Defensive negotiation. Use Market Low (AED ${mktLow.toLocaleString()}) and Handshake (AED ${handshake.toLocaleString()}) as gravity anchors to pull the seller down.`;
+  } else {
+    // UNDERPRICED — aggressive closing
+    verdict = 'UNDERPRICED'; verdictEmoji = '🟢';
+    verdictColor = '#15803D'; verdictBg = 'rgba(21,163,74,0.07)'; verdictBorder = '#6EE7B7';
+    verdictExplain = `Sticker AED ${sp.toLocaleString()} is AED ${gapAbs.toLocaleString()} below Handshake AED ${handshake.toLocaleString()}. Buyer is paying ${gapPct}% below fair market. Seller is losing potential AED ${gapAbs.toLocaleString()}. Risk: Car will sell very quickly.`;
+    verdictStrategy = `Aggressive closing. Sticker is already a strong deal. Test seller with a low offer, but be prepared to pay AED ${sp.toLocaleString()} immediately before someone else does.`;
+  }
+
+  // ── BEST MOVE (human anchor logic) ──────────────────────────────────────
+  // Opening: slightly below Market Low — tests motivation without insulting
+  const openingOffer = R500(mktLow * 0.96);
+
+  let targetClose, walkAway, bestMoveRationale;
+
+  if (!sp) {
+    targetClose = handshake;
+    walkAway    = R500(handshake * 1.03);
+    bestMoveRationale = `No sticker price. Target Handshake AED ${handshake.toLocaleString()} as your close price.`;
+  } else if (within5) {
+    // Fairly priced — still try for a small win
+    targetClose = R500(Math.min(sp, handshake));
+    walkAway    = R500(handshake * 1.03);
+    bestMoveRationale = `Price is fair. A small counter is reasonable — settle at or below AED ${handshake.toLocaleString()}.`;
+  } else if (gap > 0) {
+    // Overpriced — don't overpay for "fair"
+    targetClose = handshake;           // settle AT handshake (fair price)
+    walkAway    = handshake;           // walk if seller won't reach fair value
+    bestMoveRationale = `Overpriced by AED ${gapAbs.toLocaleString()}. Your target is Handshake AED ${handshake.toLocaleString()}. Walk away if seller won't come down to fair market value.`;
+  } else {
+    // Underpriced — sticker is the win; test for more but don't lose it
+    targetClose = sp;                  // sticker is already the "fair win"
+    walkAway    = sp;                  // walk away = sticker (don't lose a steal)
+    bestMoveRationale = `Already ${gapPct}% below market. Open low to test seller urgency, but be ready to pay AED ${sp.toLocaleString()} immediately — this car will sell fast.`;
+  }
+
+  // ── NEGOTIATION SCRIPT (scenario-aware) ──────────────────────────────────
+  const carLabel = inputs.carLabel || 'this vehicle';
+  const kmLabel  = mileage ? `${mileage.toLocaleString()} km` : '';
+  const weaknesses = [
+    fsh === false && 'no service history',
+    singleOwner === false && 'multiple owners',
+    accident === true && 'accident history',
+    warranty === false && 'no warranty',
+  ].filter(Boolean);
+  const weakStr = weaknesses.length ? ` with ${weaknesses.join(', ')}` : '';
+
+  let negoScript;
+  if (!sp) {
+    negoScript = `"Based on current UAE market data, the ${carLabel}${kmLabel?' at '+kmLabel:''} has a fair market value of AED ${handshake.toLocaleString()}. My offer is AED ${openingOffer.toLocaleString()} — is there room to work on the price?"`;
+  } else if (gap > 0) {
+    // Overpriced script
+    negoScript = `"I love the ${carLabel}${weakStr}. The market data shows similar models moving at AED ${handshake.toLocaleString()} — that's the UAE handshake price. At AED ${sp.toLocaleString()}, you're AED ${gapAbs.toLocaleString()} above that. If we can get to AED ${handshake.toLocaleString()}, we have a deal today."`;
+  } else if (!within5) {
+    // Underpriced script
+    negoScript = `"The ${carLabel}${weakStr ? weakStr : ''} is priced well below the market. I'll offer AED ${openingOffer.toLocaleString()} to see if there's any flexibility, but I'm prepared to move to AED ${sp.toLocaleString()} right now — can we close today?"`;
+  } else {
+    // Fairly priced
+    negoScript = `"The ${carLabel} is fairly priced at market. I'd like to offer AED ${openingOffer.toLocaleString()} as my opening. I can move to AED ${handshake.toLocaleString()} — does that work for you?"`;
+  }
+
+  // ── RUNNING COSTS (separated from depreciation) ──────────────────────────
+  const basePrice  = askingPrice || handshake;
+  const insEst     = Math.round(Math.max(1200, basePrice * 0.025) / 100) * 100;
+  const maintEst   = R500(Math.max(1500, basePrice * 0.015));
+  const fuelEst    = 900; // monthly
+  const rtaReg     = 940; // RTA registration + transfer
+  const runningTotal = rtaReg + insEst + maintEst + (fuelEst * 12);
+
+  // Depreciation — separate, annual value loss
+  const deprClass  = raw.depreciation_class || (age <= 2 ? 'D' : age <= 5 ? 'C' : 'B');
+  const deprRateMap= { A: 0.10, B: 0.11, C: 0.13, D: 0.15 };
+  const deprRate   = deprRateMap[deprClass] || 0.12;
+  const deprAmt    = R500(basePrice * deprRate);
+
+  // 3-year forecast
+  const cy2 = new Date().getFullYear();
+  const forecastVals = [
+    { yr: cy2,   val: handshake },
+    { yr: cy2+1, val: R500(handshake * (1 - deprRate)) },
+    { yr: cy2+2, val: R500(handshake * (1 - deprRate) ** 2) },
+    { yr: cy2+3, val: R500(handshake * (1 - deprRate) ** 3) },
+  ];
+
+  return {
+    // Core values
+    handshake,
+    mktLow,
+    mktHigh,
+    mktMid,
+    baseForAdj,
+
+    // Adjustments
+    adjustments: adjDisplay,
+
+    // Verdict
+    verdict, verdictEmoji, verdictColor, verdictBg, verdictBorder,
+    verdictExplain, verdictStrategy,
+    gap, gapAbs, gapPct, within5,
+
+    // Best Move
+    openingOffer, targetClose, walkAway, bestMoveRationale,
+
+    // Script
+    negoScript,
+
+    // Running costs (cash out — separate from depreciation)
+    runningCosts: {
+      rta:      rtaReg,
+      insurance: insEst,
+      maintenance: maintEst,
+      fuel:     fuelEst * 12,
+      total:    runningTotal,
+      note:     'Year 1 cash outflow (registration, insurance, maintenance, fuel)'
+    },
+
+    // Depreciation (value lost — separate from cash costs)
+    depreciation: {
+      rate:    deprRate,
+      annual:  deprAmt,
+      class:   deprClass,
+      forecast: forecastVals,
+      note:    'Annual asset value reduction — not a cash expense'
+    },
+  };
+}
+
 function buildResult(r,brand,model,year,mileage,asking){
   const conf=Math.round((r.confidence||0)*100);
   const avg=r.averagePrice||0;
@@ -9060,6 +9289,8 @@ function buildResult(r,brand,model,year,mileage,asking){
     ref:ref.label,carName:`${year} ${brand}${model?' '+model:''}`,
     avg,low,high,comp,conf:r.confidence||0,askingPrice:askN,marketability:mkt,ai,
     aiCls:ai?aiRatingClass(ai.deal_rating):'neu',
+    // v42 engine values for share messages
+    handshake:_vc.handshake, verdict:_vc.verdict, gapAbs:_vc.gapAbs,
     inputs:[
       ['Brand',brand||'—'],['Model',model||'—'],['Year',year||'—'],
       g('trim')?.value?['Trim',g('trim').value]:null,
@@ -9076,39 +9307,48 @@ function buildResult(r,brand,model,year,mileage,asking){
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
   const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai);
   const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,'','',accVal,ownVal,warVal);
-  // ── Negotiation: prefer v30 model output, fall back to local buildNegoGuide ──
-  const _modelNego = r.negotiation_range?.buyer?.open ? (() => {
-    const bn = r.negotiation_range.buyer;
-    const sn = r.negotiation_range.seller;
-    return {
-      offer: bn.open,
-      close: bn.target,
-      walk:  bn.walk_away,
-      room:  askN ? Math.max(0, Math.round((1 - bn.open / askN) * 100)) : 0,
-      tactic: r.negotiation_range.zone_of_agreement
-        ? `Zone of agreement: AED ${(r.negotiation_range.zone_of_agreement.low||0).toLocaleString()} – AED ${(r.negotiation_range.zone_of_agreement.high||0).toLocaleString()}. ${r.negotiation_range.zone_of_agreement.note||''}`
-        : '',
-    };
-  })() : null;
-  const nego = _modelNego || buildNegoGuide(askN,avg,condVal,accVal);
-  const cost=buildOwnershipCost(askN||avg,deprAmt,carYear,r.rtaFees);
 
-  // ── Days to sell: prefer v30 model string, fall back to bracket logic ──────
+  // ── v42 COMBINATION ENGINE: deterministic frontend valuation ─────────────
+  const _vc = ksComputeValuation(r, {
+    fsh:          qs.fsh,
+    singleOwner:  qs.singleOwner,
+    accident:     qs.accident,
+    warranty:     qs.warranty,
+    condition:    condVal,
+    spec:         specVal,
+    mileage:      km,
+    askingPrice:  askN,
+    carYear:      carYear,
+    carLabel:     `${year} ${brand}${model?' '+model:''}`,
+  });
+
+  // Expose as named variables used throughout buildResult
+  const handshake     = _vc.handshake;
+  const rangeMin      = _vc.mktLow;
+  const rangeMax      = _vc.mktHigh;
+  const sweetSpot     = _vc.targetClose;
+
+  // Negotiation anchors from engine
+  const nego = {
+    offer:  _vc.openingOffer,
+    close:  _vc.targetClose,
+    walk:   _vc.walkAway,
+    room:   askN ? Math.max(0, Math.round((1 - _vc.openingOffer / askN) * 100)) : 0,
+    tactic: _vc.bestMoveRationale,
+    script: _vc.negoScript,
+  };
+
+  // Running costs + depreciation from engine (properly separated)
+  const cost = {
+    ins:     _vc.runningCosts.insurance,
+    maint:   _vc.runningCosts.maintenance,
+    rtaOnly: _vc.runningCosts.rta + _vc.runningCosts.insurance,
+    total:   _vc.runningCosts.total,
+    deprAmt: _vc.depreciation.annual,
+    fuelEst: _vc.runningCosts.fuel / 12,
+  };
+
   const _modelDts = r.days_to_sell_estimate || '';
-
-  // ── Sweet spot from v30 model (3% below market mid) ──────────────────────
-  const sweetSpot = r.sweet_spot || Math.round(avg * 0.97 / 500) * 500;
-
-  // ── Handshake defined HERE — required by _deprRows before it is computed ──
-  // v30: adjusted_price IS the handshake (all stages already applied server-side)
-  // v29 fallback: Stage 5 exact values — excellent +5%, very good +3%, fair -5%, poor -12%, accident -8%
-  const condAdj = condVal==='Excellent'?.05:condVal==='Very Good'?.03:condVal==='Fair'?-.05:condVal==='Poor'?-.12:0;
-  const accAdj  = (accVal==='minor'||accVal==='major'||qs.accident===true)?-.08:0;
-  const _rawHandshake = Math.round(avg*(1+condAdj+accAdj)/500)*500||avg;
-  const _hasNegativeRisk = accAdj < 0 || condAdj < 0 || qs.fsh===false || (g('spec')?.value && g('spec').value!=='GCC' && g('spec').value!=='GCC Spec');
-  // If v30 model ran, avg IS already the adjusted_price — use it directly as handshake
-  const handshake = (r._model === 'v30-6stage') ? avg
-    : (_hasNegativeRisk ? Math.min(_rawHandshake, avg) : _rawHandshake);
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
   // r.depreciation is a 3-element array of AED values from applyValuationMath()
@@ -9205,8 +9445,6 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Sticker = asking price (if provided) or null
   const stickerPrice = askN||null;
   // Negotiation = smart entry point: slightly below lower end of range
-  const rangeMin = low||Math.round(avg*.82);
-  const rangeMax = high||Math.round(avg*1.18);
   const negoEntry = nego ? nego.offer : Math.round(avg * 0.93 / 500) * 500;
   // Market position % for the bar — based on handshake vs full range
   const pirRng = rangeMax - rangeMin;
@@ -9522,9 +9760,10 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ═══ S5: PRICE COMPARISON ═══ -->
   ${(()=>{
     const _sp  = r.stickerPrice || askN || 0;
-    const _hs  = handshake || avg || 0;
-    const _lo  = low  || rangeMin || 0;
-    const _hi  = high || rangeMax || 0;
+    const _hs  = _vc ? _vc.handshake : (handshake || avg || 0);
+    const _lo  = _vc ? _vc.mktLow : (low || rangeMin || 0);
+    const _hi  = _vc ? _vc.mktHigh : (high || rangeMax || 0);
+
     const _gap = _sp && _hs ? (_sp - _hs) : null;
     const _gapAbs  = _gap !== null ? Math.abs(_gap) : 0;
     const _gapPct  = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
@@ -9582,29 +9821,20 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ═══ S6: VERDICT + KEY POINTS ═══ -->
   ${(()=>{
-    // Canonical sticker: use API-processed value first, then form input
-    const _sp = r.stickerPrice || askN || 0;
-    const _hs = handshake || avg || 0;
-    const _gap = (_sp && _hs) ? (_sp - _hs) : null;
-    const _gapAbs = _gap !== null ? Math.abs(_gap) : 0;
-    const _gapPct = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
-    const _within5 = _gap !== null && _gapAbs / (_hs||1) <= 0.05;
-
-    let _vLabel, _vColor, _vBg, _vBorder, _vEmoji, _vExplain;
-
-    if(!_sp){
-      _vLabel='NO STICKER'; _vEmoji='—'; _vColor='#6B7280'; _vBg='rgba(107,114,128,0.07)'; _vBorder='#E5E7EB';
-      _vExplain='No asking price was entered. Enter a sticker price to get a verdict.';
-    } else if(_within5){
-      _vLabel='FAIRLY PRICED'; _vEmoji='🟡'; _vColor='#B45309'; _vBg='rgba(217,119,6,0.07)'; _vBorder='#FCD34D';
-      _vExplain=`Sticker AED ${_sp.toLocaleString()} is within 5% of Handshake AED ${_hs.toLocaleString()}. Both parties get a fair deal. No significant advantage or disadvantage for either side. Transaction is balanced.`;
-    } else if(_gap > 0){
-      _vLabel='OVERPRICED'; _vEmoji='🔴'; _vColor='#DC2626'; _vBg='rgba(220,38,38,0.07)'; _vBorder='#FCA5A5';
-      _vExplain=`Sticker AED ${_sp.toLocaleString()} is AED ${_gapAbs.toLocaleString()} above Handshake AED ${_hs.toLocaleString()}. Buyer pays ${_gapPct}% more than fair market value. Seller benefits from the higher asking price. Risk: Car may sit unsold for 90+ days at this price.`;
-    } else {
-      _vLabel='UNDERPRICED'; _vEmoji='🟢'; _vColor='#15803D'; _vBg='rgba(21,163,74,0.07)'; _vBorder='#6EE7B7';
-      _vExplain=`Sticker AED ${_sp.toLocaleString()} is AED ${_gapAbs.toLocaleString()} below Handshake AED ${_hs.toLocaleString()}. Buyer is paying ${_gapPct}% below fair market value — a strong deal. Seller loses potential AED ${_gapAbs.toLocaleString()}. Risk: Car will sell very quickly — seller misses out on value.`;
-    }
+    // Use v42 engine values directly
+    const _sp       = r.stickerPrice || askN || 0;
+    const _hs       = _vc.handshake;
+    const _vLabel   = _vc.verdict;
+    const _vEmoji   = _vc.verdictEmoji;
+    const _vColor   = _vc.verdictColor;
+    const _vBg      = _vc.verdictBg;
+    const _vBorder  = _vc.verdictBorder;
+    const _vExplain = _vc.verdictExplain;
+    const _vStrat   = _vc.verdictStrategy;
+    const _gapAbs   = _vc.gapAbs;
+    const _gapPct   = _vc.gapPct;
+    const _within5  = _vc.within5;
+    const _gap      = _vc.gap;
 
     // ── KEY POINTS (Strengths / Cautions / Risk Flags) ──
     const _kpHtml = `
@@ -9640,18 +9870,27 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ═══ S7: WHAT YOU SHOULD DO NOW ═══ -->
   ${(()=>{
-    const _hs   = handshake || avg || 0;
-    // Buyer: open BELOW handshake, close AT handshake, walk away ABOVE handshake
-    const _open = nego?.offer || Math.round((_hs*0.93)/500)*500;
-    const _maxPay = nego?.walk || Math.round((_hs*1.05)/500)*500; // max buyer will pay
-    // Seller: list at upper range, accept at handshake
-    const _rLo = rangeMin || Math.round(_hs*.95/500)*500;
-    const _rHi = rangeMax || Math.round(_hs*1.08/500)*500;
-    // Days — ensure "days" unit is always present
+    // All values from v42 engine
+    const _hs    = _vc.handshake;
+    const _open  = _vc.openingOffer;
+    const _target= _vc.targetClose;
+    const _walk  = _vc.walkAway;
+    const _lo    = _vc.mktLow;
+    const _hi    = _vc.mktHigh;
+    const _isOver= _vc.gap !== null && _vc.gap > 0 && !_vc.within5;
+    const _isUnder= _vc.gap !== null && _vc.gap < 0 && !_vc.within5;
     const _dtsRaw = r.days_to_sell_estimate || _modelDts || '';
     const _dts = _dtsRaw
       ? (_dtsRaw.toString().toLowerCase().includes('day') ? _dtsRaw : _dtsRaw + ' days')
       : '14–30 days';
+
+    // Buyer line: context-aware based on verdict
+    const _buyerLine = _isUnder
+      ? `Open at AED ${_open.toLocaleString()} to test urgency. Target: AED ${_target.toLocaleString()} (sticker — already a strong deal). Walk away price: AED ${_walk.toLocaleString()} — do not lose this car.`
+      : `Open at AED ${_open.toLocaleString()} (below Market Low). Target close: AED ${_target.toLocaleString()} (Handshake). Walk away if seller won't reach AED ${_walk.toLocaleString()}.`;
+
+    // Seller line
+    const _sellerLine = `Realistic price range: AED ${_lo.toLocaleString()} – AED ${_hi.toLocaleString()}. Handshake at AED ${_hs.toLocaleString()}. Expect ${_dts} to sell at fair market price.`;
 
     return `
     <div class="ks-section">
@@ -9660,11 +9899,11 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div class="ks-s7-row ks-s7-buyer">
           <span style="font-size:.72rem;font-weight:800;color:#1E40AF;white-space:nowrap;padding-top:1px;">IF BUYER</span>
-          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">Open at AED ${_open.toLocaleString()}. Target close at Handshake — AED ${_hs.toLocaleString()}. Walk away if seller won't go below AED ${_maxPay.toLocaleString()}.</span>
+          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">${_buyerLine}</span>
         </div>
         <div class="ks-s7-row ks-s7-seller">
           <span style="font-size:.72rem;font-weight:800;color:#B45309;white-space:nowrap;padding-top:1px;">IF SELLER</span>
-          <span style="font-size:.74rem;color:#4A2E08;line-height:1.5;">Realistic price is AED ${_rLo.toLocaleString()} – ${_rHi.toLocaleString()}. Expect ${_dts} to sell at fair market price.</span>
+          <span style="font-size:.74rem;color:#4A2E08;line-height:1.5;">${_sellerLine}</span>
         </div>
       </div>
     </div>`;
@@ -9703,9 +9942,10 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ═══ S5: PRICE COMPARISON ═══ -->
   ${(()=>{
     const _sp  = r.stickerPrice || askN || 0;
-    const _hs  = handshake || avg || 0;
-    const _lo  = low  || rangeMin || 0;
-    const _hi  = high || rangeMax || 0;
+    const _hs  = _vc ? _vc.handshake : (handshake || avg || 0);
+    const _lo  = _vc ? _vc.mktLow : (low || rangeMin || 0);
+    const _hi  = _vc ? _vc.mktHigh : (high || rangeMax || 0);
+
     const _gap = _sp && _hs ? (_sp - _hs) : null;
     const _gapAbs  = _gap !== null ? Math.abs(_gap) : 0;
     const _gapPct  = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
@@ -9763,29 +10003,20 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ═══ S6: VERDICT + KEY POINTS ═══ -->
   ${(()=>{
-    // Canonical sticker: use API-processed value first, then form input
-    const _sp = r.stickerPrice || askN || 0;
-    const _hs = handshake || avg || 0;
-    const _gap = (_sp && _hs) ? (_sp - _hs) : null;
-    const _gapAbs = _gap !== null ? Math.abs(_gap) : 0;
-    const _gapPct = (_gap !== null && _hs > 0) ? Math.round(Math.abs(_gap)/_hs*100) : 0;
-    const _within5 = _gap !== null && _gapAbs / (_hs||1) <= 0.05;
-
-    let _vLabel, _vColor, _vBg, _vBorder, _vEmoji, _vExplain;
-
-    if(!_sp){
-      _vLabel='NO STICKER'; _vEmoji='—'; _vColor='#6B7280'; _vBg='rgba(107,114,128,0.07)'; _vBorder='#E5E7EB';
-      _vExplain='No asking price was entered. Enter a sticker price to get a verdict.';
-    } else if(_within5){
-      _vLabel='FAIRLY PRICED'; _vEmoji='🟡'; _vColor='#B45309'; _vBg='rgba(217,119,6,0.07)'; _vBorder='#FCD34D';
-      _vExplain=`Sticker AED ${_sp.toLocaleString()} is within 5% of Handshake AED ${_hs.toLocaleString()}. Both parties get a fair deal. No significant advantage or disadvantage for either side. Transaction is balanced.`;
-    } else if(_gap > 0){
-      _vLabel='OVERPRICED'; _vEmoji='🔴'; _vColor='#DC2626'; _vBg='rgba(220,38,38,0.07)'; _vBorder='#FCA5A5';
-      _vExplain=`Sticker AED ${_sp.toLocaleString()} is AED ${_gapAbs.toLocaleString()} above Handshake AED ${_hs.toLocaleString()}. Buyer pays ${_gapPct}% more than fair market value. Seller benefits from the higher asking price. Risk: Car may sit unsold for 90+ days at this price.`;
-    } else {
-      _vLabel='UNDERPRICED'; _vEmoji='🟢'; _vColor='#15803D'; _vBg='rgba(21,163,74,0.07)'; _vBorder='#6EE7B7';
-      _vExplain=`Sticker AED ${_sp.toLocaleString()} is AED ${_gapAbs.toLocaleString()} below Handshake AED ${_hs.toLocaleString()}. Buyer is paying ${_gapPct}% below fair market value — a strong deal. Seller loses potential AED ${_gapAbs.toLocaleString()}. Risk: Car will sell very quickly — seller misses out on value.`;
-    }
+    // Use v42 engine values directly
+    const _sp       = r.stickerPrice || askN || 0;
+    const _hs       = _vc.handshake;
+    const _vLabel   = _vc.verdict;
+    const _vEmoji   = _vc.verdictEmoji;
+    const _vColor   = _vc.verdictColor;
+    const _vBg      = _vc.verdictBg;
+    const _vBorder  = _vc.verdictBorder;
+    const _vExplain = _vc.verdictExplain;
+    const _vStrat   = _vc.verdictStrategy;
+    const _gapAbs   = _vc.gapAbs;
+    const _gapPct   = _vc.gapPct;
+    const _within5  = _vc.within5;
+    const _gap      = _vc.gap;
 
     // ── KEY POINTS (Strengths / Cautions / Risk Flags) ──
     const _kpHtml = `
@@ -9821,18 +10052,27 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ═══ S7: WHAT YOU SHOULD DO NOW ═══ -->
   ${(()=>{
-    const _hs   = handshake || avg || 0;
-    // Buyer: open BELOW handshake, close AT handshake, walk away ABOVE handshake
-    const _open = nego?.offer || Math.round((_hs*0.93)/500)*500;
-    const _maxPay = nego?.walk || Math.round((_hs*1.05)/500)*500; // max buyer will pay
-    // Seller: list at upper range, accept at handshake
-    const _rLo = rangeMin || Math.round(_hs*.95/500)*500;
-    const _rHi = rangeMax || Math.round(_hs*1.08/500)*500;
-    // Days — ensure "days" unit is always present
+    // All values from v42 engine
+    const _hs    = _vc.handshake;
+    const _open  = _vc.openingOffer;
+    const _target= _vc.targetClose;
+    const _walk  = _vc.walkAway;
+    const _lo    = _vc.mktLow;
+    const _hi    = _vc.mktHigh;
+    const _isOver= _vc.gap !== null && _vc.gap > 0 && !_vc.within5;
+    const _isUnder= _vc.gap !== null && _vc.gap < 0 && !_vc.within5;
     const _dtsRaw = r.days_to_sell_estimate || _modelDts || '';
     const _dts = _dtsRaw
       ? (_dtsRaw.toString().toLowerCase().includes('day') ? _dtsRaw : _dtsRaw + ' days')
       : '14–30 days';
+
+    // Buyer line: context-aware based on verdict
+    const _buyerLine = _isUnder
+      ? `Open at AED ${_open.toLocaleString()} to test urgency. Target: AED ${_target.toLocaleString()} (sticker — already a strong deal). Walk away price: AED ${_walk.toLocaleString()} — do not lose this car.`
+      : `Open at AED ${_open.toLocaleString()} (below Market Low). Target close: AED ${_target.toLocaleString()} (Handshake). Walk away if seller won't reach AED ${_walk.toLocaleString()}.`;
+
+    // Seller line
+    const _sellerLine = `Realistic price range: AED ${_lo.toLocaleString()} – AED ${_hi.toLocaleString()}. Handshake at AED ${_hs.toLocaleString()}. Expect ${_dts} to sell at fair market price.`;
 
     return `
     <div class="ks-section">
@@ -9841,11 +10081,11 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div class="ks-s7-row ks-s7-buyer">
           <span style="font-size:.72rem;font-weight:800;color:#1E40AF;white-space:nowrap;padding-top:1px;">IF BUYER</span>
-          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">Open at AED ${_open.toLocaleString()}. Target close at Handshake — AED ${_hs.toLocaleString()}. Walk away if seller won't go below AED ${_maxPay.toLocaleString()}.</span>
+          <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">${_buyerLine}</span>
         </div>
         <div class="ks-s7-row ks-s7-seller">
           <span style="font-size:.72rem;font-weight:800;color:#B45309;white-space:nowrap;padding-top:1px;">IF SELLER</span>
-          <span style="font-size:.74rem;color:#4A2E08;line-height:1.5;">Realistic price is AED ${_rLo.toLocaleString()} – ${_rHi.toLocaleString()}. Expect ${_dts} to sell at fair market price.</span>
+          <span style="font-size:.74rem;color:#4A2E08;line-height:1.5;">${_sellerLine}</span>
         </div>
       </div>
     </div>`;
@@ -9853,23 +10093,24 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- SECTION 8: BEST MOVE -->
   <div class="ks-section">
-    <div class="ks-section-eyebrow">Negotiation Guidance</div>
+    <div class="ks-section-eyebrow">Section 8 · Negotiation</div>
     <div class="ks-section-title">Best Move</div>
+    ${_vc.gap!==null&&!_vc.within5?`<div style="font-size:.68rem;padding:7px 10px;border-radius:7px;background:${_vc.verdictBg};border:1px solid ${_vc.verdictBorder};color:${_vc.verdictColor};font-weight:700;margin-bottom:10px;">${_vc.verdictEmoji} ${_vc.verdict} — ${_vc.bestMoveRationale}</div>`:''}
     <div class="ks-nego-cols">
       <div class="ks-nego-col ks-nego-open">
         <div class="ks-nego-col-label">Open With</div>
-        <div class="ks-nego-col-val" style="color:#1E40AF">AED ${(nego?.offer||Math.round(avg*0.97/500)*500).toLocaleString()}</div>
-        <div class="ks-nego-col-sub">Opening offer</div>
+        <div class="ks-nego-col-val" style="color:#1E40AF">AED ${_vc.openingOffer.toLocaleString()}</div>
+        <div class="ks-nego-col-sub">Below Market Low — tests motivation</div>
       </div>
       <div class="ks-nego-col ks-nego-settle">
         <div class="ks-nego-col-label">Settle Here</div>
-        <div class="ks-nego-col-val" style="color:#15803D">AED ${(nego?.close||handshake).toLocaleString()}</div>
-        <div class="ks-nego-col-sub">Target close price</div>
+        <div class="ks-nego-col-val" style="color:#15803D">AED ${_vc.targetClose.toLocaleString()}</div>
+        <div class="ks-nego-col-sub">${_vc.gap!==null&&_vc.gap<0&&!_vc.within5?'Sticker — already fair win':'Handshake — fair for both'}</div>
       </div>
       <div class="ks-nego-col ks-nego-walk">
         <div class="ks-nego-col-label">Walk Away At</div>
-        <div class="ks-nego-col-val" style="color:#DC2626">AED ${(nego?.walk||Math.round(avg*1.04/500)*500).toLocaleString()}</div>
-        <div class="ks-nego-col-sub">Walk-away point</div>
+        <div class="ks-nego-col-val" style="color:#DC2626">AED ${_vc.walkAway.toLocaleString()}</div>
+        <div class="ks-nego-col-sub">${_vc.gap!==null&&_vc.gap<0&&!_vc.within5?'Sticker — do not lose this deal':'Don\'t overpay for fair'}</div>
       </div>
     </div>
     ${(()=>{
@@ -10018,23 +10259,15 @@ function buildResult(r,brand,model,year,mileage,asking){
     const _snap= r.listings_snapshot || [];
     const _comp= comp || r.listingsFound || 0;
     // Build deduction rows from adjustments
-    const _deductions = [];
-    if(_adj.fsh === false || _adj.fsh === 'no' || (r.ai?.key_factors||[]).some(f=>f&&f.toLowerCase().includes('service')))
-      _deductions.push({label:'No full service history', amt:-1000});
-    if(_adj.single_owner === false || _adj.single_owner === 'no' || (r.ai?.key_factors||[]).some(f=>f&&f.toLowerCase().includes('owner')))
-      _deductions.push({label:'Multiple owners', amt:-500});
-    if(!_adj.warranty || _adj.warranty==='none' || _adj.warranty===false)
-      _deductions.push({label:'No warranty', amt:-500});
-    if(_adj.accident === true || _adj.accident === 'yes')
-      _deductions.push({label:'Accident history', amt:-2000});
-    if(_adj.compound_risk_flag)
-      _deductions.push({label:'Compound risk penalty', amt:-Math.round(_hs*0.05/500)*500});
-    const _base  = _hs - _deductions.reduce((s,d)=>s+d.amt,0);
-    const _deducTotal = _deductions.reduce((s,d)=>s+d.amt,0);
+    // Use v42 engine adjustments — transparent, computed from market range
+    const _deductions = _vc.adjustments;
+    const _posAdjs = _deductions.filter(a=>a.dir==='pos');
+    const _negAdjs = _deductions.filter(a=>a.dir==='neg');
+    const _base  = _vc.mktLow + Math.round((_vc.mktHigh-_vc.mktLow)*0.5/500)*500; // midpoint start
     const _deducRows = _deductions.map(d=>`
       <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed rgba(0,0,0,0.06);">
-        <span style="font-size:.74rem;color:#374151;">− ${d.label}</span>
-        <span style="font-size:.74rem;font-weight:700;color:#DC2626;">− AED ${Math.abs(d.amt).toLocaleString()}</span>
+        <span style="font-size:.74rem;color:#374151;">${d.dir==='pos'?'+':'−'} ${d.label}</span>
+        <span style="font-size:.74rem;font-weight:700;color:${d.dir==='pos'?'#15803D':'#DC2626'};">${d.dir==='pos'?'+':'−'} AED ${Math.abs(d.amt).toLocaleString()}</span>
       </div>`).join('');
 
     return `
@@ -10043,8 +10276,8 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="ks-section-title" style="margin-bottom:12px;">Price Breakdown</div>
       <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;padding:14px 16px;font-family:'Exo 2',monospace;">
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #E5E7EB;margin-bottom:4px;">
-          <span style="font-size:.76rem;color:#6B7280;">Base from ${_comp>0?_comp+' comparable':''} live listings</span>
-          <span style="font-size:.76rem;font-weight:700;color:#1F2937;">AED ${_base.toLocaleString()}</span>
+          <span style="font-size:.76rem;color:#6B7280;">Market range: AED ${_vc.mktLow.toLocaleString()} – AED ${_vc.mktHigh.toLocaleString()}${_comp>0?' ('+_comp+' listings)':''}</span>
+          <span style="font-size:.76rem;font-weight:700;color:#6B7280;">Mid: AED ${_base.toLocaleString()}</span>
         </div>
         ${_deducRows||'<div style="padding:5px 0;font-size:.73rem;color:#9CA3AF;font-style:italic;">No deductions applied — all factors positive</div>'}
         <div style="border-top:2px solid #1F2937;margin:10px 0 6px;"></div>
@@ -10131,16 +10364,11 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ─── SECTION 11: 3-YEAR VALUE FORECAST ─── -->
   ${(()=>{
-    const _hs = handshake || avg || 0;
+    // Use v42 engine depreciation forecast (separated from running costs)
+    const _vals = _vc.depreciation.forecast;
+    const _deprRate = _vc.depreciation.rate;
+    const _hs = _vc.handshake;
     const _cy = new Date().getFullYear();
-    // Use API depreciation rows if available; else apply 13% flat
-    const _deprRate = 0.13;
-    const _vals = [
-      { yr: _cy,   val: _hs },
-      { yr: _cy+1, val: _deprRows[0]?.endVal || Math.round(_hs*(1-_deprRate)/500)*500 },
-      { yr: _cy+2, val: _deprRows[1]?.endVal || Math.round(_hs*(1-_deprRate)**2/500)*500 },
-      { yr: _cy+3, val: _deprRows[2]?.endVal || Math.round(_hs*(1-_deprRate)**3/500)*500 },
-    ];
     const _maxV = _vals[0].val;
     const _minV = _vals[_vals.length-1].val;
     const _rangeLo = Math.round(_minV*0.88/500)*500;
@@ -10174,6 +10402,21 @@ function buildResult(r,brand,model,year,mileage,asking){
         </div>
         <div style="margin-top:8px;font-size:.62rem;color:#9CA3AF;line-height:1.5;font-style:italic;">Disclaimer: Estimates only. Actual value depends on future condition, maintenance, and market.</div>
       </div>
+      <!-- Running Costs — separated from depreciation (cash out vs value lost) -->
+      <div style="margin-top:12px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:12px 14px;">
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#15803D;margin-bottom:8px;">💵 Year 1 Running Costs (Cash Out)</div>
+        ${[
+          ['RTA Registration + Transfer','AED '+_vc.runningCosts.rta.toLocaleString()],
+          ['Insurance (est.)','AED '+_vc.runningCosts.insurance.toLocaleString()],
+          ['Maintenance (est.)','AED '+_vc.runningCosts.maintenance.toLocaleString()],
+          ['Fuel (monthly est. × 12)','AED '+_vc.runningCosts.fuel.toLocaleString()],
+        ].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.72rem;color:#374151;border-bottom:1px solid rgba(0,0,0,0.05)"><span>${l}</span><span style="font-weight:700">${v}</span></div>`).join('')}
+        <div style="display:flex;justify-content:space-between;padding:6px 0 0;font-size:.78rem;font-weight:900;color:#15803D;"><span>Total Year 1</span><span>AED ${_vc.runningCosts.total.toLocaleString()}</span></div>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:7px;background:rgba(220,38,38,0.05);border:1px solid #FCA5A5;">
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#DC2626;margin-bottom:4px;">📉 Annual Depreciation (Value Lost — not a cash cost)</div>
+        <div style="font-size:.76rem;color:#374151;">This car loses approximately <strong style="color:#DC2626;">AED ${_vc.depreciation.annual.toLocaleString()}</strong> in value per year (${Math.round(_vc.depreciation.rate*100)}% Class ${_vc.depreciation.class}). This is asset value reduction — not money you spend monthly.</div>
+      </div>
     </div>`;
   })()}
 
@@ -10186,7 +10429,8 @@ function buildResult(r,brand,model,year,mileage,asking){
     const _owTxt = qs.singleOwner===false ? 'multiple owners' : qs.singleOwner===true ? 'single owner' : '';
     const _accTxt= qs.accident===true ? 'with accident history' : '';
     const _factors=[_fshTxt,_owTxt,_accTxt].filter(Boolean).join(', ');
-    const _script= r.hagglingScript ||
+    // v42: scenario-aware script from engine
+    const _script = _vc.negoScript || r.hagglingScript ||
       `"Your ${year} ${brand}${model?' '+model:''} at ${_km.toLocaleString()} km${_factors?' with '+_factors:''} — UAE market handshake is AED ${_hs.toLocaleString()}. My offer is AED ${_open.toLocaleString()} based on similar ${specVal||'GCC'} listings."`;
 
     return `
@@ -11225,7 +11469,9 @@ function buildShareMsg(platform){
   const sticker = d.askingPrice || 0;
   const gap     = sticker && hs ? sticker - hs : 0;
   const gapAbs  = Math.abs(gap);
-  const verdict = !sticker ? '' : gap > hs*0.05 ? 'OVERPRICED 🔴' : gap < -(hs*0.05) ? 'UNDERPRICED 🟢' : 'FAIRLY PRICED 🟡';
+  // Use engine verdict if available (more accurate)
+  const verdict = d.verdict ? d.verdict + (d.verdict==='OVERPRICED'?' 🔴':d.verdict==='UNDERPRICED'?' 🟢':' 🟡')
+    : (!sticker ? '' : gap > hs*0.05 ? 'OVERPRICED 🔴' : gap < -(hs*0.05) ? 'UNDERPRICED 🟢' : 'FAIRLY PRICED 🟡');
   const gapLine = gap > 0
     ? `That's AED ${gapAbs.toLocaleString()} overpriced.`
     : gap < 0
