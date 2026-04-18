@@ -6775,6 +6775,30 @@
   .ks-vl-row-label { flex:0 0 120px; }
 }
 
+/* ── KS FREE REPORT: S5 Price Cards responsive layout ── */
+.ks-s5-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media(max-width:600px) {
+  .ks-s5-cards { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+}
+
+/* ── KS FREE REPORT: S7 Buyer/Seller action rows ── */
+.ks-s7-row {
+  padding: 10px 13px;
+  border-radius: 9px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.ks-s7-buyer { border: 1.5px solid #BFDBFE; background: rgba(30,64,175,0.05); }
+.ks-s7-seller { border: 1.5px solid #FDE68A; background: rgba(180,83,9,0.05); }
+@media(max-width:360px) {
+  .ks-s7-row { gap: 6px; padding: 8px 10px; }
+}
+
 </style>
 <body>
 
