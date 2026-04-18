@@ -9289,8 +9289,8 @@ function buildResult(r,brand,model,year,mileage,asking){
     ref:ref.label,carName:`${year} ${brand}${model?' '+model:''}`,
     avg,low,high,comp,conf:r.confidence||0,askingPrice:askN,marketability:mkt,ai,
     aiCls:ai?aiRatingClass(ai.deal_rating):'neu',
-    // v42 engine values for share messages
-    handshake:_vc.handshake, verdict:_vc.verdict, gapAbs:_vc.gapAbs,
+    // v42 engine values — populated after _vc computed below
+    handshake:0, verdict:'', gapAbs:0,
     inputs:[
       ['Brand',brand||'—'],['Model',model||'—'],['Year',year||'—'],
       g('trim')?.value?['Trim',g('trim').value]:null,
@@ -9349,6 +9349,11 @@ function buildResult(r,brand,model,year,mileage,asking){
   };
 
   const _modelDts = r.days_to_sell_estimate || '';
+
+  // Update _lastValuationData with engine values (now that _vc is ready)
+  _lastValuationData.handshake = _vc.handshake;
+  _lastValuationData.verdict   = _vc.verdict;
+  _lastValuationData.gapAbs    = _vc.gapAbs;
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
   // r.depreciation is a 3-element array of AED values from applyValuationMath()
