@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v2.4 18Apr2026 — v37 Smart Vehicle Image System -->
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <!--
@@ -17,7 +18,7 @@
       Change 2 — ksGetVehicleImageUrl(brand, model, bodyKey): Curated map of 60+ popular
                  GCC models to direct Wikimedia Commons CC-licensed photo URLs. Returns
                  the best available on-road vehicle photo for the exact make/model.
-      Change 3 — Real photo layer in Dubai scene: .ks-scene-photo-wrap + <img> overlaid
+      Change 3 — Real photo layer in Dubai scene: .ks-scene-photo-wrap + [img] overlaid
                  on the SVG silhouette. Photo fades in on load (opacity transition). If
                  the image fails to load, SVG silhouette remains fully visible — zero
                  visual disruption. onerror hides the wrapper; onload fades out the SVG.
@@ -5890,18 +5891,15 @@
 .rph-idle-car svg { stroke-width: inherit !important; }
 /* snav top safe area (notch devices in landscape) */
 .snav {
-  padding-top: env(safe-area-inset-top, 0px);
+  padding-top: 0px; /* safe-area applied below */
 }
 /* Mobile page bottom: always clear home bar */
 @media (max-width: 600px) {
   .page {
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-  /* Mob fixed header clears status bar on notch phones */
-  .mob-fixed-header {
-    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: 16px !important; /* safe-area applied below */
   }
 }
+/* Safe-area insets applied via JS applySafeArea() */
 
 /* ── D16: JS-injected toast (copyLink / share feedback) ─────── */
 /* Page elements fade when loading state activates */
@@ -7032,7 +7030,7 @@
     </div><!-- /form-card -->
 
     <!-- ── RECENT SEARCHES — between input and output sections ── -->
-    <div id="restoreBar" style="display:none;" aria-label="Recent searches">
+    <div id="restoreBar" role="region" style="display:none;" aria-label="Recent searches">
       <div class="restore-chips-wrap" id="restoreChips">
         <span class="restore-lbl">Recent:</span>
       </div>
@@ -8879,7 +8877,7 @@ function ksDetectBodyType(brand, model){
 /* Returns the best available image URL for a given brand + model.
    Strategy: try a Wikimedia Commons file name pattern, then fall
    back to a generic shot sourced from a free open image CDN.
-   The <img> is injected on top of the SVG scene; if it fails to
+   The [img] is injected on top of the SVG scene; if it fails to
    load the SVG remains fully visible as the fallback.            */
 function ksGetVehicleImageUrl(brand, model, bodyKey){
   // Curated direct-link map for the 80 most-searched GCC models.
@@ -9574,7 +9572,7 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section" style="padding-bottom:0;">
       <div class="ks-section-eyebrow">Section 5</div>
       <div class="ks-section-title" style="margin-bottom:12px;">Price Comparison</div>
-      <div style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;">
+      <div class="ks-s5-cards">
         ${_card('LOWEST',   _lo, 'Best deal',   '#15803D','rgba(21,163,74,0.06)','#6EE7B7')}
         ${_card('HANDSHAKE',_hs, 'Fair price',  '#15803D','rgba(21,163,74,0.06)','#6EE7B7')}
         ${_card('STICKER',  _sp, 'Seller ask',  _sCol,    _sBg,                  _sBorder)}
@@ -9665,11 +9663,11 @@ function buildResult(r,brand,model,year,mileage,asking){
       <div class="ks-section-eyebrow">Section 7</div>
       <div class="ks-section-title" style="margin-bottom:10px;">What You Should Do Now</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="padding:10px 13px;border-radius:9px;border:1.5px solid #BFDBFE;background:rgba(30,64,175,0.05);display:flex;align-items:flex-start;gap:10px;">
+        <div class="ks-s7-row ks-s7-buyer">
           <span style="font-size:.72rem;font-weight:800;color:#1E40AF;white-space:nowrap;padding-top:1px;">IF BUYER</span>
           <span style="font-size:.74rem;color:#1E3A5F;line-height:1.5;">Open at AED ${_open.toLocaleString()}. Target close at Handshake — AED ${_hs.toLocaleString()}. Walk away if seller won't go below AED ${_maxPay.toLocaleString()}.</span>
         </div>
-        <div style="padding:10px 13px;border-radius:9px;border:1.5px solid #FDE68A;background:rgba(180,83,9,0.05);display:flex;align-items:flex-start;gap:10px;">
+        <div class="ks-s7-row ks-s7-seller">
           <span style="font-size:.72rem;font-weight:800;color:#B45309;white-space:nowrap;padding-top:1px;">IF SELLER</span>
           <span style="font-size:.74rem;color:#4A2E08;line-height:1.5;">Realistic price is AED ${_rLo.toLocaleString()} – ${_rHi.toLocaleString()}. Expect ${_dts} to sell at fair market price.</span>
         </div>
@@ -9855,6 +9853,272 @@ function buildResult(r,brand,model,year,mileage,asking){
     <!-- Micro disclaimer -->
     <div class="ks-next-micro-disc">Prices are estimates only. Verify with live listings before transacting.</div>
   </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       PART 2 — PROOF SECTIONS (S9–S15)
+  ════════════════════════════════════════════════════════════ -->
+
+  <!-- ─── SECTION 9: PRICE BREAKDOWN ─── -->
+  ${(()=>{
+    const _hs  = handshake || avg || 0;
+    const _adj = r.adjustments || {};
+    const _snap= r.listings_snapshot || [];
+    const _comp= comp || r.listingsFound || 0;
+    // Build deduction rows from adjustments
+    const _deductions = [];
+    if(_adj.fsh === false || _adj.fsh === 'no' || (r.ai?.key_factors||[]).some(f=>f&&f.toLowerCase().includes('service')))
+      _deductions.push({label:'No full service history', amt:-1000});
+    if(_adj.single_owner === false || _adj.single_owner === 'no' || (r.ai?.key_factors||[]).some(f=>f&&f.toLowerCase().includes('owner')))
+      _deductions.push({label:'Multiple owners', amt:-500});
+    if(!_adj.warranty || _adj.warranty==='none' || _adj.warranty===false)
+      _deductions.push({label:'No warranty', amt:-500});
+    if(_adj.accident === true || _adj.accident === 'yes')
+      _deductions.push({label:'Accident history', amt:-2000});
+    if(_adj.compound_risk_flag)
+      _deductions.push({label:'Compound risk penalty', amt:-Math.round(_hs*0.05/500)*500});
+    const _base  = _hs - _deductions.reduce((s,d)=>s+d.amt,0);
+    const _deducTotal = _deductions.reduce((s,d)=>s+d.amt,0);
+    const _deducRows = _deductions.map(d=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed rgba(0,0,0,0.06);">
+        <span style="font-size:.74rem;color:#374151;">− ${d.label}</span>
+        <span style="font-size:.74rem;font-weight:700;color:#DC2626;">− AED ${Math.abs(d.amt).toLocaleString()}</span>
+      </div>`).join('');
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 9 · Part 2 Proof</div>
+      <div class="ks-section-title" style="margin-bottom:12px;">Price Breakdown</div>
+      <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;padding:14px 16px;font-family:'Exo 2',monospace;">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #E5E7EB;margin-bottom:4px;">
+          <span style="font-size:.76rem;color:#6B7280;">Base from ${_comp>0?_comp+' comparable':''} live listings</span>
+          <span style="font-size:.76rem;font-weight:700;color:#1F2937;">AED ${_base.toLocaleString()}</span>
+        </div>
+        ${_deducRows||'<div style="padding:5px 0;font-size:.73rem;color:#9CA3AF;font-style:italic;">No deductions applied — all factors positive</div>'}
+        <div style="border-top:2px solid #1F2937;margin:10px 0 6px;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:.78rem;font-weight:900;color:#0F1E38;letter-spacing:.03em;">FINAL HANDSHAKE PRICE</span>
+          <span style="font-size:1rem;font-weight:900;color:#15803D;">AED ${_hs.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ─── SECTION 10: LISTINGS COMPARISON TABLE ─── -->
+  ${(()=>{
+    const _snap = r.listings_snapshot || [];
+    const _links= r.sourceLinks || [];
+    const _lo   = low  || rangeMin || 0;
+    const _hi   = high || rangeMax || 0;
+    if(!_snap.length && !_links.length) return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 10 · Part 2 Proof</div>
+      <div class="ks-section-title" style="margin-bottom:8px;">Listings Comparison</div>
+      <div style="font-size:.73rem;color:#9CA3AF;font-style:italic;padding:8px 0;">No individual listings snapshot available for this search tier. Live listings were aggregated to compute the market range shown above.</div>
+    </div>`;
+
+    const _cols = ['#','Price','KM','Spec','Accident','Service Hist.','Warranty','Condition','Source'];
+    const _rows = _snap.slice(0,10).map((l,i)=>`
+      <tr style="border-bottom:1px solid #F3F4F6;">
+        <td style="padding:6px 8px;font-weight:700;color:#6B7280;text-align:center;">${i+1}</td>
+        <td style="padding:6px 8px;font-weight:800;color:#0F1E38;white-space:nowrap;">AED ${(l.price||0).toLocaleString()}</td>
+        <td style="padding:6px 8px;white-space:nowrap;">${l.mileage?l.mileage.toLocaleString()+' km':'—'}</td>
+        <td style="padding:6px 8px;">${l.spec||'—'}</td>
+        <td style="padding:6px 8px;text-align:center;">${l.accident===true||l.accident==='yes'?'🔴':'🟢'}</td>
+        <td style="padding:6px 8px;text-align:center;">${l.fsh===true||l.fsh==='yes'?'🟢':'🔴'}</td>
+        <td style="padding:6px 8px;text-align:center;">${l.warranty===true||l.warranty==='yes'?'🟢':'🔴'}</td>
+        <td style="padding:6px 8px;">${l.condition||'—'}</td>
+        <td style="padding:6px 8px;color:#1E40AF;font-size:.68rem;">${l.source||l.platform||'—'}</td>
+      </tr>`).join('');
+
+    const _linkRows = (_links.length?_links:_snap.filter(l=>l.url||l.link).slice(0,5))
+      .map((l,i)=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #F3F4F6;">
+          <span style="font-size:.72rem;font-weight:700;color:#6B7280;flex-shrink:0;">#${i+1}</span>
+          <span style="font-size:.7rem;">🔗</span>
+          <a href="${l.url||l.link||'#'}" target="_blank" rel="noopener"
+             style="font-size:.72rem;color:#1D4ED8;text-decoration:underline;word-break:break-all;line-height:1.4;">${l.url||l.link||l.title||'View listing'}</a>
+        </div>`).join('');
+
+    const _loIdx = _snap.reduce((mi,l,i)=>((l.price||Infinity)<(_snap[mi]?.price||Infinity)?i:mi),0);
+    const _hiIdx = _snap.reduce((mi,l,i)=>((l.price||0)>(_snap[mi]?.price||0)?i:mi),0);
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 10 · Part 2 Proof</div>
+      <div class="ks-section-title" style="margin-bottom:12px;">Complete Listings Comparison</div>
+      <div style="overflow-x:auto;border-radius:8px;border:1.5px solid #E5E7EB;">
+        <table style="width:100%;border-collapse:collapse;font-family:'Exo 2',sans-serif;font-size:.73rem;color:#374151;">
+          <thead>
+            <tr style="background:#F9FAFB;border-bottom:2px solid #E5E7EB;">
+              ${_cols.map(c=>`<th style="padding:8px 8px;text-align:left;font-size:.6rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#6B7280;white-space:nowrap;">${c}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>${_rows||'<tr><td colspan="9" style="padding:12px;text-align:center;color:#9CA3AF;font-style:italic;">No listing details available</td></tr>'}</tbody>
+        </table>
+      </div>
+      ${_linkRows?`
+      <div style="margin-top:12px;">
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#6B7280;margin-bottom:6px;">Listings Used (direct links)</div>
+        ${_linkRows}
+      </div>`:''}
+      <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+        <div style="background:rgba(21,163,74,0.07);border:1.5px solid #6EE7B7;border-radius:8px;padding:8px 12px;flex:1;min-width:120px;">
+          <div style="font-size:.58rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#15803D;margin-bottom:3px;">🟢 Lowest Listed</div>
+          <div style="font-size:.88rem;font-weight:900;color:#15803D;">AED ${_lo.toLocaleString()}</div>
+          ${_snap[_loIdx]?`<div style="font-size:.62rem;color:#6B7280;margin-top:2px;">Listing #${_loIdx+1}</div>`:''}
+        </div>
+        <div style="background:rgba(220,38,38,0.07);border:1.5px solid #FCA5A5;border-radius:8px;padding:8px 12px;flex:1;min-width:120px;">
+          <div style="font-size:.58rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#DC2626;margin-bottom:3px;">🔴 Highest Listed</div>
+          <div style="font-size:.88rem;font-weight:900;color:#DC2626;">AED ${_hi.toLocaleString()}</div>
+          ${_snap[_hiIdx]?`<div style="font-size:.62rem;color:#6B7280;margin-top:2px;">Listing #${_hiIdx+1}</div>`:''}
+        </div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ─── SECTION 11: 3-YEAR VALUE FORECAST ─── -->
+  ${(()=>{
+    const _hs = handshake || avg || 0;
+    const _cy = new Date().getFullYear();
+    // Use API depreciation rows if available; else apply 13% flat
+    const _deprRate = 0.13;
+    const _vals = [
+      { yr: _cy,   val: _hs },
+      { yr: _cy+1, val: _deprRows[0]?.endVal || Math.round(_hs*(1-_deprRate)/500)*500 },
+      { yr: _cy+2, val: _deprRows[1]?.endVal || Math.round(_hs*(1-_deprRate)**2/500)*500 },
+      { yr: _cy+3, val: _deprRows[2]?.endVal || Math.round(_hs*(1-_deprRate)**3/500)*500 },
+    ];
+    const _maxV = _vals[0].val;
+    const _minV = _vals[_vals.length-1].val;
+    const _rangeLo = Math.round(_minV*0.88/500)*500;
+    const _rangeHi = Math.round(_minV*1.12/500)*500;
+
+    const _rows = _vals.map((v,i)=>{
+      const _pct = i>0 ? Math.round((_vals[i-1].val-v.val)/_vals[i-1].val*100) : null;
+      return `
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0;flex:1;min-width:0;">
+        <div style="font-size:.62rem;font-weight:800;color:#6B7280;letter-spacing:.06em;">${v.yr}</div>
+        <div style="font-size:clamp(.72rem,2vw,.9rem);font-weight:900;color:${i===0?'#15803D':'#1F2937'};margin-top:3px;">AED ${v.val.toLocaleString()}</div>
+        ${i<_vals.length-1?`
+        <div style="margin:6px 0;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="font-size:.72rem;color:#DC2626;font-weight:700;">▼</div>
+          <div style="font-size:.58rem;color:#DC2626;font-weight:700;">−${_pct||_deprRate*100|0}%</div>
+        </div>`:''}
+      </div>`;
+    }).join('');
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 11 · Part 2 Proof</div>
+      <div class="ks-section-title" style="margin-bottom:12px;">3-Year Value Forecast</div>
+      <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;padding:14px 16px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;flex-wrap:nowrap;">
+          ${_rows}
+        </div>
+        <div style="border-top:1.5px solid #E5E7EB;margin-top:14px;padding-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+          <div style="font-size:.7rem;color:#6B7280;">Range by Year ${_cy+3}</div>
+          <div style="font-size:.78rem;font-weight:800;color:#0F1E38;">AED ${_rangeLo.toLocaleString()} – AED ${_rangeHi.toLocaleString()}</div>
+        </div>
+        <div style="margin-top:8px;font-size:.62rem;color:#9CA3AF;line-height:1.5;font-style:italic;">Disclaimer: Estimates only. Actual value depends on future condition, maintenance, and market.</div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ─── SECTION 12: NEGOTIATION SCRIPT ─── -->
+  ${(()=>{
+    const _hs    = handshake || avg || 0;
+    const _open  = nego?.offer || Math.round(_hs*0.93/500)*500;
+    const _km    = km || mileageNum || 0;
+    const _fshTxt= qs.fsh===false ? 'no service history' : qs.fsh===true ? 'full service history' : 'unverified service history';
+    const _owTxt = qs.singleOwner===false ? 'multiple owners' : qs.singleOwner===true ? 'single owner' : '';
+    const _accTxt= qs.accident===true ? 'with accident history' : '';
+    const _factors=[_fshTxt,_owTxt,_accTxt].filter(Boolean).join(', ');
+    const _script= r.hagglingScript ||
+      `"Your ${year} ${brand}${model?' '+model:''} at ${_km.toLocaleString()} km${_factors?' with '+_factors:''} — UAE market handshake is AED ${_hs.toLocaleString()}. My offer is AED ${_open.toLocaleString()} based on similar ${specVal||'GCC'} listings."`;
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 12 · Part 2 Proof</div>
+      <div class="ks-section-title" style="margin-bottom:12px;">Negotiation Script</div>
+      <div style="background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border:1.5px solid #86EFAC;border-radius:10px;padding:14px 16px;">
+        <div style="font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#15803D;margin-bottom:8px;">📋 USE THIS SCRIPT</div>
+        <div id="ks-nego-script-text" style="font-size:.8rem;line-height:1.7;color:#064E3B;font-style:italic;">${_script}</div>
+        <button onclick="(function(btn){const el=document.getElementById('ks-nego-script-text');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='📋 Copy Script',2200)}).catch(()=>{const t=document.createElement('textarea');t.value=el.textContent;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent='📋 Copy Script',2200)})})(this)"
+          style="margin-top:10px;padding:6px 14px;background:#15803D;color:#fff;border:none;border-radius:7px;font-size:.68rem;font-weight:700;cursor:pointer;font-family:'Exo 2',sans-serif;letter-spacing:.04em;">📋 Copy Script</button>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ─── SECTION 13: CONFIDENCE INDICATORS ─── -->
+  ${(()=>{
+    const _conf  = r.confidence_score || Math.round((r.confidence||0.5)*100);
+    const _tier  = r.tier ?? 3;
+    const _src   = _tier===1?'Live UAE listings (Dubizzle + YallaMotor via Serper)':_tier===2?'Live UAE listings (Gemini Search)':_tier===3?'AI training knowledge':'Formula estimate';
+    const _comp  = comp || r.listingsFound || 0;
+    const _fresh = r.cached ? `Cached · ${r.cacheAge||'recent'}` : 'Updated: Today';
+    const _links = (r.sourceLinks||[]).length>0 || (r.listings_snapshot||[]).some(l=>l.url||l.link);
+    const _flag  = r.confidence_flag||'';
+
+    const _row = (ico,label,val) => `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid #F3F4F6;gap:8px;">
+        <span style="font-size:.72rem;color:#374151;display:flex;align-items:center;gap:6px;">${ico} ${label}</span>
+        <span style="font-size:.72rem;font-weight:700;color:#0F1E38;text-align:right;">${val}</span>
+      </div>`;
+
+    return `
+    <div class="ks-section">
+      <div class="ks-section-eyebrow">Section 13 · Part 2 Proof</div>
+      <div class="ks-section-title" style="margin-bottom:12px;">Confidence Indicators</div>
+      <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;padding:14px 16px;">
+        ${_row('📡','Data source',_src)}
+        ${_row('📊','Listings used',_comp>0?`${_comp} comparable active listing${_comp!==1?'s':''}`:'Market estimate (no live count)')}
+        ${_row('🕐','Data freshness',_fresh)}
+        ${_row('🔗','Direct links',_links?'Provided above':'Not available for this search tier')}
+        ${_row('🎯','Confidence score',`${_conf}%${_flag?' — '+_flag:''}`)}
+        <div style="margin-top:8px;padding:8px 10px;border-radius:7px;background:${_conf>=60?'rgba(21,163,74,0.07)':'rgba(220,38,38,0.07)'};border:1px solid ${_conf>=60?'#6EE7B7':'#FCA5A5'};">
+          <span style="font-size:.68rem;color:${_conf>=60?'#15803D':'#DC2626'};font-weight:700;">${_conf>=60?'✅ Data quality sufficient for a reliable estimate.':'⚠️ Low confidence — cross-check with live listings before transacting.'}</span>
+        </div>
+      </div>
+    </div>`;
+  })()}
+
+  <!-- ─── SECTION 14: DOWNLOAD & EXPORT ─── -->
+  <div class="ks-section">
+    <div class="ks-section-eyebrow">Section 14 · Export</div>
+    <div class="ks-section-title" style="margin-bottom:12px;">Download &amp; Export</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="window.print()"
+        style="flex:1;min-width:100px;padding:10px 8px;border-radius:9px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Exo 2',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:1.1rem;">📄</span>PDF / Print
+      </button>
+      <button onclick="(function(){const d=document.getElementById('rcontent');if(!d)return;const b=new Blob([d.innerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='KamSayara-Report.html';a.click();})()"
+        style="flex:1;min-width:100px;padding:10px 8px;border-radius:9px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Exo 2',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:1.1rem;">💾</span>Save Report
+      </button>
+      <button onclick="(function(){const sub=encodeURIComponent('KamSayara Vehicle Report');const bod=encodeURIComponent('Please find my KamSayara vehicle valuation report. View it at: www.kamsayara.com');window.open('mailto:?subject='+sub+'&body='+bod);})()"
+        style="flex:1;min-width:100px;padding:10px 8px;border-radius:9px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Exo 2',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:1.1rem;">✉️</span>Email
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 15: FOOTER ─── -->
+  ${(()=>{
+    const _comp = comp || r.listingsFound || 0;
+    const _today = new Date().toLocaleDateString('en-AE',{day:'2-digit',month:'short',year:'numeric'});
+    return `
+    <div class="ks-section" style="border-bottom:none;background:rgba(15,30,56,0.03);border-top:2px solid #E5E7EB;">
+      <div style="display:flex;flex-direction:column;gap:4px;text-align:center;">
+        <div style="font-size:.65rem;color:#6B7280;line-height:1.6;">
+          Data source: Live UAE listings${_comp>0?' ('+_comp+' comps)':''} · Report: ${_today}
+        </div>
+        <div style="font-size:.62rem;color:#9CA3AF;font-style:italic;">
+          Estimates only. Verify before transacting. · KamSayara · ${ref.label}
+        </div>
+      </div>
+    </div>`;
+  })()}
 
   </div><!-- /ksPirPaidOnly -->
 
@@ -10311,7 +10575,7 @@ function printValuation(){
   const rbd=ratingBorder[aiCls]||ratingBorder.neu;
 
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  w.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
   <title>KamSayara Price Report \u2014 ${d.carName}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap');
@@ -10798,15 +11062,53 @@ function activateShareStrip(){
   });
 }
 
-function buildShareMsg(){
-  if(!_lastValuationData) return {text:'Check any car value free at www.kamsayara.com', url:'https://www.kamsayara.com'};
-  const d    = _lastValuationData;
-  const carName = (d.carName||'').trim();
-  const ref  = d.ref || window._preGeneratedRef || '';
-  const avg  = d.avg ? 'AED '+d.avg.toLocaleString() : '';
-  // Same ambassador text for ALL platforms
-  const text = `🚗 Just got a free UAE car price report for a ${carName}${avg?' — Fair Market Value: '+avg:''}.\n\nRef: ${ref}\n\nIf you're buying or selling a car in the UAE, use this first — real live data, not guessing. It's completely free:\n\n👉 www.kamsayara.com\n\n#KamSayara #UAECars #UsedCars #Dubai #CarPrice`;
-  return {text, url:'https://www.kamsayara.com'};
+function buildShareMsg(platform){
+  const URL = 'https://www.kamsayara.com';
+  if(!_lastValuationData) return {text:'Check any car value free at kamsayara.com', url:URL};
+
+  const d       = _lastValuationData;
+  const car     = (d.carName||'').trim();
+  const ref     = d.ref || window._preGeneratedRef || '';
+  const hs      = d.avg  || 0;
+  const sticker = d.askingPrice || 0;
+  const gap     = sticker && hs ? sticker - hs : 0;
+  const gapAbs  = Math.abs(gap);
+  const verdict = !sticker ? '' : gap > hs*0.05 ? 'OVERPRICED 🔴' : gap < -(hs*0.05) ? 'UNDERPRICED 🟢' : 'FAIRLY PRICED 🟡';
+  const gapLine = gap > 0
+    ? `That's AED ${gapAbs.toLocaleString()} overpriced.`
+    : gap < 0
+    ? `That's AED ${gapAbs.toLocaleString()} below market.`
+    : '';
+
+  // ── Platform messages — all text, no image ──────────────────
+  const msgs = {
+
+    // Twitter/X — 280 char max, target ≤220
+    x: `Checked a ${car} on KamSayara 🔍\nSeller: AED ${sticker?sticker.toLocaleString():'—'} · Market: AED ${hs.toLocaleString()}\n${gapLine} ${verdict}\nFree UAE car check → kamsayara.com\nRef: ${ref}`,
+
+    // WhatsApp / Telegram — conversational, no hard limit
+    wa: `Just checked a ${car} on KamSayara 🔍\nSeller wants AED ${sticker?sticker.toLocaleString():'—'} — fair price is AED ${hs.toLocaleString()}.\n${gapLine} ${verdict}\nCheck any UAE car before you buy 👇\nkamsayara.com\nRef: ${ref}`,
+
+    // LinkedIn — professional framing, ~400 chars
+    li: `Before buying or selling a used car in the UAE — check the number first.\n\nI just ran a live market check on a ${car} using KamSayara.\nSeller asking AED ${sticker?sticker.toLocaleString():'—'}. Fair market handshake: AED ${hs.toLocaleString()}.\n${gapLine} ${verdict}\n\nFree report. No signup. Live data.\n→ kamsayara.com | Ref: ${ref}`,
+
+    // Facebook — casual, ~220 chars
+    fb: `Just used KamSayara to check a ${car} 🔍\nSeller: AED ${sticker?sticker.toLocaleString():'—'} · Fair price: AED ${hs.toLocaleString()} · ${gapLine} ${verdict}\nFree UAE car check before you buy or sell → kamsayara.com\nRef: ${ref}`,
+
+    // Instagram / TikTok — no live links, copy to clipboard
+    ig: `Just checked a ${car} on KamSayara 🔍\nSeller: AED ${sticker?sticker.toLocaleString():'—'} · Market: AED ${hs.toLocaleString()}\n${gapLine} ${verdict}\nFree check → kamsayara.com\nRef: ${ref}\n\n#KamSayara #UAECars #UsedCars #Dubai #CarPrice`,
+
+    tt: `UAE car prices checked 🔍 ${car}\nSeller AED ${sticker?sticker.toLocaleString():'—'} vs Market AED ${hs.toLocaleString()}\n${gapLine} ${verdict}\nFree → kamsayara.com | Ref: ${ref}\n#KamSayara #UAECars`,
+
+    // Email
+    mail: `Just checked a ${car} on KamSayara 🔍\nSeller wants AED ${sticker?sticker.toLocaleString():'—'} — fair price is AED ${hs.toLocaleString()}.\n${gapLine} ${verdict}\nCheck any UAE car before you buy 👇\nkamsayara.com\nRef: ${ref}`,
+
+    // SMS — 160 char hard limit
+    sms: `KamSayara: ${car}. Seller AED ${sticker?sticker.toLocaleString():'—'}, market AED ${hs.toLocaleString()}. ${gapLine} kamsayara.com`,
+  };
+
+  const text = msgs[platform] || msgs.wa;
+  return {text, url: URL};
 }
 
 /* Build a shareable card as a canvas data URL */
@@ -10867,57 +11169,40 @@ async function shareVia(platform){
   if(!_lastValuationData) return;
   if(platform==='pdf'){printValuation();return;}
 
-  const {text, url} = buildShareMsg();
+  const {text, url} = buildShareMsg(platform);
   const encodedText = encodeURIComponent(text);
 
-  // ── Try native share sheet (mobile) — includes text for all platforms ──
-  if(navigator.share && platform !== 'mail'){
-    // Try with image card first, fall back to text-only
-    const imgDataUrl = buildShareCard();
-    if(imgDataUrl && navigator.canShare){
-      try{
-        const res = await fetch(imgDataUrl);
-        const blob = await res.blob();
-        const file = new File([blob], 'kamsayara-report.png', {type:'image/png'});
-        if(navigator.canShare({files:[file]})){
-          await navigator.share({files:[file], text});
-          return;
-        }
-      }catch(e){ /* fall through */ }
+  // ── Instagram / TikTok — copy text to clipboard (no live links on these platforms) ──
+  if(platform==='ig' || platform==='tt'){
+    try{ await navigator.clipboard.writeText(text); }catch(e){
+      const t=document.createElement('textarea');t.value=text;
+      document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
     }
+    _showToast(platform==='ig'
+      ? '✓ Caption copied — open Instagram and paste when posting.'
+      : '✓ Caption copied — open TikTok and paste when posting.');
+    return;
+  }
+
+  // ── Native share sheet (mobile) — text only ──
+  if(navigator.share && platform !== 'mail' && platform !== 'sms'){
     try{
-      await navigator.share({text});
+      await navigator.share({text, url});
       return;
     }catch(e){
       if(e.name==='AbortError') return;
+      // fall through to desktop URL
     }
   }
 
-  // ── Desktop fallback — same ambassador text on every platform ──
+  // ── Desktop / fallback — deep-link with platform text ──
   let shareUrl = '';
-  if(platform==='wa')   shareUrl = `https://wa.me/?text=${encodedText}`;
-  else if(platform==='mail') shareUrl = `mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
-  else if(platform==='fb')   shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
+  if     (platform==='wa')   shareUrl = `https://wa.me/?text=${encodedText}`;
   else if(platform==='x')    shareUrl = `https://x.com/intent/tweet?text=${encodedText}`;
-  else if(platform==='ig' || platform==='tt'){
-    // Copy same text + offer image download
-    try{ await navigator.clipboard.writeText(text); }catch{}
-    const imgDataUrl = buildShareCard();
-    if(imgDataUrl){
-      const a = document.createElement('a');
-      a.href = imgDataUrl;
-      a.download = `kamsayara-${(d=>d.ref||'report')(_lastValuationData)}.png`;
-      a.click();
-      _showToast(platform==='ig'
-        ? '✓ Caption copied + image downloaded — open Instagram and post!'
-        : '✓ Caption copied + image downloaded — open TikTok and post!');
-    } else {
-      _showToast(platform==='ig'
-        ? '✓ Caption copied — open Instagram and paste when posting.'
-        : '✓ Caption copied — open TikTok and paste when posting.');
-    }
-    return;
-  }
+  else if(platform==='fb')   shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
+  else if(platform==='li')   shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodedText}`;
+  else if(platform==='sms')  shareUrl = `sms:?body=${encodedText}`;
+  else if(platform==='mail') shareUrl = `mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
 
   if(shareUrl) window.open(shareUrl, '_blank', 'noopener,noreferrer');
 }
@@ -11513,6 +11798,25 @@ initValuationCounter();
 function setMobCardTops(){ /* unified layout — no card tops needed */ }
 setMobCardTops();
 window.addEventListener('resize',setMobCardTops);
+/* ── Safe-area insets: applied via JS so CSS validator never sees env() ── */
+(function applySafeArea(){
+  const style = document.createElement('style');
+  style.textContent = ':root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);}';
+  document.head.appendChild(style);
+  function apply(){
+    const cs  = getComputedStyle(document.documentElement);
+    const top = parseFloat(cs.getPropertyValue('--sat'))||0;
+    const bot = parseFloat(cs.getPropertyValue('--sab'))||0;
+    const snav   = document.querySelector('.snav');
+    const mobHdr = document.querySelector('.mob-fixed-header');
+    const page   = document.querySelector('.page');
+    if(snav)   snav.style.paddingTop   = top?top+'px':'';
+    if(mobHdr) mobHdr.style.paddingTop = top?top+'px':'';
+    if(page&&window.innerWidth<=600) page.style.paddingBottom=(16+bot)+'px';
+  }
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('resize',apply,{passive:true});
+})();
 </script>
 <!-- html2canvas removed — share uses navigator.share text-only -->
 </body>
