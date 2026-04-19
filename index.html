@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<!-- v2.7 19Apr2026 — v61: Worker token cost −54% (short-key schema, pipe snippets, compressed base msg). Paired with kamsayara_v61_worker.js.
-     Worker contract unchanged: market range + depreciation_class + confidence + listings_snapshot → frontend ksComputeValuation() handles all valuation logic. -->
+<!-- KamSayara v65 — 19 Apr 2026
+     Paired with: kamsayara_v65_worker.js
+     Breakpoints: Desktop ≥861px | Tablet 601–860px | Mobile ≤600px
+     Worker contract: market range + depreciation_class + confidence + listings_snapshot → frontend ksComputeValuation() -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -728,16 +730,7 @@
     .sico-copy{background:var(--ink-soft);}
     .sico svg{width:15px;height:15px;fill:#fff;flex-shrink:0;}
 
-    /* ── PDF PRINT STYLES ────────────────────────────────────── */
-    @media print{
-      .snav,.hero,.ffoot,.qc,.nxt,.share-row,.why-toggle,.rfooter,
-      #restoreBar,.mob-overlay,.mob-result-toast{display:none!important;}
-      body{background:#fff;}
-      .layout{display:block;}
-      .result-panel{position:static;height:auto;max-height:none;box-shadow:none;border:none;}
-      .form-card{display:none!important;}
-      .pblock,.ai-block,.tags{break-inside:avoid;}
-    }
+    /* ── PDF PRINT STYLES: see v63 Phase 4 @media print block at end of <style> ── */
 
     /* ── ENHANCED SPINNER ────────────────────────────────────── */
     .spinner{
@@ -3341,68 +3334,8 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     PRICE INTELLIGENCE REPORT — Premium UI (v2 — polished)
+     PRICE INTELLIGENCE REPORT — Premium UI
   ═══════════════════════════════════════════════════════════════════ */
-
-  
-  /* ── EXPANDED TEXT SCALE — everything reads comfortably ── */
-  
-  
-
-  /* ── REPORT HEADER ── */
-  
-  /* fine diagonal grid pattern */
-  
-  /* gold accent bar at bottom */
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  /* ── VEHICLE IDENTITY BLOCK ── */
-  
-  
-  /* subtle radial glow behind car */
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  /* ── VERDICT RIBBON ── */
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  /* ── PRICE INTELLIGENCE CORE GRID ── */
-  
-  
-  
-  
-
-  /* FMV amount */
-  
-  
-  /* deal pill */
   
   
   
@@ -4850,7 +4783,15 @@
   gap:8px; padding-top:0;
 }
 
-/* ── REF STAMP — always white on dark header ── */
+/* ── REF STAMP — result panel header ── */
+  .panel-ref-stamp {
+    font-family:"Exo 2",sans-serif; font-size:.58rem; font-weight:700;
+    color:var(--muted); letter-spacing:.1em; text-transform:uppercase;
+    background:var(--surface-2); border:1px solid var(--border);
+    padding:2px 8px; border-radius:99px; margin-left:6px;
+  }
+
+  /* ── REF STAMP — always white on dark header ── */
 .ks-report-ref {
   font-family:"Exo 2",sans-serif; font-size:.58rem; font-weight:700;
   color:#FFFFFF; letter-spacing:.1em; text-transform:uppercase;
@@ -6921,7 +6862,7 @@ body.ks-result-active .form-card:hover {
     <div class="form-card" id="formCard">
 
       <div class="form-header">
-        <div class="form-header-title" id="formHeaderTitle">Vehicle Details</div>
+        <div class="form-header-title" id="formHeaderTitle">Car Details</div>
       </div>
 
       <div class="form-body">
@@ -7099,6 +7040,7 @@ body.ks-result-active .form-card:hover {
         <div class="result-panel-header-status" id="resultPanelStatus">
           <span class="rph-status-dot"></span>
           <span id="resultPanelStatusText"></span>
+          <span id="resultRef" class="panel-ref-stamp" style="display:none"></span>
         </div>
       </div>
 
@@ -9653,7 +9595,6 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 3. PRICE HIGHLIGHTS ────────────────────────── -->
   <div class="ks-section ks-section-price">
-    <div class="ks-section-eyebrow">Valuation Result</div>
     <div class="ks-price-hl-label">Fair Market Price</div>
     <div class="ks-price-hl-main" id="ksFmvNum">AED ${handshake.toLocaleString()}</div>
     <div class="ks-price-hl-range">Market range: AED ${rangeMin.toLocaleString()} – AED ${rangeMax.toLocaleString()}</div>
@@ -9670,8 +9611,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 4. DEAL ANALYSIS + PRICE SCALE ───────────── -->
   <div class="ks-section ks-section-deal">
-    <div class="ks-section-eyebrow">Deal Analysis</div>
-    <div class="ks-section-title">Price Position & Market Scale</div>
+
     <!-- Verdict pill -->
     <div class="ks-deal-verdict ${
       _vc.verdict==='UNDERPRICED'?'ks-verdict-buy':
@@ -9745,8 +9685,6 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 5. WHAT'S GOOD / WHAT TO WATCH OUT FOR ────── -->
   <div class="ks-section ks-section-flags">
-    <div class="ks-section-eyebrow">Vehicle Assessment</div>
-    <div class="ks-section-title">What's Good &amp; What to Watch</div>
     <div class="ks-flags-grid">
       ${gF.length?`<div class="ks-flags-sub-head">✓ What's Good</div>`+gF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">✓</span><span>${f}</span></div>`).join(''):''}
       ${rF.length?`<div class="ks-flags-sub-head" style="margin-top:${gF.length?'10px':'0'}">⚠ What to Watch Out For</div>`+rF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-warn">⚠</span><span>${f}</span></div>`).join(''):`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">—</span><span>No major concerns noted</span></div>`}
@@ -9821,87 +9759,42 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 6. DATA QUALITY & CONFIDENCE ──────────────── -->
   <div class="ks-section ks-section-conf">
-    <div class="ks-section-eyebrow">Data Quality</div>
-    <div class="ks-section-title">Listing Transparency & Confidence</div>
     <div class="ks-conf-row">
-      <!-- SVG Speedometer -->
-      <div class="ks-conf-left ks-conf-speedometer-wrap">
-        ${(()=>{
-          const score=_tsScore; // 0–10
-          const pct=score/10;
-          // Arc: 180deg sweep (left to right), cx=60 cy=60 r=46
-          const r=46, cx=60, cy=64;
-          const startAngle=180, endAngle=0; // left=low, right=high
-          const toRad=a=>a*Math.PI/180;
-          // needle angle: 180deg (left) = score 0, 0deg (right) = score 10
-          const needleAngle=180-(pct*180);
-          const nx=cx+r*Math.cos(toRad(needleAngle));
-          const ny=cy-r*Math.sin(toRad(needleAngle));
-          // color stops on arc
-          const arcColor=score>=7?'#22C55E':score>=5?'#F59E0B':'#EF4444';
-          // arc path helper
-          const arcPath=(startDeg,endDeg,radius,color)=>{
-            const s={x:cx+radius*Math.cos(toRad(startDeg)),y:cy-radius*Math.sin(toRad(startDeg))};
-            const e={x:cx+radius*Math.cos(toRad(endDeg)),y:cy-radius*Math.sin(toRad(endDeg))};
-            const large=Math.abs(startDeg-endDeg)>180?1:0;
-            return \`<path d="M\${s.x.toFixed(1)},\${s.y.toFixed(1)} A\${radius},\${radius} 0 \${large},0 \${e.x.toFixed(1)},\${e.y.toFixed(1)}" fill="none" stroke="\${color}" stroke-width="7" stroke-linecap="round"/>\`;
-          };
-          return \`<svg width="120" height="72" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" aria-label="Confidence gauge \${score}/10">
-            <!-- Track -->
-            \${arcPath(180,0,r,'#E5E9EF')}
-            <!-- Fill to score -->
-            \${score>0?arcPath(180,needleAngle,r,arcColor):''}
-            <!-- Zone ticks -->
-            <line x1="\${(cx+r*Math.cos(toRad(144))).toFixed(1)}" y1="\${(cy-r*Math.sin(toRad(144))).toFixed(1)}" x2="\${(cx+(r-10)*Math.cos(toRad(144))).toFixed(1)}" y2="\${(cy-(r-10)*Math.sin(toRad(144))).toFixed(1)}" stroke="#EF4444" stroke-width="2" opacity=".5"/>
-            <line x1="\${(cx+r*Math.cos(toRad(108))).toFixed(1)}" y1="\${(cy-r*Math.sin(toRad(108))).toFixed(1)}" x2="\${(cx+(r-10)*Math.cos(toRad(108))).toFixed(1)}" y2="\${(cy-(r-10)*Math.sin(toRad(108))).toFixed(1)}" stroke="#F59E0B" stroke-width="2" opacity=".5"/>
-            <line x1="\${(cx+r*Math.cos(toRad(72))).toFixed(1)}" y1="\${(cy-r*Math.sin(toRad(72))).toFixed(1)}" x2="\${(cx+(r-10)*Math.cos(toRad(72))).toFixed(1)}" y2="\${(cy-(r-10)*Math.sin(toRad(72))).toFixed(1)}" stroke="#22C55E" stroke-width="2" opacity=".5"/>
-            <!-- Needle -->
-            <line class="ks-speedometer-needle-animated" x1="\${cx}" y1="\${cy}" x2="\${nx.toFixed(1)}" y2="\${ny.toFixed(1)}" stroke="#0A2540" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
-            <line class="ks-speedometer-needle-static" x1="\${cx}" y1="\${cy}" x2="\${nx.toFixed(1)}" y2="\${ny.toFixed(1)}" stroke="#0A2540" stroke-width="2.5" stroke-linecap="round" opacity=".9" style="display:none"/>
-            <!-- Hub -->
-            <circle cx="\${cx}" cy="\${cy}" r="5" fill="#0A2540"/>
-            <circle cx="\${cx}" cy="\${cy}" r="2.5" fill="#C49A2A"/>
-            <!-- Score label -->
-            <text x="\${cx}" y="\${cy-18}" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="15" font-weight="900" fill="#0A2540">\${score}</text>
-            <text x="\${cx}" y="\${cy-6}" text-anchor="middle" font-family="Exo 2,sans-serif" font-size="7" font-weight="700" fill="#94A3B8" letter-spacing="1">/10</text>
-            <!-- Labels -->
-            <text x="10" y="70" font-family="Exo 2,sans-serif" font-size="7" fill="#EF4444" font-weight="700">LOW</text>
-            <text x="82" y="70" font-family="Exo 2,sans-serif" font-size="7" fill="#22C55E" font-weight="700">HIGH</text>
-          </svg>
-          <div class="ks-conf-score-label">\${_tsLabel}</div>\`;
-        })()}
+      <div class="ks-conf-left">
+        <div class="ks-conf-title">Listing Transparency</div>
+        <div class="ks-conf-score">${_tsScore}<span class="ks-conf-denom">/10</span></div>
+        <div class="ks-conf-label">${_tsLabel}</div>
       </div>
       <div class="ks-conf-bar-wrap">
         <div class="ks-conf-bar-track">
-          <div class="ks-conf-bar-fill" style="width:${Math.round((10-_tsScore)/10*100)}%"></div>
+          <div class="ks-conf-bar-fill" style="width:${Math.round(_tsScore/10*100)}%"></div>
         </div>
         <div class="ks-conf-stats">
-          <span class="ks-conf-stat-item">🔍 Live Data: ${comp>0?comp+' listings':'Not available'}</span>
-          <span class="ks-conf-stat-sep">·</span>
-          <span class="ks-conf-stat-item">📊 Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
-        </div>
-        <div class="ks-conf-caption">${_tsScore>=7?'High confidence — live market data directly supports this valuation.':_tsScore>=5?'Medium confidence — limited comparable listings found.':'Low confidence — AI estimate only. Verify with live listings.'}</div>
-        <div class="ks-conf-reason">${(()=>{
-          const reasons=[];
-          if(comp>0) reasons.push(`Based on ${comp} comparable UAE listing${comp>1?'s':''} at time of valuation.`);
-          else reasons.push('No direct comparables found — price uses AI-assisted market modelling.');
-          if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') reasons.push('Non-GCC spec reduces confidence — fewer local comparables.');
-          if(qs.fsh===false) reasons.push('No service history limits comparable matching.');
-          if(qs.accident===true) reasons.push('Accident history introduces pricing uncertainty.');
-          if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — prices reflect real UAE classified listings.');
-          return reasons.slice(0,2).join(' ');
-        })()}</div>
+        <span class="ks-conf-stat-item">🔍 Live Market Data: ${comp>0?comp+' listings':'Not available'}</span>
+        <span class="ks-conf-stat-sep">·</span>
+        <span class="ks-conf-stat-item">📊 Buyer Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
+      </div>
+      <div class="ks-conf-caption">${_tsScore>=7?'Price Confidence: High — Live Market Data supports this price.':_tsScore>=5?'Price Confidence: Medium — Limited Live Market Data available.':'Price Confidence: Low — No Live Market Data. AI estimate only.'}</div>
+      <div class="ks-conf-reason">${(()=>{
+        const reasons=[];
+        if(comp>0) reasons.push(`Based on ${comp} comparable UAE listing${comp>1?'s':''} checked at the time of valuation.`);
+        else reasons.push('No direct comparable listings were found — price is based on AI-assisted market modelling.');
+        if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') reasons.push(`Non-GCC spec reduces data confidence as fewer comparable units are listed locally.`);
+        if(qs.fsh===false) reasons.push('Missing service history limits how closely this listing can be compared to standard market comps.');
+        if(qs.accident===true) reasons.push('Accident history creates pricing uncertainty — values can vary widely depending on the extent of damage.');
+        if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — the price range shown reflects real asking prices from live UAE classified ads.');
+        return reasons.slice(0,3).join(' ');
+      })()}</div>
       </div>
     </div>
   </div>
 
   <!-- ── 7. FOR BUYERS / FOR SELLERS ───────────────── -->
   <div class="ks-section ks-section-s7">
-    <div class="ks-section-eyebrow">Negotiation Intelligence</div>
-    <div class="ks-section-title">For Buyers &amp; For Sellers</div>
+    <div class="ks-s7-section-title">For Buyers &amp; For Sellers</div>
     <div class="ks-s7-grid">
       <div class="ks-s7-col">
-        <div class="ks-s7-head">🏷️ For Buyers</div>
+        <div class="ks-s7-head">For Buyers</div>
         <div class="ks-s7-body">
           ${askN&&askN>handshake?
             `This car is priced <strong>AED ${(askN-handshake).toLocaleString()} above</strong> what the market says it's worth. Push back — you have room to negotiate. Start at AED ${(nego.offer||Math.round(handshake*0.93/500)*500).toLocaleString()} and aim to close around AED ${(nego.close||handshake).toLocaleString()}.`
@@ -9913,7 +9806,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         </div>
       </div>
       <div class="ks-s7-col">
-        <div class="ks-s7-head">💰 For Sellers</div>
+        <div class="ks-s7-head">For Sellers</div>
         <div class="ks-s7-body">
           The market FMV for this car is <strong>AED ${handshake.toLocaleString()}</strong>. List at <strong>AED ${Math.round(handshake*1.05/500)*500 > rangeMax ? rangeMax.toLocaleString() : (Math.round(handshake*1.05/500)*500).toLocaleString()}</strong> to leave yourself negotiating room. ${specVal==='GCC'||specVal==='GCC Spec'?'GCC spec is a strong selling point — mention it.':''} ${qs.fsh?'Full service history is your best asset — keep the records handy.':''}
         </div>
@@ -10513,21 +10406,6 @@ function copyLink(){
 let _lastValuationData=null;
 
 function printValuation(){
-  // v63: use @media print on the live report — no popup window
-  // Ensure paid content visible for print
-  const p2=document.getElementById('ksPage2');
-  const p2WasHidden=p2&&p2.style.display==='none';
-  if(p2WasHidden) p2.style.display='block';
-  const tn=document.getElementById('ksTabNav');
-  if(tn) tn.style.display='none';
-  window.print();
-  // Restore after print dialog closes
-  setTimeout(()=>{
-    if(p2WasHidden&&p2) p2.style.display='none';
-    if(tn) tn.style.display='';
-  },500);
-}
-function _printValuationLegacy_unused(){
   if(!_lastValuationData){window.print();return;}
   const d=_lastValuationData;
   const now=new Date();
