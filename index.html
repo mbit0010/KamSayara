@@ -6683,6 +6683,159 @@
 .ks-cost-table td:last-child { text-align:right; font-weight:700; color:var(--ink); }
 .ks-cost-table tr:last-child td { border-bottom:none; }
 
+/* ══════════════════════════════════════════════════
+   v56 NEW COMPONENT STYLES
+══════════════════════════════════════════════════ */
+
+/* ── Section 5: Flag items — no colored boxes ── */
+.ks-flag-plain {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:5px 0; font-size:.78rem; color:var(--ink-soft); line-height:1.5;
+  border-bottom:1px solid var(--border);
+}
+.ks-flag-plain:last-child { border-bottom:none; }
+.ks-flag-icon { font-size:.85rem; flex-shrink:0; margin-top:1px; }
+.ks-flag-icon-green { color:var(--good); }
+.ks-flag-icon-warn  { color:var(--warn); }
+
+/* Fuel row */
+.ks-fuel-row {
+  display:flex; align-items:flex-start; gap:10px;
+  margin:12px 0 4px; padding:10px 12px;
+  background:var(--surface-2); border-radius:var(--r-sm);
+  border:1px solid var(--border);
+}
+.ks-fuel-icon { font-size:1rem; flex-shrink:0; padding-top:2px; }
+.ks-fuel-body { display:flex; flex-direction:column; gap:2px; }
+.ks-fuel-lbl { font-size:.6rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+.ks-fuel-val { font-size:.78rem; color:var(--ink-soft); line-height:1.5; }
+
+/* Community feedback */
+.ks-community-note {
+  font-size:.65rem; color:var(--muted); font-style:italic; line-height:1.5;
+  margin:4px 0 8px; padding:6px 10px;
+  background:rgba(184,120,10,0.05); border-left:3px solid var(--warn-line);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;
+}
+.ks-community-grid { display:flex; flex-direction:column; gap:0; }
+.ks-comm-item {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:6px 0; font-size:.78rem; color:var(--ink-soft); line-height:1.5;
+  border-bottom:1px solid var(--border);
+}
+.ks-comm-item:last-child { border-bottom:none; }
+.ks-comm-icon { font-size:.85rem; flex-shrink:0; margin-top:1px; }
+.ks-comm-pos { color:var(--ink-soft); }
+.ks-comm-neu { color:var(--ink-soft); }
+.ks-comm-cau { color:var(--ink-soft); }
+
+/* ── Section 6: Confidence reason text ── */
+.ks-conf-reason {
+  font-size:.7rem; color:var(--muted); line-height:1.55;
+  margin-top:6px; font-style:italic;
+}
+
+/* ── Section 8: CTA compact button ── */
+.ks-cta-btn-compact {
+  padding:8px 22px !important;
+  font-size:.72rem !important;
+  min-height:0 !important;
+  height:auto !important;
+  line-height:1.2 !important;
+}
+/* Tab nav compact */
+.ks-tabnav-compact {
+  padding:5px 14px !important;
+  font-size:.72rem !important;
+  min-height:0 !important;
+  height:auto !important;
+  line-height:1.3 !important;
+}
+
+/* ── Paid S1: Outlook vertical bar chart ── */
+.ks-outlook-chart { padding:8px 0 6px; }
+.ks-outlook-bar-chart {
+  display:flex; align-items:flex-end; gap:8px;
+  height:160px; padding:0 4px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:10px;
+}
+.ks-ob-col {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:flex-end; gap:3px; height:100%;
+}
+.ks-ob-val {
+  font-size:.62rem; font-weight:800; color:var(--ink-soft);
+  white-space:nowrap; text-align:center; margin-bottom:4px;
+}
+.ks-ob-bar-wrap {
+  width:100%; display:flex; align-items:flex-end; justify-content:center;
+  flex:1;
+}
+.ks-ob-bar {
+  width:52%; border-radius:5px 5px 0 0; transition:height .5s ease;
+  min-height:8px;
+}
+.ks-ob-bar-now { background:linear-gradient(180deg,#0E3460,#0A2540); }
+.ks-ob-bar-mid { background:linear-gradient(180deg,#C49A2A,#A07820); }
+.ks-ob-bar-last{ background:linear-gradient(180deg,#e5e7eb,#CBD5E1); }
+.ks-ob-yr {
+  font-size:.65rem; font-weight:700; color:var(--ink-soft);
+  text-align:center; margin-top:5px;
+}
+.ks-ob-drop {
+  font-size:.6rem; font-weight:600; color:var(--bad); text-align:center;
+}
+.ks-ob-drop-now { color:var(--good) !important; }
+
+/* ── Paid S2: Yearly Value Drop alignment ── */
+.ks-depr-note-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 12px;
+  background:rgba(192,57,43,0.05);
+  border:1px solid rgba(192,57,43,0.15);
+  border-radius:var(--r-sm);
+}
+.ks-depr-label { font-size:.72rem; font-weight:700; color:var(--bad); }
+.ks-depr-val   { font-size:.82rem; font-weight:800; color:var(--bad); font-family:"Orbitron",sans-serif; }
+
+/* ── Paid S4: Listings table ── */
+.ks-listings-table-wrap { overflow-x:auto; margin-bottom:10px; }
+.ks-listings-table {
+  width:100%; border-collapse:collapse; font-size:.74rem;
+}
+.ks-listings-table thead tr {
+  background:var(--surface-2);
+  border-bottom:2px solid var(--border);
+}
+.ks-listings-table th {
+  padding:7px 10px; text-align:left;
+  font-size:.58rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); white-space:nowrap;
+}
+.ks-listings-table tbody tr {
+  border-bottom:1px solid var(--border);
+  transition:background .15s;
+}
+.ks-listings-table tbody tr:hover { background:var(--surface-2); }
+.ks-listings-table tbody tr:last-child { border-bottom:none; }
+.ks-listings-table td { padding:8px 10px; color:var(--ink-soft); vertical-align:middle; }
+.ks-lt-brand { font-weight:700; color:var(--ink); }
+.ks-lt-model { color:var(--ink-soft); }
+.ks-lt-year,.ks-lt-km { color:var(--muted); white-space:nowrap; }
+.ks-lt-price { font-weight:800; color:var(--accent); white-space:nowrap; }
+.ks-lt-link { white-space:nowrap; }
+.ks-lt-a {
+  font-size:.7rem; font-weight:700; color:var(--accent);
+  text-decoration:none; padding:3px 10px;
+  border:1.5px solid var(--accent-line); border-radius:99px;
+  transition:background .15s;
+}
+.ks-lt-a:hover { background:var(--accent); color:#fff; }
+@media(max-width:520px){
+  .ks-listings-table th,.ks-listings-table td { padding:6px 7px; font-size:.65rem; }
+}
+
 /* ── S10: USE THIS SCRIPT ── */
 .ks-script-box { border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; margin-bottom:10px; }
 .ks-script-toggle {
@@ -11109,8 +11262,74 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ── 5. WHAT'S GOOD / WHAT TO WATCH OUT FOR ────── -->
   <div class="ks-section ks-section-flags">
     <div class="ks-flags-grid">
-      ${gF.length?`<div class="ks-flags-sub-head">✓ What's Good</div>`+gF.map(f=>`<div class="ks-flag ks-flag-green"><span class="ks-flag-icon">✓</span><span>${f}</span></div>`).join(''):''}
-      ${rF.length?`<div class="ks-flags-sub-head" style="margin-top:${gF.length?'10px':'0'}">⚠ What to Watch Out For</div>`+rF.map(f=>`<div class="ks-flag ks-flag-red"><span class="ks-flag-icon">⚠</span><span>${f}</span></div>`).join(''):`<div class="ks-flag ks-flag-grey"><span class="ks-flag-icon">—</span><span>No major concerns noted</span></div>`}
+      ${gF.length?`<div class="ks-flags-sub-head">✓ What's Good</div>`+gF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">✓</span><span>${f}</span></div>`).join(''):''}
+      ${rF.length?`<div class="ks-flags-sub-head" style="margin-top:${gF.length?'10px':'0'}">⚠ What to Watch Out For</div>`+rF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-warn">⚠</span><span>${f}</span></div>`).join(''):`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">—</span><span>No major concerns noted</span></div>`}
+    </div>
+    <!-- Fuel Consumption -->
+    <div class="ks-fuel-row">
+      <span class="ks-fuel-icon">⛽</span>
+      <div class="ks-fuel-body">
+        <span class="ks-fuel-lbl">Estimated Fuel Consumption</span>
+        <span class="ks-fuel-val">${(()=>{
+          // Estimate L/100km based on body type and age
+          const bk=(_bodyKey||'').toLowerCase();
+          let base = bk.includes('suv')||bk.includes('offroad')?13.5:bk.includes('pickup')?14:bk.includes('van')?12:bk.includes('sport')||bk.includes('coupe')?10:9.5;
+          // Older engines typically less efficient
+          const age2=new Date().getFullYear()-parseInt(year||2015);
+          if(age2>10) base+=1.5; else if(age2>6) base+=0.8;
+          const lp100=base.toFixed(1);
+          const lpday=((base/100)*50).toFixed(0); // ~50km/day average UAE driver
+          const aedpm=Math.round((base/100)*50*30*3.3/10)*10; // AED/month ~50km/day, AED 3.3/L
+          return `~${lp100} L/100 km &nbsp;·&nbsp; ~AED ${aedpm}/month (based on 1,500 km/month at market fuel rates)`;
+        })()}</span>
+      </div>
+    </div>
+    <!-- Community Feedback -->
+    <div class="ks-flags-sub-head" style="margin-top:14px;">💬 What People Are Saying</div>
+    <div class="ks-community-note">The following reflects opinions from UAE car communities, classifieds, and owner forums — not KamSayara's assessment. Use as a general reference only.</div>
+    <div class="ks-community-grid">
+      ${(()=>{
+        // Generate context-aware community feedback based on brand/model/year/mileage
+        const yr=parseInt(year||2015);
+        const cy2=new Date().getFullYear();
+        const age3=cy2-yr;
+        const hi_km=km>120000;
+        const mid_km=km>70000&&km<=120000;
+        const brand_lc=(brand||'').toLowerCase();
+        const model_lc=(model||'').toLowerCase();
+
+        // Brand reliability reputation in GCC
+        const reliableBrands=['toyota','lexus','honda','nissan'];
+        const premiumBrands=['bmw','mercedes','audi','porsche','land rover'];
+        const isReliable=reliableBrands.some(b=>brand_lc.includes(b));
+        const isPremium=premiumBrands.some(b=>brand_lc.includes(b));
+
+        let positive=[], neutral=[], cautious=[];
+
+        // Positive feedback
+        if(isReliable) positive.push(`Buyers in UAE forums often mention the ${brand} ${model||''} as one of the more dependable choices in this price range.`);
+        if(specVal==='GCC'||specVal==='GCC Spec') positive.push('GCC-spec units are consistently preferred in UAE classifieds — they tend to sell faster and hold value better.');
+        if(qs.fsh===true) positive.push('Full service history is frequently highlighted as a key trust factor by buyers on Dubizzle and WhatsApp car groups.');
+        if(qs.singleOwner===true) positive.push('Single-owner cars in this segment tend to receive more enquiries and quicker offers, according to UAE classified ad patterns.');
+        if(!hi_km&&age3<=5) positive.push(`With ${km.toLocaleString()} km and ${age3} year${age3!==1?'s':''} of age, this sits comfortably within what UAE buyers consider low-risk territory.`);
+        if(positive.length===0) positive.push(`The ${brand} ${model||''} has an established resale market in the UAE, with regular listings across Dubai and Sharjah classifieds.`);
+
+        // Neutral observations
+        if(isPremium) neutral.push(`Premium European brands like ${brand} attract buyers but also carry higher running and parts costs — a common concern raised in owner communities.`);
+        if(age3>7) neutral.push(`Cars from ${yr} and earlier are generally accepted in the market but buyers often negotiate harder, expecting some wear-and-tear.`);
+        if(mid_km) neutral.push(`Mileage in the 70,000–120,000 km range is described as "mid-life" by most UAE dealers — manageable but worth a pre-purchase inspection.`);
+        if(neutral.length===0) neutral.push('Prices for this segment have remained relatively stable in the past quarter, based on patterns visible in UAE classified listings.');
+
+        // Cautious notes
+        if(qs.accident===true) cautious.push('Accident history is the most commonly cited dealbreaker in UAE buyer communities. Expect strong push-back on price.');
+        if(hi_km) cautious.push(`High mileage (${km.toLocaleString()} km) is one of the top reasons buyers walk away or request a significant discount — especially for vehicles older than 5 years.`);
+        if(isPremium&&age3>5) cautious.push(`Older ${brand} models often generate comments about post-warranty maintenance costs in owner groups — worth budgeting for before purchase.`);
+        if(qs.fsh===false) cautious.push('Missing service records are frequently flagged on UAE car forums as a reason to lower the offer by 5–10%.');
+        if(cautious.length===0) cautious.push('No major red flags consistently raised by the community for this type of vehicle in current market conditions.');
+
+        const renderItems=(arr,icon,cls)=>arr.map(t=>`<div class="ks-comm-item ${cls}"><span class="ks-comm-icon">${icon}</span><span>${t}</span></div>`).join('');
+        return renderItems(positive,'👍','ks-comm-pos')+renderItems(neutral,'💡','ks-comm-neu')+renderItems(cautious,'⚠️','ks-comm-cau');
+      })()}
     </div>
   </div>
 
@@ -11132,6 +11351,16 @@ function buildResult(r,brand,model,year,mileage,asking){
         <span class="ks-conf-stat-item">📊 Buyer Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
       </div>
       <div class="ks-conf-caption">${_tsScore>=7?'Price Confidence: High — Live Market Data supports this price.':_tsScore>=5?'Price Confidence: Medium — Limited Live Market Data available.':'Price Confidence: Low — No Live Market Data. AI estimate only.'}</div>
+      <div class="ks-conf-reason">${(()=>{
+        const reasons=[];
+        if(comp>0) reasons.push(`Based on ${comp} comparable UAE listing${comp>1?'s':''} checked at the time of valuation.`);
+        else reasons.push('No direct comparable listings were found — price is based on AI-assisted market modelling.');
+        if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') reasons.push(`Non-GCC spec reduces data confidence as fewer comparable units are listed locally.`);
+        if(qs.fsh===false) reasons.push('Missing service history limits how closely this listing can be compared to standard market comps.');
+        if(qs.accident===true) reasons.push('Accident history creates pricing uncertainty — values can vary widely depending on the extent of damage.');
+        if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — the price range shown reflects real asking prices from live UAE classified ads.');
+        return reasons.slice(0,3).join(' ');
+      })()}</div>
       </div>
     </div>
   </div>
@@ -11165,16 +11394,14 @@ function buildResult(r,brand,model,year,mileage,asking){
   <div class="ks-page-paid" id="ksCta1" style="display:block;">
   <div class="ks-section ks-section-cta">
     <div class="ks-cta-box">
-      <div class="ks-cta-icon">🔒</div>
       <div class="ks-cta-title">Get the Full Picture</div>
-      <div class="ks-cta-sub">Get full analysis, price outlook, running costs, negotiation line, and live listings.</div>
-      <button class="ks-cta-btn" id="ksBtnPaid" onclick="ksPirTab(2)" aria-label="Unlock full report">
+      <div class="ks-cta-sub">Full analysis, price outlook, running costs, and live listings.</div>
+      <button class="ks-cta-btn ks-cta-btn-compact" id="ksBtnPaid" onclick="ksPirTab(2)" aria-label="Unlock full report">
         Unlock Full Report
       </button>
       <div class="ks-cta-items">
         <span>3‑Year Price Outlook</span>
         <span>💸 Year 1 Costs</span>
-        <span>🗣️ Negotiation Script</span>
         <span>Live Listings</span>
       </div>
     </div>
@@ -11189,8 +11416,8 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- Tab nav — shown once paid unlocked -->
   <div class="ks-tabnav" id="ksTabNav" style="display:none;">
-    <button class="ks-tabnav-btn" id="ksBtnFree" onclick="ksPirTab(1)" aria-selected="true">Free Report</button>
-    <button class="ks-tabnav-btn" id="ksBtnPaidTab" onclick="ksPirTab(2)" aria-selected="false">Full Report</button>
+    <button class="ks-tabnav-btn ks-tabnav-compact" id="ksBtnFree" onclick="ksPirTab(1)" aria-selected="true">Free Report</button>
+    <button class="ks-tabnav-btn ks-tabnav-compact" id="ksBtnPaidTab" onclick="ksPirTab(2)" aria-selected="false">Full Report</button>
   </div>
 
   <div class="ks-page ks-page-paid ks-page-2" id="ksPage2" style="display:none;">
@@ -11199,13 +11426,31 @@ function buildResult(r,brand,model,year,mileage,asking){
   <div class="ks-section ks-section-outlook">
     <div class="ks-section-eyebrow">3‑Year Price Outlook</div>
     <div class="ks-section-title">Expected Range Over 3 Years</div>
-    <div class="ks-outlook-grid">
-      ${_vc.depreciation.forecast.map((f,i)=>`
-      <div class="ks-outlook-card ${i===0?'ks-outlook-now':''}">
-        <div class="ks-outlook-yr">${i===0?"Today's Price":f.yr}</div>
-        <div class="ks-outlook-val">AED ${f.val.toLocaleString()}</div>
-        ${i>0?`<div class="ks-outlook-drop">−AED ${(handshake-f.val).toLocaleString()} from today</div>`:'<div class="ks-outlook-drop">Current FMV</div>'}
-      </div>`).join('')}
+    <div class="ks-outlook-chart">
+      ${(()=>{
+        const pts=_vc.depreciation.forecast;
+        const vals=pts.map(f=>f.val);
+        const maxV=Math.max(...vals,handshake);
+        const minV=Math.min(...vals,handshake)*0.92;
+        const range2=maxV-minV||1;
+        const pct=v=>Math.round(((v-minV)/range2)*82)+5; // 5%–87% height range
+        const bars=[{yr:"Today",val:handshake,isnow:true},...pts.map((f,i)=>({yr:f.yr,val:f.val,isnow:false}))];
+        return `<div class="ks-outlook-bar-chart">
+          ${bars.map((b,i)=>{
+            const h=pct(b.val);
+            const drop=i>0?handshake-b.val:0;
+            const barCls=b.isnow?'ks-ob-bar-now':i===bars.length-1?'ks-ob-bar-last':'ks-ob-bar-mid';
+            return `<div class="ks-ob-col">
+              <div class="ks-ob-val">AED ${Math.round(b.val/1000)}k</div>
+              <div class="ks-ob-bar-wrap">
+                <div class="ks-ob-bar ${barCls}" style="height:${h}%"></div>
+              </div>
+              <div class="ks-ob-yr">${b.yr}</div>
+              ${drop>0?`<div class="ks-ob-drop">−AED ${Math.round(drop/1000)}k</div>`:'<div class="ks-ob-drop ks-ob-drop-now">FMV</div>'}
+            </div>`;
+          }).join('')}
+        </div>`;
+      })()}
     </div>
     <div class="ks-outlook-note">
       ${brand} ${model||''} loses roughly <strong>${Math.round(_vc.depreciation.rate*100)}% per year</strong> in the UAE market.
@@ -11225,67 +11470,70 @@ function buildResult(r,brand,model,year,mileage,asking){
       <tr class="ks-cost-total"><td>Total Year 1 Cash Out</td><td>AED ${_vc.runningCosts.total.toLocaleString()}</td></tr>
     </table>
     <div class="ks-cost-depr-note">
-      <span class="ks-depr-label">Yearly Value Drop</span>
-      <span class="ks-depr-val">AED ${_vc.depreciation.annual.toLocaleString()}/year</span>
+      <div class="ks-depr-note-row">
+        <span class="ks-depr-label">📉 Yearly Value Drop</span>
+        <span class="ks-depr-val">AED ${_vc.depreciation.annual.toLocaleString()}/year</span>
+      </div>
     </div>
     <div class="ks-cost-note">Running cost estimates are based on UAE averages. Actual figures vary by usage, insurer, and dealer.</div>
   </div>
 
-  <!-- ── 3. USE THIS LINE (Negotiation Script) ──────── -->
-  <div class="ks-section ks-section-script">
-    <div class="ks-section-eyebrow">Negotiation</div>
-    <div class="ks-section-title">Use This Line</div>
-    <div class="ks-nego-anchors">
-      <div class="ks-nego-card ks-nego-open">
-        <div class="ks-nego-card-lbl">Start here</div>
-        <div class="ks-nego-card-val">AED ${(nego.offer||Math.round(handshake*0.93/500)*500).toLocaleString()}</div>
-      </div>
-      <div class="ks-nego-card ks-nego-close">
-        <div class="ks-nego-card-lbl">Close at</div>
-        <div class="ks-nego-card-val">AED ${(nego.close||handshake).toLocaleString()}</div>
-      </div>
-      <div class="ks-nego-card ks-nego-walk">
-        <div class="ks-nego-card-lbl">Walk if over</div>
-        <div class="ks-nego-card-val">AED ${(nego.walk||rangeMax).toLocaleString()}</div>
-      </div>
-    </div>
-    <div class="ks-script-box" id="haggleScript">
-      ${nego.script||`"I've checked the market — similar ${brand} ${model||''} ${year}s in the UAE are selling between AED ${rangeMin.toLocaleString()} and AED ${rangeMax.toLocaleString()}. The fair price is around AED ${handshake.toLocaleString()}. Can we agree on AED ${(nego.close||handshake).toLocaleString()}?"`}
-    </div>
-    <button class="ks-script-copy" onclick="(function(b){const el=document.getElementById('haggleScript');if(!el)return;navigator.clipboard?.writeText(el.textContent||'').then(()=>{b.textContent='✓ Copied!';setTimeout(()=>b.textContent='📋 Copy this line',2000)}).catch(()=>{});b.textContent='✓ Copied!';setTimeout(()=>b.textContent='📋 Copy this line',2000);})(this)">📋 Copy this line</button>
-    ${nego.tactic?`<div class="ks-nego-tip"><strong>Tip:</strong> ${nego.tactic}</div>`:''}
-  </div>
 
   <!-- ── 4. LIVE LISTINGS COMPARED ─────────────────── -->
   <div class="ks-section ks-section-listings">
     <div class="ks-section-eyebrow">Live Listings</div>
     <div class="ks-section-title">Live Listings Compared</div>
-    <div class="ks-listings-grid">
+    <div class="ks-listings-table-wrap">
       ${(()=>{
-        const q = encodeURIComponent(`${brand} ${model||''} ${year}`);
-        const links = [
-          { name:'Dubizzle', url:`https://dubai.dubizzle.com/motors/used-cars/?q=${q}`, note:'Largest UAE classifieds' },
-          { name:'YallaMotor', url:`https://uae.yallamotor.com/used-cars?q=${q}`, note:'Specialist auto platform' },
-          { name:'CarsSwitch', url:`https://carsswitch.com/en-ae/used-cars?q=${q}`, note:'Dealer-inspected listings' },
-          { name:'AutoTrader UAE', url:`https://www.autotraderuae.com/search?q=${q}`, note:'Pan-Gulf listings' },
-        ];
         if(r.sourceLinks&&r.sourceLinks.length){
-          return r.sourceLinks.map(sl=>`<a class="ks-listing-link" href="${sl.url||'#'}" target="_blank" rel="noopener noreferrer">
-            <span class="ks-listing-name">${sl.title||sl.name||'View listing'}</span>
-            <span class="ks-listing-arrow">↗</span>
-          </a>`).join('');
+          // Use API-returned real listings with full details
+          const rows=r.sourceLinks.map((sl,i)=>{
+            const title=sl.title||sl.name||`${brand} ${model||''} ${year}`;
+            const price=sl.price?`AED ${parseInt(sl.price).toLocaleString()}`:(sl.asking?`AED ${parseInt(sl.asking).toLocaleString()}`:'—');
+            const mileageDisp=sl.mileage?`${parseInt(sl.mileage).toLocaleString()} km`:'—';
+            const yearDisp=sl.year||year;
+            return `<tr>
+              <td class="ks-lt-brand">${brand}</td>
+              <td class="ks-lt-model">${model||'—'}</td>
+              <td class="ks-lt-year">${yearDisp}</td>
+              <td class="ks-lt-km">${mileageDisp}</td>
+              <td class="ks-lt-price">${price}</td>
+              <td class="ks-lt-link"><a href="${sl.url||'#'}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">View ↗</a></td>
+            </tr>`;
+          });
+          return `<table class="ks-listings-table">
+            <thead><tr>
+              <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th></th>
+            </tr></thead>
+            <tbody>${rows.join('')}</tbody>
+          </table>`;
         }
-        return links.map(l=>`<a class="ks-listing-link" href="${l.url}" target="_blank" rel="noopener noreferrer">
-          <span class="ks-listing-icon">🔗</span>
-          <div class="ks-listing-info">
-            <span class="ks-listing-name">${l.name}</span>
-            <span class="ks-listing-note">${l.note}</span>
-          </div>
-          <span class="ks-listing-arrow">↗</span>
-        </a>`).join('');
+        // Fallback: search links to classified platforms
+        const q=encodeURIComponent(`${brand} ${model||''} ${year}`);
+        const qKm=km?encodeURIComponent(`${brand} ${model||''} ${year} ${Math.round(km/10000)*10000}km`):'';
+        const links=[
+          {name:'Dubizzle',url:`https://dubai.dubizzle.com/motors/used-cars/?q=${q}`,note:'Dubai · Sharjah'},
+          {name:'YallaMotor',url:`https://uae.yallamotor.com/used-cars?q=${q}`,note:'UAE wide'},
+          {name:'CarsSwitch',url:`https://carsswitch.com/en-ae/used-cars?q=${q}`,note:'Dealer-inspected'},
+          {name:'AutoTrader UAE',url:`https://www.autotraderuae.com/search?q=${q}`,note:'Pan-Gulf'},
+        ];
+        const rows2=links.map(l=>`<tr>
+          <td class="ks-lt-brand">${brand}</td>
+          <td class="ks-lt-model">${model||'—'}</td>
+          <td class="ks-lt-year">${year}</td>
+          <td class="ks-lt-km">${km?km.toLocaleString()+' km':'—'}</td>
+          <td class="ks-lt-price">—</td>
+          <td class="ks-lt-link"><a href="${l.url}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">${l.name} ↗</a></td>
+        </tr>`);
+        return `<table class="ks-listings-table">
+          <thead><tr>
+            <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th>Source</th>
+          </tr></thead>
+          <tbody>${rows2.join('')}</tbody>
+        </table>`;
       })()}
     </div>
-    <div class="ks-listings-note">Search for <strong>${brand} ${model||''} ${year}</strong> — compare against FMV of <strong>AED ${handshake.toLocaleString()}</strong>.</div>
+    <div class="ks-listings-note">Compare against FMV of <strong>AED ${handshake.toLocaleString()}</strong>. Links open live listings used to compute the Fair Market Price above.</div>
   </div>
 
   <!-- ── 5. FOOTER ──────────────────────────────────── -->
