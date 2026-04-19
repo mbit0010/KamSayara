@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- KamSayara v65 — 19 Apr 2026
-     Paired with: kamsayara_v65_worker.js
+<!-- KamSayara v66 — 19 Apr 2026
+     Paired with: kamsayara_v66_worker.js
      Breakpoints: Desktop ≥861px | Tablet 601–860px | Mobile ≤600px
      Worker contract: market range + depreciation_class + confidence + listings_snapshot → frontend ksComputeValuation() -->
 <html lang="en">
@@ -1249,16 +1249,7 @@
       .rpanel-inner { flex: 1; overflow: visible; }
     }
 
-    /* ── PRINT ───────────────────────────────────────────── */
-    @media print {
-      .snav,.hero,.ffoot,.qc,.nxt,.share-row,.why-toggle,.rfooter,
-      #restoreBar,.mob-overlay,.mob-result-toast { display:none !important; }
-      body { background:#fff; }
-      .layout { display:block; }
-      .result-panel { position:static; height:auto; max-height:none; box-shadow:none; border:none; }
-      .form-card { display:none !important; }
-      .pblock,.ai-block,.tags { break-inside:avoid; }
-    }
+    /* ── PRINT: see authoritative @media print block at end of <style> ── */
 
     /* ── SHARED: Dropdown gold scrollbar ─────────────────── */
     .ks-list { scrollbar-width: thin; scrollbar-color: var(--gold) var(--surface-2); }
@@ -4448,29 +4439,7 @@
     
     
 
-    /* ── C15 FIX: Print mode — consistent with new shared/free-only/paid-only structure ── */
-    
-    @media print {
-      /* @page handled by the single authoritative print block below — not repeated here */
-      body { font-size: 9.5px !important; background: #fff !important; }
-      .snav, .hero, .mob-fixed-header, .form-card, #restoreBar,
-      .pir-tab-footer, .pir-ext-actions, .pir-tabs-nav, .ks-tabnav { display: none !important; }
-      .layout { display: block !important; }
-      .result-panel { width: 100% !important; box-shadow: none !important; border: 1px solid #ccc !important; }
-      /* C13: show shared S1-S6 + paid-only S7-11; hide free-only upsell CTA */
-      #ksPirShared   { display: block !important; }
-      #ksPirFreeOnly { display: none !important; }
-      #ksPirPaidOnly { display: block !important; }
-      #ksPirDisclaimer { display: block !important; }
-      /* C15: print tab label replaces hidden tab nav */
-      
-      
-      
-      
-      
-      
-      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    }
+    /* ── C15 FIX: Print mode — see authoritative @media print at end of <style> ── */
 
     
 
@@ -4620,127 +4589,7 @@
 }
 /* ── FULLSCREEN CONTAINERS — removed; results render inline ── */
 
-/* ── PRINT / PDF — A4 LAYOUT ──────────────────────────── */
-@media print {
-  /* ── PAGE SETUP ─────────────────────────────────────────── */
-  @page { size: A4 portrait; margin: 15mm 14mm 12mm 14mm; }
-  @page :first { margin-top: 18mm; } /* extra top on page 1 — prevents header displacement */
-
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  html, body { background: #fff !important; font-size: 10px !important; margin: 0 !important; padding: 0 !important; }
-
-  /* ── HIDE NON-REPORT CHROME ─────────────────────────────── */
-  .snav, .hero, .restoreBar, #restoreBar, .share-strip, .ffoot, .form-card,
-  .mob-fixed-header, .mob-result-toast, .mob-overlay,
-  .ks-upsell-btn, .ks-free-upsell, .rph, .rld,
-  .ks-tabnav, .ks-script-toggle, .ks-script-copy,
-  .ks-next-micro-row, .ks-next-primary-row, .ks-next-value-prop,
-  .ks-next-steps, .ks-mf2-zones { display: none !important; }
-
-  /* ── LAYOUT ─────────────────────────────────────────────── */
-  .layout       { display: block !important; }
-  .result-panel { display: block !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
-  #rcontent     { display: block !important; }
-
-  /* ── REPORT HEADER: anchor to page top — zero displacement ── */
-  .ks-report-header {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 10px !important;
-    padding-bottom: 8px !important;
-    page-break-inside: avoid !important;
-    page-break-after: avoid !important;
-    position: static !important;
-    top: auto !important;
-    transform: none !important;
-  }
-  /* Kill any sticky/fixed positioning in print */
-  .pir-header, .ks-report-header, .ks-tabnav {
-    position: static !important;
-    top: auto !important;
-  }
-  /* Dubai scene: replace with simple header bar in print */
-  .ks-dubai-scene { display: none !important; }
-  .ks-spec-road-row {
-    display: flex !important;
-    background: #f0f4f8 !important;
-    border: 1px solid #dde4ee !important;
-    border-radius: 8px !important;
-    padding: 6px 10px !important;
-    margin-bottom: 8px !important;
-    flex-wrap: wrap !important;
-  }
-  .ks-spec-chip-lbl { color: #4A5E7A !important; }
-  .ks-spec-chip-val { color: #1A2B4C !important; }
-  .ks-spec-chip { border-right-color: #dde4ee !important; }
-
-  /* ── SECTION BASE: tight and scannable ──────────────────── */
-  .ks-section { padding: 7px 10px 8px !important; border-bottom: 1px solid #E0E0E0 !important; page-break-inside: avoid !important; }
-  .ks-section-title   { font-size: .82rem !important; margin-bottom: 5px !important; }
-  .ks-section-eyebrow { font-size: .54rem !important; margin-bottom: 1px !important; }
-
-  /* ── PRICE POSITION: tighten dead space ─────────────────── */
-  
-  
-  
-  
-  
-  
-  
-
-  /* ── DATA & TRANSPARENCY: remove gap ────────────────────── */
-  
-  
-  
-  
-  
-
-  /* ── MARKET FIT: compact ─────────────────────────────────── */
-  
-  
-  
-  
-
-  /* ── VALUE LOGIC: keep entire block together ─────────────── */
-  
-  
-  
-  
-  
-
-  /* ── NEGOTIATION: compact ────────────────────────────────── */
-  
-  
-  
-
-  /* ── SCRIPT: inline compact, no buttons ─────────────────── */
-  
-  
-  
-
-  /* ── KEY POINTS ──────────────────────────────────────────── */
-  
-  
-
-  /* ── MOOD / MARKET ───────────────────────────────────────── */
-  
-  
-
-  /* ── DEPRECIATION ────────────────────────────────────────── */
-  
-  .ks-cost-table { page-break-inside: avoid !important; }
-
-  /* ── PAGE BREAKS ─────────────────────────────────────────── */
-  .ks-section:nth-child(3) { page-break-after: always !important; } /* break after price position */
-  .ks-section, .ks-trust-card, .ks-nego-col, .ks-kp-block, .ks-depr-chart { page-break-inside: avoid !important; }
-
-  /* ── SHOW CORRECT CONTENT ────────────────────────────────── */
-  #ksPirShared     { display: block !important; }
-  #ksPirFreeOnly   { display: none  !important; }
-  #ksPirPaidOnly   { display: block !important; }
-  #ksPirDisclaimer { display: block !important; }
-  
-}
+/* ── PRINT: see authoritative @media print at end of <style> ── */
 
 /* ═══════════════════════════════════════════════════════
    KS PIR v30 — TWO-TAB REPORT SYSTEM
@@ -6889,6 +6738,440 @@ body.ks-result-active .form-card:hover {
   .ks-price-hl-main { font-size: clamp(1.8rem,10vw,2.6rem) !important; }
   .ks-conf-left { width: 96px !important; }
   .ks-conf-speedometer-wrap { width: 96px !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v66 AUTHORITATIVE LAYOUT — single source of truth
+   Overrides all conflicting !important rules above.
+   Desktop ≥861px: centred single-column, max 760px
+   Tablet  601–860px: stacked, full width
+   Mobile  ≤600px: stacked, full width, 2-col form grid
+══════════════════════════════════════════════════════════════ */
+
+/* ── BASE (mobile-first, applies to all) ── */
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  box-sizing: border-box;
+}
+
+.layout {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  margin-top: 24px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+.form-card, .result-panel {
+  width: 100% !important;
+  border-radius: 16px !important;
+  box-sizing: border-box !important;
+}
+
+.form-card   { overflow: visible !important; }
+.result-panel {
+  overflow: hidden !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+/* result-panel: hide when idle (no content yet) */
+.result-panel.panel-state-idle {
+  min-height: 240px !important;
+}
+
+/* form header and footer rounded corners */
+.form-header { border-radius: 16px 16px 0 0 !important; }
+.ffoot       { border-radius: 0 0 16px 16px !important; }
+
+/* ── FORM GRID: 2-col on mobile (default) ── */
+.fg {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px 10px !important;
+}
+.qcbar {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+}
+
+/* ── TABLET: 601–860px ── */
+@media (min-width: 601px) and (max-width: 860px) {
+  .page { padding: 28px 20px 48px !important; }
+  .layout { gap: 14px !important; margin-top: 28px !important; }
+
+  /* 4-col form grid on tablet */
+  .fg    { grid-template-columns: repeat(4, 1fr) !important; gap: 7px 10px !important; }
+  .qcbar { grid-template-columns: repeat(4, 1fr) !important; gap: 7px !important; }
+
+  /* Input sizes for tablet */
+  select, input[type="number"], input[type="text"] {
+    height: 38px !important; font-size: 0.83rem !important;
+  }
+  .ks-trigger { height: 38px !important; font-size: 0.83rem !important; }
+  .btn-go { height: 38px !important; }
+}
+
+/* ── DESKTOP: ≥861px ── */
+@media (min-width: 861px) {
+  .page {
+    width: 80% !important;
+    max-width: 860px !important;
+    min-width: 600px !important;
+    margin: 0 auto !important;
+    padding: 32px 0 56px !important;
+  }
+  .layout {
+    gap: 18px !important;
+    margin-top: 32px !important;
+  }
+
+  /* 4-col form grid on desktop */
+  .fg    { grid-template-columns: repeat(4, 1fr) !important; gap: 8px 12px !important; }
+  .qcbar { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
+
+  /* Input sizes for desktop */
+  select, input[type="number"], input[type="text"] {
+    height: 36px !important; font-size: 0.82rem !important;
+  }
+  .ks-trigger { height: 36px !important; font-size: 0.82rem !important; }
+  .btn-go { height: 36px !important; }
+
+  /* Sticky nav on desktop — hide on scroll-up, show on scroll-down */
+  .snav { display: flex !important; }
+
+  /* result-panel: auto height on desktop */
+  .result-panel {
+    overflow-y: auto !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+}
+
+/* ── MOBILE: ≤600px ── */
+@media (max-width: 600px) {
+  .page { padding: 16px 12px 40px !important; }
+  .layout { gap: 12px !important; margin-top: 16px !important; }
+
+  /* Snav hidden on mobile — hero nav serves */
+  .snav { display: none !important; }
+  .hero { display: block !important; }
+
+  /* Mobile input sizes — 16px prevents iOS zoom */
+  select, input[type="number"], input[type="text"] {
+    height: 42px !important;
+    font-size: max(16px, 1rem) !important;
+  }
+  .ks-trigger { height: 42px !important; font-size: max(16px, 1rem) !important; }
+  .btn-go { height: 42px !important; font-size: 0.85rem !important; }
+
+  /* QC bar labels — abbreviated for 2-col mobile */
+  .qcbar-item:nth-child(2) .qcbar-lbl::after { content: ''; }
+}
+
+/* ── SHARE STRIP: hidden before result ── */
+#shareStrip { display: none; }
+body.ks-result-active #shareStrip { display: flex; }
+
+/* ── BACK-TO-INPUTS BUTTON: hidden before result ── */
+#backToInputs { display: none !important; }
+body.ks-result-active #backToInputs { display: flex !important; }
+
+/* ── OVERFLOW: ensure dropdowns always escape containers ── */
+.fg, .ig, .form-body, .form-card { overflow: visible !important; }
+.ks-wrap { overflow: visible !important; position: relative !important; }
+.ks-panel { z-index: 999999 !important; }
+
+/* ── FONT SYSTEM: unified across FREE and PAID ── */
+.ks-section-eyebrow {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: 0.60rem !important; font-weight: 800 !important;
+  letter-spacing: .16em !important; text-transform: uppercase !important;
+  color: #C49A2A !important; margin-bottom: 3px !important;
+  display: block !important; opacity: 1 !important;
+}
+.ks-section-title {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: 0.92rem !important; font-weight: 800 !important;
+  color: #0A2540 !important; margin-bottom: 10px !important;
+  letter-spacing: -.01em !important; line-height: 1.25 !important;
+  opacity: 1 !important;
+}
+.ks-section p, .ks-section li, .ks-flag-plain, .ks-comm-item,
+.ks-outlook-note, .ks-cost-note, .ks-footer-disc, .ks-scale-interp,
+.ks-conf-reason, .ks-conf-caption, .ks-s7-body {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: 0.80rem !important; color: #2D3F55 !important;
+  line-height: 1.65 !important; opacity: 1 !important;
+}
+
+/* ── PRINT: see @media print block above ── */
+
+/* ══════════════════════════════════════════════════════════════
+   UNIFIED DESIGN SYSTEM v66
+   THREE SIZES ONLY — applied consistently across all devices,
+   all breakpoints, FREE and PAID sections.
+
+   SIZE 1 — Section Heading:  1.0rem / 800 / #0A2540
+   SIZE 2 — Subheading / Label: 0.72rem / 700 / #4B5E75
+   SIZE 3 — Body / Cell Text:   0.85rem / 400-600 / #2D3F55
+
+   No other sizes in report sections.
+══════════════════════════════════════════════════════════════ */
+
+/* ── ROOT TYPE TOKENS ── */
+:root {
+  --ks-t-head:   1.00rem;   /* section heading */
+  --ks-t-sub:    0.72rem;   /* labels, eyebrows, table headers */
+  --ks-t-body:   0.85rem;   /* all body text, table cells, insight text */
+  --ks-c-head:   #0A2540;
+  --ks-c-sub:    #4B5E75;
+  --ks-c-body:   #2D3F55;
+  --ks-c-gold:   #C49A2A;
+  --ks-c-loss:   #DC2626;
+  --ks-c-retain: #15803D;
+  --ks-sp-section: 18px 16px 16px; /* section padding */
+  --ks-sp-cell:    9px 10px;        /* table/card cell padding */
+  --ks-gap:        10px;            /* gap between cards/boxes */
+  --ks-radius:     10px;            /* card border radius */
+}
+
+/* ── SECTION HEADER: SIZE 1 + SIZE 2 ── */
+.ks-section { padding: var(--ks-sp-section) !important; }
+.ks-section + .ks-section { border-top: 1px solid var(--border) !important; }
+
+.ks-section-eyebrow {
+  font-size: var(--ks-t-sub) !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--ks-c-gold) !important;
+  margin-bottom: 3px !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+.ks-section-title {
+  font-size: var(--ks-t-head) !important;
+  font-weight: 800 !important;
+  color: var(--ks-c-head) !important;
+  margin-bottom: 12px !important;
+  line-height: 1.25 !important;
+  opacity: 1 !important;
+}
+
+/* ── ALL BODY TEXT: SIZE 3 ── */
+.ks-section p, .ks-section li, .ks-section td, .ks-section th,
+.ks-flag-plain, .ks-comm-item, .ks-outlook-note, .ks-cost-note,
+.ks-footer-disc, .ks-scale-interp, .ks-conf-reason, .ks-conf-caption,
+.ks-s7-body, .ks-depr3-insight, .ks-depr3-table td,
+.ks-cost-table td, .ks-listings-table td {
+  font-size: var(--ks-t-body) !important;
+  color: var(--ks-c-body) !important;
+  line-height: 1.6 !important;
+  opacity: 1 !important;
+}
+
+/* Table headers: SIZE 2 */
+.ks-depr3-table th,
+.ks-cost-table th,
+.ks-listings-table th {
+  font-size: var(--ks-t-sub) !important;
+  font-weight: 700 !important;
+  color: var(--ks-c-sub) !important;
+  opacity: 1 !important;
+}
+
+/* Insight labels: SIZE 2 */
+.ks-depr3-lbl {
+  font-size: var(--ks-t-sub) !important;
+  font-weight: 800 !important;
+  letter-spacing: .10em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 3px !important;
+  display: block !important;
+}
+
+/* Class note under table */
+.ks-depr3-cls-note {
+  font-size: var(--ks-t-sub);
+  font-weight: 700;
+  color: var(--ks-c-sub);
+  margin: 4px 0 12px;
+  padding: 5px 10px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  border-left: 3px solid var(--ks-c-gold);
+}
+
+/* ── DEPRECIATION TABLE: contained, no overflow ── */
+.ks-depr3-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  margin: 0 0 12px !important;
+  font-family: "Exo 2", sans-serif !important;
+}
+.ks-depr3-table th,
+.ks-depr3-table td {
+  padding: var(--ks-sp-cell) !important;
+  border-bottom: 1px solid var(--border) !important;
+  word-break: break-word !important;
+  overflow: hidden !important;
+}
+.ks-depr3-table th { border-bottom: 2px solid var(--border) !important; text-align: left !important; }
+.ks-depr3-table th:not(:first-child),
+.ks-depr3-table td:not(:first-child) { text-align: right !important; }
+.ks-depr3-table tr:last-child td { border-bottom: none !important; }
+.ks-depr3-table tr.ks-depr3-now-row td { background: rgba(10,37,64,.03) !important; }
+
+/* Mobile: remove Total Loss column to fit 4 cols in 2-col grid */
+@media (max-width: 600px) {
+  .ks-depr3-table th:nth-child(4),
+  .ks-depr3-table td:nth-child(4) { display: none !important; }
+}
+
+/* ── COST TABLE: same standard ── */
+.ks-cost-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+.ks-cost-table td { padding: var(--ks-sp-cell) !important; border-bottom: 1px solid var(--border) !important; }
+.ks-cost-table td:last-child { text-align: right !important; font-weight: 700 !important; color: var(--ks-c-head) !important; }
+.ks-cost-table tr:last-child td { border-bottom: none !important; }
+
+/* ── LISTINGS TABLE: contained with horizontal scroll on mobile ── */
+.ks-listings-table-wrap {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  border-radius: var(--ks-radius) !important;
+  border: 1px solid var(--border) !important;
+}
+.ks-listings-table {
+  min-width: 420px !important;
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+.ks-listings-table th,
+.ks-listings-table td { padding: 8px 10px !important; white-space: nowrap !important; }
+
+/* ── INSIGHT BOXES: consistent height driven by content ── */
+.ks-depr3-insights {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--ks-gap) !important;
+  margin-top: 12px !important;
+}
+.ks-depr3-insight {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: flex-start !important;
+  padding: 10px 12px !important;
+  border-radius: var(--ks-radius) !important;
+  border: 1px solid !important;
+  /* No min-height — height is driven by content. This ensures equal sizing
+     when text is equal length, and natural sizing when it varies. */
+}
+.ks-depr3-ico { font-size: 0.9rem !important; flex-shrink: 0 !important; margin-top: 2px !important; }
+
+/* Flag items: consistent padding */
+.ks-flag-plain, .ks-comm-item {
+  padding: 9px 10px !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border) !important;
+  margin-bottom: 6px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+}
+
+/* ── FORM SECTION SPACING ── */
+.form-body { padding: 12px 16px 10px !important; }
+.fg        { margin-bottom: 10px !important; }
+.qcbar     { margin-top: 8px !important; }
+
+.ig label {
+  font-size: var(--ks-t-sub) !important;
+  font-weight: 600 !important;
+  color: var(--ks-c-sub) !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+.ffoot {
+  padding: 10px 16px !important;
+  border-top: 1px solid var(--border) !important;
+}
+.ffoot-hint {
+  font-size: var(--ks-t-sub) !important;
+  color: var(--ks-c-sub) !important;
+}
+
+/* ── PREVENT ANY ELEMENT FROM ESCAPING SCREEN ── */
+.ks-pir, .ks-section, .ks-depr3-table,
+.ks-cost-table, .ks-listings-table-wrap,
+.ks-depr3-insights, .ks-flag-plain, .ks-comm-item,
+.ks-depr3-insight, .rcontent, #rcontent {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ── IDLE STATE: clean professional look ── */
+.ks-idle-state {
+  padding: 28px 24px !important;
+  text-align: center !important;
+}
+.ks-idle-title {
+  font-size: var(--ks-t-head) !important;
+  font-weight: 800 !important;
+  color: var(--ks-c-head) !important;
+  margin-bottom: 8px !important;
+}
+.ks-idle-sub {
+  font-size: var(--ks-t-body) !important;
+  color: var(--ks-c-sub) !important;
+  margin-bottom: 16px !important;
+  line-height: 1.6 !important;
+}
+
+/* ── SEARCH / FORM PROFESSIONAL SPACING ── */
+.form-header {
+  padding: 14px 16px 12px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.form-header-title {
+  font-size: var(--ks-t-head) !important;
+  font-weight: 800 !important;
+  color: var(--ks-c-head) !important;
+}
+
+/* QC bar spacing */
+.qcbar-item {
+  padding: 6px 4px !important;
+}
+.qcbar-lbl {
+  font-size: var(--ks-t-sub) !important;
+  font-weight: 700 !important;
+  color: var(--ks-c-sub) !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+/* ── RESULT PANEL HEADER ── */
+.result-panel-header {
+  padding: 14px 16px 12px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.result-panel-header-title {
+  font-size: var(--ks-t-head) !important;
+  font-weight: 800 !important;
+  color: var(--ks-c-head) !important;
 }
 </style>
 <body>
@@ -9230,6 +9513,8 @@ function ksGetVehicleImageUrl(brand, model, bodyKey){
    ══════════════════════════════════════════════════════════════════════════ */
 function ksComputeValuation(raw, inputs) {
   const R500 = n => Math.round(n / 500) * 500;
+  // Smart rounding: R100 for cars under AED 40k (R500 introduces ±3% error on low-value cars)
+  const R = (n, base) => base && base < 40000 ? Math.round(n/100)*100 : Math.round(n/500)*500;
 
   const mktLow  = raw.lowPrice  || raw.market_low  || 0;
   const mktHigh = raw.highPrice || raw.market_high || 0;
@@ -9411,7 +9696,7 @@ function ksComputeValuation(raw, inputs) {
   }
 
   // ── NEGOTIATION SCRIPT (scenario-aware) ──────────────────────────────────
-  const carLabel = inputs.carLabel || 'this vehicle';
+  // carLabel already destructured from inputs above
   const kmLabel  = mileage ? `${mileage.toLocaleString()} km` : '';
   const weaknesses = [
     fsh === false && 'no service history',
@@ -9560,8 +9845,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const carYear  =parseInt(year)||2020;
   const cy       =new Date().getFullYear();
   const carAge   =Math.max(1,cy-carYear);
-  const deprRate =carAge<=2?.15:carAge<=5?.12:carAge<=8?.08:.05;
-  const deprAmt  =Math.round(avg*deprRate/500)*500;
+  // deprRate and deprAmt are computed by ksComputeValuation → _vc.depreciation.*
   const confLabel=conf>=75?'High Confidence':conf>=50?'Medium Confidence':'Low Confidence';
   const dealInfo =getDealBadgeInfo(askN,avg);
   const sliderLow=low||Math.round(avg*.72);
@@ -10095,65 +10379,38 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-title">3-Year Price Outlook</div>
 
     ${(()=>{
-      const fc = _vc.depreciation.forecast; // [today, +1, +2, +3]
-      if(!fc||fc.length<4) return '<p style="color:var(--muted);font-size:.78rem">Forecast not available.</p>';
+      const fc  = _vc.depreciation.forecast;
+      const cls = _vc.depreciation.cls   || '—';
+      const lbl = _vc.depreciation.label || 'Market standard depreciation';
+      const hnt = _vc.depreciation.hint  || '';
+      if(!fc||fc.length<4) return '<p style="color:var(--muted);font-size:.85rem">Forecast not available.</p>';
 
-      const today = fc[0];
-      const y1    = fc[1];
-      const y2    = fc[2];
-      const y3    = fc[3];
-      const cards = [
-        { data:today, cls:'ks-depr3-now', lbl:'Today (FMV)', barW:100 },
-        { data:y1,    cls:'ks-depr3-y1',  lbl:`Year ${y1.yr}`, barW:y1.retained },
-        { data:y2,    cls:'ks-depr3-y2',  lbl:`Year ${y2.yr}`, barW:y2.retained },
-        { data:y3,    cls:'ks-depr3-y3',  lbl:`Year ${y3.yr}`, barW:y3.retained },
-      ];
-
-      // Monthly loss (Y1 ÷ 12)
+      const y1 = fc[1], y2 = fc[2], y3 = fc[3];
       const monthly = Math.round(y1.loss / 12 / 100) * 100;
 
-      // Human insights
-      const buyerSave   = handshake - y1.val;
       const buyerAdvice = handshake > 0
-        ? `You are buying at AED ${handshake.toLocaleString()}. In 3 years, this vehicle is likely worth around AED ${y3.val.toLocaleString()} — a total drop of AED ${y3.cumLoss.toLocaleString()} (${100-y3.retained}%). That's roughly AED ${monthly.toLocaleString()} per month in value lost. ${_vc.depreciation.hint}.`
-        : 'Enter price for buyer analysis.';
+        ? `You are buying at AED ${handshake.toLocaleString()}. In 3 years this vehicle is likely worth AED ${y3.val.toLocaleString()} — a total drop of AED ${y3.cumLoss.toLocaleString()} (${100-y3.retained}%). That is roughly AED ${monthly.toLocaleString()} per month in value lost. ${hnt}`
+        : 'Enter a price to see buyer analysis.';
 
-      const sellerAdvice = `If you sell now at AED ${handshake.toLocaleString()}, you preserve AED ${y1.loss.toLocaleString()} vs waiting one more year (Year ${y1.yr} est. AED ${y1.val.toLocaleString()}). Waiting costs you AED ${y1.loss.toLocaleString()} in Year 1 alone — ${_vc.depreciation.cls==='S'||_vc.depreciation.cls==='A'?'this model holds better than average, so you have more time':'this model depreciates faster, so acting sooner protects more value'}.`;
+      const sellerAdvice = `Selling now at AED ${handshake.toLocaleString()} preserves AED ${y1.loss.toLocaleString()} vs waiting one more year (Year ${y1.yr} estimated AED ${y1.val.toLocaleString()}). ${cls==='S'||cls==='A'?'This model holds value well — you have more time to find the right buyer.':'This model depreciates faster — acting sooner protects more value.'}`;
 
-      const brokerY1Pct = y1.rate;
-      const brokerAdvice = `Retention class: <strong>${_vc.depreciation.cls}</strong> — ${_vc.depreciation.label}. This vehicle loses ${brokerY1Pct}% in Year 1. ${_vc.depreciation.cls==='S'||_vc.depreciation.cls==='A'?'Fast-moving stock — price it at market and it moves in days. Good flip potential.':_vc.depreciation.cls==='D'||_vc.depreciation.cls==='E'?'Slower-moving — needs aggressive pricing or added value to move quickly. Watch holding costs.':'Steady market — typical turnover. Price at handshake and expect 14–30 days to close.'}`;
+      const brokerAdvice = `Class ${cls}: ${lbl}. Year 1 rate: ${y1.rate}%. ${cls==='S'||cls==='A'?'Fast-moving stock — price at market, expect to close in days.':cls==='D'||cls==='E'?'Slower-moving — needs competitive pricing. Watch holding costs.':'Steady market — typical 14–30 days to close at handshake price.'}`;
 
       return `
-      <div class="ks-depr3-cls-badge">
-        <span>📊</span>
-        <span>Class ${_vc.depreciation.cls}: ${_vc.depreciation.label}</span>
-      </div>
-
-      <div class="ks-depr3-track">
-        ${cards.map(c => `
-        <div class="ks-depr3-card ${c.cls}">
-          <span class="ks-depr3-yr">${c.lbl}</span>
-          <span class="ks-depr3-val">AED<br>${c.data.val.toLocaleString()}</span>
-          <div class="ks-depr3-bar-wrap"><div class="ks-depr3-bar-fill" style="width:${c.barW}%"></div></div>
-          <span class="ks-depr3-ret">${c.data.retained}% retained</span>
-          <div class="ks-depr3-loss">
-            ${c.data.loss > 0
-              ? `This year's drop<span class="ks-depr3-loss-amt">−AED ${c.data.loss.toLocaleString()}</span>`
-              : '<span style="font-weight:700;color:#0A2540;">Current Value</span>'}
-          </div>
-        </div>`).join('')}
-      </div>
-
       <table class="ks-depr3-table">
         <thead>
           <tr>
-            <th>Year</th><th>Est. Value</th><th>Drop This Year</th><th>Total Loss</th><th>Retained</th>
+            <th>Year</th>
+            <th>Est. Value</th>
+            <th>Annual Drop</th>
+            <th>Total Loss</th>
+            <th>Retained</th>
           </tr>
         </thead>
         <tbody>
           ${fc.map((f,i) => `
           <tr class="${i===0?'ks-depr3-now-row':''}">
-            <td>${i===0?'Today':f.yr}</td>
+            <td>${i===0?'Today (FMV)':f.yr}</td>
             <td>AED ${f.val.toLocaleString()}</td>
             <td class="ks-depr3-loss-cell">${f.loss>0?'−AED '+f.loss.toLocaleString():'—'}</td>
             <td class="ks-depr3-cum-cell">${f.cumLoss>0?'−AED '+f.cumLoss.toLocaleString():'—'}</td>
@@ -10162,18 +10419,20 @@ function buildResult(r,brand,model,year,mileage,asking){
         </tbody>
       </table>
 
+      <div class="ks-depr3-cls-note">Class ${cls} — ${lbl}</div>
+
       <div class="ks-depr3-insights">
         <div class="ks-depr3-insight ks-depr3-buy">
           <span class="ks-depr3-ico">🛒</span>
-          <div><span class="ks-depr3-lbl">Buyer Perspective</span>${buyerAdvice}</div>
+          <div><span class="ks-depr3-lbl">Buyer</span>${buyerAdvice}</div>
         </div>
         <div class="ks-depr3-insight ks-depr3-sell">
           <span class="ks-depr3-ico">🏷️</span>
-          <div><span class="ks-depr3-lbl">Seller Perspective</span>${sellerAdvice}</div>
+          <div><span class="ks-depr3-lbl">Seller</span>${sellerAdvice}</div>
         </div>
         <div class="ks-depr3-insight ks-depr3-broker">
           <span class="ks-depr3-ico">📋</span>
-          <div><span class="ks-depr3-lbl">Broker / Dealer View</span>${brokerAdvice}</div>
+          <div><span class="ks-depr3-lbl">Broker / Dealer</span>${brokerAdvice}</div>
         </div>
       </div>`;
     })()}
