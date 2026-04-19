@@ -6452,6 +6452,414 @@ body.ks-result-active .form-card:hover {
   #rld     { display: none; }
   #rcontent { display: none; }
   /* #rph is visible by default (no rule needed — .rph sets display:flex) */
+
+/* ════════════════════════════════════════════════════════════════
+   v63 VISUAL REDESIGN — Phases 1–4
+   Phase 1: Typography scale, spacing, section headers
+   Phase 2: Price hero, speedometer, price scale, flags cards
+   Phase 3: Buyers/sellers cards, cost table, footer ref
+   Phase 4: Print/PDF A4 rewrite
+════════════════════════════════════════════════════════════════ */
+
+/* ── PHASE 1A: TYPOGRAPHY SCALE ─────────────────────────────── */
+:root {
+  --fs-display:    clamp(2rem,   6vw,   3rem);
+  --fs-h1:         clamp(1.3rem, 3vw,   1.85rem);
+  --fs-h2:         clamp(1.05rem,2.5vw, 1.25rem);
+  --fs-h3:         clamp(0.9rem, 2vw,   1.05rem);
+  --fs-body:       clamp(0.82rem,1.6vw, 0.94rem);
+  --fs-body-sm:    clamp(0.75rem,1.4vw, 0.84rem);
+  --fs-caption:    clamp(0.68rem,1.2vw, 0.76rem);
+  --fs-label:      clamp(0.60rem,1.1vw, 0.68rem);
+  --fs-eyebrow:    clamp(0.58rem,1.0vw, 0.65rem);
+  --fs-price-hero: clamp(2.2rem,  7vw,  3.2rem);
+}
+
+/* ── PHASE 1B: SECTION HEADER STANDARD ─────────────────────── */
+/* Every section: eyebrow (gold uppercase) + title (navy bold) + divider */
+.ks-section { padding: 20px 22px 18px !important; }
+.ks-section + .ks-section { border-top: 2px solid #EAECF2 !important; }
+.ks-section-eyebrow {
+  font-size: var(--fs-eyebrow) !important;
+  font-weight: 800 !important; letter-spacing: .18em !important;
+  text-transform: uppercase !important; color: #C49A2A !important;
+  margin-bottom: 3px !important; display: block !important;
+}
+.ks-section-title {
+  font-size: var(--fs-h2) !important;
+  font-weight: 800 !important; color: #0A2540 !important;
+  margin-bottom: 16px !important; letter-spacing: -.02em !important;
+  line-height: 1.2 !important; border-bottom: 2px solid #EAECF2 !important;
+  padding-bottom: 10px !important;
+}
+/* Section header divider accent — gold left border on title */
+.ks-section-title::before {
+  content: '';
+  display: inline-block; width: 3px; height: .9em;
+  background: #C49A2A; border-radius: 2px;
+  margin-right: 9px; vertical-align: middle;
+}
+.ks-flags-sub-head {
+  font-size: var(--fs-eyebrow) !important;
+  font-weight: 800 !important; letter-spacing: .14em !important;
+  text-transform: uppercase !important; color: #0A2540 !important;
+  margin-bottom: 8px !important;
+}
+.ks-s7-section-title {
+  font-size: var(--fs-eyebrow) !important;
+  font-weight: 800 !important; letter-spacing: .14em !important;
+  text-transform: uppercase !important; color: #C49A2A !important;
+  margin-bottom: 12px !important;
+}
+
+/* ── PHASE 1C: BODY TEXT SCALE ──────────────────────────────── */
+.ks-flag-plain, .ks-comm-item, .ks-s7-body,
+.ks-fuel-val, .ks-conf-caption, .ks-conf-reason,
+.ks-scale-interp, .ks-outlook-note, .ks-cost-note,
+.ks-listings-note, .ks-footer-disc {
+  font-size: var(--fs-body) !important;
+  line-height: 1.65 !important;
+}
+
+/* ── PHASE 2A: PRICE HERO ───────────────────────────────────── */
+.ks-section-price {
+  text-align: center !important;
+  padding: 28px 22px 22px !important;
+  background: linear-gradient(160deg,rgba(10,37,64,.05) 0%,rgba(196,154,42,.04) 100%) !important;
+  border-bottom: 2px solid #EAECF2 !important;
+}
+.ks-price-hl-label {
+  font-size: var(--fs-eyebrow) !important;
+  font-weight: 800 !important; letter-spacing: .22em !important;
+  text-transform: uppercase !important; color: #64748B !important;
+  margin-bottom: 8px !important; display: block !important;
+}
+.ks-price-hl-main {
+  font-family: "Orbitron", sans-serif !important;
+  font-size: var(--fs-price-hero) !important;
+  font-weight: 900 !important; color: #0A2540 !important;
+  letter-spacing: -.03em !important; line-height: 1 !important;
+  margin-bottom: 8px !important;
+  text-shadow: 0 2px 20px rgba(10,37,64,.12) !important;
+}
+.ks-price-hl-range {
+  font-size: var(--fs-body-sm) !important;
+  color: #3D5166 !important; margin-bottom: 14px !important;
+  font-weight: 600 !important;
+}
+.ks-price-diff-lbl {
+  font-size: var(--fs-eyebrow) !important;
+  font-weight: 700 !important; letter-spacing: .12em !important;
+  text-transform: uppercase !important; color: #94A3B8 !important;
+  margin-bottom: 6px !important; display: block !important;
+}
+.ks-price-hl-ask {
+  display: inline-flex !important; align-items: center !important;
+  gap: 8px !important; font-size: var(--fs-body-sm) !important;
+  font-weight: 700 !important; padding: 8px 18px !important;
+  border-radius: 99px !important; margin-bottom: 12px !important;
+  flex-wrap: wrap !important; justify-content: center !important;
+}
+.ks-ask-delta { font-weight: 600 !important; font-size: var(--fs-caption) !important; }
+.ks-price-meta {
+  display: flex !important; justify-content: center !important;
+  gap: 8px !important; font-size: var(--fs-caption) !important;
+  color: #4B5E75 !important;
+}
+
+/* ── PHASE 2B: CONFIDENCE SPEEDOMETER ──────────────────────── */
+.ks-conf-speedometer-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; width: 120px;
+}
+.ks-conf-speedometer-wrap svg { overflow: visible; }
+.ks-conf-score-label {
+  font-size: var(--fs-caption); font-weight: 700;
+  color: #94A3B8; letter-spacing: .08em;
+  text-transform: uppercase; margin-top: 4px;
+  text-align: center;
+}
+/* Override old conf-left sizing for speedometer */
+.ks-conf-left {
+  flex-shrink: 0 !important; text-align: center !important;
+  width: 120px !important;
+}
+.ks-conf-score {
+  font-family: "Orbitron",sans-serif !important;
+  font-size: 1.8rem !important; font-weight: 900 !important;
+  color: #0A2540 !important; line-height: 1 !important;
+}
+.ks-conf-bar-wrap { flex: 1 !important; }
+.ks-conf-bar-track {
+  height: 10px !important;
+  border-radius: 99px !important; margin-bottom: 10px !important;
+  background: linear-gradient(90deg,#EF4444 0%,#F59E0B 45%,#22C55E 85%) !important;
+  position: relative !important;
+}
+.ks-conf-bar-fill {
+  position: absolute !important; top: 0 !important; right: 0 !important;
+  bottom: 0 !important; background: rgba(255,255,255,.55) !important;
+  border-radius: 0 99px 99px 0 !important; transition: width .8s ease !important;
+}
+.ks-conf-stats {
+  font-size: var(--fs-caption) !important; color: #4B5E75 !important;
+  display: flex !important; gap: 8px !important; flex-wrap: wrap !important;
+  margin-bottom: 6px !important;
+}
+.ks-conf-caption {
+  font-size: var(--fs-body-sm) !important;
+  color: #3D5166 !important; line-height: 1.55 !important;
+  font-weight: 600 !important; margin-bottom: 6px !important;
+}
+
+/* ── PHASE 2C: FLAGS CARDS ──────────────────────────────────── */
+.ks-flags-grid { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+.ks-flag-plain {
+  display: flex !important; align-items: flex-start !important;
+  gap: 10px !important; padding: 10px 14px !important;
+  border-radius: 10px !important; border: 1px solid #E5E9EF !important;
+  font-size: var(--fs-body) !important; color: #2D3D50 !important;
+  line-height: 1.55 !important; background: #FAFBFC !important;
+  border-bottom: none !important;
+}
+.ks-flag-plain:last-child { border-bottom: none !important; }
+/* Green flag card */
+.ks-flag-plain:has(.ks-flag-icon-green) {
+  border-left: 4px solid #22C55E !important;
+  background: rgba(34,197,94,.04) !important;
+}
+/* Warn flag card */
+.ks-flag-plain:has(.ks-flag-icon-warn) {
+  border-left: 4px solid #F59E0B !important;
+  background: rgba(245,158,11,.04) !important;
+}
+.ks-flag-icon { font-size: 1rem !important; flex-shrink: 0 !important; margin-top: 1px !important; }
+
+/* Community items */
+.ks-comm-item {
+  display: flex !important; align-items: flex-start !important;
+  gap: 10px !important; padding: 10px 14px !important;
+  border-radius: 10px !important; border: 1px solid #E5E9EF !important;
+  font-size: var(--fs-body) !important; color: #2D3D50 !important;
+  line-height: 1.55 !important; margin-bottom: 6px !important;
+  border-bottom: none !important;
+}
+.ks-comm-pos { background: rgba(34,197,94,.04) !important; border-left: 4px solid #22C55E !important; }
+.ks-comm-neu { background: rgba(59,130,246,.04) !important; border-left: 4px solid #93C5FD !important; }
+.ks-comm-cau { background: rgba(245,158,11,.04) !important; border-left: 4px solid #F59E0B !important; }
+
+/* Fuel row card */
+.ks-fuel-row {
+  display: flex !important; align-items: flex-start !important; gap: 12px !important;
+  margin: 14px 0 6px !important; padding: 12px 16px !important;
+  background: rgba(10,37,64,.03) !important; border-radius: 10px !important;
+  border: 1px solid rgba(10,37,64,.10) !important; border-left: 4px solid #0A2540 !important;
+}
+.ks-fuel-lbl { font-size: var(--fs-eyebrow) !important; font-weight: 800 !important; letter-spacing: .1em !important; text-transform: uppercase !important; color: #0A2540 !important; }
+.ks-fuel-val { font-size: var(--fs-body) !important; color: #2D3D50 !important; }
+
+/* ── PHASE 3A: BUYERS/SELLERS CARDS ─────────────────────────── */
+.ks-s7-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important; gap: 12px !important;
+}
+.ks-s7-col {
+  border-radius: 12px !important; overflow: hidden !important;
+  border: 1px solid #E5E9EF !important; background: #fff !important;
+  box-shadow: 0 2px 8px rgba(10,37,64,.06) !important;
+}
+.ks-s7-head {
+  font-size: var(--fs-caption) !important; font-weight: 800 !important;
+  letter-spacing: .1em !important; text-transform: uppercase !important;
+  padding: 10px 14px !important; margin-bottom: 0 !important;
+}
+/* Buyer card — navy header */
+.ks-s7-col:first-child .ks-s7-head {
+  background: linear-gradient(135deg,#0A2540,#0E3460) !important;
+  color: #fff !important;
+}
+/* Seller card — gold header */
+.ks-s7-col:last-child .ks-s7-head {
+  background: linear-gradient(135deg,#B8780A,#C49A2A) !important;
+  color: #fff !important;
+}
+.ks-s7-body {
+  font-size: var(--fs-body) !important; color: #2D3D50 !important;
+  line-height: 1.65 !important; padding: 12px 14px !important;
+}
+@media(max-width:520px) {
+  .ks-s7-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ── PHASE 3B: COST TABLE ────────────────────────────────────── */
+.ks-cost-table { width: 100% !important; border-collapse: collapse !important; margin-bottom: 12px !important; }
+.ks-cost-table tbody tr:nth-child(even) td { background: #F8FAFC !important; }
+.ks-cost-table td {
+  padding: 9px 12px !important; font-size: var(--fs-body) !important;
+  color: #2D3D50 !important; border-bottom: 1px solid #F1F5F9 !important;
+}
+.ks-cost-table td:last-child {
+  text-align: right !important; font-weight: 700 !important;
+  color: #0A2540 !important; font-variant-numeric: tabular-nums !important;
+}
+.ks-cost-total td {
+  font-size: var(--fs-body-sm) !important; font-weight: 900 !important;
+  color: #fff !important; background: #0A2540 !important;
+  border-bottom: none !important; padding: 11px 12px !important;
+}
+.ks-cost-total td:first-child { border-radius: 8px 0 0 8px !important; }
+.ks-cost-total td:last-child { border-radius: 0 8px 8px 0 !important; color: #E8D060 !important; }
+
+/* ── PHASE 3C: FOOTER REF ────────────────────────────────────── */
+.ks-footer-ref {
+  font-size: var(--fs-caption) !important; font-weight: 800 !important;
+  color: #0A2540 !important; letter-spacing: .12em !important;
+  text-transform: uppercase !important; margin-bottom: 8px !important;
+  display: block !important;
+}
+.ks-footer-disc {
+  font-size: var(--fs-caption) !important; color: #64748B !important;
+  line-height: 1.65 !important; margin-bottom: 16px !important;
+}
+.ks-footer-reset {
+  font-size: var(--fs-body-sm) !important;
+  border-radius: 8px !important; padding: 9px 22px !important;
+}
+
+/* ── PHASE 4: PRINT / PDF A4 ─────────────────────────────────── */
+@media print {
+  @page { size: A4 portrait; margin: 14mm 14mm 12mm 14mm; }
+  @page :first { margin-top: 14mm; }
+
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  html, body {
+    background: #fff !important; font-size: 11px !important;
+    margin: 0 !important; padding: 0 !important;
+    width: 100% !important; max-width: none !important;
+  }
+
+  /* Hide everything except the report */
+  .snav, .hero, .restoreBar, #restoreBar, .share-strip,
+  .ffoot, .form-card, .mob-fixed-header, .mob-result-toast,
+  .mob-overlay, .ks-upsell-btn, .ks-free-upsell, .rph, .rld,
+  .ks-tabnav, .ks-script-toggle, .ks-script-copy,
+  .ks-next-micro-row, .ks-next-primary-row, .ks-next-value-prop,
+  .ks-next-steps, .ks-mf2-zones, .ks-cta-btn, .ks-page-paid,
+  .ks-section-cta, .ks-footer-reset { display: none !important; }
+
+  /* Layout — print from exact top of report header */
+  .layout { display: block !important; margin: 0 !important; padding: 0 !important; }
+  .page   { width: 100% !important; padding: 0 !important; margin: 0 !important; }
+  .result-panel {
+    display: block !important; border: none !important;
+    box-shadow: none !important; overflow: visible !important;
+    border-radius: 0 !important; width: 100% !important;
+    margin: 0 !important; padding: 0 !important;
+  }
+  .rcontent { overflow: visible !important; }
+  .ks-pir   { display: block !important; min-height: 0 !important; }
+
+  /* Report header: anchored to absolute top, no shift */
+  .ks-report-header {
+    margin: 0 !important; padding: 14px 20px 12px !important;
+    position: static !important; top: auto !important;
+    transform: none !important; page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    background: linear-gradient(135deg,#0A2540,#0E3460) !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .ks-report-title { font-size: 1.4rem !important; }
+  .ks-report-eyebrow { font-size: .62rem !important; }
+  .ks-report-ref { color: #FFFFFF !important; }
+
+  /* Dubai scene: hidden in print — spec strip replaces it */
+  .ks-dubai-scene { display: none !important; }
+  .ks-spec-road-row {
+    display: flex !important; flex-wrap: wrap !important;
+    background: #F0F4F8 !important; border: 1px solid #D5DCE8 !important;
+    border-radius: 8px !important; padding: 8px 12px !important;
+    margin-bottom: 10px !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .ks-spec-chip-lbl { color: #4A5E7A !important; }
+  .ks-spec-chip-val { color: #1A2B4C !important; }
+
+  /* Sections: tighter padding, avoid breaks */
+  .ks-section {
+    padding: 10px 14px 12px !important;
+    border-bottom: 1px solid #D5DCE8 !important;
+    page-break-inside: avoid !important;
+  }
+  .ks-section-title {
+    font-size: .9rem !important; margin-bottom: 8px !important;
+    padding-bottom: 6px !important;
+  }
+  .ks-section-title::before { display: none !important; }
+  .ks-section-eyebrow { font-size: .56rem !important; }
+
+  /* Price hero */
+  .ks-price-hl-main { font-size: 2rem !important; }
+  .ks-price-hl-range { font-size: .74rem !important; }
+
+  /* Speedometer: show static, hide animated needle */
+  .ks-speedometer-needle-animated { display: none !important; }
+  .ks-speedometer-needle-static   { display: block !important; }
+
+  /* Flag cards: keep left border, strip shadow */
+  .ks-flag-plain, .ks-comm-item {
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Buyers/Sellers cards */
+  .ks-s7-grid { grid-template-columns: 1fr 1fr !important; gap: 8px !important; page-break-inside: avoid !important; }
+  .ks-s7-head { -webkit-print-color-adjust: exact !important; }
+  .ks-s7-col:first-child .ks-s7-head { background: #0A2540 !important; color: #fff !important; }
+  .ks-s7-col:last-child  .ks-s7-head { background: #C49A2A !important; color: #fff !important; }
+
+  /* Cost table */
+  .ks-cost-total td { background: #0A2540 !important; color: #fff !important; -webkit-print-color-adjust: exact !important; }
+  .ks-cost-total td:last-child { color: #E8D060 !important; }
+
+  /* Depreciation chart */
+  .ks-outlook-bar-chart { page-break-inside: avoid !important; }
+  .ks-ob-bar-now { background: #0A2540 !important; -webkit-print-color-adjust: exact !important; }
+  .ks-ob-bar-mid { background: #C49A2A !important; -webkit-print-color-adjust: exact !important; }
+
+  /* Listings table */
+  .ks-listings-table { page-break-inside: avoid !important; font-size: .72rem !important; }
+
+  /* Page breaks */
+  .ks-section-price    { page-break-after: avoid !important; }
+  .ks-section-deal     { page-break-after: avoid !important; }
+  .ks-section-flags    { page-break-after: always !important; }
+  .ks-section-outlook  { page-break-inside: avoid !important; }
+  .ks-section-costs    { page-break-inside: avoid !important; }
+  .ks-section-listings { page-break-inside: avoid !important; }
+  .ks-section-footer   { page-break-inside: avoid !important; border-bottom: none !important; }
+
+  /* Show all paid content in print */
+  #ksPirShared   { display: block !important; }
+  #ksPirFreeOnly { display: none  !important; }
+  #ksPirPaidOnly { display: block !important; }
+  #ksPirDisclaimer { display: block !important; }
+
+  /* Footer ref prominent in print */
+  .ks-footer-ref {
+    color: #0A2540 !important; font-weight: 800 !important;
+    font-size: .65rem !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+}
+
+/* ── MOBILE ADJUSTMENTS v63 ─────────────────────────────────── */
+@media(max-width:600px) {
+  .ks-section { padding: 16px 16px 14px !important; }
+  .ks-s7-grid { grid-template-columns: 1fr !important; }
+  .ks-price-hl-main { font-size: clamp(1.8rem,10vw,2.6rem) !important; }
+  .ks-conf-left { width: 96px !important; }
+  .ks-conf-speedometer-wrap { width: 96px !important; }
+}
 </style>
 <body>
 
@@ -9245,6 +9653,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 3. PRICE HIGHLIGHTS ────────────────────────── -->
   <div class="ks-section ks-section-price">
+    <div class="ks-section-eyebrow">Valuation Result</div>
     <div class="ks-price-hl-label">Fair Market Price</div>
     <div class="ks-price-hl-main" id="ksFmvNum">AED ${handshake.toLocaleString()}</div>
     <div class="ks-price-hl-range">Market range: AED ${rangeMin.toLocaleString()} – AED ${rangeMax.toLocaleString()}</div>
@@ -9261,7 +9670,8 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 4. DEAL ANALYSIS + PRICE SCALE ───────────── -->
   <div class="ks-section ks-section-deal">
-
+    <div class="ks-section-eyebrow">Deal Analysis</div>
+    <div class="ks-section-title">Price Position & Market Scale</div>
     <!-- Verdict pill -->
     <div class="ks-deal-verdict ${
       _vc.verdict==='UNDERPRICED'?'ks-verdict-buy':
@@ -9335,6 +9745,8 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 5. WHAT'S GOOD / WHAT TO WATCH OUT FOR ────── -->
   <div class="ks-section ks-section-flags">
+    <div class="ks-section-eyebrow">Vehicle Assessment</div>
+    <div class="ks-section-title">What's Good &amp; What to Watch</div>
     <div class="ks-flags-grid">
       ${gF.length?`<div class="ks-flags-sub-head">✓ What's Good</div>`+gF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">✓</span><span>${f}</span></div>`).join(''):''}
       ${rF.length?`<div class="ks-flags-sub-head" style="margin-top:${gF.length?'10px':'0'}">⚠ What to Watch Out For</div>`+rF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-warn">⚠</span><span>${f}</span></div>`).join(''):`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">—</span><span>No major concerns noted</span></div>`}
@@ -9409,42 +9821,87 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 6. DATA QUALITY & CONFIDENCE ──────────────── -->
   <div class="ks-section ks-section-conf">
+    <div class="ks-section-eyebrow">Data Quality</div>
+    <div class="ks-section-title">Listing Transparency & Confidence</div>
     <div class="ks-conf-row">
-      <div class="ks-conf-left">
-        <div class="ks-conf-title">Listing Transparency</div>
-        <div class="ks-conf-score">${_tsScore}<span class="ks-conf-denom">/10</span></div>
-        <div class="ks-conf-label">${_tsLabel}</div>
+      <!-- SVG Speedometer -->
+      <div class="ks-conf-left ks-conf-speedometer-wrap">
+        ${(()=>{
+          const score=_tsScore; // 0–10
+          const pct=score/10;
+          // Arc: 180deg sweep (left to right), cx=60 cy=60 r=46
+          const r=46, cx=60, cy=64;
+          const startAngle=180, endAngle=0; // left=low, right=high
+          const toRad=a=>a*Math.PI/180;
+          // needle angle: 180deg (left) = score 0, 0deg (right) = score 10
+          const needleAngle=180-(pct*180);
+          const nx=cx+r*Math.cos(toRad(needleAngle));
+          const ny=cy-r*Math.sin(toRad(needleAngle));
+          // color stops on arc
+          const arcColor=score>=7?'#22C55E':score>=5?'#F59E0B':'#EF4444';
+          // arc path helper
+          const arcPath=(startDeg,endDeg,radius,color)=>{
+            const s={x:cx+radius*Math.cos(toRad(startDeg)),y:cy-radius*Math.sin(toRad(startDeg))};
+            const e={x:cx+radius*Math.cos(toRad(endDeg)),y:cy-radius*Math.sin(toRad(endDeg))};
+            const large=Math.abs(startDeg-endDeg)>180?1:0;
+            return \`<path d="M\${s.x.toFixed(1)},\${s.y.toFixed(1)} A\${radius},\${radius} 0 \${large},0 \${e.x.toFixed(1)},\${e.y.toFixed(1)}" fill="none" stroke="\${color}" stroke-width="7" stroke-linecap="round"/>\`;
+          };
+          return \`<svg width="120" height="72" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" aria-label="Confidence gauge \${score}/10">
+            <!-- Track -->
+            \${arcPath(180,0,r,'#E5E9EF')}
+            <!-- Fill to score -->
+            \${score>0?arcPath(180,needleAngle,r,arcColor):''}
+            <!-- Zone ticks -->
+            <line x1="\${(cx+r*Math.cos(toRad(144))).toFixed(1)}" y1="\${(cy-r*Math.sin(toRad(144))).toFixed(1)}" x2="\${(cx+(r-10)*Math.cos(toRad(144))).toFixed(1)}" y2="\${(cy-(r-10)*Math.sin(toRad(144))).toFixed(1)}" stroke="#EF4444" stroke-width="2" opacity=".5"/>
+            <line x1="\${(cx+r*Math.cos(toRad(108))).toFixed(1)}" y1="\${(cy-r*Math.sin(toRad(108))).toFixed(1)}" x2="\${(cx+(r-10)*Math.cos(toRad(108))).toFixed(1)}" y2="\${(cy-(r-10)*Math.sin(toRad(108))).toFixed(1)}" stroke="#F59E0B" stroke-width="2" opacity=".5"/>
+            <line x1="\${(cx+r*Math.cos(toRad(72))).toFixed(1)}" y1="\${(cy-r*Math.sin(toRad(72))).toFixed(1)}" x2="\${(cx+(r-10)*Math.cos(toRad(72))).toFixed(1)}" y2="\${(cy-(r-10)*Math.sin(toRad(72))).toFixed(1)}" stroke="#22C55E" stroke-width="2" opacity=".5"/>
+            <!-- Needle -->
+            <line class="ks-speedometer-needle-animated" x1="\${cx}" y1="\${cy}" x2="\${nx.toFixed(1)}" y2="\${ny.toFixed(1)}" stroke="#0A2540" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
+            <line class="ks-speedometer-needle-static" x1="\${cx}" y1="\${cy}" x2="\${nx.toFixed(1)}" y2="\${ny.toFixed(1)}" stroke="#0A2540" stroke-width="2.5" stroke-linecap="round" opacity=".9" style="display:none"/>
+            <!-- Hub -->
+            <circle cx="\${cx}" cy="\${cy}" r="5" fill="#0A2540"/>
+            <circle cx="\${cx}" cy="\${cy}" r="2.5" fill="#C49A2A"/>
+            <!-- Score label -->
+            <text x="\${cx}" y="\${cy-18}" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="15" font-weight="900" fill="#0A2540">\${score}</text>
+            <text x="\${cx}" y="\${cy-6}" text-anchor="middle" font-family="Exo 2,sans-serif" font-size="7" font-weight="700" fill="#94A3B8" letter-spacing="1">/10</text>
+            <!-- Labels -->
+            <text x="10" y="70" font-family="Exo 2,sans-serif" font-size="7" fill="#EF4444" font-weight="700">LOW</text>
+            <text x="82" y="70" font-family="Exo 2,sans-serif" font-size="7" fill="#22C55E" font-weight="700">HIGH</text>
+          </svg>
+          <div class="ks-conf-score-label">\${_tsLabel}</div>\`;
+        })()}
       </div>
       <div class="ks-conf-bar-wrap">
         <div class="ks-conf-bar-track">
-          <div class="ks-conf-bar-fill" style="width:${Math.round(_tsScore/10*100)}%"></div>
+          <div class="ks-conf-bar-fill" style="width:${Math.round((10-_tsScore)/10*100)}%"></div>
         </div>
         <div class="ks-conf-stats">
-        <span class="ks-conf-stat-item">🔍 Live Market Data: ${comp>0?comp+' listings':'Not available'}</span>
-        <span class="ks-conf-stat-sep">·</span>
-        <span class="ks-conf-stat-item">📊 Buyer Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
-      </div>
-      <div class="ks-conf-caption">${_tsScore>=7?'Price Confidence: High — Live Market Data supports this price.':_tsScore>=5?'Price Confidence: Medium — Limited Live Market Data available.':'Price Confidence: Low — No Live Market Data. AI estimate only.'}</div>
-      <div class="ks-conf-reason">${(()=>{
-        const reasons=[];
-        if(comp>0) reasons.push(`Based on ${comp} comparable UAE listing${comp>1?'s':''} checked at the time of valuation.`);
-        else reasons.push('No direct comparable listings were found — price is based on AI-assisted market modelling.');
-        if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') reasons.push(`Non-GCC spec reduces data confidence as fewer comparable units are listed locally.`);
-        if(qs.fsh===false) reasons.push('Missing service history limits how closely this listing can be compared to standard market comps.');
-        if(qs.accident===true) reasons.push('Accident history creates pricing uncertainty — values can vary widely depending on the extent of damage.');
-        if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — the price range shown reflects real asking prices from live UAE classified ads.');
-        return reasons.slice(0,3).join(' ');
-      })()}</div>
+          <span class="ks-conf-stat-item">🔍 Live Data: ${comp>0?comp+' listings':'Not available'}</span>
+          <span class="ks-conf-stat-sep">·</span>
+          <span class="ks-conf-stat-item">📊 Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
+        </div>
+        <div class="ks-conf-caption">${_tsScore>=7?'High confidence — live market data directly supports this valuation.':_tsScore>=5?'Medium confidence — limited comparable listings found.':'Low confidence — AI estimate only. Verify with live listings.'}</div>
+        <div class="ks-conf-reason">${(()=>{
+          const reasons=[];
+          if(comp>0) reasons.push(`Based on ${comp} comparable UAE listing${comp>1?'s':''} at time of valuation.`);
+          else reasons.push('No direct comparables found — price uses AI-assisted market modelling.');
+          if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') reasons.push('Non-GCC spec reduces confidence — fewer local comparables.');
+          if(qs.fsh===false) reasons.push('No service history limits comparable matching.');
+          if(qs.accident===true) reasons.push('Accident history introduces pricing uncertainty.');
+          if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — prices reflect real UAE classified listings.');
+          return reasons.slice(0,2).join(' ');
+        })()}</div>
       </div>
     </div>
   </div>
 
   <!-- ── 7. FOR BUYERS / FOR SELLERS ───────────────── -->
   <div class="ks-section ks-section-s7">
-    <div class="ks-s7-section-title">For Buyers &amp; For Sellers</div>
+    <div class="ks-section-eyebrow">Negotiation Intelligence</div>
+    <div class="ks-section-title">For Buyers &amp; For Sellers</div>
     <div class="ks-s7-grid">
       <div class="ks-s7-col">
-        <div class="ks-s7-head">For Buyers</div>
+        <div class="ks-s7-head">🏷️ For Buyers</div>
         <div class="ks-s7-body">
           ${askN&&askN>handshake?
             `This car is priced <strong>AED ${(askN-handshake).toLocaleString()} above</strong> what the market says it's worth. Push back — you have room to negotiate. Start at AED ${(nego.offer||Math.round(handshake*0.93/500)*500).toLocaleString()} and aim to close around AED ${(nego.close||handshake).toLocaleString()}.`
@@ -9456,7 +9913,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         </div>
       </div>
       <div class="ks-s7-col">
-        <div class="ks-s7-head">For Sellers</div>
+        <div class="ks-s7-head">💰 For Sellers</div>
         <div class="ks-s7-body">
           The market FMV for this car is <strong>AED ${handshake.toLocaleString()}</strong>. List at <strong>AED ${Math.round(handshake*1.05/500)*500 > rangeMax ? rangeMax.toLocaleString() : (Math.round(handshake*1.05/500)*500).toLocaleString()}</strong> to leave yourself negotiating room. ${specVal==='GCC'||specVal==='GCC Spec'?'GCC spec is a strong selling point — mention it.':''} ${qs.fsh?'Full service history is your best asset — keep the records handy.':''}
         </div>
@@ -10056,6 +10513,21 @@ function copyLink(){
 let _lastValuationData=null;
 
 function printValuation(){
+  // v63: use @media print on the live report — no popup window
+  // Ensure paid content visible for print
+  const p2=document.getElementById('ksPage2');
+  const p2WasHidden=p2&&p2.style.display==='none';
+  if(p2WasHidden) p2.style.display='block';
+  const tn=document.getElementById('ksTabNav');
+  if(tn) tn.style.display='none';
+  window.print();
+  // Restore after print dialog closes
+  setTimeout(()=>{
+    if(p2WasHidden&&p2) p2.style.display='none';
+    if(tn) tn.style.display='';
+  },500);
+}
+function _printValuationLegacy_unused(){
   if(!_lastValuationData){window.print();return;}
   const d=_lastValuationData;
   const now=new Date();
