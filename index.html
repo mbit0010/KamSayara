@@ -840,13 +840,19 @@
 
     /* Desktop panel — always opens downward, layered above everything */
     .ks-panel{
-      position:absolute;top:calc(100% + 3px);left:0;right:0;
+      position:absolute;
+      top:calc(100% + 3px);
+      left:0;       /* panel starts at left edge of .ks-wrap */
+      right:0;      /* panel ends at right edge of .ks-wrap = exact cell width */
+      width:auto;   /* determined by left+right — NOT wider, NOT narrower than cell */
+      min-width:0;  /* never expand beyond cell */
+      max-width:100%; /* never expand beyond cell */
       background:var(--white);border:1.5px solid var(--accent-line);
       border-radius:var(--r-md);
       box-shadow:0 10px 32px rgba(0,0,0,0.13),0 2px 8px rgba(0,0,0,0.06);
-      z-index:99999;             /* always on top of every form element */
+      z-index:99999;
       display:flex;flex-direction:column;
-      overflow:visible;          /* must NOT clip — allows scrollbar to render */
+      overflow:hidden; /* clip to border-radius; scrollbar on .ks-list handles scroll */
       visibility:hidden;opacity:0;pointer-events:none;
       transform:translateY(-5px);
       transition:opacity .16s var(--ease),transform .16s var(--ease),visibility .16s;
@@ -858,6 +864,16 @@
     }
     /* Clip the list bottom to panel border-radius */
     .ks-list{
+      flex:1;
+      max-height:192px;          /* 6 items visible */
+      overflow-y:scroll;         /* always-visible scrollbar */
+      overflow-x:hidden;
+      width:100%;                /* fill panel exactly */
+      box-sizing:border-box;
+      direction:ltr;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(10,37,64,.30) var(--surface-2);
       border-radius:0 0 var(--r-md) var(--r-md);
     }
     .ks-wrap.open .ks-panel{visibility:visible;opacity:1;pointer-events:auto;transform:translateY(0);}
@@ -894,37 +910,36 @@
     .ig { overflow: visible !important; }
     .form-body { overflow: visible !important; }
 
-    /* Inline search — flush at top, no wrapper box */
-    .ks-search-row{flex-shrink:0;}
-    
-    .ks-count{display:none;}
+    /* Inline search — flush at top, contained within panel width */
+    .ks-search-row{flex-shrink:0; overflow:hidden;}
     .ks-search{
-      display:block;width:100%;
-      border:none;border-bottom:1px solid var(--border);
+      display:block; width:100%; box-sizing:border-box;
+      border:none; border-bottom:1px solid var(--border);
       background:var(--surface-2);
-      font-family:"Exo 2",sans-serif;font-size:.78rem;color:var(--ink);
-      outline:none;padding:.38rem .65rem;height:2rem;
-      box-shadow:none;border-radius:0;
+      font-family:"Exo 2",sans-serif; font-size:.82rem; color:var(--ink);
+      outline:none; padding:.38rem .65rem; height:2rem;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
     .ks-search::placeholder{color:var(--muted);}
     .ks-search:focus{background:var(--white);border-bottom-color:var(--accent);}
 
-    /* Options list — max 6 items visible, right-side scrollbar always shown */
-    .ks-list{
-      flex:1;
-      max-height:192px;          /* 6 × ~32px per item */
-      overflow-y:scroll;         /* right-side scrollbar always visible */
-      overflow-x:hidden;
-      direction:ltr;             /* scrollbar on right */
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:thin;scrollbar-color:rgba(10,37,64,0.30) var(--surface-2);
+    .ks-opt{
+      padding:.38rem .65rem; font-family:"Exo 2",sans-serif;
+      font-size:.82rem; color:var(--ink); cursor:pointer;
+      transition:background .1s,color .1s;
+      display:flex; align-items:center; gap:6px;
+      outline:none;
+      /* Critical: prevent long text from widening the panel */
+      width:100%; box-sizing:border-box;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .ks-list::-webkit-scrollbar{width:6px;display:block !important;-webkit-appearance:none;}
-    .ks-list::-webkit-scrollbar-track{background:var(--surface-2);border-radius:3px;}
-    .ks-list::-webkit-scrollbar-thumb{background:rgba(10,37,64,0.30);border-radius:3px;}
-    .ks-list::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+    .ks-opt:hover,.ks-opt:focus{background:var(--accent-soft);color:var(--accent);}
+    .ks-opt.ks-selected{background:var(--accent-soft);color:var(--accent);font-weight:600;}
+    .ks-opt.ks-active{background:var(--accent-soft);color:var(--accent);}
+    
+    .ks-count{display:none;}
 
-    /* Mobile modal list — same always-visible scrollbar */
+    /* Mobile modal list — same scrollbar style */
     .ks-sheet-list{
       overflow-y:scroll;flex:1;-webkit-overflow-scrolling:touch;padding-bottom:16px;
       scrollbar-width:thin;scrollbar-color:rgba(10,37,64,0.25) var(--surface-2);
@@ -940,23 +955,9 @@
       position:sticky;top:0;z-index:1;
     }
     .ks-div{height:1px;background:var(--border);margin:3px 0;}
-
-    .ks-opt{
-      padding:.4rem .75rem;font-family:"Exo 2",sans-serif;
-      font-size:.78rem;color:var(--ink);cursor:pointer;
-      transition:background .1s,color .1s;
-      display:flex;align-items:center;gap:6px;
-      outline:none;
-    }
-    .ks-opt:hover,.ks-opt:focus{background:var(--accent-soft);color:var(--accent);}
-    .ks-opt.ks-selected{background:var(--accent-soft);color:var(--accent);font-weight:600;}
-    .ks-opt.ks-active{background:var(--accent-soft);color:var(--accent);}
     .ks-chk{margin-left:auto;font-size:.7rem;color:var(--accent);flex-shrink:0;}
     .ks-mark{background:rgba(10,37,64,0.13);color:var(--accent);border-radius:2px;font-weight:700;padding:0 1px;}
-    .ks-empty{
-      padding:.9rem .75rem;font-size:.72rem;color:var(--muted);
-      font-style:italic;text-align:center;
-    }
+    .ks-empty{padding:.9rem .75rem;font-size:.72rem;color:var(--muted);font-style:italic;text-align:center;}
     .ks-empty-sub{font-size:.65rem;color:var(--muted);margin-top:3px;}
 
     /* ── MOBILE FULL-SCREEN MODAL ────────────────────────────── */
@@ -1285,71 +1286,120 @@
     /* ══════════════════════════════════════════════════════════
        RESULT PANEL HEADER — mirrors form-card header
     ══════════════════════════════════════════════════════════ */
+    /* ── RESULT PANEL HEADER — letterhead, all devices ── */
     .result-panel-header {
-      padding: 12px 14px 10px !important;
-      border-bottom: 1px solid rgba(255,255,255,0.12) !important;
+      padding: 20px 22px 18px !important;
+      border-bottom: 3px solid rgba(196,154,42,0.55) !important;
       border-radius: 16px 16px 0 0 !important;
-      background: linear-gradient(138deg,#061828 0%,#0A2540 45%,#0E3460 100%) !important;
+      background: linear-gradient(135deg,#0A2540 0%,#0E3460 100%) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
-      gap: 8px !important;
+      gap: 12px !important;
       flex-shrink: 0 !important;
-      transition: background 0.35s ease !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      position: relative !important;
+      z-index: 2 !important;
     }
-    .result-panel-header-title {
-      font-size: 0.65rem !important;
-      font-weight: 800 !important;
+
+    /* LEFT: brand name big like a letterhead */
+    .rph-brand-col {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+    }
+    .rph-brand-name {
+      font-family: "Orbitron", sans-serif !important;
+      font-size: clamp(1.2rem, 3vw, 1.65rem) !important;
+      font-weight: 900 !important;
+      color: #E8D060 !important;
+      letter-spacing: 0.03em !important;
+      line-height: 1.1 !important;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.35) !important;
+    }
+    .rph-brand-sub {
+      font-family: "Exo 2", sans-serif !important;
+      font-size: 0.72rem !important;
+      font-weight: 700 !important;
+      color: rgba(255,255,255,0.80) !important;
       letter-spacing: 0.18em !important;
       text-transform: uppercase !important;
-      color: #E8D060 !important;
+      line-height: 1.2 !important;
     }
-    .result-panel-header-status {
+
+    /* RIGHT: status + ref */
+    .rph-status-col {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-end !important;
+      gap: 5px !important;
+      flex-shrink: 0 !important;
+    }
+    .rph-status-row {
       display: flex !important;
       align-items: center !important;
-      gap: 5px !important;
+      gap: 6px !important;
     }
     .rph-status-dot {
-      width: 7px !important;
-      height: 7px !important;
+      width: 9px !important;
+      height: 9px !important;
       border-radius: 50% !important;
-      background: rgba(255,255,255,0.22) !important;
+      background: rgba(255,255,255,0.20) !important;
       flex-shrink: 0 !important;
       transition: background 0.3s ease !important;
     }
-    #resultPanel.panel-state-loading .rph-status-dot {
-      background: #E8D060 !important;
-      animation: statusDotPulse 1s ease-in-out infinite !important;
-    }
-    #resultPanel.panel-state-ready .rph-status-dot { background: #4ADE80 !important; }
-    #resultPanel.panel-state-loading .result-panel-header {
-      background: linear-gradient(138deg,#0A2540 0%,#103050 45%,#1A3A60 100%) !important;
-    }
-    #resultPanel.panel-state-ready .result-panel-header {
-      background: linear-gradient(138deg,#062810 0%,#0A3218 45%,#103C24 100%) !important;
-    }
-    @keyframes statusDotPulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: 0.4; transform: scale(0.65); }
-    }
-    #resultPanelStatusText {
-      font-size: 0.60rem !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.08em !important;
+    .rph-status-text {
+      font-family: "Exo 2", sans-serif !important;
+      font-size: 0.72rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.12em !important;
       color: rgba(255,255,255,0.50) !important;
       text-transform: uppercase !important;
       white-space: nowrap !important;
       transition: color 0.3s ease !important;
     }
-    #resultPanel.panel-state-loading #resultPanelStatusText { color: rgba(232,208,96,0.80) !important; }
-    #resultPanel.panel-state-ready #resultPanelStatusText { color: rgba(74,222,128,0.85) !important; }
-
-    /* Ensure result-panel top corners always rounded */
-    .result-panel { border-radius: 16px !important; overflow: hidden !important; }
-    @media(max-width:600px){
-      .result-panel-header { border-radius: 16px 16px 0 0 !important; padding: 10px 14px 8px !important; }
-      .result-panel { border-radius: 16px !important; overflow: hidden !important; }
+    .rph-ref-stamp {
+      font-family: "Exo 2", sans-serif !important;
+      font-size: 0.62rem !important;
+      font-weight: 600 !important;
+      color: rgba(255,255,255,0.40) !important;
+      letter-spacing: 0.10em !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
     }
+
+    /* State: loading — slightly lighter */
+    #resultPanel.panel-state-loading .result-panel-header {
+      background: linear-gradient(135deg,#0D2D50 0%,#133868 100%) !important;
+    }
+    #resultPanel.panel-state-loading .rph-status-dot {
+      background: #E8D060 !important;
+      animation: statusDotPulse 1s ease-in-out infinite !important;
+    }
+    #resultPanel.panel-state-loading .rph-status-text { color: rgba(232,208,96,0.90) !important; }
+
+    /* State: ready — navy stays, only dot + text go green */
+    #resultPanel.panel-state-ready .result-panel-header {
+      background: linear-gradient(135deg,#0A2540 0%,#0E3460 100%) !important;
+    }
+    #resultPanel.panel-state-ready .rph-status-dot { background: #4ADE80 !important; }
+    #resultPanel.panel-state-ready .rph-status-text { color: rgba(74,222,128,1.0) !important; }
+    #resultPanel.panel-state-ready .rph-ref-stamp { color: rgba(255,255,255,0.55) !important; }
+
+    @keyframes statusDotPulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.35; transform:scale(0.6); }
+    }
+
+    /* Mobile: slightly tighter padding but same proportions */
+    @media (max-width:600px) {
+      .result-panel-header { padding: 16px 16px 14px !important; }
+      .rph-brand-name { font-size: clamp(1.05rem, 5vw, 1.3rem) !important; }
+      .rph-brand-sub  { font-size: 0.62rem !important; letter-spacing: 0.12em !important; }
+    }
+
+    .result-panel { border-radius: 16px !important; overflow: hidden !important; }
 
     /* ── IDLE PANEL prompt text styling ── */
     .ks-sk-prompt {
@@ -2710,7 +2760,7 @@
   .ks-trigger.ks-err{border-color:#C0392B!important;background:#FEF2F2!important;}
   .ks-trigger::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;}
   .ks-wrap{position:relative!important;overflow:visible!important;}
-  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:999999!important;overflow:visible!important;position:absolute!important;left:0!important;right:0!important;bottom:auto!important;width:100%!important;}
+  .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:999999!important;overflow:hidden!important;position:absolute!important;left:0!important;bottom:auto!important;/* width set by JS to exact trigger px — no width or right here */}
   .ks-search-row{border-radius:10px 10px 0 0!important;overflow:hidden!important;}
   .ks-list{max-height:192px!important;overflow-y:scroll!important;overflow-x:hidden!important;direction:ltr!important;scrollbar-width:thin!important;scrollbar-color:rgba(26,43,76,.38) #F4F6FA!important;border-radius:0 0 10px 10px!important;}
   .ks-list::-webkit-scrollbar{width:6px!important;display:block!important;}
@@ -6875,7 +6925,8 @@ body.ks-result-active .form-card:hover {
 }
 
 /* ── SHARE STRIP: hidden before result ── */
-#shareStrip { display: none; }
+/* Share strip always visible — icons work before and after search */
+#shareStrip { display: flex; }
 body.ks-result-active #shareStrip { display: flex; }
 
 /* ── BACK-TO-INPUTS BUTTON: hidden before result ── */
@@ -7163,16 +7214,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
   display: block !important;
 }
 
-/* ── RESULT PANEL HEADER ── */
-.result-panel-header {
-  padding: 14px 16px 12px !important;
-  border-bottom: 1px solid var(--border) !important;
-}
-.result-panel-header-title {
-  font-size: var(--ks-t-head) !important;
-  font-weight: 800 !important;
-  color: var(--ks-c-head) !important;
-}
+/* result-panel-header styling is fully defined in the authoritative block above — no override needed here */
 </style>
 <body>
 
@@ -7406,13 +7448,18 @@ body.ks-result-active #backToInputs { display: flex !important; }
     <!-- ── RESULT PANEL ────────────────────────────────────── -->
     <div class="result-panel" id="resultPanel" role="region" aria-label="Valuation result" aria-live="polite">
 
-      <!-- Result panel header — matches form-card header style -->
+      <!-- Unified brand header — letterhead style, always visible all devices -->
       <div class="result-panel-header" id="resultPanelHeader">
-        <div class="result-panel-header-title" id="resultPanelTitle">Price Intelligence Report</div>
-        <div class="result-panel-header-status" id="resultPanelStatus">
-          <span class="rph-status-dot"></span>
-          <span id="resultPanelStatusText"></span>
-          <span id="resultRef" class="panel-ref-stamp" style="display:none"></span>
+        <div class="rph-brand-col">
+          <div class="rph-brand-name">KamSayara</div>
+          <div class="rph-brand-sub">Price Intelligence Report</div>
+        </div>
+        <div class="rph-status-col">
+          <div class="rph-status-row">
+            <span class="rph-status-dot" id="rphStatusDot"></span>
+            <span id="resultPanelStatusText" class="rph-status-text"></span>
+          </div>
+          <span id="resultRef" class="rph-ref-stamp" style="display:none"></span>
         </div>
       </div>
 
@@ -7580,32 +7627,32 @@ body.ks-result-active #backToInputs { display: flex !important; }
   <!-- ── SHARE AS POST STRIP ─────────────────────────────────── -->
   <div class="share-strip" id="shareStrip">
     <div style="width:100%;text-align:center;margin-bottom:2px;">
-      <span class="share-strip-lbl">Share as Post</span>
-      <span style="font-size:.55rem;color:var(--muted);margin-left:6px;font-family:'Exo 2',sans-serif;">Same report text + image on all platforms</span>
+      <span class="share-strip-lbl">Share KamSayara</span>
+      <span style="font-size:.55rem;color:var(--muted);margin-left:6px;font-family:'Exo 2',sans-serif;">Free UAE car price tool</span>
     </div>
     <div class="share-strip-icons">
       <!-- WhatsApp -->
-      <button class="sico sico-wa share-dimmed" id="sico-wa" onclick="shareVia('wa')" data-tip="WhatsApp" aria-label="Share on WhatsApp">
+      <button class="sico sico-wa" id="sico-wa" onclick="shareVia('wa')" data-tip="WhatsApp" aria-label="Share on WhatsApp">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.132.558 4.133 1.532 5.865L.057 23.492a.5.5 0 00.614.603l5.757-1.51A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 110-19.5 9.75 9.75 0 010 19.5z" opacity=".25"/></svg>
       </button>
       <!-- X / Twitter -->
-      <button class="sico sico-x share-dimmed" id="sico-x" onclick="shareVia('x')" data-tip="Post on X" aria-label="Post on X">
+      <button class="sico sico-x" id="sico-x" onclick="shareVia('x')" data-tip="Post on X" aria-label="Post on X">
         <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.727-8.835L1.254 2.25H8.08l4.261 5.631 5.903-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </button>
       <!-- Facebook -->
-      <button class="sico sico-fb share-dimmed" id="sico-fb" onclick="shareVia('fb')" data-tip="Post on Facebook" aria-label="Post on Facebook">
+      <button class="sico sico-fb" id="sico-fb" onclick="shareVia('fb')" data-tip="Post on Facebook" aria-label="Post on Facebook">
         <svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
       </button>
       <!-- Instagram -->
-      <button class="sico sico-ig share-dimmed" id="sico-ig" onclick="shareVia('ig')" data-tip="Post on Instagram" aria-label="Post on Instagram">
+      <button class="sico sico-ig" id="sico-ig" onclick="shareVia('ig')" data-tip="Post on Instagram" aria-label="Post on Instagram">
         <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </button>
       <!-- TikTok -->
-      <button class="sico sico-tt share-dimmed" id="sico-tt" onclick="shareVia('tt')" data-tip="Post on TikTok" aria-label="Post on TikTok">
+      <button class="sico sico-tt" id="sico-tt" onclick="shareVia('tt')" data-tip="Post on TikTok" aria-label="Post on TikTok">
         <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z" fill="#fff"/></svg>
       </button>
       <!-- Email -->
-      <button class="sico sico-mail share-dimmed" id="sico-mail" onclick="shareVia('mail')" data-tip="Send via Email" aria-label="Share via Email">
+      <button class="sico sico-mail" id="sico-mail" onclick="shareVia('mail')" data-tip="Send via Email" aria-label="Share via Email">
         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
       </button>
     </div>
@@ -8056,14 +8103,18 @@ function showState(st){
     if(rld) rld.style.display = 'none';
     if(ph)  ph.style.display  = 'none';
     if(rct) { rct.style.display = 'block'; rct.classList.add('ks-fading-in'); setTimeout(()=>rct.classList.remove('ks-fading-in'), 350); }
-    // Smooth scroll to result panel
+    // Scroll to top of result panel with a small margin above — not to car image
     if(resultPanel){
       resultPanel.classList.remove('panel-state-idle','panel-state-loading');
       resultPanel.classList.add('panel-state-ready');
-      setTimeout(()=>resultPanel.scrollIntoView({ behavior:'smooth', block:'start' }), 80);
+      setTimeout(()=>{
+        const rect = resultPanel.getBoundingClientRect();
+        const margin = 12; // px above panel top
+        window.scrollTo({ top: window.scrollY + rect.top - margin, behavior:'smooth' });
+      }, 80);
     }
     const stTxt = document.getElementById('resultPanelStatusText');
-    if(stTxt) stTxt.textContent = 'Report Ready';
+    if(stTxt) stTxt.textContent = 'Live';
     document.body.classList.add('ks-result-active');
     // Trigger animated elements
     setTimeout(()=>{
@@ -10071,22 +10122,8 @@ function buildResult(r,brand,model,year,mileage,asking){
     </div>
   </div>` : ''}
 
-  <!-- ══════════════════════════════════════════════════
-       SECTION 1 — FREE REPORT
-  ══════════════════════════════════════════════════ -->
+  <!-- ── SECTION 1 — FREE REPORT ── -->
   <div class="ks-page ks-page-1" id="ksPage1">
-
-  <!-- ── 1. HEADER ─────────────────────────────────── -->
-  <div class="ks-report-header">
-    <div class="ks-report-header-left">
-      <div class="ks-report-eyebrow">KamSayara</div>
-      <div class="ks-report-title">Price Intelligence Report</div>
-    </div>
-    <div class="ks-report-header-right">
-      ${_sourceBadge}
-      <div class="ks-report-ref">${ref.label}</div>
-    </div>
-  </div>
 
   <!-- ── 2. HERO — Car Scene + Spec Strip ──────────── -->
   <div class="ks-section ks-section-hero">
@@ -10844,10 +10881,14 @@ function displayValuationResult(data){
     }
   }, 60);
 
-  // MODIFY: unified scroll — same behavior all devices
+  // Scroll to top of result panel with margin — report starts from header, not car image
   setTimeout(()=>{
     const panel = g('resultPanel') || resultContainer.closest('.result-panel');
-    if(panel) panel.scrollIntoView({ behavior:'smooth', block:'start' });
+    if(panel){
+      const rect = panel.getBoundingClientRect();
+      const margin = 12;
+      window.scrollTo({ top: window.scrollY + rect.top - margin, behavior:'smooth' });
+    }
   }, 120);
 
   saveLastValuation();
@@ -10934,7 +10975,7 @@ function resetForm(){
   if(lay) lay.style.display='';
   const hero=document.querySelector('.hero');
   if(hero) hero.style.display='';
-  SHARE_ICONS.forEach(id=>{const el=document.getElementById('sico-'+id);if(el)el.classList.add('share-dimmed');});
+  
   // Change 5: #rcontent is the single result target — clear it on reset
   const rct=g('rcontent');
   if(rct) rct.innerHTML='';
@@ -11131,25 +11172,26 @@ let _ksActiveSel=null; // which select is open in mobile modal
 // Mobile full-screen sheet is suppressed via CSS (.ks-overlay { display:none }) and JS.
 const _ksIsMob=()=>false; // Always use inline panel — never open full-screen modal
 
-/* On mobile/tablet the panel uses position:absolute relative to .ks-wrap.
-   _ksPositionPanel() detects viewport-edge cases and can flip to open upward if needed.
-   It does NOT need to set left/width since CSS handles those (left:0, right:0 = trigger width). */
+/* Panel width = EXACT trigger pixel width, set by JS on every open.
+   This eliminates CSS cascade ambiguity across desktop/tablet/mobile. */
 function _ksPositionPanel(wrap){
   const trig = wrap.querySelector('.ks-trigger');
   const panel = wrap.querySelector('.ks-panel');
   if(!trig || !panel) return;
-  const rect = trig.getBoundingClientRect();
+
+  // Lock panel width to trigger's exact rendered width
+  const trigW = Math.round(trig.getBoundingClientRect().width);
+  panel.style.width    = trigW + 'px';
+  panel.style.minWidth = '';
+  panel.style.maxWidth = '';
+  panel.style.left     = '0';
+  panel.style.right    = 'auto';
+
+  const rect       = trig.getBoundingClientRect();
   const spaceBelow = window.innerHeight - rect.bottom - 8;
   const spaceAbove = rect.top - 8;
-  const panelNeeded = 192 + 40; // max-height list + search row
+  const panelNeeded = 192 + 40;
   const openUp = spaceBelow < panelNeeded && spaceAbove > spaceBelow;
-
-  // Reset any inline styles from previous opens
-  panel.style.left   = '';
-  panel.style.width  = '';
-  panel.style.right  = '';
-  panel.style.top    = '';
-  panel.style.bottom = '';
 
   const list = panel.querySelector('.ks-list');
 
@@ -11458,7 +11500,10 @@ function activateShareStrip(){
 
 function buildShareMsg(platform){
   const URL = 'https://www.kamsayara.com';
-  if(!_lastValuationData) return {text:'Check any car value free at kamsayara.com', url:URL};
+  if(!_lastValuationData) return {
+    text:'🚗 KamSayara — Free UAE Car Price Intelligence. Check any car\'s real market value instantly based on live UAE listings. Know before you buy or sell.',
+    url: URL
+  };
 
   const d       = _lastValuationData;
   const car     = (d.carName||'').trim();
@@ -11562,43 +11607,42 @@ function buildShareCard(){
 }
 
 async function shareVia(platform){
-  if(!_lastValuationData) return;
-  if(platform==='pdf'){printValuation();return;}
+  if(platform==='pdf'){
+    if(!_lastValuationData){ _showToast('Run a search first to generate a PDF.'); return; }
+    printValuation(); return;
+  }
 
   const {text, url} = buildShareMsg(platform);
   const encodedText = encodeURIComponent(text);
 
-  // ── Instagram / TikTok — copy text to clipboard (no live links on these platforms) ──
+  // ── Instagram / TikTok — copy text to clipboard ──
   if(platform==='ig' || platform==='tt'){
-    try{ await navigator.clipboard.writeText(text); }catch(e){
-      const t=document.createElement('textarea');t.value=text;
+    try{ await navigator.clipboard.writeText(text+'\n'+url); }catch(e){
+      const t=document.createElement('textarea');t.value=text+'\n'+url;
       document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
     }
     _showToast(platform==='ig'
-      ? '✓ Caption copied — open Instagram and paste when posting.'
-      : '✓ Caption copied — open TikTok and paste when posting.');
+      ? '✓ Caption + link copied — paste in Instagram.'
+      : '✓ Caption + link copied — paste in TikTok.');
     return;
   }
 
-  // ── Native share sheet (mobile) — text only ──
-  if(navigator.share && platform !== 'mail' && platform !== 'sms'){
+  // ── Native share sheet (mobile) ──
+  if(navigator.share && platform !== 'mail'){
     try{
-      await navigator.share({text, url});
+      await navigator.share({ title:'KamSayara — UAE Car Price Intelligence', text, url });
       return;
     }catch(e){
       if(e.name==='AbortError') return;
-      // fall through to desktop URL
     }
   }
 
-  // ── Desktop / fallback — deep-link with platform text ──
+  // ── Desktop / fallback deep-links ──
   let shareUrl = '';
-  if     (platform==='wa')   shareUrl = `https://wa.me/?text=${encodedText}`;
-  else if(platform==='x')    shareUrl = `https://x.com/intent/tweet?text=${encodedText}`;
+  if     (platform==='wa')   shareUrl = `https://wa.me/?text=${encodeURIComponent(text+'\n'+url)}`;
+  else if(platform==='x')    shareUrl = `https://x.com/intent/tweet?text=${encodedText}&url=${encodeURIComponent(url)}`;
   else if(platform==='fb')   shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedText}`;
-  else if(platform==='li')   shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodedText}`;
-  else if(platform==='sms')  shareUrl = `sms:?body=${encodedText}`;
-  else if(platform==='mail') shareUrl = `mailto:?subject=${encodeURIComponent('UAE Car Price Report – KamSayara')}&body=${encodedText}`;
+  else if(platform==='mail') shareUrl = `mailto:?subject=${encodeURIComponent('Free UAE Car Price Tool — KamSayara')}&body=${encodeURIComponent(text+'\n\n'+url)}`;
 
   if(shareUrl) window.open(shareUrl, '_blank', 'noopener,noreferrer');
 }
