@@ -10423,14 +10423,15 @@ function buildResult(r,brand,model,year,mileage,asking){
 
     <!-- Verdict pill -->
     <div class="ks-deal-verdict ${
-      _vc.verdict==='UNDERPRICED'?'ks-verdict-buy':
-      _vc.verdict==='OVERPRICED'?'ks-verdict-nego':
+      (_vc.verdict==='GOOD DEAL'||_vc.verdict==='UNDERPRICED')?'ks-verdict-buy':
+      (_vc.verdict==='OVERPRICED'||_vc.verdict==='SLIGHTLY HIGH')?'ks-verdict-nego':
       (_vc.verdict==='FAIRLY PRICED'&&r.comparisonToAsking&&r.comparisonToAsking.diff>0)?'ks-verdict-nego':
       'ks-verdict-fair'}">
-      <span class="ks-verdict-emoji">${(_vc.verdict==="GOOD DEAL"?"✅":_vc.verdict==="FAIRLY PRICED"?"📊":_vc.verdict==="SLIGHTLY HIGH"?"⚠️":"🔴")||'📊'}</span>
+      <span class="ks-verdict-emoji">${(_vc.verdict==="GOOD DEAL"?"✅":_vc.verdict==="FAIRLY PRICED"?"📊":_vc.verdict==="SLIGHTLY HIGH"?"⚠️":_vc.verdict==="OVERPRICED"?"🔴":"📊")||'📊'}</span>
       <span class="ks-verdict-label">${
-        _vc.verdict==='UNDERPRICED'?'Good Deal — Below Market':
+        (_vc.verdict==='GOOD DEAL'||_vc.verdict==='UNDERPRICED')?'Good Deal — Below Market':
         _vc.verdict==='OVERPRICED'?'High-End — Negotiate Down':
+        _vc.verdict==='SLIGHTLY HIGH'?'Slightly High — Negotiate':
         _vc.verdict==='NO STICKER'?'No Asking Price':
         (r.comparisonToAsking&&r.comparisonToAsking.diff>0)?'Consider — Negotiation Zone':
         'Fairly Priced — Good Value'
