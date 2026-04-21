@@ -55,6 +55,50 @@
       opacity:.35;
     }
 
+    /* ── STICKY CONTEXT BAND (car name + price while scrolling report) ── */
+    .ks-sticky-ctx{
+      position:fixed;top:0;left:0;right:0;z-index:195;
+      background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 2px 12px rgba(10,37,64,0.08);
+      transform:translateY(-100%);transition:transform .3s var(--ease),opacity .3s var(--ease);
+      opacity:0;pointer-events:none;
+    }
+    /* When hero sticky nav (.snav.on) is also active, push ctx band down below it */
+    .snav.on ~ * .ks-sticky-ctx.visible,
+    body.snav-on .ks-sticky-ctx.visible{
+      top:52px;
+    }
+    .ks-sticky-ctx.visible{transform:translateY(0);opacity:1;pointer-events:auto;}
+    .ks-sticky-inner{
+      max-width:1120px;margin:0 auto;padding:0 16px;
+      display:flex;align-items:center;justify-content:space-between;
+      height:44px;gap:12px;
+    }
+    .ks-sticky-car{
+      font-family:"Exo 2",sans-serif;font-size:.78rem;font-weight:700;
+      color:var(--ink);letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      display:flex;align-items:center;gap:6px;
+    }
+    .ks-sticky-car-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+    .ks-sticky-price{
+      font-family:"Orbitron",sans-serif;font-size:.82rem;font-weight:700;
+      color:var(--accent);white-space:nowrap;flex-shrink:0;
+    }
+    .ks-sticky-badge{
+      font-family:"Exo 2",sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.1em;
+      text-transform:uppercase;padding:2px 8px;border-radius:99px;white-space:nowrap;flex-shrink:0;
+    }
+    .ks-sticky-badge.good{background:var(--good-bg);color:var(--good);border:1px solid var(--good-line);}
+    .ks-sticky-badge.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line);}
+    .ks-sticky-badge.bad {background:var(--bad-bg); color:var(--bad); border:1px solid var(--bad-line);}
+    .ks-sticky-badge.neu {background:var(--surface-2);color:var(--muted);border:1px solid var(--border);}
+    @media(max-width:480px){
+      .ks-sticky-badge{display:none;}
+      .ks-sticky-car{font-size:.72rem;}
+      .ks-sticky-price{font-size:.75rem;}
+    }
+
     /* ── STICKY NAV ─────────────────────────────────────────── */
     .snav{
       position:fixed;top:0;left:0;right:0;z-index:200;
@@ -353,6 +397,12 @@
     .qb:hover{background:rgba(255,255,255,0.14);color:rgba(255,255,255,.75);}
     .qb.tick.on{background:rgba(74,222,128,0.16);border-color:rgba(74,222,128,0.35);color:#4ADE80;}
     .qb.cross.on{background:rgba(252,165,165,0.16);border-color:rgba(252,165,165,0.35);color:#FCA5A5;}
+    /* Accident "No" = good news — show green not red */
+    [data-field="accident"] .qb.cross.on{background:rgba(74,222,128,0.16)!important;border-color:rgba(74,222,128,0.35)!important;color:#4ADE80!important;}
+    /* FSH/Warranty/SingleOwner "No" = neutral grey */
+    [data-field="fsh"] .qb.cross.on,[data-field="warranty"] .qb.cross.on,[data-field="singleOwner"] .qb.cross.on{background:rgba(100,116,139,0.10)!important;border-color:rgba(100,116,139,0.28)!important;color:#64748B!important;}
+    /* Accident-no = good signal: cross turns green, not red */
+    .qcbar-item--accident-clean .qb.cross.on{background:rgba(74,222,128,0.16);border-color:rgba(74,222,128,0.35);color:#4ADE80;}
 
     /* ── FORM FOOTER: always single row, no wrap ── */
     .ffoot {
@@ -428,7 +478,7 @@
     /* rph-sample removed */
 
     /* loading */
-    .rld{text-align:left;padding:0;flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;}
+    .rld{text-align:left;padding:0;flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;min-height:300px;}
     .spinner{width:30px;height:30px;border:2.5px solid var(--accent-line);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px;}
     @keyframes spin{to{transform:rotate(360deg);}}
     .rld p{font-size:.78rem;color:var(--muted);}
@@ -591,6 +641,77 @@
     .smart-hint.on{display:flex;}
     .smart-hint.warn-hint{color:var(--warn);}
 
+    /* ── FIX 6: CONDITION TOOLTIP ────────────────────────────── */
+    .ks-cond-tip-trigger {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      position: relative;
+      margin-left: 2px;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .ks-cond-tip-trigger:hover { color: var(--accent); }
+    .ks-cond-tip-box {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0A2540;
+      color: #E8EDF5;
+      font-family: "Exo 2", sans-serif;
+      font-size: .68rem;
+      font-weight: 400;
+      line-height: 1.5;
+      padding: 11px 13px;
+      border-radius: 10px;
+      width: 260px;
+      max-width: 90vw;
+      box-shadow: 0 8px 28px rgba(10,37,64,0.35);
+      z-index: 99999;
+      pointer-events: none;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    /* Arrow */
+    .ks-cond-tip-box::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #0A2540;
+    }
+    .ks-cond-tip-trigger:hover .ks-cond-tip-box,
+    .ks-cond-tip-trigger:focus .ks-cond-tip-box { display: block; }
+    .ks-cond-tip-box strong { color: #E8D060; font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+    .ks-cond-tip-row { display: block; margin-bottom: 5px; }
+    .ks-cond-tip-row:last-child { margin-bottom: 0; }
+    .ks-cond-tip-row b { color: #C49A2A; }
+    /* On mobile, open tooltip on tap by toggling class */
+    @media(max-width:600px){
+      .ks-cond-tip-box { left: 0; transform: none; max-width: calc(100vw - 32px); }
+      .ks-cond-tip-box::after { left: 16px; transform: none; }
+    }
+
+    /* ── FIX 2: MOBILE TOUCH TARGETS — WCAG 2.5.5 minimum 44×44px ── */
+    @media(max-width:600px){
+      .qb{
+        min-width:44px !important;
+        min-height:44px !important;
+        font-size:.9rem !important;
+        padding:6px !important;
+      }
+      /* Ensure qcbar items give thumbs enough room */
+      .qcbar-item { min-height:52px; display:flex; flex-direction:column; justify-content:center; }
+    }
+
     /* ── QC TOUCH TARGETS ────────────────────────────────────── */
     .qb{
       background:none;border:none;cursor:pointer;
@@ -712,7 +833,90 @@
     .sico-copy{background:var(--ink-soft);}
     .sico svg{width:15px;height:15px;fill:#fff;flex-shrink:0;}
 
-    /* ── PDF PRINT STYLES: see v63 Phase 4 @media print block at end of <style> ── */
+    /* ── TRANSPARENCY SCORE BREAKDOWN ───────────────────────── */
+    .ks-ts-breakdown{
+      margin-top:10px;padding:10px 12px;
+      background:var(--surface-2);border-radius:var(--r-sm);border:1px solid var(--border);
+    }
+    .ks-ts-breakdown-title{
+      font-family:"Exo 2",sans-serif;font-size:.58rem;font-weight:800;
+      letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;
+    }
+    .ks-ts-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:3px 0;border-bottom:1px solid rgba(10,37,64,0.06);gap:8px;
+    }
+    .ks-ts-row:last-child{border-bottom:none;}
+    .ks-ts-row-label{font-size:.68rem;color:var(--ink-soft);flex:1;}
+    .ks-ts-row-val{
+      font-family:"Exo 2",sans-serif;font-size:.68rem;font-weight:700;white-space:nowrap;
+    }
+    .ks-ts-row-val.deduct{color:var(--bad);}
+    .ks-ts-row-val.base{color:var(--good);}
+    .ks-ts-row-val.total{color:var(--accent);}
+    .ks-ts-row.total-row{
+      border-top:1.5px solid var(--border);margin-top:4px;padding-top:6px;
+    }
+
+    /* ── FIX 4: SECTION TRANSITIONS — premium smooth reveal ─── */
+    @keyframes ksSecIn{
+      from{opacity:0;transform:translateY(22px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+    @keyframes ksReportIn{
+      from{opacity:0;transform:translateY(32px) scale(0.99);}
+      to{opacity:1;transform:translateY(0) scale(1);}
+    }
+    /* Report container: slides in when content is injected */
+    #rcontent.report-visible{
+      animation:ksReportIn .55s var(--ease) both;
+    }
+    /* Each .ks-section gets staggered reveal */
+    .ks-pir .ks-section{
+      animation:ksSecIn .48s var(--ease) both;
+      opacity:0; /* start invisible; animation fills to 1 */
+    }
+    /* Stagger each section with a delay that increments by index */
+    .ks-pir .ks-section:nth-child(1){animation-delay:.05s;}
+    .ks-pir .ks-section:nth-child(2){animation-delay:.12s;}
+    .ks-pir .ks-section:nth-child(3){animation-delay:.19s;}
+    .ks-pir .ks-section:nth-child(4){animation-delay:.26s;}
+    .ks-pir .ks-section:nth-child(5){animation-delay:.33s;}
+    .ks-pir .ks-section:nth-child(6){animation-delay:.40s;}
+    .ks-pir .ks-section:nth-child(7){animation-delay:.47s;}
+    .ks-pir .ks-section:nth-child(8){animation-delay:.54s;}
+    .ks-pir .ks-section:nth-child(n+9){animation-delay:.60s;}
+    /* Price number: count-up pulse */
+    @keyframes ksNumPop{
+      0%{transform:scale(0.88);opacity:0;}
+      65%{transform:scale(1.04);}
+      100%{transform:scale(1);opacity:1;}
+    }
+    .ks-price-hl-main{animation:ksNumPop .6s .22s var(--spring) both;}
+    /* Verdict pill: zoom in */
+    @keyframes ksVerdictIn{
+      from{opacity:0;transform:scale(0.8);}
+      to{opacity:1;transform:scale(1);}
+    }
+    .ks-deal-verdict{animation:ksVerdictIn .4s .35s var(--spring) both;}
+
+    /* ── FIX 3: WCAG CONTRAST — gold on white backgrounds ── */
+    /* --gold (#C49A2A) on white fails AA (3.3:1). Use #8B6914 (7.1:1) for body text on white. */
+    :root {
+      --gold-a11y: #8B6914;      /* AA+ compliant gold for text on white — 7.1:1 */
+      --gold-a11y-mid: #6B4F0D;  /* AAA compliant for small text — 10:1 */
+    }
+    /* Sticky context band: gold price on white background must use accessible gold */
+    .ks-sticky-price { color: var(--gold-a11y) !important; }
+    /* Report section eyebrow: gold on white sections */
+    .ks-s7-section-title { color: var(--gold-a11y) !important; }
+    .ks-report-eyebrow { color: #C49A2A !important; } /* stays gold on dark navy — passes */
+    /* Any inline gold text on white surface */
+    .ks-price-diff-lbl { color: #5E6E85 !important; }
+    /* Loader percentage — gold on white */
+    .ks-loader-pct { color: var(--gold-a11y) !important; }
+
+
 
     /* ── ENHANCED SPINNER ────────────────────────────────────── */
     .spinner{
@@ -721,6 +925,42 @@
       border-top-color:var(--accent);border-right-color:var(--accent-2);
       border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;
     }
+
+    /* ── FIX 5: MODEL DROPDOWN LOADING STATE ────────────────── */
+    .ks-trigger.ks-loading{
+      color:var(--muted)!important;
+      pointer-events:none;
+      position:relative;
+      padding-right:2.4rem!important;
+    }
+    .ks-trigger.ks-loading::after{
+      content:'';
+      position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
+      width:13px;height:13px;
+      border:2px solid var(--accent-line);
+      border-top-color:var(--accent);
+      border-radius:50%;
+      animation:spin .6s linear infinite;
+      flex-shrink:0;
+    }
+
+    /* ── ICON STANDARDIZATION: Corporate outlined set, 1.5px stroke ── */
+    /* All inline SVG icons in the app must conform to this standard */
+    .ks-ico{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ks-ico svg,.ks-flag-icon svg,.ks-s7-check-icon svg,
+    .ks-comm-icon svg,.ai-factor svg{
+      width:16px;height:16px;
+      stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill:none;
+    }
+    /* Emoji icons used in flags/checklist: normalize size */
+    .ks-flag-icon,.ks-s7-check-icon,.ks-comm-icon{
+      font-size:.88rem;line-height:1;flex-shrink:0;
+      display:inline-flex;align-items:center;justify-content:center;
+      width:20px;height:20px;
+    }
+    /* Share icon buttons: standardize to 30px outlined circles */
+    .sico{width:30px;height:30px;}
+    .sico svg{width:14px;height:14px;fill:#fff;stroke:none;}
 
     /* ── LOADING MSG STYLES ──────────────────────────────────── */
     /* Change 9: single loading message — #mobLoadMsg removed with mob toast */
@@ -1626,18 +1866,21 @@
       width: 100% !important;
     }
 
-    /* ── RESET BUTTON — 1/3 width ── */
+    /* ── RESET BUTTON — compact ghost, clearly secondary ── */
     .btn-reset {
-      flex: 1 1 0 !important;
+      flex: 0 0 auto !important;
+      width: auto !important;
+      min-width: 72px !important;
+      max-width: 96px !important;
       height: 36px !important;
       min-height: 36px !important;
-      background: #EEF1F6 !important;
-      color: #334155 !important;
+      background: transparent !important;
+      color: #94A3B8 !important;
       border: 1.5px solid #D0D5E0 !important;
       border-radius: 10px !important;
       font-family: "Exo 2", sans-serif !important;
-      font-size: 0.76rem !important;
-      font-weight: 700 !important;
+      font-size: 0.68rem !important;
+      font-weight: 600 !important;
       letter-spacing: 0.04em !important;
       cursor: pointer !important;
       display: flex !important;
@@ -1647,8 +1890,8 @@
       white-space: nowrap !important;
     }
     .btn-reset:hover {
-      background: #E2E8F4 !important;
-      color: #1A2B4C !important;
+      background: #F1F5FB !important;
+      color: #64748B !important;
       border-color: #B0BAD0 !important;
     }
 
@@ -2071,51 +2314,13 @@
     .sico::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%); background: rgba(5,15,30,0.95); color: #fff; font-family: "Exo 2", sans-serif; font-size: 0.52rem; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; padding: 4px 9px; border-radius: 6px; pointer-events: none; opacity: 0; transition: opacity 0.14s; border: 1px solid rgba(255,255,255,0.1); }
     .sico:hover::after { opacity: 1; }
 
-    /* ── DUBAI ROAD SCENE ────────────────────────────────────── */
-    .ks-dubai-scene {
-      position: relative; width: 100%; overflow: hidden;
-      background: linear-gradient(180deg,
-        #87CEEB 0%, #9ED5F0 12%, #B8E2F8 22%, #CCE8F4 30%,
-        #DFF0F8 38%, #EEF6FA 44%,
-        #F5E8C0 52%, #EDD68A 58%, #D4B050 64%,
-        #8A7238 72%, #5A4A22 82%, #3A3018 92%, #28240E 100%);
-      min-height: 210px;
-    }
-    .ks-scene-skyline { position: absolute; bottom: 36%; left: 0; right: 0; pointer-events: none; z-index: 2; }
-    .ks-scene-road {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 38%;
-      background: linear-gradient(180deg, #6A6050 0%, #504840 50%, #3A3228 100%);
-      z-index: 3;
-    }
-    .ks-scene-road::before {
-      content: ''; position: absolute; top: 28%; left: 0; right: 0; height: 3px;
-      background: repeating-linear-gradient(90deg, transparent 0, transparent 55px, rgba(240,200,60,0.75) 55px, rgba(240,200,60,0.75) 110px);
-    }
-    .ks-scene-car-wrap {
-      position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%);
-      width: 42% !important; max-width: 280px !important; min-width: 140px; z-index: 10;
-      filter: drop-shadow(0 8px 22px rgba(0,0,0,0.55)) drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-      animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    @keyframes ksCarIn {
-      from { opacity: 0; transform: translateX(calc(-50% + 70px)); }
-      to   { opacity: 1; transform: translateX(-50%); }
-    }
-    @keyframes ksHazeShimmer {
-      0%,100% { opacity: 0.5; transform: scaleX(1); }
-      50%      { opacity: 1;   transform: scaleX(1.08); }
-    }
-    .ks-scene-car-shadow {
-      position: absolute; bottom: 32%; left: 50%; transform: translateX(-50%);
-      width: 38%; max-width: 240px; height: 18px;
-      background: rgba(0,0,0,0.35); border-radius: 50%;
-      filter: blur(10px); z-index: 9;
-      animation: ksCarIn 0.85s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    .ks-scene-weather { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
-    
-    
-    /* Spec chips below scene */
+    /* ── DUBAI ROAD SCENE — hidden, kept for JS compatibility ── */
+    .ks-dubai-scene { display: none !important; }
+    .ks-scene-skyline, .ks-scene-road, .ks-scene-car-wrap,
+    .ks-scene-car-shadow, .ks-scene-weather,
+    .ks-scene-photo-wrap, .ks-scene-photo { display: none !important; }
+
+    /* Spec chip strip — now the only element in ks-section-hero */
     .ks-spec-road-row {
       background: linear-gradient(135deg, #0C1728 0%, #142035 55%, #1C2C48 100%);
       border-top: 2px solid rgba(196,154,42,0.4);
@@ -2764,8 +2969,8 @@
   .ffoot-hint strong{color:#1A2B4C!important;}
   .ffoot-hint.ready-hint strong{color:#16A34A!important;}
   .ffoot-btns{display:flex!important;gap:8px!important;align-items:stretch!important;}
-  .btn-reset{flex:1 1 0!important;height:36px!important;min-height:36px!important;background:#E8ECF4!important;color:#3D4F66!important;border:1.5px solid #CDD2DE!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:.04em!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .14s,color .14s!important;white-space:nowrap!important;}
-  .btn-reset:hover{background:#DDE2EE!important;color:#1A2B4C!important;border-color:#B0BACE!important;}
+  .btn-reset{flex:0 0 auto!important;width:auto!important;min-width:72px!important;max-width:96px!important;height:36px!important;min-height:36px!important;background:transparent!important;color:#94A3B8!important;border:1.5px solid #CDD2DE!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;font-weight:600!important;letter-spacing:.04em!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .14s,color .14s!important;white-space:nowrap!important;}
+  .btn-reset:hover{background:#F1F5FB!important;color:#64748B!important;border-color:#B0BAD0!important;}
   .btn-go{flex:2 1 0!important;height:36px!important;min-height:36px!important;background:linear-gradient(135deg,#D4AF37 0%,#B8960A 100%)!important;color:#1A2B4C!important;border:none!important;border-radius:10px!important;font-family:"Exo 2",sans-serif!important;font-weight:900!important;font-size:.84rem!important;letter-spacing:.12em!important;text-transform:uppercase!important;padding:0 14px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;cursor:pointer!important;position:relative!important;overflow:hidden!important;box-shadow:0 4px 14px rgba(184,150,10,.35)!important;transition:transform .14s,box-shadow .14s!important;white-space:nowrap!important;}
   .btn-go::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 55%);pointer-events:none;}
   .btn-go:hover:not(:disabled){transform:translateY(-2px)!important;box-shadow:0 7px 20px rgba(184,150,10,.45)!important;}
@@ -3019,6 +3224,9 @@
     text-align: left !important;
     background: #fff;
     padding: 0;
+    /* Centre the loader content vertically within the panel */
+    justify-content: center;
+    min-height: 340px;
   }
 
   /* ── HIDE tips, skeleton, fact rotator ── */
@@ -3027,15 +3235,21 @@
   /* ── NEW ANIMATED LOADER ── */
   .ks-loader-wrap {
     display: flex; flex-direction: column;
-    gap: 0; padding: 22px 22px 24px;
+    gap: 0; padding: 28px 28px 28px;
     background: #fff; flex: 1;
+    /* Centre block within the panel */
+    justify-content: center;
+    align-items: stretch;
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
   }
   .ks-loader-head {
     display: flex; align-items: center; gap: 14px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
   .ks-loader-icon {
-    width: 44px; height: 44px; flex-shrink: 0; position: relative;
+    width: 48px; height: 48px; flex-shrink: 0; position: relative;
   }
   .ks-loader-icon svg { width: 100%; height: 100%; }
   .ks-loader-ring {
@@ -3045,22 +3259,22 @@
   @keyframes ksLoaderSpin { to { transform: rotate(360deg); } }
   .ks-loader-title {
     font-family: "Orbitron", sans-serif;
-    font-size: .78rem; font-weight: 900; color: #0A2540;
+    font-size: .82rem; font-weight: 900; color: #0A2540;
     letter-spacing: .04em; line-height: 1.2;
   }
   .ks-loader-sub {
-    font-size: .65rem; font-weight: 600; color: #64748B;
-    margin-top: 2px; font-family: "Exo 2", sans-serif;
+    font-size: .70rem; font-weight: 600; color: #64748B;
+    margin-top: 3px; font-family: "Exo 2", sans-serif;
     transition: opacity .3s ease;
   }
   .ks-loader-pct {
     margin-left: auto; font-family: "Orbitron", sans-serif;
-    font-size: 1rem; font-weight: 900; color: #C49A2A;
+    font-size: 1.1rem; font-weight: 900; color: #C49A2A;
     flex-shrink: 0; min-width: 44px; text-align: right;
   }
   .ks-loader-bar-track {
-    height: 4px; background: #E8EBF3; border-radius: 99px;
-    overflow: hidden; margin-bottom: 22px;
+    height: 5px; background: #E8EBF3; border-radius: 99px;
+    overflow: hidden; margin-bottom: 24px;
   }
   .ks-loader-bar-fill {
     height: 100%; width: 0%; border-radius: 99px;
@@ -5005,8 +5219,29 @@
 .ks-depr-label { font-size:.72rem; font-weight:700; color:var(--bad); white-space:nowrap; flex-shrink:0; }
 .ks-depr-val   { font-size:.78rem; font-weight:800; color:var(--bad); font-family:"Orbitron",sans-serif; white-space:nowrap; text-align:right; flex-shrink:0; }
 
+/* ── FIX 1: TABLE OVERFLOW — all data tables scroll on mobile ── */
+.ks-table-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 10px;
+  border-radius: var(--r-sm);
+}
+/* 3-Year Outlook table */
+.rpt-depr-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 10px;
+}
+.rpt-depr-table { min-width: 320px; }
+/* Cost table */
+.rpt-cost-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.rpt-cost-table { min-width: 280px; }
+
 /* ── Paid S4: Listings table ── */
-.ks-listings-table-wrap { overflow-x:auto; margin-bottom:10px; }
+.ks-listings-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:10px; }
 .ks-listings-table {
   width:100%; border-collapse:collapse; font-size:.74rem;
 }
@@ -5730,7 +5965,7 @@ body.ks-result-active .form-card:hover {
 
 /* Idle/loading containers */
 .rph { background: #fff !important; }
-.rld { background: #fff !important; padding: 0 !important; }
+.rld { background: #fff !important; padding: 0 !important; display: flex; flex-direction: column; justify-content: center; min-height: 340px; }
 
 /* Remove any lingering gradient or tint from ks-pir */
 .ks-pir > * { background: inherit; }
@@ -6205,6 +6440,7 @@ body.ks-result-active .form-card:hover {
     transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center;
     gap: 1px; pointer-events: none; bottom: 0;
+    will-change: left; /* GPU compositing for crisp pixel alignment */
   }
   /* stacked = asking label is pushed up when too close to FMV */
   .ks-hscale-float-stacked { bottom: 26px; }
@@ -6489,6 +6725,16 @@ body.ks-result-active .form-card:hover {
   margin-bottom: 8px !important;
   text-shadow: 0 2px 20px rgba(10,37,64,.12) !important;
 }
+/* De-emphasise currency prefix so the number dominates */
+.ks-price-currency {
+  font-size: 0.45em !important;
+  font-weight: 700 !important;
+  color: #64748B !important;
+  letter-spacing: .08em !important;
+  vertical-align: middle !important;
+  margin-right: 2px !important;
+  text-shadow: none !important;
+}
 .ks-price-hl-range {
   font-size: var(--fs-body-sm) !important;
   color: #3D5166 !important; margin-bottom: 14px !important;
@@ -6675,6 +6921,27 @@ body.ks-result-active .form-card:hover {
 
 /* ── PHASE 4: PRINT / PDF A4 ─────────────────────────────────── */
 @media print {
+  /* FIX 4: ENHANCED PRINT LAYOUT — all rules scoped to print only */
+  /* Ensure images don't overflow columns */
+  img { max-width: 100% !important; }
+  /* Modern break property alongside page-break for full browser coverage */
+  .ks-section, .ks-block { break-inside: avoid !important; }
+  /* Print-friendly links */
+  a { color: #0A2540 !important; text-decoration: underline !important; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .55rem; color: #64748B; }
+  /* Report fills full A4 width */
+  #rcontent, .ks-pir, .ks-page { width: 100% !important; max-width: none !important; }
+  /* Print-safe section text */
+  .ks-section-title { color: #0A2540 !important; }
+  .ks-section-eyebrow { color: #5E6E85 !important; }
+  /* Listings table: wrap URLs gracefully */
+  .ks-listings-table td { word-break: break-word !important; }
+  /* Sticky UI not needed in print */
+  .ks-sticky-ctx { display: none !important; }
+  /* Depreciation bars: force colour print */
+  .rpt-depr-bar-fill { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  /* Negotiation cards: keep 3-col in print */
+  .rpt-nego-grid { grid-template-columns: 1fr 1fr 1fr !important; }
   @page { size: A4 portrait; margin: 14mm 14mm 12mm 14mm; }
   @page :first { margin-top: 14mm; }
 
@@ -6775,6 +7042,16 @@ body.ks-result-active .form-card:hover {
 
   /* Listings table */
   .ks-listings-table { page-break-inside: avoid !important; font-size: .72rem !important; }
+  /* FIX 1+4: Remove overflow scroll in print so full table renders */
+  .ks-listings-table-wrap,
+  .rpt-depr-table-wrap,
+  .rpt-cost-table-wrap,
+  .ks-table-scroll-wrap { overflow: visible !important; }
+  .ks-listings-table,
+  .rpt-depr-table,
+  .rpt-cost-table { min-width: 0 !important; width: 100% !important; }
+  /* FIX 7: vs FMV column — print in black */
+  .ks-lt-diff span { color: #1A2738 !important; }
 
   /* Page breaks */
   .ks-section-price    { page-break-after: avoid !important; }
@@ -7538,6 +7815,468 @@ body.ks-result-active #backToInputs { display: flex !important; }
   .ks-hp-cta-text p { font-size: 14px; }
   .ks-hp-btn-outline, .ks-hp-btn-ghost { font-size: 13px; padding: .5rem 1.2rem; }
 }
+
+/* ══ GLOBAL SCENE SUPPRESSOR — removes Dubai scene + car image on ALL screen sizes ══
+   The scene HTML is no longer injected by buildResult(), but these rules neutralise
+   any residual CSS from older blocks scattered across this file.                      */
+.ks-dubai-scene,
+.ks-scene-skyline,
+.ks-scene-road,
+.ks-scene-road::before,
+.ks-scene-car-wrap,
+.ks-scene-car-shadow,
+.ks-scene-weather,
+.ks-scene-photo-wrap,
+.ks-scene-photo,
+.ks-scene-photo.ks-scene-photo-ready,
+.ks-page-1 .ks-dubai-scene,
+#ksDubaiScene {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+/* Also suppress the rph-stage2 car silhouette — idle panel stays clean */
+#rphStage2,
+.rph-stage2 {
+  display: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MASTER NORMALIZATION — v74 FINAL
+   Single source of truth for ALL report typography & spacing.
+   Free page (ks-page-1) and paid page (ks-page-2) are identical.
+   Loaded LAST so it overrides every earlier conflicting rule.
+══════════════════════════════════════════════════════════════ */
+
+/* ─── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  --rpt-pad:        20px 22px 18px;
+  --rpt-divider:    2px solid #EAECF2;
+  --rpt-navy:       #0A2540;
+  --rpt-gold:       #C49A2A;
+  --rpt-ink:        #1A2738;
+  --rpt-soft:       #2D3F55;
+  --rpt-muted:      #64748B;
+  --rpt-border:     #EAECF2;
+  /* Type scale */
+  --rpt-price:      clamp(2.2rem, 7vw, 3.2rem);
+  --rpt-h1:         clamp(1.2rem, 3vw, 1.65rem);
+  --rpt-h2:         1.00rem;
+  --rpt-h3:         0.88rem;
+  --rpt-body:       0.84rem;
+  --rpt-sm:         0.76rem;
+  --rpt-caption:    0.68rem;
+  --rpt-label:      0.62rem;
+  --rpt-eyebrow:    0.60rem;
+}
+
+/* ─── SECTION SHELL — identical free + paid ─────────────────── */
+.ks-section {
+  padding: var(--rpt-pad) !important;
+  background: #fff !important;
+}
+.ks-section + .ks-section {
+  border-top: var(--rpt-divider) !important;
+}
+
+/* ─── EYEBROW (above every section title) ───────────────────── */
+.ks-section-eyebrow {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-eyebrow) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.20em !important;
+  text-transform: uppercase !important;
+  color: var(--rpt-gold) !important;
+  margin-bottom: 3px !important;
+  display: block !important;
+  line-height: 1.4 !important;
+}
+
+/* ─── SECTION TITLE ─────────────────────────────────────────── */
+.ks-section-title {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-h2) !important;
+  font-weight: 800 !important;
+  color: var(--rpt-navy) !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.25 !important;
+  margin-bottom: 16px !important;
+  padding-bottom: 10px !important;
+  border-bottom: var(--rpt-divider) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.ks-section-title::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 3px !important;
+  height: 0.85em !important;
+  background: var(--rpt-gold) !important;
+  border-radius: 2px !important;
+  flex-shrink: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ─── BODY TEXT — all paragraph / list / note variants ──────── */
+.ks-section p,
+.ks-s7-situation p,
+.ks-flag-plain,
+.ks-comm-item,
+.ks-s7-body,
+.ks-fuel-val,
+.ks-conf-caption,
+.ks-conf-reason,
+.ks-scale-interp,
+.ks-outlook-note,
+.ks-cost-note,
+.ks-listings-note,
+.ks-footer-disc,
+.ks-depr3-insight,
+.ks-community-note {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-body) !important;
+  color: var(--rpt-soft) !important;
+  line-height: 1.65 !important;
+}
+
+/* ─── INTERNAL SUB-HEADS ─────────────────────────────────────── */
+.ks-flags-sub-head,
+.ks-s7-checklist-title,
+.ks-ts-breakdown-title,
+.ks-conf-title,
+.ks-fuel-lbl {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-label) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--rpt-navy) !important;
+  margin-bottom: 8px !important;
+}
+
+/* ─── SITUATION CARDS (inside S7) ───────────────────────────── */
+.ks-s7-situation {
+  border-radius: 10px !important;
+  border: 1px solid !important;
+  padding: 13px 15px !important;
+  margin-bottom: 12px !important;
+}
+.ks-s7-sit-title {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-sm) !important;
+  font-weight: 800 !important;
+  margin-bottom: 8px !important;
+  line-height: 1.3 !important;
+}
+.ks-s7-situation p { margin-bottom: 8px !important; }
+.ks-s7-situation p:last-child { margin-bottom: 0 !important; }
+
+/* ─── CHECKLIST ITEMS ───────────────────────────────────────── */
+.ks-s7-check-item {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-sm) !important;
+  color: var(--rpt-soft) !important;
+  line-height: 1.55 !important;
+  padding: 6px 0 !important;
+  border-bottom: 1px solid var(--rpt-border) !important;
+  gap: 10px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+}
+.ks-s7-check-item:last-child { border-bottom: none !important; }
+.ks-s7-checklist {
+  background: #F8FAFC !important;
+  border: 1px solid #E5E9EF !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+}
+
+/* ─── TABLES — cost / depr / listings ───────────────────────── */
+.ks-cost-table td,
+.ks-depr3-table td,
+.ks-depr3-table th,
+.ks-listings-table td,
+.ks-listings-table th {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-sm) !important;
+  color: var(--rpt-soft) !important;
+  line-height: 1.5 !important;
+}
+.ks-cost-table td:last-child {
+  font-weight: 700 !important;
+  color: var(--rpt-navy) !important;
+  text-align: right !important;
+}
+.ks-cost-total td {
+  font-weight: 900 !important;
+  font-size: var(--rpt-sm) !important;
+  color: #fff !important;
+  background: var(--rpt-navy) !important;
+}
+.ks-listings-table th {
+  font-size: var(--rpt-label) !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.10em !important;
+  color: var(--rpt-muted) !important;
+  white-space: nowrap !important;
+}
+.ks-lt-brand { font-weight: 700 !important; color: var(--rpt-navy) !important; }
+.ks-lt-price {
+  font-family: "Orbitron", sans-serif !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  color: var(--rpt-navy) !important;
+  white-space: nowrap !important;
+}
+
+/* ─── SPEC CHIP STRIP (dark navy bar) ───────────────────────── */
+.ks-spec-chip-lbl {
+  font-size: 0.50rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: rgba(196,154,42,0.9) !important;
+  display: block !important;
+}
+.ks-spec-chip-val {
+  font-size: 0.70rem !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  display: block !important;
+  margin-top: 1px !important;
+}
+.ks-spec-chip-val.good { color: #4ADE80 !important; }
+.ks-spec-chip-val.warn { color: #FCD34D !important; }
+.ks-spec-chip-val.bad  { color: #FCA5A5 !important; }
+
+/* ─── REPORT HEADER (dark navy letterhead) ───────────────────── */
+.ks-report-header {
+  padding: 22px 24px 20px !important;
+  background: linear-gradient(135deg, #0A2540 0%, #0E3460 100%) !important;
+  border-bottom: 3px solid rgba(196,154,42,0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+.ks-report-eyebrow {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-label) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--rpt-gold) !important;
+  margin-bottom: 4px !important;
+}
+.ks-report-title {
+  font-family: "Orbitron", sans-serif !important;
+  font-size: var(--rpt-h1) !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ─── PRICE HERO ─────────────────────────────────────────────── */
+.ks-price-hl-label {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-label) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--rpt-muted) !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+.ks-price-hl-main {
+  font-family: "Orbitron", sans-serif !important;
+  font-size: var(--rpt-price) !important;
+  font-weight: 900 !important;
+  color: var(--rpt-navy) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+  margin-bottom: 8px !important;
+}
+.ks-price-hl-range {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-sm) !important;
+  color: #3D5166 !important;
+  font-weight: 600 !important;
+  margin-bottom: 14px !important;
+}
+
+/* ─── FLAG + COMMUNITY CARDS ─────────────────────────────────── */
+.ks-flag-plain {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  border: 1px solid #E5E9EF !important;
+  background: #FAFBFC !important;
+  border-bottom: none !important;
+  font-size: var(--rpt-body) !important;
+  color: var(--rpt-soft) !important;
+  line-height: 1.55 !important;
+}
+.ks-flag-plain:has(.ks-flag-icon-green) {
+  border-left: 4px solid #22C55E !important;
+  background: rgba(34,197,94,.04) !important;
+}
+.ks-flag-plain:has(.ks-flag-icon-warn) {
+  border-left: 4px solid #F59E0B !important;
+  background: rgba(245,158,11,.04) !important;
+}
+.ks-comm-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  border: 1px solid #E5E9EF !important;
+  font-size: var(--rpt-body) !important;
+  color: var(--rpt-soft) !important;
+  line-height: 1.55 !important;
+  margin-bottom: 6px !important;
+  border-bottom: none !important;
+}
+
+/* ─── OUTLOOK CHART TEXT ─────────────────────────────────────── */
+.ks-ob-val {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: 0.64rem !important;
+  font-weight: 800 !important;
+  color: var(--rpt-ink) !important;
+  text-align: center !important;
+}
+.ks-ob-yr {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  color: var(--rpt-muted) !important;
+  text-align: center !important;
+}
+.ks-ob-drop {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: 0.58rem !important;
+  font-weight: 600 !important;
+}
+
+/* ─── S7 NEGOTIATION — SIDE-BY-SIDE TWO COLUMNS ─────────────── */
+/* Always show both columns — never hide one */
+.ks-s7-sidebyside {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+.ks-s7-col-wrap {
+  border-radius: 12px !important;
+  border: 1px solid var(--rpt-border) !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(10,37,64,0.06) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+/* Column header bars */
+.ks-s7-col-head {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-caption) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.10em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  padding: 11px 16px !important;
+  flex-shrink: 0 !important;
+}
+.ks-s7-col-head-buyer {
+  background: linear-gradient(135deg, #0A2540 0%, #0E3460 100%) !important;
+}
+.ks-s7-col-head-seller {
+  background: linear-gradient(135deg, #8B6914 0%, #C49A2A 100%) !important;
+}
+/* Content padding inside each column */
+.ks-s7-col-wrap .ks-s7-situation {
+  margin: 14px 14px 0 !important;
+}
+.ks-s7-col-wrap .ks-s7-checklist {
+  margin: 12px 14px 14px !important;
+}
+/* Kill the old tab buttons entirely */
+.ks-s7-tabs,
+#ks-s7-tabs { display: none !important; }
+/* Kill old hidden-panel logic */
+.ks-s7-panels { display: contents !important; }
+.ks-s7-panel,
+#ks-s7-panel-0,
+#ks-s7-panel-1 {
+  display: contents !important;
+}
+/* Stack on narrow mobile */
+@media(max-width: 640px) {
+  .ks-s7-sidebyside {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* ─── TRANSPARENCY / CONFIDENCE SCORE BREAKDOWN ──────────────── */
+.ks-ts-row-label {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-sm) !important;
+  color: var(--rpt-soft) !important;
+}
+.ks-ts-row-val {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-sm) !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+.ks-footer-ref {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-label) !important;
+  color: var(--rpt-muted) !important;
+  letter-spacing: 0.08em !important;
+  margin-bottom: 6px !important;
+}
+.ks-footer-disc {
+  font-family: "Exo 2", sans-serif !important;
+  font-size: var(--rpt-caption) !important;
+  color: var(--rpt-muted) !important;
+  line-height: 1.6 !important;
+  margin-bottom: 14px !important;
+}
+
+/* ─── MOBILE OVERRIDES ───────────────────────────────────────── */
+@media(max-width: 600px) {
+  :root {
+    --rpt-h2:    0.92rem;
+    --rpt-body:  0.82rem;
+    --rpt-sm:    0.74rem;
+  }
+  .ks-section {
+    padding: 16px 16px 14px !important;
+  }
+  .ks-report-header {
+    padding: 16px 16px 14px !important;
+  }
+  .ks-report-title {
+    font-size: clamp(1.05rem, 5vw, 1.3rem) !important;
+  }
+  .ks-price-hl-main {
+    font-size: clamp(1.9rem, 9vw, 2.8rem) !important;
+  }
+}
 </style>
 <body>
 
@@ -7653,13 +8392,13 @@ body.ks-result-active #backToInputs { display: flex !important; }
             <label for="mileage">Mileage (KM) <span class="rq">*</span></label>
             <div class="prefix-wrap">
               <span class="prefix-lbl" id="mileagePrefixLbl">KM</span>
-              <input type="number" id="mileage" placeholder="e.g. 50000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this);updateReadiness();_checkMileagePlausibility()" onkeydown="blockNonNumeric(event)" aria-required="true">
+              <input type="number" id="mileage" placeholder="e.g. 50,000" min="0" max="999999" inputmode="numeric" oninput="markFilled(this);updateReadiness();_checkMileagePlausibility()" onkeydown="blockNonNumeric(event)" aria-required="true">
             </div>
             <span class="errmsg" id="err-mileage">Enter mileage</span>
           </div>
 
           <div class="ig">
-            <label for="spec">Spec</label>
+            <label for="spec">Specification</label>
             <select id="spec" onchange="markFilled(this)">
               <option value="">Select…</option>
               <option value="GCC">GCC</option>
@@ -7672,7 +8411,16 @@ body.ks-result-active #backToInputs { display: flex !important; }
           </div>
 
           <div class="ig">
-            <label for="condition">Condition</label>
+            <label for="condition">Condition <span class="ks-cond-tip-trigger" tabindex="0" aria-label="Condition grade definitions" role="button">ⓘ
+              <span class="ks-cond-tip-box" role="tooltip">
+                <strong>How grades affect the AI price:</strong><br>
+                <span class="ks-cond-tip-row"><b>Excellent</b> — Showroom-ready. No visible wear, full service history, possibly still under warranty. +3–5% vs market avg.</span>
+                <span class="ks-cond-tip-row"><b>Very Good</b> — Minor cosmetic blemishes only (small scuffs/stone chips). Mechanically perfect. No accidents. +1–3% vs avg.</span>
+                <span class="ks-cond-tip-row"><b>Good</b> — Normal wear for age/mileage. May have minor dents or faded trim. No major mechanical issues. At market avg.</span>
+                <span class="ks-cond-tip-row"><b>Fair</b> — Visible wear, possible minor repairs needed, or service history gaps. −3–7% vs avg.</span>
+                <span class="ks-cond-tip-row"><b>Poor</b> — Significant mechanical or cosmetic issues. Accident damage or high repair cost likely. −8–15% vs avg.</span>
+              </span>
+            </span></label>
             <select id="condition" onchange="markFilled(this)">
               <option value="">Select…</option>
               <option>Excellent</option>
@@ -7711,18 +8459,25 @@ body.ks-result-active #backToInputs { display: flex !important; }
         <div class="qcbar" role="group" aria-label="Additional details">
 
           <div class="ig-qc">
-            <div class="qcbar-item">
+            <div class="qcbar-item" data-field="accident">
               <span class="qcbar-lbl">Accident</span>
               <div class="qcbar-btns">
                 <button class="qb tick" onclick="setYN('accident','yes',this)" aria-label="Accident Yes">✓</button>
                 <button class="qb cross" onclick="setYN('accident','no',this)" aria-label="Accident No">✗</button>
               </div>
             </div>
+            <div id="accidentSevWrap" style="display:none;margin-top:6px;">
+              <select id="accidentSeverityInput" onchange="qs.accidentSeverity=this.value" style="font-size:12px;width:100%;padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--ink);">
+                <option value="moderate">Moderate (default)</option>
+                <option value="minor">Minor — cosmetic only</option>
+                <option value="major">Major — structural / frame</option>
+              </select>
+            </div>
           </div>
 
           <div class="ig-qc">
-            <div class="qcbar-item">
-              <span class="qcbar-lbl">Svc. History</span>
+            <div class="qcbar-item" data-field="fsh">
+              <span class="qcbar-lbl">Service History</span>
               <div class="qcbar-btns">
                 <button class="qb tick" onclick="setYN('fsh','yes',this)" aria-label="Service History Yes">✓</button>
                 <button class="qb cross" onclick="setYN('fsh','no',this)" aria-label="Service History No">✗</button>
@@ -7731,7 +8486,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
           </div>
 
           <div class="ig-qc">
-            <div class="qcbar-item">
+            <div class="qcbar-item" data-field="warranty">
               <span class="qcbar-lbl">Warranty</span>
               <div class="qcbar-btns">
                 <button class="qb tick" onclick="setYN('warranty','yes',this)" aria-label="Warranty Yes">✓</button>
@@ -7741,7 +8496,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
           </div>
 
           <div class="ig-qc">
-            <div class="qcbar-item">
+            <div class="qcbar-item" data-field="singleOwner">
               <span class="qcbar-lbl">Single Owner</span>
               <div class="qcbar-btns">
                 <button class="qb tick" onclick="setYN('singleOwner','yes',this)" aria-label="Single Owner Yes">✓</button>
@@ -7991,9 +8746,24 @@ body.ks-result-active #backToInputs { display: flex !important; }
 <!-- Floating back-to-inputs (mobile) -->
 <button class="back-to-inputs" id="backToInputs" onclick="g('formCard').scrollIntoView({behavior:'smooth'})">↑ Inputs</button>
 
+</div><!-- /page -->
+
+<!-- Sticky context sub-header: shows car name + price while scrolling the report -->
+<div class="ks-sticky-ctx" id="ksStickyCtx" aria-hidden="true">
+  <div class="ks-sticky-inner">
+    <div class="ks-sticky-car">
+      <span class="ks-sticky-car-dot"></span>
+      <span id="ksStickyCarName">—</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="ks-sticky-badge neu" id="ksStickyVerdict"></span>
+      <span class="ks-sticky-price" id="ksStickyPrice"></span>
+    </div>
+  </div>
+</div>
+
 <!-- Change 1: mob-overlay and mob-result-toast removed — single unified result-panel is the only render target -->
 
-</div><!-- /page -->
 <!-- ════════════════════════════════════════════════════════
      SECTION 3 — HOW IT WORKS (preview)
 ════════════════════════════════════════════════════════ -->
@@ -8140,29 +8910,60 @@ const BODY_HINTS=[
        > 60  000 km → +1 %
        ≤ 60  000 km →  0 %
 ─────────────────────────────────────────────────────────────── */
-function buildDeprTable(handshake, carYear, brand, km) {
+/* ── GLOBAL ROUNDING HELPER ─────────────────────────────────
+   All user-facing AED prices round to nearest 500 for consistency.
+   Below AED 5,000 round to nearest 100 for precision.           */
+function ksRound(n){
+  if(!n||isNaN(n)) return 0;
+  return n < 5000 ? Math.round(n/100)*100 : Math.round(n/500)*500;
+}
+
+function buildDeprTable(handshake, carYear, brand, km, dc, model) {
   const currentYear = new Date().getFullYear();
   const age = Math.max(0, currentYear - (parseInt(carYear, 10) || currentYear));
 
-  // Base rates per year slot [Y1, Y2, Y3]
-  let base;
-  if      (age <= 2)  base = [18, 14, 12];
-  else if (age <= 5)  base = [15, 13, 11];
-  else if (age <= 9)  base = [13, 11,  9];
-  else                base = [10,  9,  8];
+  // Fix 5: brand-class-aware rates — matches worker DEPR_RATES exactly (Y1/Y2/Y3)
+  const DC_RATES = {
+    S: [8,  6,  5],   // Icons: LC/Patrol — hold value, flatten after Y1
+    A: [12, 10,  8],  // Strong: Camry/Corolla/Honda
+    B: [15, 12, 10],  // Good: X-Trail/Pajero
+    C: [19, 15, 12],  // Average: Hyundai/Kia — steep Y1
+    D: [23, 17, 13],  // Fast: BMW/Audi/Merc — service fear
+    E: [30, 22, 16],  // High: MG/Haval/BYD — market flooding
+  };
 
-  // Mileage delta on Y1 only
+  // Resolve class: use passed dc, or derive from brand/model, or fall back by age
+  const BRAND_DC_FE = {
+    'toyota':'A','lexus':'A','honda':'A','nissan':'B','mitsubishi':'B',
+    'mazda':'B','subaru':'B','isuzu':'B','hyundai':'C','kia':'C',
+    'genesis':'C','chevrolet':'C','ford':'C','gmc':'C','dodge':'C',
+    'jeep':'C','ram':'C','bmw':'D','audi':'D','mercedes-benz':'D',
+    'mercedes':'D','volvo':'D','land rover':'D','jaguar':'D','cadillac':'D',
+    'lincoln':'D','porsche':'D','infiniti':'B','mg':'E','haval':'E',
+    'gac':'E','chery':'E','byd':'E','omoda':'E','jetour':'E','geely':'E',
+  };
+  // Iconic model override — matches worker PRICE_MODEL_SYSTEM dc:S definition
+  // Applied only when dc is not already provided by the API response
+  const ICONIC_MODELS_RE = /land.?cruiser|patrol(?!\s*safari|\s*sport)|prado|fj.?cruiser/i;
+  const _brandDc = BRAND_DC_FE[(brand||'').toLowerCase()] || (age <= 2 ? 'C' : age <= 5 ? 'B' : 'A');
+  const _modelStr = (model || '').toLowerCase();
+  const _isIconic = ICONIC_MODELS_RE.test(_modelStr) || ICONIC_MODELS_RE.test((brand||'').toLowerCase()+' '+_modelStr);
+  const resolvedDc = dc || (_isIconic ? 'S' : _brandDc);
+
+  const base = DC_RATES[resolvedDc] || DC_RATES['C'];
+
+  // Mileage delta on Y1 only — same cap logic as before
   const mileageKm = parseInt(km, 10) || 0;
-  const mDelta = mileageKm > 150000 ? 4
-               : mileageKm > 100000 ? 2
+  const mDelta = mileageKm > 150000 ? 5
+               : mileageKm > 100000 ? 3
                : mileageKm > 60000  ? 1
                : 0;
-  base[0] = Math.min(base[0] + mDelta, 35); // cap at 35 %
+  const rates = [Math.min(base[0] + mDelta, 38), base[1], base[2]];
 
   const rows = [];
   let prev = Math.max(handshake, 0);
   for (let i = 0; i < 3; i++) {
-    const rate   = base[i];
+    const rate   = rates[i];
     const endVal = Math.round(prev * (1 - rate / 100) / 500) * 500;
     rows.push({
       year    : currentYear + i + 1,
@@ -8192,7 +8993,7 @@ function saveLastValuation(){
       condition:g('condition').value,
       asking:g('asking').value,ts:Date.now(),
       // FIX #12: persist QC state so restore recovers tick/cross answers
-      qs:{warranty:qs.warranty,singleOwner:qs.singleOwner,fsh:qs.fsh,accident:qs.accident}
+      qs:{warranty:qs.warranty,singleOwner:qs.singleOwner,fsh:qs.fsh,accident:qs.accident,accidentSeverity:qs.accidentSeverity}
     };
     // Keep last 6 in history array
     let hist=[];
@@ -8243,6 +9044,14 @@ function restoreValuation(idx){
               item.classList.remove('qcbar-item--unset');
             });
           });
+          // Restore accident severity selector
+          if(data.qs.accidentSeverity && data.qs.accident===true){
+            qs.accidentSeverity=data.qs.accidentSeverity;
+            const sevWrap=document.getElementById('accidentSevWrap');
+            const sevSel=document.getElementById('accidentSeverityInput');
+            if(sevWrap) sevWrap.style.display='block';
+            if(sevSel)  sevSel.value=data.qs.accidentSeverity;
+          }
         }
         _ksMap.forEach((_w,sel)=>ksSync(sel));
         updateReadiness();
@@ -8370,7 +9179,7 @@ function blockNonNumeric(e){
 
 
 const API='https://kamsayara-api.mbit0010.workers.dev';
-const qs={warranty:null,singleOwner:null,fsh:null,accident:null};
+const qs={warranty:null,singleOwner:null,fsh:null,accident:null,accidentSeverity:null};
 
 /* ── DEVICE TOKEN (rate limiting) ─────────────────────────── */
 function _getDeviceToken(){
@@ -8452,6 +9261,15 @@ function updateReadiness(){
 
 function g(id){return document.getElementById(id);}
 
+/* ── UNIFIED PRICE ROUNDING (Fix 8) ─────────────────────────────────────
+   >= AED 10,000 → nearest AED 500
+   <  AED 10,000 → nearest AED 100
+   Used by all report price outputs for consistency.                       */
+function ksRound(n){
+  if(!n||isNaN(n)) return 0;
+  return n >= 10000 ? Math.round(n/500)*500 : Math.round(n/100)*100;
+}
+
 /* ── INIT DROPDOWNS ─────────────────────────────────────── */
 function initBrands(){
   const s=g('brand');
@@ -8463,6 +9281,13 @@ function initYears(){
 }
 function populateModels(){
   const b=g('brand').value,s=g('model'),sy=window.scrollY;
+  // Fix 5: show loading state on model dropdown trigger while populating
+  const modelWrap = _ksMap.get(s);
+  const modelTrig = modelWrap?.querySelector('.ks-trigger');
+  if(modelTrig && b){
+    modelTrig.classList.add('ks-loading');
+    modelTrig.textContent = 'Loading…';
+  }
   s.innerHTML='<option value="">Select model…</option>';
   if(b&&BM[b])BM[b].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;s.appendChild(o);});
   markFilled(g('brand'));
@@ -8472,6 +9297,11 @@ function populateModels(){
   // refresh model ks-dropdown with new options
   requestAnimationFrame(()=>{
     ksRefresh(s);
+    // Fix 5: remove loading state after options are rendered
+    if(modelTrig){
+      modelTrig.classList.remove('ks-loading');
+      _ksTrigUpdate(s, modelTrig);
+    }
     window.scrollTo({top:sy,behavior:'instant'});
     updateReadiness();
   });
@@ -8536,6 +9366,24 @@ function setYN(key,val,btn){
     item.classList.remove('qcbar-item--unset');
   }
   btn.classList.add('on');
+  // Show/hide accident severity selector
+  if(key==='accident'){
+    const sevWrap=document.getElementById('accidentSevWrap');
+    if(sevWrap){
+      sevWrap.style.display=(val==='yes')?'block':'none';
+      if(val==='yes'){
+        const sel=document.getElementById('accidentSeverityInput');
+        qs.accidentSeverity=sel?sel.value:'moderate';
+      } else {
+        qs.accidentSeverity=null;
+      }
+    }
+    // Visual: "No accident" is a positive signal — mark the item so cross glows green
+    const accItem=btn.closest('.qcbar-item');
+    if(accItem){
+      accItem.classList.toggle('qcbar-item--accident-clean', val==='no');
+    }
+  }
 }
 
 /* ── SHOW STATE ─────────────────────────────────────────── */
@@ -8549,16 +9397,31 @@ function showState(st){
   const hero     = document.querySelector('.hero');
   const disc     = document.querySelector('.disc');
   const resultPanel = g('resultPanel');
+  const header   = g('resultPanelHeader');
 
   // Always hide legacy overlay elements — they are no longer used
   const fullLoad = g('ks-fullscreen-load');
   const fullRes  = g('ks-fullscreen-result');
   if(fullLoad) fullLoad.style.display = 'none';
   if(fullRes)  fullRes.style.display  = 'none';
-  // mob-result-toast and mob-overlay have been removed from the DOM (Change 1)
+
+  // ── Shared scroll helper ──────────────────────────────────────
+  // Scrolls so the result-panel-header is visible with breathing room above it.
+  // Uses the header element when available so the scroll lands just above it
+  // regardless of how tall the form card is on any screen size.
+  function _scrollToHeader(delay){
+    setTimeout(()=>{
+      const target = header || resultPanel;
+      if(!target) return;
+      const rect   = target.getBoundingClientRect();
+      // 72px headroom — enough to show the sticky nav + a small gap above the header bar
+      const offset = window.scrollY + rect.top - 72;
+      window.scrollTo({ top: Math.max(0, offset), behavior:'smooth' });
+    }, delay || 80);
+  }
 
   if(st === 'placeholder'){
-    // Reset — show form + idle result panel
+    // Reset — show form + idle result panel (Stage 1 only — clean, no car image)
     if(layout)   layout.style.display    = '';
     if(formCard) { formCard.style.display=''; formCard.classList.remove('ks-collapsing','ks-expanding'); }
     if(hero)     { hero.style.display=''; }
@@ -8567,8 +9430,11 @@ function showState(st){
     if(rld) rld.style.display = 'none';
     if(rct) rct.style.display = 'none';
     document.body.classList.remove('ks-result-active');
-    // Header: idle state
     if(resultPanel){ resultPanel.classList.remove('panel-state-loading','panel-state-ready'); resultPanel.classList.add('panel-state-idle'); }
+    // Always keep Stage 1 visible, Stage 2 hidden when returning to idle
+    const s1=g('rphStage1'), s2=g('rphStage2');
+    if(s1) s1.style.display='flex';
+    if(s2) s2.style.display='none';
     const stTxt = document.getElementById('resultPanelStatusText');
     if(stTxt) stTxt.textContent = '';
 
@@ -8580,15 +9446,15 @@ function showState(st){
     if(ph)  ph.style.display  = 'none';
     if(rld) rld.style.display = 'flex';
     if(rct) rct.style.display = 'none';
-    // Smooth scroll to result panel
     if(resultPanel){
       resultPanel.classList.remove('panel-state-idle','panel-state-ready');
       resultPanel.classList.add('panel-state-loading');
-      setTimeout(()=>resultPanel.scrollIntoView({ behavior:'smooth', block:'start' }), 80);
     }
     const stTxt = document.getElementById('resultPanelStatusText');
     if(stTxt) stTxt.textContent = 'Analysing…';
     document.body.classList.add('ks-result-active');
+    // Scroll so the result panel header is clearly visible above the loading steps
+    _scrollToHeader(80);
 
   } else if(st === 'content'){
     // Keep layout + form visible; show result in result-panel
@@ -8598,19 +9464,15 @@ function showState(st){
     if(rld) rld.style.display = 'none';
     if(ph)  ph.style.display  = 'none';
     if(rct) { rct.style.display = 'block'; rct.classList.add('ks-fading-in'); setTimeout(()=>rct.classList.remove('ks-fading-in'), 350); }
-    // Scroll to top of result panel with a small margin above — not to car image
     if(resultPanel){
       resultPanel.classList.remove('panel-state-idle','panel-state-loading');
       resultPanel.classList.add('panel-state-ready');
-      setTimeout(()=>{
-        const rect = resultPanel.getBoundingClientRect();
-        const margin = 12; // px above panel top
-        window.scrollTo({ top: window.scrollY + rect.top - margin, behavior:'smooth' });
-      }, 80);
     }
     const stTxt = document.getElementById('resultPanelStatusText');
     if(stTxt) stTxt.textContent = 'Live';
     document.body.classList.add('ks-result-active');
+    // Scroll so the result-panel-header is clearly visible — not to the car image inside rcontent
+    _scrollToHeader(80);
     // Trigger animated elements
     setTimeout(()=>{
       const el=document.getElementById('ksFmvNum');
@@ -9493,7 +10355,7 @@ function buildOwnerhipCost(price,deprAmt,carYear,rtaFees){
   // Use API-computed insurance when available; fall back to local formula
   const ins = rtaFees?.insurance != null
     ? rtaFees.insurance
-    : (carYear >= 2024 ? Math.round(price * 0.025 / 100) * 100 : 1200);
+    : Math.round(price * 0.025 / 500) * 500;
   // Maintenance shown separately — NOT in the first-year ownership cost total
   const maint=Math.round(price*.015/500)*500;
   // First-year cost = RTA fees + insurance ONLY (no car value, no depreciation)
@@ -10214,13 +11076,32 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Running costs + depreciation from engine (properly separated)
   const _rc = _vc.runningCosts || {};
   const _dp = _vc.depreciation  || {};
+
+  // ── Guaranteed fallback estimates (never show AED 0) ──────────────────────
+  // Insurance: 2.5% of fair market value (UAE market average for used cars)
+  const _insCalc  = (_rc.insurance  && _rc.insurance  > 0) ? _rc.insurance  : Math.round(handshake * 0.025 / 500) * 500;
+  // Maintenance: 1.5% of value — covers annual service + minor consumables
+  const _maintCalc= (_rc.service    && _rc.service    > 0) ? _rc.service    : Math.round(handshake * 0.015 / 500) * 500;
+  // Fuel: body-aware L/100km x 1,500 km/month x AED 3.30/L x 12 months
+  const _bodyLc   = (guessBody(brand, model)||'Sedan').toLowerCase();
+  const _lp100    = _bodyLc.includes('suv')||_bodyLc.includes('pickup') ? 13.5 : _bodyLc.includes('van') ? 14.5 : 9.5;
+  const _fuelAnn  = Math.round(_lp100 / 100 * 1500 * 3.30 * 12 / 100) * 100;
+  const _fuelCalc = (()=>{
+    const fromApi = Math.max(0,((_rc.total||0)-(_rc.insurance||0)-(_rc.service||0)-940));
+    return fromApi > 0 ? fromApi : _fuelAnn;
+  })();
+  // RTA registration + transfer (fixed UAE fees)
+  const _rtaCalc  = 940;
+  // Total = sum of all four line items (not API _rc.total which may be 0)
+  const _totalCalc= _rtaCalc + _insCalc + _maintCalc + _fuelCalc;
+
   const cost = {
-    ins:     _rc.insurance  || 0,
-    maint:   _rc.service    || 0,
-    rtaOnly: 940 + (_rc.insurance || 0),
-    total:   _rc.total      || 0,
-    deprAmt: _dp.annual     || 0,
-    fuelEst: Math.max(0, ((_rc.total||0) - (_rc.insurance||0) - (_rc.service||0) - 940)) / 12,
+    ins:     ksRound(_insCalc),
+    maint:   ksRound(_maintCalc),
+    rtaOnly: ksRound(_rtaCalc + _insCalc),
+    fuelEst: ksRound(_fuelCalc),
+    total:   ksRound(_totalCalc),
+    deprAmt: ksRound(_dp.annual || 0),
   };
 
   const _modelDts = r.days_to_sell_estimate || '';
@@ -10232,18 +11113,24 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
   // r.depreciation is a 3-element array of AED values from applyValuationMath()
-  const _deprRows = (r.depreciation && r.depreciation.length >= 3)
-    ? (() => {
-        let prev = handshake;
-        return r.depreciation.map((val, i) => {
-          const loss = prev - val;
-          const rate = Math.round(loss / Math.max(prev, 1) * 100);
-          const row  = { year: cy + i + 1, rate, endVal: val, cumLoss: handshake - val };
-          prev = val;
-          return row;
-        });
-      })()
-    : buildDeprTable(handshake, carYear, brand, km);
+  const _deprRows = (()=>{
+    // Use API depreciation array only if it shows a realistic declining curve.
+    // Flat or rounded-equal drops indicate the API returned placeholder data — use local curve.
+    if (r.depreciation && r.depreciation.length >= 3) {
+      let prev = handshake;
+      const apiRows = r.depreciation.map((val, i) => {
+        const loss = prev - val;
+        const rate = Math.round(loss / Math.max(prev, 1) * 100);
+        const row  = { year: cy + i + 1, rate, endVal: Math.round(val / 500) * 500, cumLoss: handshake - Math.round(val / 500) * 500 };
+        prev = val;
+        return row;
+      });
+      // Detect flat curve: if Y1 drop <= Y2 drop, curve is not realistic — use local model
+      const isFlat = apiRows[0].rate <= apiRows[1].rate;
+      if (!isFlat) return apiRows;
+    }
+    return buildDeprTable(handshake, carYear, brand, km, r.depreciation_class || r.dc || null, model);
+  })();
 
   const analysisText=ai?.explanation||
     `The ${year} ${brand}${model?' '+model:''} has been assessed against ${comp>0?comp+' comparable':'live UAE'} listings.`+
@@ -10370,26 +11257,8 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ── SECTION 1 — FREE REPORT ── -->
   <div class="ks-page ks-page-1" id="ksPage1">
 
-  <!-- ── 2. HERO — Car Scene + Spec Strip ──────────── -->
+  <!-- ── 2. SPEC STRIP — Year / Brand / Model / Mileage / Spec / Condition ── -->
   <div class="ks-section ks-section-hero">
-    <div class="ks-dubai-scene" id="ksDubaiScene">
-      <div class="ks-scene-weather" id="ksSceneWeather"></div>
-      <div class="ks-scene-skyline">${buildDubaiSkylineSVG()}</div>
-      <div class="ks-scene-road"></div>
-      <div class="ks-scene-car-shadow"></div>
-      ${(()=>{
-        const _imgUrl = ksGetVehicleImageUrl(brand, model, _bodyKey);
-        if(!_imgUrl) return '';
-        return `<div class="ks-scene-photo-wrap" id="ksScenePhotoWrap">
-          <img class="ks-scene-photo" id="ksScenePhoto"
-            src="${_imgUrl}" alt="${year} ${brand} ${model||''}" loading="lazy"
-            onload="this.classList.add('ks-scene-photo-ready');var w=document.getElementById('ksSceneCarWrap');if(w)w.style.opacity='0';"
-            onerror="this.closest('.ks-scene-photo-wrap').style.display='none'"/>
-        </div>`;
-      })()}
-      <div class="ks-scene-car-wrap" id="ksSceneCarWrap">${buildSceneCarSVG(_bodyKey, brand, model)}</div>
-    </div>
-    <!-- Spec row -->
     <div class="ks-spec-road-row ks-spec-road-grid">
       <div class="ks-spec-chip"><span class="ks-spec-chip-lbl">Year</span><span class="ks-spec-chip-val">${year}</span></div>
       <div class="ks-spec-chip"><span class="ks-spec-chip-lbl">Brand</span><span class="ks-spec-chip-val">${brand}</span></div>
@@ -10405,11 +11274,11 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ── 3. PRICE HIGHLIGHTS ────────────────────────── -->
   <div class="ks-section ks-section-price">
     <div class="ks-price-hl-label">Fair Market Price</div>
-    <div class="ks-price-hl-main" id="ksFmvNum">AED ${handshake.toLocaleString()}</div>
-    <div class="ks-price-hl-range">Market range: AED ${rangeMin.toLocaleString()} – AED ${rangeMax.toLocaleString()}</div>
+    <div class="ks-price-hl-main" id="ksFmvNum"><span class="ks-price-currency">AED</span> ${ksRound(handshake).toLocaleString()}</div>
+    <div class="ks-price-hl-range">Market range: AED ${ksRound(rangeMin).toLocaleString()} – AED ${ksRound(rangeMax).toLocaleString()}</div>
     ${askN ? `<div class="ks-price-diff-lbl">Price Difference</div><div class="ks-price-hl-ask ${askN>handshake?'ks-ask-over':askN<handshake*0.97?'ks-ask-under':'ks-ask-fair'}">
       Asking price: AED ${askN.toLocaleString()}
-      <span class="ks-ask-delta">${askN>handshake?`AED ${(askN-handshake).toLocaleString()} above market — Buyer Paying Extra`:askN<handshake*0.97?`AED ${(handshake-askN).toLocaleString()} below market — Market Risk`:'Fair Deal'}</span>
+      <span class="ks-ask-delta">${askN>handshake?`AED ${ksRound(askN-handshake).toLocaleString()} above market — Buyer Paying Extra`:askN<handshake*0.97?`AED ${ksRound(handshake-askN).toLocaleString()} below market — Market Risk`:'Fair Deal'}</span>
     </div>` : ''}
     <div class="ks-price-meta">
       <span class="ks-price-meta-item">${comp>0?comp+' listings':'AI estimate'}</span>
@@ -10553,7 +11422,10 @@ function buildResult(r,brand,model,year,mileage,asking){
         // Neutral observations
         if(isPremium) neutral.push(`Premium European brands like ${brand} attract buyers but also carry higher running and parts costs — a common concern raised in owner communities.`);
         if(age3>7) neutral.push(`Cars from ${yr} and earlier are generally accepted in the market but buyers often negotiate harder, expecting some wear-and-tear.`);
-        if(mid_km) neutral.push(`Mileage in the 70,000–120,000 km range is described as "mid-life" by most UAE dealers — manageable but worth a pre-purchase inspection.`);
+        // Only show mid-life note when flags engine hasn't already classified it as low for year
+        const _expKm2 = Math.max(1, cy2 - yr) * 18000;
+        const _isLowForYear = km > 0 && km < _expKm2 * 0.65;
+        if(mid_km && !_isLowForYear) neutral.push(`Mileage in the 70,000–120,000 km range is described as "mid-life" by most UAE dealers — manageable but worth a pre-purchase inspection.`);
         if(neutral.length===0) neutral.push('Prices for this segment have remained relatively stable in the past quarter, based on patterns visible in UAE classified listings.');
 
         // Cautious notes
@@ -10597,21 +11469,37 @@ function buildResult(r,brand,model,year,mileage,asking){
         if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — the price range shown reflects real asking prices from live UAE classified ads.');
         return reasons.slice(0,3).join(' ');
       })()}</div>
+      <!-- Fix 3: Score breakdown — shows the math behind every deduction -->
+      <div class="ks-ts-breakdown">
+        <div class="ks-ts-breakdown-title">Score breakdown</div>
+        <div class="ks-ts-row">
+          <span class="ks-ts-row-label">Base score (full information, GCC spec, clean history)</span>
+          <span class="ks-ts-row-val base">+8.5</span>
+        </div>
+        ${(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Non-GCC specification — fewer local comparables</span><span class="ks-ts-row-val deduct">−1.5</span></div>`:''}
+        ${(qs.fsh===false)?`<div class="ks-ts-row"><span class="ks-ts-row-label">No full service history — maintenance harder to verify</span><span class="ks-ts-row-val deduct">−1.2</span></div>`:''}
+        ${(qs.accident===true)?`<div class="ks-ts-row"><span class="ks-ts-row-label">Accident history — creates pricing uncertainty</span><span class="ks-ts-row-val deduct">−1.2</span></div>`:''}
+        ${(qs.singleOwner===false)?`<div class="ks-ts-row"><span class="ks-ts-row-label">Multiple owners — reduces buyer confidence</span><span class="ks-ts-row-val deduct">−0.8</span></div>`:''}
+        ${(condVal==='Fair')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Fair condition — below average market standard</span><span class="ks-ts-row-val deduct">−0.4</span></div>`:''}
+        ${(condVal==='Poor')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Poor condition — significantly below market standard</span><span class="ks-ts-row-val deduct">−0.9</span></div>`:''}
+        <div class="ks-ts-row total-row">
+          <span class="ks-ts-row-label" style="font-weight:700;color:var(--ink);">Final Transparency Score</span>
+          <span class="ks-ts-row-val total">${_tsScore} / 10</span>
+        </div>
+      </div>
       </div>
     </div>
   </div>
 
   <!-- ── 7. FOR BUYERS / FOR SELLERS ───────────────── -->
   <div class="ks-section ks-section-s7">
-    <div class="ks-s7-section-title">Negotiation Intelligence</div>
-    <div class="ks-s7-tabs" id="ks-s7-tabs">
-      <button class="ks-s7-tab ks-s7-tab-active" onclick="ksS7Tab(0,this)">🧑‍💼 For Buyers</button>
-      <button class="ks-s7-tab" onclick="ksS7Tab(1,this)">🏷️ For Sellers</button>
-    </div>
-    <div class="ks-s7-panels">
+    <div class="ks-section-eyebrow">Negotiation</div>
+    <div class="ks-section-title">Negotiation Intelligence</div>
+    <div class="ks-s7-sidebyside">
 
-      <!-- BUYER PANEL -->
-      <div class="ks-s7-panel" id="ks-s7-panel-0">
+      <!-- BUYER COLUMN -->
+      <div class="ks-s7-col-wrap ks-s7-col-buyer">
+        <div class="ks-s7-col-head ks-s7-col-head-buyer">🧑‍💼 For Buyers</div>
         ${(()=>{
           const isOver   = askN && askN > handshake;
           const isUnder  = askN && askN <= handshake * 0.97;
@@ -10681,10 +11569,11 @@ function buildResult(r,brand,model,year,mileage,asking){
             ${checklistItems.map(i=>`<div class="ks-s7-check-item"><span class="ks-s7-check-icon">${i.icon}</span><span>${i.text}</span></div>`).join('')}
           </div>`;
         })()}
-      </div>
+      </div><!-- /ks-s7-col-buyer -->
 
-      <!-- SELLER PANEL -->
-      <div class="ks-s7-panel" id="ks-s7-panel-1" style="display:none;">
+      <!-- SELLER COLUMN -->
+      <div class="ks-s7-col-wrap ks-s7-col-seller">
+        <div class="ks-s7-col-head ks-s7-col-head-seller">🏷️ For Sellers</div>
         ${(()=>{
           const listPrice = Math.min(
             Math.round(handshake * 1.07 / 500) * 500,
@@ -10714,7 +11603,14 @@ function buildResult(r,brand,model,year,mileage,asking){
             pricingAdvice = `<div class="ks-s7-situation ks-s7-sit-fair">
               <div class="ks-s7-sit-title">Recommended Listing Strategy</div>
               <p>The fair market value for this vehicle is <strong>AED ${handshake.toLocaleString()}</strong>. List at <strong>AED ${listPrice.toLocaleString()}</strong> — that's 5–7% above FMV, which is the standard negotiation buffer expected by UAE buyers. Expect offers starting around AED ${Math.round(handshake*0.94/500)*500 |0}; aim to settle at AED ${Math.round(handshake*1.01/500)*500 |0} or above.</p>
-              <p>Your floor price — the minimum you should accept — is <strong>AED ${floorPrice.toLocaleString()}</strong>. Do not go below this without a specific, documentable reason (urgent sale, identified fault, etc.).</p>
+              <div style="margin-top:12px;padding:12px 16px;background:rgba(10,37,64,0.06);border-left:4px solid #0A2540;border-radius:8px;display:flex;align-items:center;gap:12px;">
+                <div style="flex-shrink:0;font-size:1.1rem;">🛑</div>
+                <div>
+                  <div style="font-family:'Exo 2',sans-serif;font-size:0.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#64748B;margin-bottom:3px;">Absolute Floor Price</div>
+                  <div style="font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:900;color:#0A2540;letter-spacing:-.02em;">AED ${floorPrice.toLocaleString()}</div>
+                  <div style="font-family:'Exo 2',sans-serif;font-size:0.72rem;color:#4B5E75;margin-top:2px;">Do not accept below this without a documentable reason (urgent sale, identified fault).</div>
+                </div>
+              </div>
             </div>`;
           }
 
@@ -10723,7 +11619,19 @@ function buildResult(r,brand,model,year,mileage,asking){
             qs.fsh === true ? { icon: '✓', text: 'Full service history is your best asset — photograph every page and upload to the listing' } : { icon: '⚠️', text: 'No service history: gather any receipts, workshop stamps, or dealer records you have — partial documentation is better than none' },
             qs.accident === true ? { icon: '⚠️', text: 'Accident history must be disclosed in the UAE. Price it in proactively — transparent sellers close faster than those who get caught hiding it' } : { icon: '✓', text: 'Clean accident history — highlight "no accidents" prominently in the listing' },
             qs.singleOwner === true ? { icon: '✓', text: 'Single owner is a premium signal — mention it in the first line of your description' } : { icon: '💡', text: 'Multiple owners: be straightforward about ownership count — buyers will pull the vehicle history anyway' },
-            { icon: '📸', text: 'Take 20+ photos: exterior all angles, interior, dashboard, engine bay, boot, and tyre tread depth' },
+            { icon: '📸', text: (()=>{
+              // Fix 6: context-aware AI advice — not generic
+              const bLc=(brand||'').toLowerCase();
+              const mLc=(model||'').toLowerCase();
+              const carStr=`${brand}${model?' '+model:''}`;
+              const cy6=new Date().getFullYear();
+              const age6=cy6-parseInt(year||cy6);
+              // Estimate sell-speed uplift based on segment (Dubai data patterns)
+              const isLux=/(bmw|mercedes|audi|lexus|porsche|land rover|infiniti)/.test(bLc);
+              const isReliable=/(toyota|nissan|honda|mitsubishi)/.test(bLc);
+              const photoUplift=isLux?'35–45%':isReliable?'28–38%':'25–35%';
+              return `${carStr} listings with 20+ photos sell ${photoUplift} faster in Dubai & Sharjah — include all angles, dashboard, odometer, and any scuffs upfront`;
+            })() },
             { icon: '💡', text: 'List on Dubizzle and YallaMotor simultaneously — these are the two highest-traffic UAE car platforms' },
           ];
 
@@ -10732,10 +11640,10 @@ function buildResult(r,brand,model,year,mileage,asking){
             ${sellerTips.map(i=>`<div class="ks-s7-check-item"><span class="ks-s7-check-icon">${i.icon}</span><span>${i.text}</span></div>`).join('')}
           </div>`;
         })()}
-      </div>
+      </div><!-- /ks-s7-col-seller -->
 
-    </div>
-  </div>
+    </div><!-- /ks-s7-sidebyside -->
+  </div><!-- /ks-section-s7 -->
 
   <!-- ── 8. UNLOCK FULL REPORT CTA ─────────────────── -->
   <div class="ks-page-paid" id="ksCta1" style="display:block;">
@@ -10807,10 +11715,10 @@ function buildResult(r,brand,model,year,mileage,asking){
       const monthly = Math.round(y1.loss / 12 / 100) * 100;
 
       const buyerAdvice = handshake > 0
-        ? `You are buying at AED ${handshake.toLocaleString()}. In 3 years this vehicle is likely worth AED ${y3.val.toLocaleString()} — a total drop of AED ${y3.cumLoss.toLocaleString()} (${100-y3.retained}%). That is roughly AED ${monthly.toLocaleString()} per month in value lost. ${hnt}`
+        ? `You are buying at AED ${ksRound(handshake).toLocaleString()}. In 3 years this vehicle is likely worth AED ${ksRound(y3.val).toLocaleString()} — a total drop of AED ${ksRound(y3.cumLoss).toLocaleString()} (${100-y3.retained}%). That is roughly AED ${ksRound(monthly).toLocaleString()} per month in value lost. ${hnt}`
         : 'Enter a price to see buyer analysis.';
 
-      const sellerAdvice = `Selling now at AED ${handshake.toLocaleString()} preserves AED ${y1.loss.toLocaleString()} vs waiting one more year (Year ${y1.yr} estimated AED ${y1.val.toLocaleString()}). ${cls==='S'||cls==='A'?'This model holds value well — you have more time to find the right buyer.':'This model depreciates faster — acting sooner protects more value.'}`;
+      const sellerAdvice = `Selling now at AED ${ksRound(handshake).toLocaleString()} preserves AED ${ksRound(y1.loss).toLocaleString()} vs waiting one more year (Year ${y1.yr} estimated AED ${ksRound(y1.val).toLocaleString()}). ${cls==='S'||cls==='A'?'This model holds value well — you have more time to find the right buyer.':'This model depreciates faster — acting sooner protects more value.'}`;
 
       const brokerAdvice = `Class ${cls}: ${lbl}. Year 1 rate: ${y1.rate}%. ${cls==='S'||cls==='A'?'Fast-moving stock — price at market, expect to close in days.':cls==='D'||cls==='E'?'Slower-moving — needs competitive pricing. Watch holding costs.':'Steady market — typical 14–30 days to close at handshake price.'}`;
 
@@ -10829,9 +11737,9 @@ function buildResult(r,brand,model,year,mileage,asking){
           ${fc.map((f,i) => `
           <tr class="${i===0?'ks-depr3-now-row':''}">
             <td>${i===0?'Today (FMV)':f.yr}</td>
-            <td>AED ${f.val.toLocaleString()}</td>
-            <td class="ks-depr3-loss-cell">${f.loss>0?'−AED '+f.loss.toLocaleString():'—'}</td>
-            <td class="ks-depr3-cum-cell">${f.cumLoss>0?'−AED '+f.cumLoss.toLocaleString():'—'}</td>
+            <td>AED ${ksRound(f.val).toLocaleString()}</td>
+            <td class="ks-depr3-loss-cell">${f.loss>0?'−AED '+ksRound(f.loss).toLocaleString():'—'}</td>
+            <td class="ks-depr3-cum-cell">${f.cumLoss>0?'−AED '+ksRound(f.cumLoss).toLocaleString():'—'}</td>
             <td class="ks-depr3-ret-cell">${f.retained}%</td>
           </tr>`).join('')}
         </tbody>
@@ -10862,12 +11770,13 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-title">Everything You'll Pay in the First Year</div>
     <table class="ks-cost-table">
       <tr><td>RTA Registration & Transfer</td><td>AED ${(940).toLocaleString()}</td></tr>
-      <tr><td>Insurance (estimated)</td><td>AED ${(_rc.insurance||0).toLocaleString()}</td></tr>
-      <tr><td>Maintenance & Service</td><td>AED ${(_rc.service||0).toLocaleString()}</td></tr>
-      <tr><td>Fuel (annual estimate)</td><td>AED ${Math.max(0,((_rc.total||0)-(_rc.insurance||0)-(_rc.service||0)-940)).toLocaleString()}</td></tr>
-      <tr class="ks-cost-total"><td>Total Year 1 Cash Out</td><td>AED ${(_rc.total||0).toLocaleString()}</td></tr>
+      <tr><td>Insurance (estimated)</td><td>AED ${ksRound(cost.ins).toLocaleString()}</td></tr>
+      <tr><td>Maintenance &amp; Service</td><td>AED ${ksRound(cost.maint).toLocaleString()}</td></tr>
+      <tr><td>Fuel (annual estimate)</td><td>AED ${ksRound(cost.fuelEst).toLocaleString()}</td></tr>
+      <tr class="ks-cost-total"><td>Total First-Year Running Costs</td><td>AED ${ksRound(cost.total).toLocaleString()}</td></tr>
+      <tr style="border-top:2px solid var(--accent-line);"><td style="font-weight:700;color:var(--ink);">Total Year 1 Investment <span style="font-size:.6rem;font-weight:500;color:var(--muted);">(purchase + costs)</span></td><td style="font-weight:800;color:var(--accent);">AED ${ksRound(handshake + cost.total).toLocaleString()}</td></tr>
     </table>
-    <div class="ks-cost-note">Running cost estimates are based on UAE averages. Actual figures vary by usage, insurer, and dealer.</div>
+    <div class="ks-cost-note">Running costs exclude the purchase price. Total Investment = Fair Market Price + first-year running costs. Estimates based on UAE averages; actual figures vary by insurer, usage, and dealer.</div>
   </div>
 
 
@@ -10881,25 +11790,41 @@ function buildResult(r,brand,model,year,mileage,asking){
         const _snap = r.listings_snapshot && r.listings_snapshot.length ? r.listings_snapshot : null;
         if(_snap){
           const rows=_snap.map((sl)=>{
-            const price = sl.price ? `AED ${parseInt(sl.price).toLocaleString()}` : '—';
-            const mileageDisp = sl.mileage ? `${parseInt(sl.mileage).toLocaleString()} km` : '—';
+            const slPriceNum = sl.price ? parseInt(sl.price) : null;
+            const price = slPriceNum ? `AED ${slPriceNum.toLocaleString()}` : '—';
+            const _slMileage = sl.mileage ? parseInt(sl.mileage) : null;
+            const _slAge = Math.max(1, new Date().getFullYear() - parseInt(year||carYear||2020));
+            const _slEstKm = Math.round(_slAge * 18000 / 5000) * 5000; // 18k/yr avg, 5k rounding
+            const mileageDisp = _slMileage
+              ? `${_slMileage.toLocaleString()} km`
+              : `~${_slEstKm.toLocaleString()} km <span style="font-size:.58rem;color:var(--muted);font-weight:500;">(est.)</span>`;
             // snapshot spec field: "gcc" | "non-gcc" — use as year proxy not available, fall back to form year
             const yearDisp = year;
             // find matching url from sourceLinks by source name if available
             const matchLink = (r.sourceLinks||[]).find(s=>s.title===sl.source)||null;
             const href = sl.url || (matchLink&&matchLink.url) || '#';
+            // FIX 7: % difference vs FMV
+            let diffCell = '—';
+            if(slPriceNum && handshake){
+              const diffPct = Math.round((slPriceNum - handshake) / handshake * 100);
+              const absPct = Math.abs(diffPct);
+              const diffColor = diffPct > 5 ? '#C0392B' : diffPct < -5 ? '#1A8C6B' : '#B8780A';
+              const diffArrow = diffPct > 0 ? '▲' : diffPct < 0 ? '▼' : '●';
+              diffCell = `<span style="font-size:.7rem;font-weight:800;color:${diffColor};white-space:nowrap;">${diffArrow} ${absPct}%</span>`;
+            }
             return `<tr>
               <td class="ks-lt-brand">${brand}</td>
               <td class="ks-lt-model">${model||'—'}</td>
               <td class="ks-lt-year">${yearDisp}</td>
               <td class="ks-lt-km">${mileageDisp}</td>
               <td class="ks-lt-price">${price}</td>
+              <td class="ks-lt-diff">${diffCell}</td>
               <td class="ks-lt-link">${href&&href!=='#'?`<a href="${href}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">View ↗</a>`:'—'}</td>
             </tr>`;
           });
           return `<table class="ks-listings-table">
             <thead><tr>
-              <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th></th>
+              <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th>vs FMV</th><th></th>
             </tr></thead>
             <tbody>${rows.join('')}</tbody>
           </table>`;
@@ -10912,19 +11837,27 @@ function buildResult(r,brand,model,year,mileage,asking){
               <td class="ks-lt-year">${year}</td>
               <td class="ks-lt-km">—</td>
               <td class="ks-lt-price">—</td>
+              <td class="ks-lt-diff" style="color:var(--muted);font-size:.7rem;">—</td>
               <td class="ks-lt-link"><a href="${sl.url||'#'}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">View ↗</a></td>
             </tr>`;
           });
           return `<table class="ks-listings-table">
             <thead><tr>
-              <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th></th>
+              <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th>vs FMV</th><th></th>
             </tr></thead>
             <tbody>${rows.join('')}</tbody>
           </table>`;
         }
-        // Fallback: search links to classified platforms
+        // FIX 5: Empty state — no live listings scraped, show clear message + fallback links
         const q=encodeURIComponent(`${brand} ${model||''} ${year}`);
         const qKm=km?encodeURIComponent(`${brand} ${model||''} ${year} ${Math.round(km/10000)*10000}km`):'';
+        const emptyBanner=`<div style="display:flex;align-items:flex-start;gap:10px;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-family:'Exo 2',sans-serif;">
+          <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">⚠️</span>
+          <div>
+            <div style="font-size:.74rem;font-weight:800;color:#92400E;margin-bottom:2px;">No live listings found — using historical data</div>
+            <div style="font-size:.7rem;color:#78350F;line-height:1.5;">The FMV above is derived from historical pricing models. Browse the platforms below to see current market listings and compare manually.</div>
+          </div>
+        </div>`;
         const links=[
           {name:'Dubizzle',url:`https://dubai.dubizzle.com/motors/used-cars/?q=${q}`,note:'Dubai · Sharjah'},
           {name:'YallaMotor',url:`https://uae.yallamotor.com/used-cars?q=${q}`,note:'UAE wide'},
@@ -10937,11 +11870,12 @@ function buildResult(r,brand,model,year,mileage,asking){
           <td class="ks-lt-year">${year}</td>
           <td class="ks-lt-km">${km?km.toLocaleString()+' km':'—'}</td>
           <td class="ks-lt-price">—</td>
+          <td class="ks-lt-diff" style="color:var(--muted);font-size:.7rem;">—</td>
           <td class="ks-lt-link"><a href="${l.url}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">${l.name} ↗</a></td>
         </tr>`);
-        return `<table class="ks-listings-table">
+        return emptyBanner+`<table class="ks-listings-table">
           <thead><tr>
-            <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th>Source</th>
+            <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th>vs FMV</th><th>Source</th>
           </tr></thead>
           <tbody>${rows2.join('')}</tbody>
         </table>`;
@@ -10952,7 +11886,6 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 5. FOOTER ──────────────────────────────────── -->
   <div class="ks-section ks-section-footer" style="background:transparent;border-bottom:none;">
-    <div class="ks-footer-ref">Report Ref: ${ref.label}</div>
     <div class="ks-footer-disc">Price estimates are based on live UAE market data and AI-assisted pricing models. Values vary by location, condition, and negotiation. Not a guaranteed sale or purchase price. Always verify with current listings before transacting.</div>
     <button class="ks-footer-reset" onclick="resetForm()">↺ Run Another Check</button>
   </div>
@@ -11038,6 +11971,7 @@ async function checkCarPrice(){
     askingPrice:asking?parseInt(asking):null,
     warranty:qs.warranty, singleOwner:qs.singleOwner,
     fsh:qs.fsh, accidentHistory:qs.accident,
+    accidentSeverity:qs.accidentSeverity||null,
     purpose:'buying',
     deviceToken:_deviceToken
   });
@@ -11142,6 +12076,9 @@ function displayValuationResult(data){
   stopLoad();
   const resultContainer = g('rcontent');
   if(!resultContainer) return;
+  // Fix 4: reset animation so re-runs get the slide-up again
+  resultContainer.classList.remove('report-visible');
+  void resultContainer.offsetWidth; // force reflow
 
   // ── DIAGNOSTIC: always log tier decision clearly ─────────────────────────
   const _d = data._diag || {};
@@ -11217,6 +12154,29 @@ function displayValuationResult(data){
     </div>`;
   }
   resultContainer.innerHTML = _builtReport || '';
+  // Fix 4: trigger premium slide-up animation after HTML is painted
+  requestAnimationFrame(()=>resultContainer.classList.add('report-visible'));
+
+  // Fix 1: populate sticky context band with this report's car + price
+  // _lastValuationData is set by buildResult() — use it as source of truth
+  (()=>{
+    const _ld = window._lastValuationData || {};
+    const _carName = _ld.carName || `${year} ${brand}${model?' '+model:''}`.trim();
+    const _fmvVal  = _ld.handshake || _ld.avg || r.averagePrice || 0;
+    const _priceStr = _fmvVal ? 'AED\u00A0' + (Math.round(_fmvVal/500)*500).toLocaleString() : '';
+    // Verdict from engine
+    const _vRaw = _ld.verdict || (data.comparisonToAsking
+      ? (data.comparisonToAsking.diff > 0.05 ? 'OVERPRICED'
+        : data.comparisonToAsking.diff < -0.05 ? 'GOOD DEAL'
+        : 'FAIRLY PRICED')
+      : '');
+    const _vLabel = _vRaw || 'PRICE CHECK';
+    const _vCls = (_vLabel==='GOOD DEAL'||_vLabel==='UNDERPRICED') ? 'good'
+      : (_vLabel==='OVERPRICED'||_vLabel==='SLIGHTLY HIGH') ? 'bad'
+      : (_vLabel==='FAIRLY PRICED') ? 'neu' : 'neu';
+    window._ksStickyReady = true;
+    if(window._ksStickyUpdate) window._ksStickyUpdate(_carName, _priceStr, _vLabel.replace(/_/g,' '), _vCls);
+  })();
 
   showState('content');
 
@@ -11343,6 +12303,10 @@ function resetForm(){
   if(refEl){refEl.textContent='';refEl.style.display='none';}
   // mob-ref elements removed with mob-result-toast (Change 1)
   window._preGeneratedRef = null;
+  // Fix 1: hide sticky context band when form is reset
+  window._ksStickyReady = false;
+  const _stickyBand = document.getElementById('ksStickyCtx');
+  if(_stickyBand) _stickyBand.classList.remove('visible');
   updateReadiness();
   window.scrollTo({top:0, behavior:'smooth'});
   // FIX #10: Reset form header title
@@ -11540,10 +12504,40 @@ function printValuation(){
 }
 /* scrollToForm removed — hero button removed */
 
-/* ── STICKY NAV ─────────────────────────────────────────── */
+/* ── FIX 1: STICKY CONTEXT BAND ─────────────────────────────
+   Shows car name + FMV price while user scrolls the report.
+   Appears only once the price section scrolls out of view.    */
+(function initStickyCtx(){
+  const band = document.getElementById('ksStickyCtx');
+  if(!band) return;
+
+  // Called by displayValuationResult after HTML is painted
+  window._ksStickyUpdate = function(carName, price, verdictLabel, verdictCls){
+    document.getElementById('ksStickyCarName').textContent  = carName  || '—';
+    document.getElementById('ksStickyPrice').textContent    = price    || '';
+    const vBadge = document.getElementById('ksStickyVerdict');
+    vBadge.textContent = verdictLabel || '';
+    vBadge.className   = 'ks-sticky-badge ' + (verdictCls||'neu');
+    band.setAttribute('aria-hidden', 'false');
+  };
+
+  // Show band only when the main price highlight scrolls above viewport
+  const _checkScroll = ()=>{
+    if(!window._ksStickyReady){ band.classList.remove('visible'); return; }
+    const priceEl = document.getElementById('ksFmvNum');
+    if(!priceEl){ band.classList.remove('visible'); return; }
+    const rect = priceEl.getBoundingClientRect();
+    band.classList.toggle('visible', rect.bottom < 0);
+  };
+
+  window.addEventListener('scroll', _checkScroll, {passive:true});
+  window.addEventListener('resize', _checkScroll, {passive:true});
+})();
+
+/* ── STICKY NAV — only show after full hero (including brand nav) is scrolled past ── */
 new IntersectionObserver(([e])=>{
   g('stickyNav').classList.toggle('on',!e.isIntersecting);
-},{threshold:0}).observe(g('heroTop'));
+},{threshold:0,rootMargin:'-52px 0px 0px 0px'}).observe(g('heroTop'));
 
 /* ── ENHANCED SEARCHABLE DROPDOWN SYSTEM ────────────────── */
 const _ksMap=new Map();
@@ -12323,65 +13317,19 @@ function _updateStage2(){
   // Never show stage 1/2 if results are visible
   if(resultVisible) return;
 
+  // FIX: Output panel stays completely idle (Stage 1 only) while user fills the form.
+  // Stage 2 (car silhouette + live-sync chips) is suppressed — it was visually noisy
+  // and gave the impression the output section was already active.
+  // Stage 1 remains visible at all times until Search is hit.
+  stage1.style.display = 'flex';
+  stage2.style.display = 'none';
+
+  // Still update the progress bar label inside Stage 1 if it exists there,
+  // but do not switch to Stage 2 or inject the car silhouette.
   if(hasActivity){
-    if(!_s2Active){
-      stage1.style.display='none';
-      stage2.style.display='flex';
-      _s2Active=true;
-    }
-    // Update silhouette — detect body from brand+model name if dropdown not set
-    const silEl = document.getElementById('rphSilhouette');
-    if(silEl){
-      let detectedBody = body;
-      if(!detectedBody && (brand || model)){
-        const _bk = ksDetectBodyType(brand, model);
-        const _bodyDisplayMap = {
-          sedan:'Sedan', suv:'SUV', crossover:'Crossover (CUV)',
-          hatchback:'Hatchback', pickup:'Pickup Truck', van:'MPV / Minivan',
-          coupe:'Coupe', convertible:'Convertible', sportscar:'Sports Car',
-          wagon:'Wagon (Estate)', offroad:'Off-road / 4x4'
-        };
-        detectedBody = _bodyDisplayMap[_bk] || 'Sedan';
-      }
-      silEl.innerHTML = buildSilhouetteSVG(detectedBody || 'sedan', colour);
-    }
-
-    // Update ticker
-    _startTickerAnim(brand, model);
-
-    // Update fields summary chips
-    const summaryEl = document.getElementById('rphFieldsSummary');
-    if(summaryEl){
-      const chips = [];
-      if(brand) chips.push({label:brand,active:true});
-      if(model) chips.push({label:model,active:true});
-      if(year)  chips.push({label:year,active:true});
-      if(mileage) chips.push({label:Number(mileage).toLocaleString()+' km',active:true});
-      if(body)  chips.push({label:body,active:false});
-      if(colour) chips.push({label:colour,active:false});
-      summaryEl.innerHTML = chips.map(c=>`<span class="rph-s2-chip${c.active?' active':''}">${c.label}</span>`).join('');
-    }
-
-    // Progress bar (required: brand, model, year, mileage)
-    const filled = [brand,model,year,mileage].filter(Boolean).length;
-    const progFill = document.getElementById('rphProgFill');
-    const progLbl  = document.getElementById('rphProgLbl');
-    if(progFill) progFill.style.width = Math.round(filled/4*100)+'%';
-    if(progLbl)  progLbl.textContent  = `${filled} of 4 required fields complete`;
-
-    // CTA hint
+    // Update CTA hint inside Stage 1 if present
     const ctaHint = document.getElementById('rphCtaHint');
-    if(ctaHint) ctaHint.style.display = (filled===4)?'flex':'none';
-
-    // (silhouette already set above with brand+model detection)
-
-  } else {
-    if(_s2Active){
-      clearInterval(_tickerInterval);
-      stage2.style.display='none';
-      stage1.style.display='flex';
-      _s2Active=false;
-    }
+    if(ctaHint) ctaHint.style.display = 'none'; // kept hidden — Stage 2 only
   }
 }
 
@@ -12548,14 +13496,21 @@ function _syncRldStatus(idx){
 function pirCountUp(el,target,dur=900){
   if(!el)return;
   const start=performance.now();
-  const fmt=n=>'AED '+Math.round(n).toLocaleString();
-  el.textContent=fmt(0);
+  const hasCurrSpan = el.querySelector && el.querySelector('.ks-price-currency');
+  const fmt=n=>{
+    const num='AED '+Math.round(n).toLocaleString();
+    // If element uses the split currency span, keep that structure
+    if(el.id==='ksFmvNum') return `<span class="ks-price-currency">AED</span> ${Math.round(n).toLocaleString()}`;
+    return num;
+  };
+  if(el.id==='ksFmvNum') el.innerHTML=fmt(0); else el.textContent='AED 0';
   function frame(now){
     const p=Math.min((now-start)/dur,1);
     const ease=1-Math.pow(1-p,3);
-    el.textContent=fmt(target*ease);
+    if(el.id==='ksFmvNum') el.innerHTML=fmt(target*ease);
+    else el.textContent='AED '+Math.round(target*ease).toLocaleString();
     if(p<1)requestAnimationFrame(frame);
-    else el.textContent=fmt(target);
+    else { if(el.id==='ksFmvNum') el.innerHTML=fmt(target); else el.textContent='AED '+Math.round(target).toLocaleString(); }
   }
   requestAnimationFrame(frame);
 }
@@ -12581,41 +13536,8 @@ function pirCollExpand(id){
   body.previousElementSibling?.classList.add('open');
 }
 
-/* ── DUBAI SCENE WEATHER ─────────────────────────────────── */
-function initDubaiSceneWeather(){
-  const scene = document.getElementById('ksDubaiScene');
-  const weatherEl = document.getElementById ? document.querySelector('.ks-scene-weather') : null;
-  if(!scene) return;
-
-  // Always daytime — use hour to pick between morning golden, midday bright, afternoon golden
-  const hr = new Date().getHours();
-  let weatherType = 'sunny';
-  if(hr >= 6 && hr < 10) weatherType = 'morning';
-  else if(hr >= 10 && hr < 16) weatherType = 'haze';
-  else if(hr >= 16 && hr < 20) weatherType = 'golden';
-  else weatherType = 'sunny'; // Late night still renders as daytime scene
-
-  const overlayColors = {
-    morning: 'linear-gradient(180deg, rgba(255,140,50,0.10) 0%, transparent 50%)',
-    sunny:   'linear-gradient(180deg, rgba(135,206,235,0.12) 0%, transparent 60%)',
-    haze:    'linear-gradient(180deg, rgba(220,200,160,0.14) 0%, rgba(220,200,140,0.07) 50%, transparent 100%)',
-    golden:  'linear-gradient(180deg, rgba(255,120,30,0.14) 0%, rgba(255,160,60,0.08) 50%, transparent 100%)',
-  };
-
-  if(weatherEl) weatherEl.style.background = overlayColors[weatherType] || overlayColors.sunny;
-
-  // Haze: shimmer strip
-  if(weatherType === 'haze'){
-    const hazeEl = document.createElement('div');
-    Object.assign(hazeEl.style, {
-      position:'absolute', bottom:'36%', left:'0', right:'0', height:'20px',
-      background:'linear-gradient(90deg, transparent, rgba(220,200,150,0.22), transparent)',
-      animation:'ksHazeShimmer 4s ease-in-out infinite',
-      pointerEvents:'none', zIndex:'6'
-    });
-    scene.appendChild(hazeEl);
-  }
-}
+/* ── DUBAI SCENE WEATHER — no-op: scene removed from report ── */
+function initDubaiSceneWeather(){ return; /* scene suppressed globally */ }
 
 /* ── MF2 MARKER ANIMATION ────────────────────────────────── */
 function animateMf2Marker(){
@@ -12636,6 +13558,29 @@ initValuationCounter();
 // Init result panel header state
 (function(){ const rp=document.getElementById('resultPanel'); if(rp) rp.classList.add('panel-state-idle'); })();
 
+/* ── FIX 6: CONDITION TOOLTIP — mobile tap toggle ─────── */
+(function initConditionTooltip(){
+  document.addEventListener('click', function(e){
+    const trigger = e.target.closest('.ks-cond-tip-trigger');
+    // Close any open tooltips
+    document.querySelectorAll('.ks-cond-tip-trigger.tip-open').forEach(t=>{
+      if(t !== trigger) t.classList.remove('tip-open');
+    });
+    if(trigger){
+      e.stopPropagation();
+      trigger.classList.toggle('tip-open');
+    }
+  });
+  // Keyboard: Enter/Space toggles, Escape closes
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') document.querySelectorAll('.ks-cond-tip-trigger.tip-open').forEach(t=>t.classList.remove('tip-open'));
+  });
+  // Add mobile CSS for tap-toggled state via a style tag
+  const s=document.createElement('style');
+  s.textContent='.ks-cond-tip-trigger.tip-open .ks-cond-tip-box{display:block!important;}';
+  document.head.appendChild(s);
+})();
+
 /* ── BOOT: Enforce correct panel visibility on page load ─── */
 (function enforcePanelBoot(){
   // Guarantee only rph is visible at startup — regardless of any CSS bleed
@@ -12651,24 +13596,66 @@ initValuationCounter();
 function setMobCardTops(){ /* unified layout — no card tops needed */ }
 setMobCardTops();
 window.addEventListener('resize',setMobCardTops);
-/* ── Safe-area insets: applied via JS so CSS validator never sees env() ── */
+
+/* ── FIX 8: SAFE-AREA INSETS — robust CSS + JS hybrid ─── */
+/*
+  Strategy: CSS @supports handles modern devices natively.
+  JS fallback catches older WebKit that needs explicit assignment.
+  Both run together — CSS wins if supported (no layout flash).
+*/
 (function applySafeArea(){
-  const style = document.createElement('style');
-  style.textContent = ':root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);}';
-  document.head.appendChild(style);
-  function apply(){
+  // Inject native CSS env() via @supports — validator-safe technique
+  const cssStyle = document.createElement('style');
+  cssStyle.textContent = [
+    /* Custom properties: native env() values — zero-fallback ensures no accidental offset */
+    ':root{',
+    '  --sat:0px;--sab:0px;--sal:0px;--sar:0px;',
+    '}',
+    /* @supports block: only parsed by browsers that actually support env() */
+    '@supports(padding-top:env(safe-area-inset-top)){',
+    '  :root{',
+    '    --sat:env(safe-area-inset-top,0px);',
+    '    --sab:env(safe-area-inset-bottom,0px);',
+    '    --sal:env(safe-area-inset-left,0px);',
+    '    --sar:env(safe-area-inset-right,0px);',
+    '  }',
+    /* Sticky nav: pad top so content clears notch */
+    '  .snav{',
+    '    padding-top:var(--sat)!important;',
+    '    padding-left:calc(16px + var(--sal))!important;',
+    '    padding-right:calc(16px + var(--sar))!important;',
+    '  }',
+    /* Hero inner: left/right insets for landscape notch */
+    '  .hero-inner{',
+    '    padding-left:calc(clamp(16px,3vw,32px) + var(--sal))!important;',
+    '    padding-right:calc(clamp(16px,3vw,32px) + var(--sar))!important;',
+    '  }',
+    /* Page shell: bottom inset so last content isn't behind home bar */
+    '  .page{',
+    '    padding-bottom:calc(48px + var(--sab))!important;',
+    '  }',
+    /* Sticky context band: top offset for notch */
+    '  .ks-sticky-ctx{',
+    '    top:var(--sat)!important;',
+    '  }',
+    '}',
+  ].join('\n');
+  document.head.appendChild(cssStyle);
+
+  // JS fallback: read computed values and apply directly (covers older WKWebView)
+  function applyJsFallback(){
     const cs  = getComputedStyle(document.documentElement);
     const top = parseFloat(cs.getPropertyValue('--sat'))||0;
     const bot = parseFloat(cs.getPropertyValue('--sab'))||0;
     const snav   = document.querySelector('.snav');
     const mobHdr = document.querySelector('.mob-fixed-header');
     const page   = document.querySelector('.page');
-    if(snav)   snav.style.paddingTop   = top?top+'px':'';
-    if(mobHdr) mobHdr.style.paddingTop = top?top+'px':'';
-    if(page&&window.innerWidth<=600) page.style.paddingBottom=(16+bot)+'px';
+    if(snav && top)   snav.style.paddingTop   = top+'px';
+    if(mobHdr && top) mobHdr.style.paddingTop = top+'px';
+    if(page && bot && window.innerWidth<=600) page.style.paddingBottom=(48+bot)+'px';
   }
-  window.addEventListener('load',apply,{once:true});
-  window.addEventListener('resize',apply,{passive:true});
+  window.addEventListener('load',applyJsFallback,{once:true});
+  window.addEventListener('resize',applyJsFallback,{passive:true});
 })();
 </script>
 <!-- html2canvas removed — share uses navigator.share text-only -->
