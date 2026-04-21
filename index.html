@@ -10139,7 +10139,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const _vc = r._vc || {};
 
   // Expose as named variables used throughout buildResult
-  const handshake     = _vc.handshake;
+  const handshake     = _vc.handshake || r.averagePrice || 0;
   const rangeMin      = r.lowPrice || 0;
   const rangeMax      = r.highPrice || 0;
   const sweetSpot     = 0; // removed per v43 design
@@ -10159,20 +10159,22 @@ function buildResult(r,brand,model,year,mileage,asking){
   };
 
   // Running costs + depreciation from engine (properly separated)
+  const _rc = _vc.runningCosts || {};
+  const _dp = _vc.depreciation  || {};
   const cost = {
-    ins:     _vc.runningCosts.insurance,
-    maint:   (_vc.runningCosts&&_vc.runningCosts.service||0),
-    rtaOnly: 940 + _vc.runningCosts.insurance,
-    total:   _vc.runningCosts.total,
-    deprAmt: _vc.depreciation.annual,
-    fuelEst: ((_vc.runningCosts&&_vc.runningCosts.total||0) - (_vc.runningCosts&&_vc.runningCosts.insurance||0) - (_vc.runningCosts&&_vc.runningCosts.service||0) - 940) / 12,
+    ins:     _rc.insurance  || 0,
+    maint:   _rc.service    || 0,
+    rtaOnly: 940 + (_rc.insurance || 0),
+    total:   _rc.total      || 0,
+    deprAmt: _dp.annual     || 0,
+    fuelEst: Math.max(0, ((_rc.total||0) - (_rc.insurance||0) - (_rc.service||0) - 940)) / 12,
   };
 
   const _modelDts = r.days_to_sell_estimate || '';
 
   // Update _lastValuationData with engine values (now that _vc is ready)
-  _lastValuationData.handshake = _vc.handshake;
-  _lastValuationData.verdict   = _vc.verdict;
+  _lastValuationData.handshake = _vc.handshake || r.averagePrice || 0;
+  _lastValuationData.verdict   = _vc.verdict || '';
   _lastValuationData.gapAbs    = (r.comparisonToAsking?Math.abs(r.comparisonToAsking.diff):0);
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
@@ -10370,14 +10372,14 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-deal-verdict ${
       _vc.verdict==='UNDERPRICED'?'ks-verdict-buy':
       _vc.verdict==='OVERPRICED'?'ks-verdict-nego':
-      (_vc.verdict==='FAIRLY PRICED'&&_vc.gap!==null&&_vc.gap>0)?'ks-verdict-nego':
+      (_vc.verdict==='FAIRLY PRICED'&&r.comparisonToAsking&&r.comparisonToAsking.diff>0)?'ks-verdict-nego':
       'ks-verdict-fair'}">
       <span class="ks-verdict-emoji">${(_vc.verdict==="GOOD DEAL"?"✅":_vc.verdict==="FAIRLY PRICED"?"📊":_vc.verdict==="SLIGHTLY HIGH"?"⚠️":"🔴")||'📊'}</span>
       <span class="ks-verdict-label">${
         _vc.verdict==='UNDERPRICED'?'Good Deal — Below Market':
         _vc.verdict==='OVERPRICED'?'High-End — Negotiate Down':
         _vc.verdict==='NO STICKER'?'No Asking Price':
-        (_vc.gap!==null&&_vc.gap>0)?'Consider — Negotiation Zone':
+        (r.comparisonToAsking&&r.comparisonToAsking.diff>0)?'Consider — Negotiation Zone':
         'Fairly Priced — Good Value'
       }</span>
     </div>
@@ -10720,8 +10722,8 @@ function buildResult(r,brand,model,year,mileage,asking){
 
     ${(()=>{
       const fc  = [];
-      const cls = _vc.depreciation.cls   || '—';
-      const lbl = (_vc.depreciation&&_vc.depreciation.class||"") || 'Market standard depreciation';
+      const cls = (_dp.cls||_dp.class||"C")   || '—';
+      const lbl = (_dp.class||"") || 'Market standard depreciation';
       const hnt = ""  || '';
       if(!fc||fc.length<4) return '<p style="color:var(--muted);font-size:.85rem">Forecast not available.</p>';
 
@@ -10784,10 +10786,10 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-title">Everything You'll Pay in the First Year</div>
     <table class="ks-cost-table">
       <tr><td>RTA Registration & Transfer</td><td>AED ${(940).toLocaleString()}</td></tr>
-      <tr><td>Insurance (estimated)</td><td>AED ${_vc.runningCosts.insurance.toLocaleString()}</td></tr>
-      <tr><td>Maintenance & Service</td><td>AED ${(_vc.runningCosts&&_vc.runningCosts.service||0).toLocaleString()}</td></tr>
-      <tr><td>Fuel (annual estimate)</td><td>AED ${((_vc.runningCosts&&_vc.runningCosts.total||0) - (_vc.runningCosts&&_vc.runningCosts.insurance||0) - (_vc.runningCosts&&_vc.runningCosts.service||0) - 940).toLocaleString()}</td></tr>
-      <tr class="ks-cost-total"><td>Total Year 1 Cash Out</td><td>AED ${_vc.runningCosts.total.toLocaleString()}</td></tr>
+      <tr><td>Insurance (estimated)</td><td>AED ${(_rc.insurance||0).toLocaleString()}</td></tr>
+      <tr><td>Maintenance & Service</td><td>AED ${(_rc.service||0).toLocaleString()}</td></tr>
+      <tr><td>Fuel (annual estimate)</td><td>AED ${Math.max(0,((_rc.total||0)-(_rc.insurance||0)-(_rc.service||0)-940)).toLocaleString()}</td></tr>
+      <tr class="ks-cost-total"><td>Total Year 1 Cash Out</td><td>AED ${(_rc.total||0).toLocaleString()}</td></tr>
     </table>
     <div class="ks-cost-note">Running cost estimates are based on UAE averages. Actual figures vary by usage, insurer, and dealer.</div>
   </div>
