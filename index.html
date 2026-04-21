@@ -10799,19 +10799,41 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-title">Live Listings Compared</div>
     <div class="ks-listings-table-wrap">
       ${(()=>{
-        if(r.sourceLinks&&r.sourceLinks.length){
-          // Use API-returned real listings with full details
-          const rows=r.sourceLinks.map((sl,i)=>{
-            const title=sl.title||sl.name||`${brand} ${model||''} ${year}`;
-            const price=sl.price?`AED ${parseInt(sl.price).toLocaleString()}`:(sl.asking?`AED ${parseInt(sl.asking).toLocaleString()}`:'—');
-            const mileageDisp=sl.mileage?`${parseInt(sl.mileage).toLocaleString()} km`:'—';
-            const yearDisp=sl.year||year;
+        // listings_snapshot has price + mileage from the Worker; prefer it over sourceLinks
+        const _snap = r.listings_snapshot && r.listings_snapshot.length ? r.listings_snapshot : null;
+        if(_snap){
+          const rows=_snap.map((sl)=>{
+            const price = sl.price ? `AED ${parseInt(sl.price).toLocaleString()}` : '—';
+            const mileageDisp = sl.mileage ? `${parseInt(sl.mileage).toLocaleString()} km` : '—';
+            // snapshot spec field: "gcc" | "non-gcc" — use as year proxy not available, fall back to form year
+            const yearDisp = year;
+            // find matching url from sourceLinks by source name if available
+            const matchLink = (r.sourceLinks||[]).find(s=>s.title===sl.source)||null;
+            const href = sl.url || (matchLink&&matchLink.url) || '#';
             return `<tr>
               <td class="ks-lt-brand">${brand}</td>
               <td class="ks-lt-model">${model||'—'}</td>
               <td class="ks-lt-year">${yearDisp}</td>
               <td class="ks-lt-km">${mileageDisp}</td>
               <td class="ks-lt-price">${price}</td>
+              <td class="ks-lt-link">${href&&href!=='#'?`<a href="${href}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">View ↗</a>`:'—'}</td>
+            </tr>`;
+          });
+          return `<table class="ks-listings-table">
+            <thead><tr>
+              <th>Brand</th><th>Model</th><th>Year</th><th>Mileage</th><th>Asking Price</th><th></th>
+            </tr></thead>
+            <tbody>${rows.join('')}</tbody>
+          </table>`;
+        }
+        if(r.sourceLinks&&r.sourceLinks.length){
+          const rows=r.sourceLinks.map((sl)=>{
+            return `<tr>
+              <td class="ks-lt-brand">${brand}</td>
+              <td class="ks-lt-model">${model||'—'}</td>
+              <td class="ks-lt-year">${year}</td>
+              <td class="ks-lt-km">—</td>
+              <td class="ks-lt-price">—</td>
               <td class="ks-lt-link"><a href="${sl.url||'#'}" target="_blank" rel="noopener noreferrer" class="ks-lt-a">View ↗</a></td>
             </tr>`;
           });
