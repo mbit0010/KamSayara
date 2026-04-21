@@ -1,38 +1,9 @@
 <!DOCTYPE html>
-<!-- KamSayara v66 — 19 Apr 2026
-     Paired with: kamsayara_v66_worker.js
-     Breakpoints: Desktop ≥861px | Tablet 601–860px | Mobile ≤600px
-     Worker contract: market range + depreciation_class + confidence + listings_snapshot → frontend ksComputeValuation() -->
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!--
-    KamSayara – UAE Car Price Intelligence
-    VERSION: v37 (April 2026) — index_v37.html
-    Based on: v36 (index_v36.html)
-
-    ARCH CHANGES (v37): Smart Vehicle Image System
-      Change 1 — ksDetectBodyType(brand, model): Replaces the 10-pattern regex with a
-                 200+ entry curated model lookup table covering every major GCC brand/model
-                 (Toyota, Nissan, BMW, Mercedes, Lexus, Mitsubishi, Hyundai, Kia, Ford,
-                 Jeep, Land Rover, Porsche, Audi, Chevrolet, VW, Chinese brands, etc.).
-                 Falls back to layered regex patterns only for unknown models. Used by
-                 both buildResult() and _updateStage2() for live silhouette preview.
-      Change 2 — ksGetVehicleImageUrl(brand, model, bodyKey): Curated map of 60+ popular
-                 GCC models to direct Wikimedia Commons CC-licensed photo URLs. Returns
-                 the best available on-road vehicle photo for the exact make/model.
-      Change 3 — Real photo layer in Dubai scene: .ks-scene-photo-wrap + [img] overlaid
-                 on the SVG silhouette. Photo fades in on load (opacity transition). If
-                 the image fails to load, SVG silhouette remains fully visible — zero
-                 visual disruption. onerror hides the wrapper; onload fades out the SVG.
-      Change 4 — _updateStage2() uses ksDetectBodyType() for accurate live silhouette
-                 preview as user selects brand/model in the form.
-
-    PRESERVED from v36:
-      Unified single result-rendering system (no device forks).
-      Serper+Haiku primary / Gemini backup / Haiku single-shot / Formula tier waterfall.
-      KV cache (T0), full PIR report (buildResult), all form layout and field grids intact.
-  -->
+  
 
   <title>KamSayara – UAE Car Price Intelligence</title>
   <meta name="description" content="Get an instant, accurate UAE car price intelligence report based on 50,000+ live listings. Free market price check for any car — GCC spec, Dubai, Sharjah, Abu Dhabi.">
@@ -6334,10 +6305,7 @@ body.ks-result-active .form-card:hover {
     .ks-hscale-float-labels { height: 48px; }
   }
 
-/* ══ 3-YEAR DEPRECIATION CHART v65 ══════════════════════════════════════
-   Unified across Desktop / Tablet / Mobile
-   Research-backed brand-aware rates (CarSwitch, Dubizzle, ArabWheels 2025-26)
-═══════════════════════════════════════════════════════════════════════ */
+/* */
 .ks-depr3-track { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
 .ks-depr3-card  { border-radius:10px; padding:11px 9px 10px; border:1.5px solid; text-align:center; }
 .ks-depr3-now { background:linear-gradient(135deg,rgba(10,37,64,.07),rgba(10,37,64,.02)); border-color:rgba(10,37,64,.22); }
@@ -8737,15 +8705,6 @@ function stopLoad(){
   if(tipEl) tipEl.style.display='none';
 }
 
-/* ── DEAL LOGIC (fallback if AI unavailable) ─────────────── */
-function dealVerdict(ask,mkt){
-  if(!ask||!mkt)return null;
-  const d=(ask-mkt)/mkt;
-  if(d<-0.05)return{cls:'good',label:'Good Deal',ver:`${Math.round(Math.abs(d)*100)}% below market`,act:'Strong buy — negotiate further if possible'};
-  if(d<=0.05) return{cls:'good',label:'Fair Price',ver:'Matches market rate',act:'Try for 3–5% off'};
-  if(d<=0.10) return{cls:'warn',label:'Slightly High',ver:`${Math.round(d*100)}% above market`,act:'Counter with market data'};
-  return{cls:'bad',label:'Overpriced',ver:`${Math.round(d*100)}% above fair value`,act:'Strong counter-offer or walk away'};
-}
 
 /* ── MAP AI RATING TO CSS CLASS ─────────────────────────── */
 function aiRatingClass(rating){
@@ -8902,8 +8861,7 @@ function buildDubaiSkylineSVG(){
 
 /* ── SCENE CAR SVG (detailed, brand-aware coloring) ─────── */
 function buildSceneCarSVG(bodyKey, brand, model){
-  /* v38 — accurate on-road sketch per body type.
-     Cars face RIGHT in the scene (front = high-x, rear = low-x). */
+  
   const luxBrands=['BMW','Mercedes-Benz','Audi','Porsche','Lexus','Genesis','Infiniti',
                    'Cadillac','Rolls-Royce','Bentley','Maserati','Lamborghini','Ferrari','McLaren'];
   const isLux = luxBrands.includes(brand);
@@ -9441,109 +9399,6 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
    Chinese brands (Haval/GAC/MG) lose 45-55% (uncertain track record)
    Modifiers: mileage, spec, FSH, accident, age, owners
 ────────────────────────────────────────────────────────────── */
-function ksGetDepreciationProfile(brand, model, carAge, mileageKm, specVal, qsObj) {
-  const m = (model||'').toLowerCase();
-  const b = (brand||'').toLowerCase();
-
-  // Retention Classes — base annual rates [Y1, Y2, Y3]
-  // S: 8/7/6  — Icons: LC, Patrol, Prado, Lexus LX, G-Class, Hilux, FJ
-  // A: 11/9/8 — Strong: Camry, Corolla, Accord, Fortuner, RAV4, Lexus RX/ES
-  // B: 13/11/9 — Good: X-Trail, Pajero, Mazda, CR-V, HR-V, Subaru
-  // C: 15/13/11 — Average: Hyundai, Kia, Chevrolet, Ford, GMC, Dodge
-  // D: 18/15/12 — Fast: BMW, Audi, MB mainstream, Land Rover, Volvo
-  // E: 22/18/14 — Very Fast: Chinese brands (Haval, GAC, MG, BYD, OMODA)
-
-  const isSuperModel = [
-    'land cruiser','prado','patrol','lexus lx','lx 570','lx 600',
-    'lx570','lx600','land cruiser 200','land cruiser 300','land cruiser 70',
-    'g-class','g 63','g63','fj cruiser','hilux'
-  ].some(s => m.includes(s) || (b+' '+m).includes(s));
-
-  const isStrongModel = [
-    'camry','corolla','corolla cross','accord','civic','fortuner',
-    'rav4','rav 4','4runner','highlander','sequoia','tundra','tacoma',
-    'lexus rx','lexus es','lexus is','lexus nx','lexus gs','rx 350',
-    'rx 500','es 350','pilot','avalon','innova','rush','yaris'
-  ].some(s => m.includes(s));
-
-  const isMBException = b.includes('mercedes') && (m.includes('g-class')||m.includes('g 63')||m.includes('g63'));
-  const isPorscheStrong = b.includes('porsche') && (m.includes('911')||m.includes('cayenne')||m.includes('macan'));
-  const isVeryFast = ['haval','gac','chery','mg ','byd','omoda','jetour','geely','great wall','jac','togg','zeekr','xpeng','lynk'].some(s=>b.includes(s)||b===s.trim());
-  const isFastBrand = ['bmw','audi','volvo','land rover','jaguar','cadillac','lincoln','maserati','alfa romeo'].some(s=>b.includes(s));
-  const isMBMainstream = b.includes('mercedes') && !isMBException;
-
-  let cls;
-  if (isSuperModel)          cls='S';
-  else if (isMBException||isPorscheStrong) cls='A';
-  else if (isStrongModel)    cls='A';
-  else if (b.includes('lexus')) cls='A';
-  else if (isVeryFast)       cls='E';
-  else if (isFastBrand||isMBMainstream) cls='D';
-  else if (['toyota','honda','mazda','subaru','isuzu'].some(x=>b.includes(x))) cls='B';
-  else if (['nissan','mitsubishi','suzuki'].some(x=>b.includes(x)))             cls='B';
-  else if (['hyundai','kia','genesis','chevrolet','ford','gmc','dodge','ram','chrysler'].some(x=>b.includes(x))) cls='C';
-  else cls='C';
-
-  const baseRates = { S:[0.08,0.07,0.06], A:[0.11,0.09,0.08], B:[0.13,0.11,0.09], C:[0.15,0.13,0.11], D:[0.18,0.15,0.12], E:[0.22,0.18,0.14] };
-  let rates = [...baseRates[cls]];
-
-  // Age: near-new loses more (new-car premium evaporates); old cars stabilise
-  if (carAge<=1)      rates[0]+=0.04;
-  else if (carAge<=2) rates[0]+=0.02;
-  if (carAge>=12)     rates=rates.map(r=>Math.max(0.03,r*0.65));
-  else if (carAge>=8) rates=rates.map(r=>Math.max(0.04,r*0.80));
-
-  // Mileage vs UAE standard (20,000 km/year)
-  const expKm = Math.max(carAge,1)*20000;
-  if (mileageKm > expKm*1.6)      rates=rates.map(r=>r+0.030);
-  else if (mileageKm > expKm*1.3) rates=rates.map(r=>r+0.015);
-  else if (mileageKm < expKm*0.5) rates=rates.map(r=>Math.max(0.03,r-0.020));
-
-  // Non-GCC: smaller buyer pool in UAE
-  if (specVal && specVal!=='GCC' && specVal!=='GCC Spec') {
-    rates[0]+=0.035; rates[1]+=0.020; rates[2]+=0.010;
-  }
-
-  // Condition modifiers
-  if (qsObj && qsObj.fsh===false)      rates=rates.map(r=>r+0.020);
-  if (qsObj && qsObj.accident===true)  { rates[0]+=0.040; rates[1]+=0.025; rates[2]+=0.010; }
-  if (qsObj && qsObj.singleOwner===false) { rates[0]+=0.020; rates[1]+=0.010; }
-
-  rates=rates.map(r=>Math.min(r,0.40));
-
-  const labels = {
-    S:'Exceptional Retention — UAE icon, demand always exceeds supply',
-    A:'Strong Retention — highly trusted brand, fast resale turnover',
-    B:'Good Retention — reliable choice, steady local demand',
-    C:'Average Depreciation — typical UAE market pattern',
-    D:'Above-Average Depreciation — high running costs erode demand',
-    E:'High Depreciation — newer brand, limited UAE resale track record',
-  };
-  const hints = {
-    S:'Minimal value loss — among the best long-term ownership choices in the UAE',
-    A:'Below-average loss per month — a smart choice for cost-conscious buyers',
-    B:'Moderate value loss — reliable and predictable ownership cost',
-    C:'Average value loss — budget for depreciation as part of total cost',
-    D:'Higher value loss — factor in expensive service and parts costs',
-    E:'Elevated value loss — verify spare parts availability before buying',
-  };
-
-  return { cls, rates, label:labels[cls], hint:hints[cls] };
-}
-
-// Legacy shim — kept for any external calls
-function buildDeprTable(handshake,carYear,brandName,mileageKm){
-  const cy=new Date().getFullYear();
-  const age=Math.max(1,cy-carYear);
-  const p=ksGetDepreciationProfile(brandName,'',age,mileageKm||0,'GCC',{});
-  const rows=[]; let val=handshake;
-  for(let y=0;y<3;y++){
-    val=Math.round(val*(1-p.rates[y])/500)*500;
-    rows.push({year:cy+y+1,rate:Math.round(p.rates[y]*100),endVal:val,cumLoss:handshake-val,pct:Math.round(((handshake-val)/handshake)*100)});
-  }
-  return rows;
-}
-
 function buildNegoGuide(askN,avg,conditionVal,accidentVal){
   if(!avg) return null;
   const hasAsk = !!(askN && askN > 0);
@@ -10196,302 +10051,6 @@ function ksGetVehicleImageUrl(brand, model, bodyKey){
    Input:  raw market data (low, high, comp, listings) + user inputs
    Output: handshake, adjustments, verdict, bestMove, script, costs
    ══════════════════════════════════════════════════════════════════════════ */
-function ksComputeValuation(raw, inputs) {
-  const R500 = n => Math.round(n / 500) * 500;
-  // Smart rounding: R100 for cars under AED 40k (R500 introduces ±3% error on low-value cars)
-  const R = (n, base) => base && base < 40000 ? Math.round(n/100)*100 : Math.round(n/500)*500;
-
-  const mktLow  = raw.lowPrice  || raw.market_low  || 0;
-  const mktHigh = raw.highPrice || raw.market_high || 0;
-  const mktMid  = mktLow && mktHigh ? R500((mktLow + mktHigh) / 2) : (raw.averagePrice || 0);
-  const range   = Math.max(0, mktHigh - mktLow);
-
-  const { fsh, singleOwner, accident, warranty, condition, spec, mileage, askingPrice, carYear, carLabel, brand: _inBrand, model: _inModel, trim } = inputs;
-  const cy  = new Date().getFullYear();
-  const age = Math.max(1, cy - (carYear || cy - 5));
-
-  // ── ADJUSTMENT ENGINE v65 ─────────────────────────────────────────────────
-  // All adjustments are % of mid price (NOT % of range).
-  // Using mid price makes adjustments proportional to vehicle value,
-  // not to data uncertainty (wide range = uncertain data, not bigger premium).
-  // Bug fix: previous model used % of range — gave bigger adjustments when
-  // data was LESS certain, which is backwards.
-  const base = mktMid || mktLow || 1;
-  const adjustments = [];
-  let totalAdj = 0; // net AED adjustment from mid
-
-  // ── FULL SERVICE HISTORY (±3.5% / -4.0% of mid) ──────────────────────────
-  // FSH = proven maintenance record = trust premium in UAE market
-  if (fsh === true)  { const a = R500(base * 0.035); totalAdj += a;  adjustments.push({ label:'Full service history', amt:+a, dir:'pos' }); }
-  if (fsh === false) { const a = R500(base * 0.040); totalAdj -= a;  adjustments.push({ label:'No service history',  amt:-a, dir:'neg' }); }
-
-  // ── OWNERSHIP HISTORY (graduated 3-tier, not binary) ─────────────────────
-  // UAE buyers care deeply about ownership count — graduated penalty
-  if (singleOwner === true)  { const a = R500(base * 0.025); totalAdj += a; adjustments.push({ label:'Single owner',    amt:+a, dir:'pos' }); }
-  if (singleOwner === false) {
-    // Try to read actual owner count from DOM for graduation
-    const ownerVal = typeof g === 'function' ? (g('owners')?.value||'') : '';
-    const ownerN = ownerVal==='4+'?4:ownerVal?parseInt(ownerVal)||2:2;
-    const pct = ownerN>=4?0.075:ownerN===3?0.055:0.035; // 4+ owners −7.5%, 3 owners −5.5%, 2 owners −3.5%
-    const a = R500(base * pct);
-    totalAdj -= a;
-    adjustments.push({ label:`${ownerN>=4?'4+':ownerN} previous owners`, amt:-a, dir:'neg' });
-  }
-
-  // ── ACCIDENT HISTORY (−9% of mid) ────────────────────────────────────────
-  // Accident disclosure is required in UAE; buyers discount heavily + resale impact compounds
-  if (accident === true) { const a = R500(base * 0.090); totalAdj -= a; adjustments.push({ label:'Accident history', amt:-a, dir:'neg' }); }
-
-  // ── WARRANTY (+2.5% / −1.5% of mid) ─────────────────────────────────────
-  if (warranty === true)  { const a = R500(base * 0.025); totalAdj += a; adjustments.push({ label:'Active warranty', amt:+a, dir:'pos' }); }
-  if (warranty === false) { const a = R500(base * 0.015); totalAdj -= a; adjustments.push({ label:'No warranty',     amt:-a, dir:'neg' }); }
-
-  // ── CONDITION (% of mid, not range) ──────────────────────────────────────
-  const condPctMap = { 'Excellent':0.05, 'Very Good':0.03, 'Good':0, 'Fair':-0.055, 'Poor':-0.12 };
-  const condPct = condPctMap[condition] ?? 0;
-  if (condPct !== 0) {
-    const a = R500(Math.abs(base * condPct));
-    totalAdj += condPct > 0 ? a : -a;
-    adjustments.push({ label:`Condition: ${condition}`, amt: condPct > 0 ? +a : -a, dir: condPct > 0 ? 'pos' : 'neg' });
-  }
-
-  // ── SPEC — Non-GCC (−9% of mid) ──────────────────────────────────────────
-  // Bug fix: was −5% of range. Non-GCC significantly shrinks UAE buyer pool.
-  // UAE buyers strongly prefer GCC-spec (better cooling, dust protection, warranty).
-  if (spec && spec !== 'GCC' && spec !== 'GCC Spec') {
-    const a = R500(base * 0.090);
-    totalAdj -= a;
-    adjustments.push({ label:'Non-GCC specification', amt:-a, dir:'neg' });
-  }
-
-  // ── TRIM LEVEL FACTOR ─────────────────────────────────────────────────────
-  // Bug fix: trim collected but never used. Limited/VXR/Platinum commands real premium.
-  const trimVal = (trim || (typeof g === 'function' ? g('trim')?.value : '') || '').toLowerCase();
-  const premiumTrims = ['limited','platinum','vxr','sport','titanium','se','xle','touring','prestige','executive','ultimate'];
-  const baseTrims    = ['base','entry','standard','dls','gl','l'];
-  if (premiumTrims.some(t => trimVal.includes(t))) {
-    const a = R500(base * 0.040);
-    totalAdj += a;
-    adjustments.push({ label:`Trim: ${trim||trimVal}`, amt:+a, dir:'pos' });
-  } else if (baseTrims.some(t => trimVal === t)) {
-    const a = R500(base * 0.020);
-    totalAdj -= a;
-    adjustments.push({ label:`Trim: ${trim||trimVal} (entry level)`, amt:-a, dir:'neg' });
-  }
-
-  // ── MILEAGE vs UAE STANDARD (20,000 km/year) ──────────────────────────────
-  // Bug fix: was 15,000 km/year. UAE standard is 20,000 km/yr (multiple sources).
-  // Using 15k was wrongly awarding low-mileage premium to normal UAE cars.
-  const expectedKm = age * 20000;
-  if (mileage) {
-    const ratio = mileage / expectedKm;
-    if      (ratio < 0.40) { const a=R500(base*0.040); totalAdj+=a;  adjustments.push({ label:'Very low mileage for age',  amt:+a, dir:'pos' }); }
-    else if (ratio < 0.70) { const a=R500(base*0.020); totalAdj+=a;  adjustments.push({ label:'Below expected mileage',     amt:+a, dir:'pos' }); }
-    else if (ratio > 2.00) { const a=R500(base*0.080); totalAdj-=a;  adjustments.push({ label:'Very high mileage for age',  amt:-a, dir:'neg' }); }
-    else if (ratio > 1.40) { const a=R500(base*0.040); totalAdj-=a;  adjustments.push({ label:'Above expected mileage',     amt:-a, dir:'neg' }); }
-    // 70–140% of expected = no adjustment (normal range)
-  }
-
-  // ── NEAR-NEW PREMIUM (0–1 yr) ─────────────────────────────────────────────
-  // Cars ≤1 year old in excellent condition trade near dealer price — push toward high
-  if (age <= 1 && (condition === 'Excellent' || condition === 'Very Good')) {
-    const a = R500(base * 0.030);
-    totalAdj += a;
-    adjustments.push({ label:'Near-new (dealer-fresh condition)', amt:+a, dir:'pos' });
-  }
-
-  // ── COMPUTE HANDSHAKE ─────────────────────────────────────────────────────
-  // Start at mid, apply net adjustment, then clamp
-  const rawHandshake = base + totalAdj;
-
-  // Bug fix: old model clamped strictly to [low, high] even for severely damaged cars.
-  // In real UAE market, accident + poor + non-GCC + no FSH can sell 20-25% below market low.
-  // New: allow down to 0.72 × low for worst-case, but cap at high for best-case.
-  const heavyPenalty = (accident === true) && (condition === 'Poor' || condition === 'Fair') && (fsh === false);
-  const floorMultiplier = heavyPenalty ? 0.72 : 0.88; // 28% or 12% below market low max
-  const floor = mktLow ? R500(mktLow * floorMultiplier) : 0;
-  const ceil  = mktHigh || R500(base * 1.20);
-
-  const handshake = mktLow && mktHigh
-    ? Math.max(floor, Math.min(ceil, R500(rawHandshake)))
-    : R500(rawHandshake > 0 ? rawHandshake : base);
-
-  // Adjustment amounts for display
-  const baseForAdj = R500(mktMid) || handshake;
-  const adjDisplay = adjustments.map(a => ({ label: a.label, amt: a.amt, dir: a.dir }));
-
-  // ── VERDICT ──────────────────────────────────────────────────────────────
-  const sp    = askingPrice || 0;
-  const gap   = sp ? sp - handshake : null;
-  const gapAbs= gap !== null ? Math.abs(gap) : 0;
-  const gapPct= gap !== null && handshake > 0 ? Math.round(Math.abs(gap) / handshake * 100) : 0;
-  const within5 = gap !== null && gapAbs / (handshake || 1) <= 0.05;
-
-  let verdict, verdictEmoji, verdictColor, verdictBg, verdictBorder, verdictExplain, verdictStrategy;
-
-  if (!sp) {
-    verdict = 'NO STICKER'; verdictEmoji = '—';
-    verdictColor = '#6B7280'; verdictBg = 'rgba(107,114,128,0.07)'; verdictBorder = '#E5E7EB';
-    verdictExplain = 'No asking price entered. Enter sticker price to get verdict and negotiation strategy.';
-    verdictStrategy = '';
-  } else if (within5) {
-    verdict = 'FAIRLY PRICED'; verdictEmoji = '🟡';
-    verdictColor = '#B45309'; verdictBg = 'rgba(217,119,6,0.07)'; verdictBorder = '#FCD34D';
-    verdictExplain = `Sticker AED ${sp.toLocaleString()} is within 5% of Handshake AED ${handshake.toLocaleString()}. Both parties get a fair deal.`;
-    verdictStrategy = 'A small counter-offer is still reasonable. Try opening slightly below to test the seller\'s flexibility.';
-  } else if (gap > 0) {
-    // OVERPRICED — defensive negotiation
-    verdict = 'OVERPRICED'; verdictEmoji = '🔴';
-    verdictColor = '#DC2626'; verdictBg = 'rgba(220,38,38,0.07)'; verdictBorder = '#FCA5A5';
-    verdictExplain = `Sticker AED ${sp.toLocaleString()} is AED ${gapAbs.toLocaleString()} above Handshake AED ${handshake.toLocaleString()}. Buyer pays ${gapPct}% above fair market value. Seller benefits from higher price. Risk: Car may sit unsold for 90+ days.`;
-    verdictStrategy = `Defensive negotiation. Use Market Low (AED ${mktLow.toLocaleString()}) and Handshake (AED ${handshake.toLocaleString()}) as gravity anchors to pull the seller down.`;
-  } else {
-    // UNDERPRICED — aggressive closing
-    verdict = 'UNDERPRICED'; verdictEmoji = '🟢';
-    verdictColor = '#15803D'; verdictBg = 'rgba(21,163,74,0.07)'; verdictBorder = '#6EE7B7';
-    verdictExplain = `Sticker AED ${sp.toLocaleString()} is AED ${gapAbs.toLocaleString()} below Handshake AED ${handshake.toLocaleString()}. Buyer is paying ${gapPct}% below fair market. Seller is losing potential AED ${gapAbs.toLocaleString()}. Risk: Car will sell very quickly.`;
-    verdictStrategy = `Aggressive closing. Sticker is already a strong deal. Test seller with a low offer, but be prepared to pay AED ${sp.toLocaleString()} immediately before someone else does.`;
-  }
-
-  // ── BEST MOVE (human anchor logic) ──────────────────────────────────────
-  // Opening: slightly below Market Low — tests motivation without insulting
-  const openingOffer = R500(mktLow * 0.96);
-
-  let targetClose, walkAway, bestMoveRationale;
-
-  if (!sp) {
-    targetClose = handshake;
-    walkAway    = R500(handshake * 1.03);
-    bestMoveRationale = `No sticker price. Target Handshake AED ${handshake.toLocaleString()} as your close price.`;
-  } else if (within5) {
-    // Fairly priced — still try for a small win
-    targetClose = R500(Math.min(sp, handshake));
-    walkAway    = R500(handshake * 1.03);
-    bestMoveRationale = `Price is fair. A small counter is reasonable — settle at or below AED ${handshake.toLocaleString()}.`;
-  } else if (gap > 0) {
-    // Overpriced — don't overpay for "fair"
-    targetClose = handshake;           // settle AT handshake (fair price)
-    walkAway    = handshake;           // walk if seller won't reach fair value
-    bestMoveRationale = `Overpriced by AED ${gapAbs.toLocaleString()}. Your target is Handshake AED ${handshake.toLocaleString()}. Walk away if seller won't come down to fair market value.`;
-  } else {
-    // Underpriced — sticker is the win; test for more but don't lose it
-    targetClose = sp;                  // sticker is already the "fair win"
-    walkAway    = sp;                  // walk away = sticker (don't lose a steal)
-    bestMoveRationale = `Already ${gapPct}% below market. Open low to test seller urgency, but be ready to pay AED ${sp.toLocaleString()} immediately — this car will sell fast.`;
-  }
-
-  // ── NEGOTIATION SCRIPT (scenario-aware) ──────────────────────────────────
-  // carLabel already destructured from inputs above
-  const kmLabel  = mileage ? `${mileage.toLocaleString()} km` : '';
-  const weaknesses = [
-    fsh === false && 'no service history',
-    singleOwner === false && 'multiple owners',
-    accident === true && 'accident history',
-    warranty === false && 'no warranty',
-  ].filter(Boolean);
-  const weakStr = weaknesses.length ? ` with ${weaknesses.join(', ')}` : '';
-
-  let negoScript;
-  if (!sp) {
-    negoScript = `"Based on current UAE market data, the ${carLabel}${kmLabel?' at '+kmLabel:''} has a fair market value of AED ${handshake.toLocaleString()}. My offer is AED ${openingOffer.toLocaleString()} — is there room to work on the price?"`;
-  } else if (gap > 0) {
-    // Overpriced script
-    negoScript = `"I love the ${carLabel}${weakStr}. The market data shows similar models moving at AED ${handshake.toLocaleString()} — that's the UAE handshake price. At AED ${sp.toLocaleString()}, you're AED ${gapAbs.toLocaleString()} above that. If we can get to AED ${handshake.toLocaleString()}, we have a deal today."`;
-  } else if (!within5) {
-    // Underpriced script
-    negoScript = `"The ${carLabel}${weakStr ? weakStr : ''} is priced well below the market. I'll offer AED ${openingOffer.toLocaleString()} to see if there's any flexibility, but I'm prepared to move to AED ${sp.toLocaleString()} right now — can we close today?"`;
-  } else {
-    // Fairly priced
-    negoScript = `"The ${carLabel} is fairly priced at market. I'd like to offer AED ${openingOffer.toLocaleString()} as my opening. I can move to AED ${handshake.toLocaleString()} — does that work for you?"`;
-  }
-
-  // ── RUNNING COSTS (separated from depreciation) ──────────────────────────
-  const basePrice  = askingPrice || handshake;
-  const insEst     = Math.round(Math.max(1200, basePrice * 0.025) / 100) * 100;
-  const maintEst   = R500(Math.max(1500, basePrice * 0.015));
-  // Fuel: unified formula — body-type L/100km × 1,500 km/month × AED 3.3/L
-  // Matches the ⛽ display block exactly. Constants: 1,500 km/mo, AED 3.3/L.
-  const _fuelBodyKey = (typeof ksDetectBodyType === 'function' ? ksDetectBodyType(_inBrand, _inModel) : '').toLowerCase();
-  let _fuelBase = _fuelBodyKey.includes('suv') || _fuelBodyKey.includes('offroad') ? 13.5
-                : _fuelBodyKey.includes('pickup') ? 14
-                : _fuelBodyKey.includes('van')    ? 12
-                : _fuelBodyKey.includes('sport') || _fuelBodyKey.includes('coupe') ? 10
-                : 9.5;
-  if(age > 10) _fuelBase += 1.5; else if(age > 6) _fuelBase += 0.8;
-  const fuelEst = Math.round((_fuelBase / 100) * 1500 * 3.3 / 10) * 10; // monthly AED, rounded to nearest 10
-  const rtaReg     = 940; // RTA registration + transfer
-  const runningTotal = rtaReg + insEst + maintEst + (fuelEst * 12);
-
-  // ── DEPRECIATION — multi-factor brand/model-aware model (v65) ──────────────
-  // Based on UAE market data 2024-2026: CarSwitch, Dubizzle, ArabWheels
-  const _deprProfile = ksGetDepreciationProfile(_inBrand, _inModel, age, mileage||0, spec, { fsh, accident, singleOwner });
-  const cy2 = new Date().getFullYear();
-
-  // Build forecast: compound each year's rate on the previous year's value
-  let _prev = handshake;
-  const forecastVals = [{ yr:cy2, val:handshake, rate:0, loss:0, cumLoss:0, retained:100 }];
-  _deprProfile.rates.forEach((rate, i) => {
-    const newVal = R500(_prev * (1 - rate));
-    const loss   = _prev - newVal;
-    forecastVals.push({
-      yr:       cy2 + i + 1,
-      val:      newVal,
-      rate:     Math.round(rate * 100),
-      loss:     loss,
-      cumLoss:  handshake - newVal,
-      retained: Math.max(0, Math.round((newVal / handshake) * 100)),
-    });
-    _prev = newVal;
-  });
-
-  const deprRate = _deprProfile.rates[0];
-  const deprAmt  = forecastVals[1] ? forecastVals[1].loss : R500(handshake * deprRate);
-
-  return {
-    // Core values
-    handshake,
-    mktLow,
-    mktHigh,
-    mktMid,
-    baseForAdj,
-
-    // Adjustments
-    adjustments: adjDisplay,
-
-    // Verdict
-    verdict, verdictEmoji, verdictColor, verdictBg, verdictBorder,
-    verdictExplain, verdictStrategy,
-    gap, gapAbs, gapPct, within5,
-
-    // Best Move
-    openingOffer, targetClose, walkAway, bestMoveRationale,
-
-    // Script
-    negoScript,
-
-    // Running costs (cash out — separate from depreciation)
-    runningCosts: {
-      rta:      rtaReg,
-      insurance: insEst,
-      maintenance: maintEst,
-      fuel:     fuelEst * 12,
-      total:    runningTotal,
-      note:     'Year 1 cash outflow (registration, insurance, maintenance, fuel)'
-    },
-
-    // Depreciation (value lost — not a cash expense)
-    depreciation: {
-      rate:     deprRate,
-      annual:   deprAmt,
-      class:    _deprProfile.cls,
-      label:    _deprProfile.label,
-      hint:     _deprProfile.hint,
-      forecast: forecastVals,
-      note:     'Annual asset value reduction — not a cash expense'
-    },
-  };
-}
-
 function buildResult(r,brand,model,year,mileage,asking){
   const conf=Math.round((r.confidence||0)*100);
   const avg=r.averagePrice||0;
@@ -10539,9 +10098,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const carYear  =parseInt(year)||2020;
   const cy       =new Date().getFullYear();
   const carAge   =Math.max(1,cy-carYear);
-  // deprRate and deprAmt are computed by ksComputeValuation → _vc.depreciation.*
   const confLabel=conf>=75?'High Confidence':conf>=50?'Medium Confidence':'Low Confidence';
-  // dealInfo computed after _vc (uses handshake, not raw avg) — see line below _vc init
   const sliderLow=low||Math.round(avg*.72);
   const sldrHigh =high||Math.round(avg*1.30);
   const offerPx  =askN||avg;
@@ -10560,7 +10117,6 @@ function buildResult(r,brand,model,year,mileage,asking){
     ref:ref.label,carName:`${year} ${brand}${model?' '+model:''}`,
     avg,low,high,comp,conf:r.confidence||0,askingPrice:askN,marketability:mkt,ai,
     aiCls:ai?aiRatingClass(ai.deal_rating):'neu',
-    // v42 engine values — populated after _vc computed below
     handshake:0, verdict:'', gapAbs:0,
     inputs:[
       ['Brand',brand||'—'],['Model',model||'—'],['Year',year||'—'],
@@ -10576,29 +10132,16 @@ function buildResult(r,brand,model,year,mileage,asking){
   };
 
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
-  // v67: getBuddyVerdict moved below _vc so it uses handshake — see after _vc block
   const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,'','',accVal,ownVal,warVal);
 
   // ── v42 COMBINATION ENGINE: deterministic frontend valuation ─────────────
-  const _vc = ksComputeValuation(r, {
-    fsh:          qs.fsh,
-    singleOwner:  qs.singleOwner,
-    accident:     qs.accident,
-    warranty:     qs.warranty,
-    condition:    condVal,
-    spec:         specVal,
-    mileage:      km,
-    askingPrice:  askN,
-    carYear:      carYear,
-    carLabel:     `${year} ${brand}${model?' '+model:''}`,
-    brand:        brand,
-    model:        model,
-  });
+  // _vc is computed by the Worker (v67+) — read directly
+  const _vc = r._vc || {};
 
   // Expose as named variables used throughout buildResult
   const handshake     = _vc.handshake;
-  const rangeMin      = _vc.mktLow;
-  const rangeMax      = _vc.mktHigh;
+  const rangeMin      = r.lowPrice || 0;
+  const rangeMax      = r.highPrice || 0;
   const sweetSpot     = 0; // removed per v43 design
   // v67 fix: dealInfo now uses handshake (confidence-adjusted FMV), not raw avg
   const dealInfo = getDealBadgeInfo(askN, handshake);
@@ -10607,22 +10150,22 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   // Negotiation anchors from engine
   const nego = {
-    offer:  _vc.openingOffer,
-    close:  _vc.targetClose,
-    walk:   _vc.walkAway,
-    room:   askN ? Math.max(0, Math.round((1 - _vc.openingOffer / askN) * 100)) : 0,
-    tactic: _vc.bestMoveRationale,
-    script: _vc.negoScript,
+    offer:  (_vc.bestMove && _vc.bestMove.openOffer ? _vc.bestMove.openOffer : Math.round((_vc.handshake||0)*0.95/500)*500),
+    close:  (_vc.handshake||0),
+    walk:   Math.round((_vc.handshake||0)*1.03/500)*500,
+    room:   askN ? Math.max(0, Math.round((1 - (_vc.bestMove && _vc.bestMove.openOffer ? _vc.bestMove.openOffer : Math.round((_vc.handshake||0)*0.95/500)*500) / askN) * 100)) : 0,
+    tactic: (_vc.bestMove&&_vc.bestMove.note||""),
+    script: (_vc.negoScript||r.hagglingScript||""),
   };
 
   // Running costs + depreciation from engine (properly separated)
   const cost = {
     ins:     _vc.runningCosts.insurance,
-    maint:   _vc.runningCosts.maintenance,
-    rtaOnly: _vc.runningCosts.rta + _vc.runningCosts.insurance,
+    maint:   (_vc.runningCosts&&_vc.runningCosts.service||0),
+    rtaOnly: 940 + _vc.runningCosts.insurance,
     total:   _vc.runningCosts.total,
     deprAmt: _vc.depreciation.annual,
-    fuelEst: _vc.runningCosts.fuel / 12,
+    fuelEst: ((_vc.runningCosts&&_vc.runningCosts.total||0) - (_vc.runningCosts&&_vc.runningCosts.insurance||0) - (_vc.runningCosts&&_vc.runningCosts.service||0) - 940) / 12,
   };
 
   const _modelDts = r.days_to_sell_estimate || '';
@@ -10630,7 +10173,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   // Update _lastValuationData with engine values (now that _vc is ready)
   _lastValuationData.handshake = _vc.handshake;
   _lastValuationData.verdict   = _vc.verdict;
-  _lastValuationData.gapAbs    = _vc.gapAbs;
+  _lastValuationData.gapAbs    = (r.comparisonToAsking?Math.abs(r.comparisonToAsking.diff):0);
 
   // Depreciation rows: prefer API-computed brand-aware values; fall back to local model
   // r.depreciation is a 3-element array of AED values from applyValuationMath()
@@ -10829,7 +10372,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       _vc.verdict==='OVERPRICED'?'ks-verdict-nego':
       (_vc.verdict==='FAIRLY PRICED'&&_vc.gap!==null&&_vc.gap>0)?'ks-verdict-nego':
       'ks-verdict-fair'}">
-      <span class="ks-verdict-emoji">${_vc.verdictEmoji||'📊'}</span>
+      <span class="ks-verdict-emoji">${(_vc.verdict==="GOOD DEAL"?"✅":_vc.verdict==="FAIRLY PRICED"?"📊":_vc.verdict==="SLIGHTLY HIGH"?"⚠️":"🔴")||'📊'}</span>
       <span class="ks-verdict-label">${
         _vc.verdict==='UNDERPRICED'?'Good Deal — Below Market':
         _vc.verdict==='OVERPRICED'?'High-End — Negotiate Down':
@@ -11176,10 +10719,10 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-title">3-Year Price Outlook</div>
 
     ${(()=>{
-      const fc  = _vc.depreciation.forecast;
+      const fc  = [];
       const cls = _vc.depreciation.cls   || '—';
-      const lbl = _vc.depreciation.label || 'Market standard depreciation';
-      const hnt = _vc.depreciation.hint  || '';
+      const lbl = (_vc.depreciation&&_vc.depreciation.class||"") || 'Market standard depreciation';
+      const hnt = ""  || '';
       if(!fc||fc.length<4) return '<p style="color:var(--muted);font-size:.85rem">Forecast not available.</p>';
 
       const y1 = fc[1], y2 = fc[2], y3 = fc[3];
@@ -11240,10 +10783,10 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-section-eyebrow">First‑Year Costs</div>
     <div class="ks-section-title">Everything You'll Pay in the First Year</div>
     <table class="ks-cost-table">
-      <tr><td>RTA Registration & Transfer</td><td>AED ${_vc.runningCosts.rta.toLocaleString()}</td></tr>
+      <tr><td>RTA Registration & Transfer</td><td>AED ${(940).toLocaleString()}</td></tr>
       <tr><td>Insurance (estimated)</td><td>AED ${_vc.runningCosts.insurance.toLocaleString()}</td></tr>
-      <tr><td>Maintenance & Service</td><td>AED ${_vc.runningCosts.maintenance.toLocaleString()}</td></tr>
-      <tr><td>Fuel (annual estimate)</td><td>AED ${_vc.runningCosts.fuel.toLocaleString()}</td></tr>
+      <tr><td>Maintenance & Service</td><td>AED ${(_vc.runningCosts&&_vc.runningCosts.service||0).toLocaleString()}</td></tr>
+      <tr><td>Fuel (annual estimate)</td><td>AED ${((_vc.runningCosts&&_vc.runningCosts.total||0) - (_vc.runningCosts&&_vc.runningCosts.insurance||0) - (_vc.runningCosts&&_vc.runningCosts.service||0) - 940).toLocaleString()}</td></tr>
       <tr class="ks-cost-total"><td>Total Year 1 Cash Out</td><td>AED ${_vc.runningCosts.total.toLocaleString()}</td></tr>
     </table>
     <div class="ks-cost-note">Running cost estimates are based on UAE averages. Actual figures vary by usage, insurer, and dealer.</div>
@@ -11499,33 +11042,11 @@ function displayValuationResult(data){
   stopLoad();
   const resultContainer = g('rcontent');
   if(!resultContainer) return;
-  console.log('[KamSayara] API response:', JSON.stringify(data, null, 2));
 
   // ── DIAGNOSTIC: always log tier decision clearly ─────────────────────────
   const _d = data._diag || {};
   const _tierNum = data.tier ?? 4;
   const _tierName = data.cached?'CACHE':_tierNum===1?'SERPER+HAIKU':_tierNum===2?'GEMINI':_tierNum===3?'HAIKU OFFLINE':'FORMULA';
-  console.group(`%c[KamSayara v35] Tier ${_tierNum} — ${_tierName}`, _tierNum===1?'color:#16A34A;font-weight:bold':_tierNum===2?'color:#3B82F6;font-weight:bold':_tierNum===3?'color:#D97706;font-weight:bold':'color:#DC2626;font-weight:bold;');
-  if (data.cached) {
-    console.log('  T0 Cache: HIT ✓ — result served from KV');
-  } else {
-    if (_d.t1_serper_skipped)      console.warn('  T1 Serper: SKIPPED — SERPER_API_KEY not set');
-    else if (_d.t1_json_ok)        console.log(`  T1 Serper+Haiku: SUCCESS ✓ (${_d.t1_serper_results} results from Serper)`);
-    else                           console.warn('  T1 Serper: FAILED — Serper:', _d.t1_serper_error, '| Haiku:', _d.t1_haiku_error);
-
-    if (_d.t2_gemini_skipped)      console.warn('  T2 Gemini: SKIPPED — GEMINI_API_KEY not set');
-    else if (_d.t2_json_ok)        console.log('  T2 Gemini: SUCCESS ✓');
-    else if (_tierNum < 2)         console.log('  T2 Gemini: not needed');
-    else                           console.warn('  T2 Gemini: FAILED —', _d.t2_gemini_error);
-
-    if (_d.t3_json_ok)             console.log('  T3 Haiku Single-Shot: SUCCESS ✓');
-    else if (_tierNum < 3)         console.log('  T3 Haiku: not needed');
-    else                           console.warn('  T3 Haiku Single-Shot: FAILED —', _d.t3_haiku_error);
-
-    if (_tierNum === 4)            console.error('  T4 Formula: ALL AI tiers failed — formula estimate only');
-  }
-  console.groupEnd();
-
   // Map V12 API fields → buildResult() compatible shape
   const r = {
     averagePrice:     data.handshakePrice  || data.averagePrice   || data.stickerPrice || 0,
@@ -11588,7 +11109,6 @@ function displayValuationResult(data){
   try {
     _builtReport = buildResult(r, brand, model, year, mileage, asking);
   } catch(buildErr) {
-    console.error('[KamSayara] buildResult error:', buildErr);
     _builtReport = `<div style="padding:32px 20px;text-align:center;font-family:'Exo 2',sans-serif;">
       <div style="font-size:1.5rem;margin-bottom:12px;">⚠️</div>
       <div style="font-weight:800;color:#1A2B4C;margin-bottom:8px;">Report Build Error</div>
