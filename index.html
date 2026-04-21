@@ -88,7 +88,7 @@
     .snav{
       position:fixed;top:0;left:0;right:0;z-index:200;
       background:rgba(6,24,40,0.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(255,255,255,0.07);
+      border-bottom:none;
       padding:0 16px; /* safe-area fallback for notch devices */
       transform:translateY(-100%);transition:transform .3s var(--ease);
     }
@@ -410,7 +410,7 @@
       padding:10px 20px;
       display:flex;align-items:center;gap:10px;
       background:var(--surface);
-      border-top:1px solid var(--border);
+      border-top:none;
       border-radius:0 0 var(--r-xl) var(--r-xl);
       flex-shrink:0;
     }
@@ -6043,12 +6043,49 @@ body.ks-result-active .form-card:hover {
   .ks-conf-bar-fill { position: absolute; top: 0; right: 0; bottom: 0; background: rgba(255,255,255,.5); border-radius: 0 99px 99px 0; transition: width .8s ease; }
   .ks-conf-caption { font-size: .72rem; color: #3D5166; line-height: 1.55; }
 
-  /* ── 7. FOR BUYERS / SELLERS ── */
-  .ks-s7-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .ks-s7-col { background: #F8FAFC; border: 1px solid #E5E9EF; border-radius: 10px; padding: 12px 14px; }
-  .ks-s7-head { font-size: .7rem; font-weight: 800; color: #0A2540; margin-bottom: 8px; letter-spacing: .02em; }
-  .ks-s7-body { font-size: .78rem; color: #2D3D50; line-height: 1.65; }
-  @media (max-width:520px) { .ks-s7-grid { grid-template-columns: 1fr; } }
+  /* ── 7. FOR BUYERS / SELLERS — v67 upgraded ── */
+  .ks-s7-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .ks-s7-tab {
+    flex: 1; padding: 8px 10px; border-radius: 9px; border: 1.5px solid #DDE4EE;
+    background: #F8FAFC; font-family: "Exo 2", sans-serif; font-size: .72rem;
+    font-weight: 700; color: #4B5E75; cursor: pointer; transition: all .18s;
+    letter-spacing: .02em;
+  }
+  .ks-s7-tab-active {
+    background: #0A2540 !important; color: #fff !important;
+    border-color: #0A2540 !important;
+    box-shadow: 0 3px 10px rgba(10,37,64,0.20);
+  }
+  .ks-s7-tab:not(.ks-s7-tab-active):hover { border-color: #0A2540; color: #0A2540; }
+
+  .ks-s7-panels { }
+  .ks-s7-panel { display: flex; flex-direction: column; gap: 12px; }
+
+  /* Situation cards */
+  .ks-s7-situation {
+    border-radius: 11px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px;
+    border: 1.5px solid;
+  }
+  .ks-s7-situation p { font-size: .78rem; color: inherit; line-height: 1.65; margin: 0; }
+  .ks-s7-situation strong { font-weight: 800; }
+  .ks-s7-situation em { font-style: normal; font-weight: 600; }
+  .ks-s7-sit-title { font-size: .72rem; font-weight: 800; letter-spacing: .02em; margin-bottom: 2px; }
+
+  .ks-s7-sit-warn  { background: rgba(192,57,43,.05); border-color: rgba(192,57,43,.22); color: #7A1F1F; }
+  .ks-s7-sit-warn  .ks-s7-sit-title { color: #C0392B; }
+  .ks-s7-sit-good  { background: rgba(26,140,107,.05); border-color: rgba(26,140,107,.22); color: #0F4A36; }
+  .ks-s7-sit-good  .ks-s7-sit-title { color: #1A8C6B; }
+  .ks-s7-sit-fair  { background: rgba(10,37,64,.04); border-color: rgba(10,37,64,.15); color: #1A2738; }
+  .ks-s7-sit-fair  .ks-s7-sit-title { color: #0A2540; }
+  .ks-s7-sit-neutral{ background: #F8FAFC; border-color: #DDE4EE; color: #2D3D50; }
+  .ks-s7-sit-neutral .ks-s7-sit-title { color: #0A2540; }
+
+  /* Checklist */
+  .ks-s7-checklist { background: #F8FAFC; border: 1px solid #E5E9EF; border-radius: 10px; padding: 12px 14px; }
+  .ks-s7-checklist-title { font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #64748B; margin-bottom: 9px; }
+  .ks-s7-check-item { display: flex; align-items: flex-start; gap: 9px; font-size: .76rem; color: #2D3D50; line-height: 1.55; padding: 5px 0; border-bottom: 1px solid #EEF1F6; }
+  .ks-s7-check-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .ks-s7-check-icon { font-size: .85rem; flex-shrink: 0; margin-top: 1px; }
 
   /* ── 8. CTA ── */
   .ks-section-cta { border-bottom: none; background: linear-gradient(135deg,#0A2540,#0E3460); border-radius: 0 0 16px 16px; }
@@ -6152,7 +6189,7 @@ body.ks-result-active .form-card:hover {
   /* Buyers/Sellers section title */
   .ks-s7-section-title {
     font-size: .62rem; font-weight: 800; letter-spacing: .14em;
-    text-transform: uppercase; color: #64748B; margin-bottom: 10px;
+    text-transform: uppercase; color: #C49A2A; margin-bottom: 12px;
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -7170,7 +7207,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
 
 .ffoot {
   padding: 10px 16px !important;
-  border-top: 1px solid var(--border) !important;
+  border-top: none !important;
 }
 .ffoot-hint {
   font-size: var(--ks-t-sub) !important;
@@ -7207,7 +7244,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
 /* ── SEARCH / FORM PROFESSIONAL SPACING ── */
 .form-header {
   padding: 14px 16px 12px !important;
-  border-bottom: 1px solid var(--border) !important;
+  border-bottom: none !important;
 }
 .form-header-title {
   font-size: 0.72rem !important;
@@ -7230,20 +7267,325 @@ body.ks-result-active #backToInputs { display: flex !important; }
 }
 
 /* result-panel-header styling is fully defined in the authoritative block above — no override needed here */
+
+/* ════════════════════════════════════════════════════════
+   HOMEPAGE SECTIONS 3, 4, 5 + FOOTER — v67
+   All typography references shared vars from ks-pages.css equivalents.
+   Uses --accent, --gold, --ink, --ink-soft, --muted, --border,
+   --surface, --surface-2, --white, --good/bad vars — same values.
+════════════════════════════════════════════════════════ */
+
+/* Mirror shared design tokens for homepage sections
+   (index.html embeds its own CSS; these match ks-pages.css :root exactly) */
+:root {
+  --accent:#0A2540; --accent-2:#1A4A7A;
+  --accent-soft:rgba(10,37,64,0.07); --accent-line:rgba(10,37,64,0.16);
+  --gold:#C49A2A; --gold-light:#E8D060;
+  --ink:#1A2738; --ink-soft:#2D3F55; --muted:#4B5E75;
+  --border:#DEE3EB; --surface:#F8F9FB; --surface-2:#F2F4F8; --white:#fff;
+  --good:#1A8C6B; --good-bg:rgba(26,140,107,0.08); --good-line:rgba(26,140,107,0.20);
+  --bad:#C0392B;  --bad-bg:rgba(192,57,43,0.08);   --bad-line:rgba(192,57,43,0.20);
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Section wrappers */
+.ks-hp-section {
+  width: 100%;
+  background: var(--white);
+  border-top: none;
+}
+.ks-hp-section-alt { background: var(--surface); }
+
+/* Two-column layout — matches shared .two-col */
+.ks-hp-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+.ks-hp-align-center { align-items: center; }
+@media (max-width: 700px) { .ks-hp-two-col { grid-template-columns: 1fr; } }
+
+/* Section label — matches shared .sec-label exactly */
+.ks-hp-sec-label {
+  font-family: "Exo 2", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin-bottom: 8px;
+}
+.ks-hp-sec-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-line), transparent);
+}
+
+/* Section heading — matches shared .sec-head responsive size */
+.ks-hp-sec-head {
+  font-family: "Exo 2", sans-serif;
+  font-size: clamp(1.35rem,3vw,1.75rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.ks-hp-sec-head em { color: var(--accent-2); font-style: normal; }
+
+/* Body paragraph — matches shared .body-p */
+.ks-hp-body-p {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+/* Arabic word highlight — matches shared .aw */
+.ks-hp-aw { color: var(--gold); font-weight: 600; font-style: normal; }
+
+/* Step cards (unique to homepage) */
+.ks-hp-step-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(10,37,64,0.05);
+  transition: transform .18s var(--ease);
+}
+.ks-hp-step-card:hover { transform: translateX(3px); }
+.ks-hp-step-gold {
+  background: linear-gradient(135deg, rgba(196,154,42,0.07), rgba(196,154,42,0.02));
+  border: 1.5px solid rgba(196,154,42,0.28);
+}
+.ks-hp-step-num {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--accent);
+  opacity: .18;
+  flex-shrink: 0;
+  line-height: 1;
+}
+/* Step text — matches .nxt-t (15px 700) */
+.ks-hp-step-text {
+  font-family: "Exo 2", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Info box — matches shared .info-box / .info-box.gold-tint */
+.ks-hp-info-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: clamp(16px, 2vw, 24px);
+}
+.ks-hp-gold-tint {
+  background: linear-gradient(135deg, rgba(196,154,42,0.06), var(--surface-2));
+  border-color: rgba(196,154,42,0.2);
+}
+
+/* Row list inside info box — matches shared .row-list/.row-item */
+.ks-hp-row-list { display: flex; flex-direction: column; }
+.ks-hp-row-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(222,227,235,0.45);
+}
+.ks-hp-row-ico {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.ks-hp-ico-red  { background: var(--bad-bg);  border: 1px solid var(--bad-line);  color: var(--bad); }
+.ks-hp-ico-green{ background: var(--good-bg); border: 1px solid var(--good-line); color: var(--good); }
+/* Row title — matches shared .row-title (15px 700) */
+.ks-hp-row-title {
+  font-family: "Exo 2", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Buttons — match shared .btn-outline and add ghost variant */
+.ks-hp-btn-outline {
+  font-family: "Exo 2", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1.5px solid var(--accent-line);
+  border-radius: 99px;
+  padding: .55rem 1.4rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all .18s;
+  background: transparent;
+}
+.ks-hp-btn-outline:hover { background: var(--accent-soft); border-color: var(--accent); }
+
+.ks-hp-btn-ghost {
+  font-family: "Exo 2", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 99px;
+  padding: .6rem 1.6rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all .18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ks-hp-btn-ghost:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.6); }
+
+/* CTA strip — matches shared .cta-strip exactly */
+.ks-hp-cta-strip {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  border-radius: 20px;
+  padding: clamp(22px, 3.5vw, 36px) clamp(20px, 3vw, 36px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  box-shadow: 0 8px 32px rgba(10,37,64,0.22);
+  position: relative;
+  overflow: hidden;
+}
+.ks-hp-cta-strip::before {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,208,96,0.12), transparent 70%);
+  pointer-events: none;
+}
+/* CTA text — matches shared .cta-text h3 (18px 700) and p (15px) */
+.ks-hp-cta-text h3 {
+  font-family: "Exo 2", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.ks-hp-cta-text h3 em { color: #E8D060; font-style: normal; }
+.ks-hp-cta-text p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.65;
+}
+
+/* Footer — matches shared .site-footer / .footer-* exactly */
+.ks-hp-footer {
+  background: var(--accent);
+  border-top: none;
+  padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px);
+}
+.ks-hp-footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+/* Image-based footer logo */
+.ks-hp-footer-logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: contain;
+  opacity: 0.85;
+}
+.ks-hp-footer-tagline { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: .1em; text-transform: uppercase; margin-top: 3px; }
+.ks-hp-footer-links { display: flex; gap: 4px; flex-wrap: wrap; }
+/* Footer links — 13px matches shared (corrected from 15px) */
+.ks-hp-footer-link {
+  font-family: "Exo 2", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  padding: .22rem .65rem;
+  border-radius: 99px;
+  transition: all .15s;
+}
+.ks-hp-footer-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
+.ks-hp-footer-copy { font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: .05em; width: 100%; text-align: center; margin-top: 4px; }
+
+/* ── HOMEPAGE RESPONSIVE ── */
+/* Tablet */
+@media (max-width: 768px) {
+  .ks-hp-sec-head { font-size: clamp(1.2rem, 4vw, 1.5rem); }
+  .ks-hp-two-col  { gap: clamp(16px, 3vw, 28px); }
+  .ks-hp-section > div { padding-top: 36px; padding-bottom: 36px; }
+}
+/* Mobile */
+@media (max-width: 700px) {
+  .ks-hp-two-col { grid-template-columns: 1fr; }
+  .ks-hp-cta-strip { flex-direction: column; text-align: center; align-items: center; }
+  .ks-hp-btn-ghost { width: 100%; justify-content: center; }
+  .ks-hp-footer-inner { justify-content: center; text-align: center; }
+  .ks-hp-footer-links { justify-content: center; }
+  .ks-hp-info-box { padding: 14px 16px; }
+}
+/* Small mobile */
+@media (max-width: 480px) {
+  .ks-hp-sec-head { font-size: clamp(1.1rem, 5vw, 1.35rem); }
+  .ks-hp-sec-label { font-size: 12px; }
+  .ks-hp-body-p { font-size: 14px; }
+  .ks-hp-step-text { font-size: 14px; }
+  .ks-hp-row-title { font-size: 14px; }
+  .ks-hp-cta-text h3 { font-size: 16px; }
+  .ks-hp-cta-text p { font-size: 14px; }
+  .ks-hp-btn-outline, .ks-hp-btn-ghost { font-size: 13px; padding: .5rem 1.2rem; }
+}
 </style>
 <body>
 
 <!-- STICKY NAV -->
 <nav class="snav" id="stickyNav" aria-label="Main navigation">
   <div class="snav-inner">
-    <a href="#" class="snav-logo">
-      <span class="sl-kam">KAM</span><span class="sl-sep">·</span><span class="sl-say">SAYARA</span>
+    <a href="#" class="snav-logo" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+      <img src="data:image/webp;base64,UklGRrQEAABXRUJQVlA4IKgEAADQFwCdASpmAEQAPj0cjESiIaETO2yQIAPEsYBpMggWncDs6eo/8q7x7zF/rd/qv8B78HoY/03mgdYB6AHlk+xp+1n7S+zdWDuPXywoBdXf6XyP/uXgD6dPI9/Wddz4pXyv+uflhqQ3GDRc/6r7Sfh5/ufKn8lf7D3B/4//Lf8x/aP3Y/vX//5Vj9ZiHo5+SRG8t82QlsWuiYsxGInrd1QSXqniT/dOYNRGQYeL8W/Oj7IzhUFDtsstjIwH/ZFK6r7/kk4Pq9dAAP7+J5L/+rQ//Vof/q0PtI+9E8QiWU2YhCdT14C2ghMPn1eQ0U+GmGcxLNhEnxlLUFBxbfv30il+gTE1DeWas6qlrKUfB07VcunL9xI+dYjVJ5pJHF8zfsbjxOPZ72F/D4FyQn+SeXX7Jfr/G5m9+n38YGENOO3u85Eq1neAmandMrqJh5BgkIZ8BH5RPVZ6X/pJAztDDFLaK4CRW3uGugoTzzu3gc0DtfOxc+y9agXkfT8pOHXKcPWD1O8G4LLxil9im9gZOLbRiZLoQPUOMPAUxIVong/F2LjkvcBp/6qKQs5Z/qBcxV80qKj6+wmH5ovKIKQFc9rTniMyssk7miTAGfGQafQS/ZusDF4gJmkZz4oPNHP2YX/hgBAq9MO26g8jNt2KPKWtxnwe5znsc3PdjnIJelswPOI0xeTDpgj7tb2qT5aEP0w01eicHPjt5l15b+aqk8MC7FTGGjb62o2QzOQcYY9h+NDjlEIBlAF8XpjxTdJ7ooBeqFeynOOQoA4rsbGwMfkF0CtMmVkqNdH5yixiBHxe12yU/blus4fp8H4DFtslBkAHeQX5vPF/Ff9i/m4o5khqairQZ7zdlXfCyxB/UfqVsMTl/Mqo/h/mgKBnvVoCmjvOGQayJzL/vHgE1OM0lfhC6GStEa+3KTL9Vqi3tZHKIaJy+bfzz4tVjASNU1rHQfJz0RX/7kJIjG6B8ed0Mn+kifeRu2LjAy1QxYQ2BuRq2ZRE6xRcjVeZlV0uqZ/HyKMvDWXLfTj9U6x2V0UoqZm5Q4KpZ/jcWP9TGZ6pZiVap5I3xtAp//OCNqe9z4WFN/2s5jp3WiydubJ3iaJPzPhdeeq25mwr/Ecq4UE7uUz0EboKIYWEgqj9cYLYb5zW9fk2UL63Q8mZ+9qijuiqW+/4yF96dQ2qWdEyYXE8hKexjjYf9cvA1AW4sDDLyfb3bN9zMbIHOZ3ePnnZGeVMpDOaiRV/zPvsz0Nque//TVZ8eSuXYsf10sOdavnEEOgNjMrMdXvwSnP/yPY7OKaqA5P9NhTVik2vWy0zaVjosC+nEs7NaRz+9mir6YCryivb4z72WnEYUsng3//DWeW25LKEj+AbjQqChZY5fyvANVGLv8z85bI3qw86+G3hBnlRyRIKRDqVzykY64M6ao81oi38S3yO+N8dIK5MHNjmkwYF/CRf7dxMi+br8E/8K7Zbp8EIAu8+QlYm4+haSh6WGlx/sl/dmpT7yG0oh/MMkJyjPuvF+eO07YQkEnroB5ujyTaiPjH8RitR44W1552gftCLVIfzdNgACU9fVA8It5hC8MPCs76a4SAA" alt="KamSayara" style="height:32px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+      <span style="display:flex;align-items:baseline;gap:2px;"><span class="sl-kam">KAM</span><span class="sl-sep">·</span><span class="sl-say">SAYARA</span></span>
     </a>
     <div class="snav-links">
-      <a href="#howworks" class="snav-link">How It Works</a>
-      <a href="#whoweare" class="snav-link">Who We Are</a>
-      <a href="#contact" class="snav-link">Contact</a>
+      <a href="https://www.kamsayara.com/how-it-works.html" class="snav-link">How It Works</a>
+      <a href="https://www.kamsayara.com/who-we-are.html" class="snav-link">Who We Are</a>
+      <a href="https://www.kamsayara.com/contact.html" class="snav-link">Contact</a>
     </div>
+    <button class="snav-cta" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'})">Check Car Price</button>
   </div>
 </nav>
 
@@ -7259,19 +7601,22 @@ body.ks-result-active #backToInputs { display: flex !important; }
   <!-- mob-tab-bar removed (Change 1) — unified result-panel replaces mobile card-stack UI -->
 </div>
 <div class="hero" id="heroTop">
-  <img class="hero-bg-photo" src="https://raw.githubusercontent.com/mbit0010/KamSayara/main/Car_Photo.png" alt="" aria-hidden="true" loading="eager">
+  <img class="hero-bg-photo" src="https://raw.githubusercontent.com/mbit0010/KamSayara/main/Kamsayara_1.png" alt="" aria-hidden="true" loading="eager">
   <div class="hero-inner">
     <nav class="hnav" aria-label="Site header">
-      <a href="#" class="wm">
-        <div class="wm-name">
-          <span class="wm-kam">KAM</span><span class="wm-sep">·</span><span class="wm-say">SAYARA</span>
+      <a href="#" class="wm" style="flex-direction:row;align-items:center;gap:10px;">
+        <img src="data:image/webp;base64,UklGRrQEAABXRUJQVlA4IKgEAADQFwCdASpmAEQAPj0cjESiIaETO2yQIAPEsYBpMggWncDs6eo/8q7x7zF/rd/qv8B78HoY/03mgdYB6AHlk+xp+1n7S+zdWDuPXywoBdXf6XyP/uXgD6dPI9/Wddz4pXyv+uflhqQ3GDRc/6r7Sfh5/ufKn8lf7D3B/4//Lf8x/aP3Y/vX//5Vj9ZiHo5+SRG8t82QlsWuiYsxGInrd1QSXqniT/dOYNRGQYeL8W/Oj7IzhUFDtsstjIwH/ZFK6r7/kk4Pq9dAAP7+J5L/+rQ//Vof/q0PtI+9E8QiWU2YhCdT14C2ghMPn1eQ0U+GmGcxLNhEnxlLUFBxbfv30il+gTE1DeWas6qlrKUfB07VcunL9xI+dYjVJ5pJHF8zfsbjxOPZ72F/D4FyQn+SeXX7Jfr/G5m9+n38YGENOO3u85Eq1neAmandMrqJh5BgkIZ8BH5RPVZ6X/pJAztDDFLaK4CRW3uGugoTzzu3gc0DtfOxc+y9agXkfT8pOHXKcPWD1O8G4LLxil9im9gZOLbRiZLoQPUOMPAUxIVong/F2LjkvcBp/6qKQs5Z/qBcxV80qKj6+wmH5ovKIKQFc9rTniMyssk7miTAGfGQafQS/ZusDF4gJmkZz4oPNHP2YX/hgBAq9MO26g8jNt2KPKWtxnwe5znsc3PdjnIJelswPOI0xeTDpgj7tb2qT5aEP0w01eicHPjt5l15b+aqk8MC7FTGGjb62o2QzOQcYY9h+NDjlEIBlAF8XpjxTdJ7ooBeqFeynOOQoA4rsbGwMfkF0CtMmVkqNdH5yixiBHxe12yU/blus4fp8H4DFtslBkAHeQX5vPF/Ff9i/m4o5khqairQZ7zdlXfCyxB/UfqVsMTl/Mqo/h/mgKBnvVoCmjvOGQayJzL/vHgE1OM0lfhC6GStEa+3KTL9Vqi3tZHKIaJy+bfzz4tVjASNU1rHQfJz0RX/7kJIjG6B8ed0Mn+kifeRu2LjAy1QxYQ2BuRq2ZRE6xRcjVeZlV0uqZ/HyKMvDWXLfTj9U6x2V0UoqZm5Q4KpZ/jcWP9TGZ6pZiVap5I3xtAp//OCNqe9z4WFN/2s5jp3WiydubJ3iaJPzPhdeeq25mwr/Ecq4UE7uUz0EboKIYWEgqj9cYLYb5zW9fk2UL63Q8mZ+9qijuiqW+/4yF96dQ2qWdEyYXE8hKexjjYf9cvA1AW4sDDLyfb3bN9zMbIHOZ3ePnnZGeVMpDOaiRV/zPvsz0Nque//TVZ8eSuXYsf10sOdavnEEOgNjMrMdXvwSnP/yPY7OKaqA5P9NhTVik2vWy0zaVjosC+nEs7NaRz+9mir6YCryivb4z72WnEYUsng3//DWeW25LKEj+AbjQqChZY5fyvANVGLv8z85bI3qw86+G3hBnlRyRIKRDqVzykY64M6ao81oi38S3yO+N8dIK5MHNjmkwYF/CRf7dxMi+br8E/8K7Zbp8EIAu8+QlYm4+haSh6WGlx/sl/dmpT7yG0oh/MMkJyjPuvF+eO07YQkEnroB5ujyTaiPjH8RitR44W1552gftCLVIfzdNgACU9fVA8It5hC8MPCs76a4SAA" alt="KamSayara — UAE Car Price Intelligence" style="height:clamp(48px,7vw,72px);width:auto;display:block;border-radius:8px;object-fit:contain;"/>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div class="wm-name">
+            <span class="wm-kam">KAM</span><span class="wm-sep">·</span><span class="wm-say">SAYARA</span>
+          </div>
+          <div class="wm-sub">Real price, no stories</div>
         </div>
-        <div class="wm-sub">Real price, no stories</div>
       </a>
       <div class="hnav-links">
-        <a href="#howworks" class="hnav-link">How It Works</a>
-        <a href="#whoweare" class="hnav-link">Who We Are</a>
-        <a href="#contact" class="hnav-link">Contact</a>
+        <a href="https://www.kamsayara.com/how-it-works.html" class="hnav-link">How It Works</a>
+        <a href="https://www.kamsayara.com/who-we-are.html" class="hnav-link">Who We Are</a>
+        <a href="https://www.kamsayara.com/contact.html" class="hnav-link">Contact</a>
       </div>
     </nav>
     <div class="hero-hl">
@@ -7681,6 +8026,120 @@ body.ks-result-active #backToInputs { display: flex !important; }
 <!-- Change 1: mob-overlay and mob-result-toast removed — single unified result-panel is the only render target -->
 
 </div><!-- /page -->
+<!-- ════════════════════════════════════════════════════════
+     SECTION 3 — HOW IT WORKS (preview)
+════════════════════════════════════════════════════════ -->
+<section class="ks-hp-section">
+  <div style="max-width:1120px;margin:0 auto;padding:48px clamp(16px,3vw,40px);">
+    <div class="ks-hp-two-col ks-hp-align-center">
+      <div>
+        <div class="ks-hp-sec-label">How It Works</div>
+        <h2 class="ks-hp-sec-head">Clear answers, <em>shwaya shwaya</em></h2>
+        <p class="ks-hp-body-p">
+          You enter basic details. The system scans live UAE listings,
+          removes duplicates and noise, and gives you a clean price range —
+          what is realistic, how demand looks, and where your car stands.
+        </p>
+        <div style="margin-top:20px;">
+          <a href="https://www.kamsayara.com/how-it-works.html" class="ks-hp-btn-outline">Learn More ›</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="ks-hp-step-card">
+          <div class="ks-hp-step-num">01</div>
+          <div class="ks-hp-step-text">Enter make, model, year, mileage</div>
+        </div>
+        <div class="ks-hp-step-card">
+          <div class="ks-hp-step-num">02</div>
+          <div class="ks-hp-step-text">System scans live UAE listings</div>
+        </div>
+        <div class="ks-hp-step-card">
+          <div class="ks-hp-step-num">03</div>
+          <div class="ks-hp-step-text">Duplicates and noise removed</div>
+        </div>
+        <div class="ks-hp-step-card ks-hp-step-gold">
+          <div class="ks-hp-step-num" style="color:var(--hp-gold);">04</div>
+          <div class="ks-hp-step-text">Clear price range + market position</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 4 — WHO WE ARE (preview)
+════════════════════════════════════════════════════════ -->
+<section class="ks-hp-section ks-hp-section-alt">
+  <div style="max-width:1120px;margin:0 auto;padding:48px clamp(16px,3vw,40px);">
+    <div class="ks-hp-two-col ks-hp-align-center">
+      <div class="ks-hp-info-box ks-hp-gold-tint">
+        <div class="ks-hp-sec-label" style="font-size:.72rem;margin-bottom:12px;">Our Position</div>
+        <div class="ks-hp-row-list">
+          <div class="ks-hp-row-item">
+            <div class="ks-hp-row-ico ks-hp-ico-red">✕</div>
+            <div class="ks-hp-row-title">Not a marketplace</div>
+          </div>
+          <div class="ks-hp-row-item">
+            <div class="ks-hp-row-ico ks-hp-ico-red">✕</div>
+            <div class="ks-hp-row-title">No promoted listings</div>
+          </div>
+          <div class="ks-hp-row-item" style="border-bottom:none;">
+            <div class="ks-hp-row-ico ks-hp-ico-green">✓</div>
+            <div class="ks-hp-row-title">Neutral — no sides taken</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ks-hp-sec-label">Who We Are</div>
+        <h2 class="ks-hp-sec-head">Built in the UAE. <em>Built for this market.</em></h2>
+        <p class="ks-hp-body-p">
+          A small team with real experience in technology, automotive, and how deals
+          actually happen here. Not a marketplace. No promoted listings.
+          No sides taken. Just <em class="ks-hp-aw">thiqah</em>.
+        </p>
+        <div style="margin-top:20px;">
+          <a href="https://www.kamsayara.com/who-we-are.html" class="ks-hp-btn-outline">Know More About Us ›</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 5 — CONTACT CTA
+════════════════════════════════════════════════════════ -->
+<section class="ks-hp-section">
+  <div style="max-width:1120px;margin:0 auto;padding:0 clamp(16px,3vw,40px) 56px;">
+    <div class="ks-hp-cta-strip">
+      <div class="ks-hp-cta-text">
+        <h3>Questions? <em>We read every message.</em></h3>
+        <p>If something feels unclear or you want to share feedback —
+        reach us through the contact form. <span class="ks-hp-aw">inshaAllah</span>, we respond within 1–2 days.</p>
+      </div>
+      <a href="https://www.kamsayara.com/contact.html" class="ks-hp-btn-ghost">Contact Us ›</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════ -->
+<footer class="ks-hp-footer">
+  <div class="ks-hp-footer-inner">
+    <div>
+      <img src="data:image/webp;base64,UklGRrQEAABXRUJQVlA4IKgEAADQFwCdASpmAEQAPj0cjESiIaETO2yQIAPEsYBpMggWncDs6eo/8q7x7zF/rd/qv8B78HoY/03mgdYB6AHlk+xp+1n7S+zdWDuPXywoBdXf6XyP/uXgD6dPI9/Wddz4pXyv+uflhqQ3GDRc/6r7Sfh5/ufKn8lf7D3B/4//Lf8x/aP3Y/vX//5Vj9ZiHo5+SRG8t82QlsWuiYsxGInrd1QSXqniT/dOYNRGQYeL8W/Oj7IzhUFDtsstjIwH/ZFK6r7/kk4Pq9dAAP7+J5L/+rQ//Vof/q0PtI+9E8QiWU2YhCdT14C2ghMPn1eQ0U+GmGcxLNhEnxlLUFBxbfv30il+gTE1DeWas6qlrKUfB07VcunL9xI+dYjVJ5pJHF8zfsbjxOPZ72F/D4FyQn+SeXX7Jfr/G5m9+n38YGENOO3u85Eq1neAmandMrqJh5BgkIZ8BH5RPVZ6X/pJAztDDFLaK4CRW3uGugoTzzu3gc0DtfOxc+y9agXkfT8pOHXKcPWD1O8G4LLxil9im9gZOLbRiZLoQPUOMPAUxIVong/F2LjkvcBp/6qKQs5Z/qBcxV80qKj6+wmH5ovKIKQFc9rTniMyssk7miTAGfGQafQS/ZusDF4gJmkZz4oPNHP2YX/hgBAq9MO26g8jNt2KPKWtxnwe5znsc3PdjnIJelswPOI0xeTDpgj7tb2qT5aEP0w01eicHPjt5l15b+aqk8MC7FTGGjb62o2QzOQcYY9h+NDjlEIBlAF8XpjxTdJ7ooBeqFeynOOQoA4rsbGwMfkF0CtMmVkqNdH5yixiBHxe12yU/blus4fp8H4DFtslBkAHeQX5vPF/Ff9i/m4o5khqairQZ7zdlXfCyxB/UfqVsMTl/Mqo/h/mgKBnvVoCmjvOGQayJzL/vHgE1OM0lfhC6GStEa+3KTL9Vqi3tZHKIaJy+bfzz4tVjASNU1rHQfJz0RX/7kJIjG6B8ed0Mn+kifeRu2LjAy1QxYQ2BuRq2ZRE6xRcjVeZlV0uqZ/HyKMvDWXLfTj9U6x2V0UoqZm5Q4KpZ/jcWP9TGZ6pZiVap5I3xtAp//OCNqe9z4WFN/2s5jp3WiydubJ3iaJPzPhdeeq25mwr/Ecq4UE7uUz0EboKIYWEgqj9cYLYb5zW9fk2UL63Q8mZ+9qijuiqW+/4yF96dQ2qWdEyYXE8hKexjjYf9cvA1AW4sDDLyfb3bN9zMbIHOZ3ePnnZGeVMpDOaiRV/zPvsz0Nque//TVZ8eSuXYsf10sOdavnEEOgNjMrMdXvwSnP/yPY7OKaqA5P9NhTVik2vWy0zaVjosC+nEs7NaRz+9mir6YCryivb4z72WnEYUsng3//DWeW25LKEj+AbjQqChZY5fyvANVGLv8z85bI3qw86+G3hBnlRyRIKRDqVzykY64M6ao81oi38S3yO+N8dIK5MHNjmkwYF/CRf7dxMi+br8E/8K7Zbp8EIAu8+QlYm4+haSh6WGlx/sl/dmpT7yG0oh/MMkJyjPuvF+eO07YQkEnroB5ujyTaiPjH8RitR44W1552gftCLVIfzdNgACU9fVA8It5hC8MPCs76a4SAA" alt="KamSayara" class="ks-hp-footer-logo-img"/>
+      <div class="ks-hp-footer-tagline">UAE Car Price Intelligence</div>
+    </div>
+    <nav class="ks-hp-footer-links">
+      <a href="https://www.kamsayara.com/how-it-works.html" class="ks-hp-footer-link">How It Works</a>
+      <a href="https://www.kamsayara.com/who-we-are.html" class="ks-hp-footer-link">Who We Are</a>
+      <a href="https://www.kamsayara.com/contact.html" class="ks-hp-footer-link">Contact</a>
+    </nav>
+    <p class="ks-hp-footer-copy">© <span id="ks-hp-yr"></span> KamSayara · UAE Car Valuation · All rights reserved</p>
+  </div>
+</footer>
+<script>document.getElementById('ks-hp-yr').textContent=new Date().getFullYear();</script>
+
 
 <script>
 /* ── DATA ─────────────────────────────────────────────────── */
@@ -8878,10 +9337,11 @@ function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPr
   return adj.slice(0,6);
 }
 
-function getDealBadgeInfo(askN,avg){
-  if(!avg)return null;
+function getDealBadgeInfo(askN,fmv){
+  // v67: use adjusted FMV (handshake) not raw market avg — fixes confidence-factor bypass bug
+  if(!fmv)return null;
   if(!askN)return{cls:'neutral',label:'Market Rate'};
-  const d=(askN-avg)/avg;
+  const d=(askN-fmv)/fmv;
   if(d<-.05)return{cls:'good',label:'Good Deal'};
   if(d<=.05) return{cls:'good',label:'Fair Price'};
   if(d<=.10) return{cls:'warn',label:'Slightly High'};
@@ -9130,7 +9590,9 @@ function buildOwnerhipCost(price,deprAmt,carYear,rtaFees){
   const maint=Math.round(price*.015/500)*500;
   // First-year cost = RTA fees + insurance ONLY (no car value, no depreciation)
   const rtaOnly = 170 + 420 + 350 + ins;
-  return{ins,maint,rtaOnly,deprAmt,fuelEst:900};
+  // Fuel: sedan default (9.5 L/100km), 1,500 km/month, AED 3.3/L — matches unified formula
+  const fuelEst=Math.round((9.5/100)*1500*3.3/10)*10;
+  return{ins,maint,rtaOnly,deprAmt,fuelEst};
 }
 
 function confPctToPos(conf){return Math.max(5,Math.min(95,conf));}
@@ -9947,7 +10409,16 @@ function ksComputeValuation(raw, inputs) {
   const basePrice  = askingPrice || handshake;
   const insEst     = Math.round(Math.max(1200, basePrice * 0.025) / 100) * 100;
   const maintEst   = R500(Math.max(1500, basePrice * 0.015));
-  const fuelEst    = 900; // monthly
+  // Fuel: unified formula — body-type L/100km × 1,500 km/month × AED 3.3/L
+  // Matches the ⛽ display block exactly. Constants: 1,500 km/mo, AED 3.3/L.
+  const _fuelBodyKey = (typeof ksDetectBodyType === 'function' ? ksDetectBodyType(_inBrand, _inModel) : '').toLowerCase();
+  let _fuelBase = _fuelBodyKey.includes('suv') || _fuelBodyKey.includes('offroad') ? 13.5
+                : _fuelBodyKey.includes('pickup') ? 14
+                : _fuelBodyKey.includes('van')    ? 12
+                : _fuelBodyKey.includes('sport') || _fuelBodyKey.includes('coupe') ? 10
+                : 9.5;
+  if(age > 10) _fuelBase += 1.5; else if(age > 6) _fuelBase += 0.8;
+  const fuelEst = Math.round((_fuelBase / 100) * 1500 * 3.3 / 10) * 10; // monthly AED, rounded to nearest 10
   const rtaReg     = 940; // RTA registration + transfer
   const runningTotal = rtaReg + insEst + maintEst + (fuelEst * 12);
 
@@ -10070,7 +10541,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const carAge   =Math.max(1,cy-carYear);
   // deprRate and deprAmt are computed by ksComputeValuation → _vc.depreciation.*
   const confLabel=conf>=75?'High Confidence':conf>=50?'Medium Confidence':'Low Confidence';
-  const dealInfo =getDealBadgeInfo(askN,avg);
+  // dealInfo computed after _vc (uses handshake, not raw avg) — see line below _vc init
   const sliderLow=low||Math.round(avg*.72);
   const sldrHigh =high||Math.round(avg*1.30);
   const offerPx  =askN||avg;
@@ -10105,7 +10576,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   };
 
   const adjItems=buildConditionAdjustments(specVal,km,condVal,carYear,avg);
-  const {vk,vl,para}=getBuddyVerdict(askN,avg,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai);
+  // v67: getBuddyVerdict moved below _vc so it uses handshake — see after _vc block
   const {green:gF,red:rF}=buildFlags(specVal,km,condVal,carYear,'','',accVal,ownVal,warVal);
 
   // ── v42 COMBINATION ENGINE: deterministic frontend valuation ─────────────
@@ -10129,6 +10600,10 @@ function buildResult(r,brand,model,year,mileage,asking){
   const rangeMin      = _vc.mktLow;
   const rangeMax      = _vc.mktHigh;
   const sweetSpot     = 0; // removed per v43 design
+  // v67 fix: dealInfo now uses handshake (confidence-adjusted FMV), not raw avg
+  const dealInfo = getDealBadgeInfo(askN, handshake);
+  // v67 fix: getBuddyVerdict uses handshake (confidence-adjusted FMV) not raw avg
+  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai);
 
   // Negotiation anchors from engine
   const nego = {
@@ -10352,13 +10827,15 @@ function buildResult(r,brand,model,year,mileage,asking){
     <div class="ks-deal-verdict ${
       _vc.verdict==='UNDERPRICED'?'ks-verdict-buy':
       _vc.verdict==='OVERPRICED'?'ks-verdict-nego':
+      (_vc.verdict==='FAIRLY PRICED'&&_vc.gap!==null&&_vc.gap>0)?'ks-verdict-nego':
       'ks-verdict-fair'}">
       <span class="ks-verdict-emoji">${_vc.verdictEmoji||'📊'}</span>
       <span class="ks-verdict-label">${
         _vc.verdict==='UNDERPRICED'?'Good Deal — Below Market':
-        _vc.verdict==='OVERPRICED'?'Overpriced — Negotiate Down':
+        _vc.verdict==='OVERPRICED'?'High-End — Negotiate Down':
         _vc.verdict==='NO STICKER'?'No Asking Price':
-        'Fairly Priced'
+        (_vc.gap!==null&&_vc.gap>0)?'Consider — Negotiation Zone':
+        'Fairly Priced — Good Value'
       }</span>
     </div>
 
@@ -10527,26 +11004,137 @@ function buildResult(r,brand,model,year,mileage,asking){
 
   <!-- ── 7. FOR BUYERS / FOR SELLERS ───────────────── -->
   <div class="ks-section ks-section-s7">
-    <div class="ks-s7-section-title">For Buyers &amp; For Sellers</div>
-    <div class="ks-s7-grid">
-      <div class="ks-s7-col">
-        <div class="ks-s7-head">For Buyers</div>
-        <div class="ks-s7-body">
-          ${askN&&askN>handshake?
-            `This car is priced <strong>AED ${(askN-handshake).toLocaleString()} above</strong> what the market says it's worth. Push back — you have room to negotiate. Start at AED ${(nego.offer||Math.round(handshake*0.93/500)*500).toLocaleString()} and aim to close around AED ${(nego.close||handshake).toLocaleString()}.`
-          :askN&&askN<=handshake*0.97?
-            `Good news — this is priced <strong>below FMV</strong>. Move fast, but still get a mechanic to inspect it before signing anything.`
-          :
-            `This car is fairly priced. Use the FMV of <strong>AED ${handshake.toLocaleString()}</strong> as your anchor and see if the seller will go slightly lower to close the deal.`
+    <div class="ks-s7-section-title">Negotiation Intelligence</div>
+    <div class="ks-s7-tabs" id="ks-s7-tabs">
+      <button class="ks-s7-tab ks-s7-tab-active" onclick="ksS7Tab(0,this)">🧑‍💼 For Buyers</button>
+      <button class="ks-s7-tab" onclick="ksS7Tab(1,this)">🏷️ For Sellers</button>
+    </div>
+    <div class="ks-s7-panels">
+
+      <!-- BUYER PANEL -->
+      <div class="ks-s7-panel" id="ks-s7-panel-0">
+        ${(()=>{
+          const isOver   = askN && askN > handshake;
+          const isUnder  = askN && askN <= handshake * 0.97;
+          const isFair   = askN && !isOver && !isUnder;
+          const noAsk    = !askN;
+          const overAmt  = askN ? (askN - handshake) : 0;
+          const underAmt = askN ? (handshake - askN) : 0;
+          const openOffer = nego.offer || Math.round(handshake * 0.93 / 500) * 500;
+          const closeTarget = nego.close || handshake;
+          const weaknesses = [
+            qs.fsh === false && 'no service history on file',
+            qs.accident === true && 'a recorded accident',
+            qs.singleOwner === false && 'multiple previous owners',
+            qs.warranty === false && 'no active warranty',
+            (condVal === 'Fair' || condVal === 'Poor') && `${condVal.toLowerCase()} condition`,
+          ].filter(Boolean);
+          const strengths = [
+            qs.fsh === true && 'full service history',
+            qs.singleOwner === true && 'single owner',
+            qs.warranty === true && 'active warranty',
+            (specVal === 'GCC' || specVal === 'GCC Spec') && 'GCC spec',
+          ].filter(Boolean);
+          const hasWeaknesses = weaknesses.length > 0;
+
+          let situationHtml = '';
+          if (noAsk) {
+            situationHtml = `<div class="ks-s7-situation ks-s7-sit-neutral">
+              <div class="ks-s7-sit-title">No Asking Price Entered</div>
+              <p>The fair market value for this vehicle is <strong>AED ${handshake.toLocaleString()}</strong>. If you're about to make an offer, open at <strong>AED ${openOffer.toLocaleString()}</strong> — that's roughly ${Math.round((1 - openOffer/handshake)*100)}% below FMV and gives you room to settle at market rate without overpaying.</p>
+              <p>Always benchmark any asking price against the FMV above before engaging. If the seller's number is more than 8% over AED ${handshake.toLocaleString()}, you have strong grounds to counter.</p>
+            </div>`;
+          } else if (isOver) {
+            situationHtml = `<div class="ks-s7-situation ks-s7-sit-warn">
+              <div class="ks-s7-sit-title">⚠ Asking Price is AED ${overAmt.toLocaleString()} Above Market</div>
+              <p>The seller is asking <strong>AED ${askN.toLocaleString()}</strong>, which is <strong>${Math.round(overAmt/handshake*100)}% above</strong> the fair market value of AED ${handshake.toLocaleString()}. You are being asked to pay a premium that the current UAE market does not support for this vehicle's profile.</p>
+              ${hasWeaknesses ? `<p>This car also has factors that reduce its fair value: <em>${weaknesses.join(', ')}</em>. These are legitimate, documentable reasons to push back on price — not just negotiation tactics.</p>` : ''}
+              <p><strong>Your opening offer:</strong> AED ${openOffer.toLocaleString()} — reference the market data and the vehicle's specific factors. <strong>Target close:</strong> AED ${closeTarget.toLocaleString()} (fair market value). <strong>Walk-away point:</strong> AED ${nego.walk ? nego.walk.toLocaleString() : Math.round(handshake*1.04/500)*500 |0} — do not exceed this.</p>
+              <p>If the seller refuses to move toward AED ${handshake.toLocaleString()}, there are comparable vehicles at fair market value in the UAE. Patience is your strongest asset.</p>
+            </div>`;
+          } else if (isUnder) {
+            situationHtml = `<div class="ks-s7-situation ks-s7-sit-good">
+              <div class="ks-s7-sit-title">✓ Priced AED ${underAmt.toLocaleString()} Below Market</div>
+              <p>At <strong>AED ${askN.toLocaleString()}</strong>, this is priced <strong>${Math.round(underAmt/handshake*100)}% below</strong> fair market value. This is a genuine opportunity — but act with awareness, not haste.</p>
+              ${hasWeaknesses ? `<p>The below-market price may partially reflect known issues: <em>${weaknesses.join(', ')}</em>. Make sure you factor these into your total cost of ownership before committing.</p>` : '<p>The vehicle profile does not show major red flags that would explain the lower price — which makes this a strong opportunity.</p>'}
+              <p><strong>What to do:</strong> Secure a pre-purchase inspection from a certified UAE mechanic before transferring ownership. If the inspection comes back clean, move quickly — this listing will attract other buyers. You can still test the seller with a small counter of AED ${Math.round(askN*0.97/500)*500 |0}, but be prepared to pay the asking price immediately.</p>
+            </div>`;
+          } else {
+            situationHtml = `<div class="ks-s7-situation ks-s7-sit-fair">
+              <div class="ks-s7-sit-title">Fair Market Pricing</div>
+              <p>At <strong>AED ${askN.toLocaleString()}</strong>, this vehicle is priced within 5% of its fair market value of AED ${handshake.toLocaleString()}. Both buyer and seller are in a reasonable position.</p>
+              ${hasWeaknesses ? `<p>However, the listing has factors that technically reduce its adjusted FMV: <em>${weaknesses.join(', ')}</em>. These give you a credible basis to negotiate a small reduction — around AED ${Math.round(askN*0.03/500)*500 |0} — without overreaching.</p>` : '<p>There are no major negative factors that would justify a large counter-offer, but a small 2–3% counter is always reasonable in the UAE market.</p>'}
+              <p><strong>Suggested approach:</strong> Open at AED ${openOffer.toLocaleString()} and settle at or below AED ${handshake.toLocaleString()}. Use the FMV figure as your anchor if the seller pushes back.</p>
+            </div>`;
           }
-        </div>
+
+          const checklistItems = [
+            { icon: '📋', text: 'Request a TAMM or Carfax UAE vehicle history report before signing' },
+            qs.fsh === false ? { icon: '🔧', text: 'Ask for workshop receipts or stamped service book to partially verify maintenance' } : null,
+            qs.accident === true ? { icon: '⚠️', text: 'Get an independent bodywork inspection — assess repair quality, not just disclosure' } : null,
+            { icon: '🔍', text: 'Insist on a pre-purchase inspection at a certified workshop — AED 200–400, worth every dirham' },
+            { icon: '📝', text: 'Confirm RTA transfer, Mulkiya, and insurance lapse date before the handover day' },
+            strengths.length ? { icon: '✓', text: `Positives to confirm at handover: ${strengths.join(', ')}` } : null,
+          ].filter(Boolean);
+
+          return situationHtml + `<div class="ks-s7-checklist">
+            <div class="ks-s7-checklist-title">Buyer Checklist</div>
+            ${checklistItems.map(i=>`<div class="ks-s7-check-item"><span class="ks-s7-check-icon">${i.icon}</span><span>${i.text}</span></div>`).join('')}
+          </div>`;
+        })()}
       </div>
-      <div class="ks-s7-col">
-        <div class="ks-s7-head">For Sellers</div>
-        <div class="ks-s7-body">
-          The market FMV for this car is <strong>AED ${handshake.toLocaleString()}</strong>. List at <strong>AED ${Math.round(handshake*1.05/500)*500 > rangeMax ? rangeMax.toLocaleString() : (Math.round(handshake*1.05/500)*500).toLocaleString()}</strong> to leave yourself negotiating room. ${specVal==='GCC'||specVal==='GCC Spec'?'GCC spec is a strong selling point — mention it.':''} ${qs.fsh?'Full service history is your best asset — keep the records handy.':''}
-        </div>
+
+      <!-- SELLER PANEL -->
+      <div class="ks-s7-panel" id="ks-s7-panel-1" style="display:none;">
+        ${(()=>{
+          const listPrice = Math.min(
+            Math.round(handshake * 1.07 / 500) * 500,
+            rangeMax || Math.round(handshake * 1.12 / 500) * 500
+          );
+          const floorPrice = Math.round(handshake * 0.97 / 500) * 500;
+          const askIsOver  = askN && askN > handshake * 1.08;
+          const askIsUnder = askN && askN < handshake * 0.95;
+          const hasPositives = [qs.fsh === true, qs.singleOwner === true, qs.warranty === true, specVal === 'GCC' || specVal === 'GCC Spec'].filter(Boolean).length;
+          const hasNegatives = [qs.fsh === false, qs.accident === true, qs.singleOwner === false].filter(Boolean).length;
+
+          let pricingAdvice = '';
+          if (askIsOver) {
+            pricingAdvice = `<div class="ks-s7-situation ks-s7-sit-warn">
+              <div class="ks-s7-sit-title">⚠ Current Ask May Be Too High</div>
+              <p>Your asking price of <strong>AED ${askN.toLocaleString()}</strong> is <strong>${Math.round((askN-handshake)/handshake*100)}% above</strong> the market FMV of AED ${handshake.toLocaleString()}. UAE buyers are price-aware — listings significantly above FMV attract fewer serious enquiries and typically sit for 60–90+ days before selling or being relisted lower.</p>
+              ${hasNegatives ? '<p>This vehicle also has factors that experienced buyers will use to negotiate hard. Pricing high with these disclosures makes it harder to defend the ask.</p>' : ''}
+              <p>Consider listing at <strong>AED ${listPrice.toLocaleString()}</strong> — this gives you genuine negotiation room while remaining within buyer consideration range. Your floor should be <strong>AED ${floorPrice.toLocaleString()}</strong>.</p>
+            </div>`;
+          } else if (askIsUnder) {
+            pricingAdvice = `<div class="ks-s7-situation ks-s7-sit-good">
+              <div class="ks-s7-sit-title">⬆ You May Be Leaving Money Behind</div>
+              <p>Your asking price of <strong>AED ${askN.toLocaleString()}</strong> is below the fair market value of AED ${handshake.toLocaleString()}. ${hasNegatives ? 'While the vehicle has some factors that reduce value, you can likely list higher and still attract buyers.' : 'This vehicle has a strong profile — you can price higher without losing buyer interest.'}</p>
+              <p>Try listing at <strong>AED ${listPrice.toLocaleString()}</strong>. Buyers will negotiate — but starting at FMV+5–7% lets you settle at fair value without leaving the deal.</p>
+            </div>`;
+          } else {
+            pricingAdvice = `<div class="ks-s7-situation ks-s7-sit-fair">
+              <div class="ks-s7-sit-title">Recommended Listing Strategy</div>
+              <p>The fair market value for this vehicle is <strong>AED ${handshake.toLocaleString()}</strong>. List at <strong>AED ${listPrice.toLocaleString()}</strong> — that's 5–7% above FMV, which is the standard negotiation buffer expected by UAE buyers. Expect offers starting around AED ${Math.round(handshake*0.94/500)*500 |0}; aim to settle at AED ${Math.round(handshake*1.01/500)*500 |0} or above.</p>
+              <p>Your floor price — the minimum you should accept — is <strong>AED ${floorPrice.toLocaleString()}</strong>. Do not go below this without a specific, documentable reason (urgent sale, identified fault, etc.).</p>
+            </div>`;
+          }
+
+          const sellerTips = [
+            (specVal === 'GCC' || specVal === 'GCC Spec') ? { icon: '✓', text: 'GCC spec is your strongest selling point in the UAE — state it clearly in the listing title' } : { icon: '⚠️', text: 'Non-GCC spec must be disclosed upfront — this limits your buyer pool; price accordingly' },
+            qs.fsh === true ? { icon: '✓', text: 'Full service history is your best asset — photograph every page and upload to the listing' } : { icon: '⚠️', text: 'No service history: gather any receipts, workshop stamps, or dealer records you have — partial documentation is better than none' },
+            qs.accident === true ? { icon: '⚠️', text: 'Accident history must be disclosed in the UAE. Price it in proactively — transparent sellers close faster than those who get caught hiding it' } : { icon: '✓', text: 'Clean accident history — highlight "no accidents" prominently in the listing' },
+            qs.singleOwner === true ? { icon: '✓', text: 'Single owner is a premium signal — mention it in the first line of your description' } : { icon: '💡', text: 'Multiple owners: be straightforward about ownership count — buyers will pull the vehicle history anyway' },
+            { icon: '📸', text: 'Take 20+ photos: exterior all angles, interior, dashboard, engine bay, boot, and tyre tread depth' },
+            { icon: '💡', text: 'List on Dubizzle and YallaMotor simultaneously — these are the two highest-traffic UAE car platforms' },
+          ];
+
+          return pricingAdvice + `<div class="ks-s7-checklist">
+            <div class="ks-s7-checklist-title">Seller Playbook</div>
+            ${sellerTips.map(i=>`<div class="ks-s7-check-item"><span class="ks-s7-check-icon">${i.icon}</span><span>${i.text}</span></div>`).join('')}
+          </div>`;
+        })()}
       </div>
+
     </div>
   </div>
 
@@ -12321,6 +12909,14 @@ function ksPirTab(n){
 }
 window.ksPirTab=ksPirTab;
 function pirSwitchTab(n){ ksPirTab(n); }
+
+/* ── BUYER/SELLER TAB SWITCHER (section 7) ── */
+function ksS7Tab(idx, btn){
+  document.querySelectorAll('.ks-s7-panel').forEach((p,i)=>{ p.style.display = i===idx ? 'flex' : 'none'; });
+  document.querySelectorAll('.ks-s7-tab').forEach(t=>t.classList.remove('ks-s7-tab-active'));
+  if(btn) btn.classList.add('ks-s7-tab-active');
+}
+window.ksS7Tab = ksS7Tab;
 
 
 /* ── TASK 12: Loading status label sync ── */

@@ -18,508 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-/* KamSayara — Shared Pages CSS
-   Used by: how-it-works.html, who-we-are.html, contact.html
-   All pages are self-contained (CSS embedded inline) for GitHub Pages deployment.
-*/
-
-:root {
-  --accent:#0A2540; --accent-h:#061828; --accent-2:#1A4A7A;
-  --accent-soft:rgba(10,37,64,0.07); --accent-line:rgba(10,37,64,0.16);
-  --accent-glow:rgba(10,37,64,0.22); --accent-glow2:rgba(10,37,64,0.10);
-  --gold:#C49A2A; --gold-light:#E8D060;
-  --ink:#1A2738; --ink-soft:#2D3F55; --muted:#4B5E75;
-  --border:#DEE3EB; --surface:#F8F9FB; --surface-2:#F2F4F8; --white:#fff;
-  --good:#1A8C6B; --good-bg:rgba(26,140,107,0.08); --good-line:rgba(26,140,107,0.20);
-  --bad:#C0392B;  --bad-bg:rgba(192,57,43,0.08);   --bad-line:rgba(192,57,43,0.20);
-  --warn:#B8780A; --warn-bg:rgba(184,120,10,0.08); --warn-line:rgba(184,120,10,0.20);
-  --err:#C0392B;  --err-bg:rgba(192,57,43,0.06);
-  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
-  --ease:cubic-bezier(0.16,1,0.3,1);
-  --spring:cubic-bezier(0.34,1.56,0.64,1);
-  --sh-card:0 2px 8px rgba(10,37,64,0.08),0 12px 32px rgba(10,37,64,0.10),inset 0 1px 0 rgba(255,255,255,0.7);
-  --sh-btn:0 6px 20px var(--accent-glow),0 2px 6px rgba(0,0,0,0.12);
-}
-
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;max-width:100vw;overflow-x:hidden;}
-body{
-  font-family:"Exo 2",system-ui,sans-serif;
-  background:#F8F9FB;
-  color:var(--ink);line-height:1.55;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  text-rendering:optimizeLegibility;
-  min-height:100vh;
-  max-width:100vw;
-  overflow-x:hidden;
-  font-size:15px;
-}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  opacity:.35;
-}
-
-/* ══════════════════════════════════════
-   HERO / NAV
-══════════════════════════════════════ */
-.page-hero{
-  width:100%;position:relative;overflow:hidden;
-  background:#0A2540;
-}
-.page-hero::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:linear-gradient(180deg,rgba(10,37,64,0.55) 0%,rgba(10,37,64,0.35) 60%,rgba(10,37,64,0.60) 100%);
-}
-.page-hero::after{content:none!important;display:none!important;}
-
-.hero-inner{
-  position:relative;z-index:2;max-width:1120px;margin:0 auto;
-  padding:clamp(4px,1vw,10px) clamp(16px,3vw,32px) clamp(28px,4vw,44px);
-  box-sizing:border-box;width:100%;
-}
-
-/* ── NAV ── */
-.hnav{display:flex;align-items:center;justify-content:space-between;padding:clamp(14px,2.5vw,22px) 0 clamp(10px,2vw,18px);gap:8px;min-width:0;}
-.wm{display:flex;flex-direction:column;gap:2px;text-decoration:none;flex-shrink:0;}
-.wm-name{display:flex;align-items:baseline;}
-.wm-kam{font-family:"Orbitron",sans-serif;font-size:24px;font-weight:900;color:#E8D060;letter-spacing:-.01em;text-shadow:0 2px 18px rgba(0,0,0,0.3);white-space:nowrap;}
-.wm-sep{font-size:18px;color:rgba(232,208,96,0.3);margin:0 2px;}
-.wm-say{font-family:"Orbitron",sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;}
-.wm-sub{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:.14em;text-transform:uppercase;}
-
-.hnav-links{display:flex;align-items:center;gap:0;margin-left:auto;flex-shrink:1;min-width:0;}
-.hnav-link{
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:600;
-  letter-spacing:.05em;text-transform:uppercase;
-  color:rgba(255,255,255,0.75);text-decoration:none;
-  padding:.28rem clamp(.5rem,1vw,.78rem);border-radius:99px;border:1px solid transparent;
-  transition:all .18s;white-space:nowrap;
-}
-.hnav-link:hover,.hnav-link.active{color:#fff;border-color:rgba(255,255,255,0.20);background:rgba(255,255,255,0.09);}
-.hnav-link.active{color:#E8D060;border-color:rgba(232,208,96,0.25);}
-.hnav-cta-btn{
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;
-  background:#E8D060;color:#0A2540;text-decoration:none;
-  padding:.3rem clamp(.7rem,1.2vw,1rem);border-radius:99px;
-  transition:all .18s;white-space:nowrap;flex-shrink:0;margin-left:6px;
-  box-shadow:0 2px 12px rgba(232,208,96,0.30);
-}
-.hnav-cta-btn:hover{background:#fff;transform:translateY(-1px);}
-
-/* ── HERO HEADLINE ── */
-.hero-hl{
-  padding:clamp(8px,2vw,20px) 0 clamp(4px,1.5vw,12px);
-  display:flex;flex-direction:column;align-items:flex-start;gap:clamp(8px,1.8vw,16px);
-  width:100%;
-}
-.hero-eyebrow{
-  display:flex;align-items:center;gap:8px;
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.55);
-  animation:hIn .6s var(--ease) both;
-}
-.dot{width:4px;height:4px;border-radius:50%;background:#E8D060;opacity:.7;}
-.hero-tag{
-  font-family:"Exo 2",sans-serif;
-  font-size:clamp(2rem,5vw,3.2rem);
-  font-weight:700;color:#fff;line-height:1.15;margin:0;
-  text-shadow:0 2px 24px rgba(0,0,0,0.25);letter-spacing:.01em;
-  animation:hIn .7s .05s var(--ease) both;
-}
-.hero-tag em{color:#E8D060;font-style:normal;}
-.hero-sub{
-  font-size:15px;color:rgba(255,255,255,0.72);
-  line-height:1.65;width:100%;max-width:100%;
-  animation:hIn .7s .10s var(--ease) both;
-}
-.hero-trust{
-  display:flex;align-items:center;gap:clamp(8px,2.5vw,24px);flex-wrap:wrap;width:100%;
-  animation:hIn .7s .15s var(--ease) both;
-}
-.ht{display:flex;align-items:center;gap:5px;font-size:13px;color:rgba(255,255,255,0.80);letter-spacing:.04em;}
-.htd{width:5px;height:5px;border-radius:50%;background:rgba(232,208,96,0.7);flex-shrink:0;}
-@keyframes hIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-
-/* ══════════════════════════════════════
-   PAGE BODY
-══════════════════════════════════════ */
-.page-body{
-  position:relative;z-index:1;
-  max-width:1120px;margin:0 auto;
-  padding:clamp(28px,4vw,52px) clamp(16px,3vw,32px) clamp(40px,6vw,80px);
-  display:flex;flex-direction:column;gap:clamp(28px,4vw,48px);
-}
-
-/* ── TWO-COL ── */
-.two-col{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:clamp(20px,3vw,36px);
-  align-items:start;
-}
-.two-col.align-center{align-items:center;}
-@media(max-width:700px){
-  .two-col{grid-template-columns:1fr;}
-}
-
-/* ── SECTION LABELS ── */
-.sec-label{
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
-  display:flex;align-items:center;gap:.55rem;margin-bottom:8px;
-}
-.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--accent-line),transparent);}
-.sec-head{
-  font-family:"Exo 2",sans-serif;
-  font-size:24px;
-  font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:14px;
-}
-.sec-head em{color:var(--accent-2);font-style:normal;}
-.body-p{font-size:15px;color:var(--ink-soft);line-height:1.7;}
-
-/* ── DIVIDER ── */
-.divider{
-  border:none;border-top:1px solid var(--border);
-  margin:clamp(8px,2vw,16px) 0;opacity:.6;
-}
-
-/* ── CHIP ROW ── */
-.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;}
-.chip{
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:700;
-  letter-spacing:.06em;padding:3px 10px;border-radius:99px;
-  background:var(--surface-2);border:1px solid var(--border);color:var(--ink-soft);
-  display:flex;align-items:center;gap:4px;
-}
-.cdot{width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.5;}
-.gold-chip{background:rgba(196,154,42,0.08);border-color:rgba(196,154,42,0.25);color:var(--gold);}
-.good-chip{background:var(--good-bg);border-color:var(--good-line);color:var(--good);}
-
-/* ── BADGES ── */
-.badge{
-  font-family:"Exo 2",sans-serif;font-size:11px;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:2px 7px;border-radius:99px;
-}
-.badge.green{background:var(--good-bg);color:var(--good);border:1px solid var(--good-line);}
-.badge.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line);}
-.badge.red{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-line);}
-
-/* ── CARDS ── */
-.ks-card{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:var(--r-xl);
-  box-shadow:var(--sh-card);
-}
-.card-hdr{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  padding:clamp(12px,1.8vw,16px) clamp(14px,2vw,22px);
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(135deg,var(--surface) 0%,var(--white) 100%);
-  border-radius:var(--r-xl) var(--r-xl) 0 0;
-}
-.card-hdr-title{
-  font-family:"Exo 2",sans-serif;font-size:15px;font-weight:800;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
-}
-.card-hdr-badge{
-  font-family:"Exo 2",sans-serif;font-size:11px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  background:var(--accent-soft);color:var(--accent);
-  border:1px solid var(--accent-line);border-radius:99px;
-  padding:2px 8px;white-space:nowrap;
-}
-.card-body{padding:clamp(14px,2vw,20px) clamp(14px,2vw,22px);}
-
-/* ── ALGO BOX ── */
-.algo-box{
-  background:var(--surface-2);border-radius:var(--r-sm);
-  padding:10px 14px;border-left:3px solid var(--accent-line);
-}
-.algo-box h4{
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;
-}
-.algo-box p{font-size:15px;color:var(--ink-soft);line-height:1.6;}
-
-/* ── ROW LIST ── */
-.row-list{display:flex;flex-direction:column;padding:0 clamp(14px,2vw,22px);}
-.row-item{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:clamp(11px,1.8vw,15px) 0;
-  border-bottom:1px solid var(--border);
-}
-.row-item:last-child{border-bottom:none;}
-.row-ico{
-  width:30px;height:30px;border-radius:var(--r-sm);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;
-}
-.row-ico.green{background:var(--good-bg);border:1px solid var(--good-line);color:var(--good);}
-.row-ico.blue{background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);}
-.row-ico.gold{background:rgba(196,154,42,0.08);border:1px solid rgba(196,154,42,0.25);color:var(--gold);}
-.row-ico.red{background:var(--bad-bg);border:1px solid var(--bad-line);color:var(--bad);}
-.row-title{font-family:"Exo 2",sans-serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px;}
-.row-desc{font-size:15px;color:var(--ink-soft);line-height:1.6;}
-
-/* ── FEAT GRID ── */
-.feat-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:clamp(12px,2vw,20px);
-}
-.feat-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:var(--r-lg);padding:clamp(16px,2.2vw,24px);
-  box-shadow:0 2px 8px rgba(10,37,64,0.06);
-  position:relative;overflow:hidden;
-  transition:transform .22s var(--ease),box-shadow .22s var(--ease);
-}
-.feat-card::before{
-  content:'';position:absolute;top:0;right:0;
-  width:80px;height:80px;
-  background:radial-gradient(circle at 100% 0%,var(--accent-glow2),transparent 70%);
-  pointer-events:none;
-}
-.feat-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(10,37,64,0.12);}
-.feat-num{
-  font-family:"Orbitron",sans-serif;font-size:13px;font-weight:700;
-  color:var(--accent-line);letter-spacing:.15em;margin-bottom:8px;
-}
-.feat-icon{font-size:24px;margin-bottom:10px;}
-.feat-title{
-  font-family:"Exo 2",sans-serif;font-size:18px;font-weight:700;
-  color:var(--ink);margin-bottom:6px;
-}
-.feat-desc{font-size:15px;color:var(--ink-soft);line-height:1.65;}
-
-/* ── INFO BOX ── */
-.info-box{
-  background:var(--surface-2);border:1px solid var(--border);
-  border-radius:var(--r-xl);padding:clamp(16px,2vw,22px);
-}
-.info-box.gold-tint{
-  background:linear-gradient(135deg,rgba(196,154,42,0.06) 0%,var(--surface-2) 100%);
-  border-color:rgba(196,154,42,0.2);
-}
-
-/* ── STAT ROW ── */
-.stat-row{display:flex;gap:clamp(16px,3vw,28px);flex-wrap:wrap;}
-.stat-item{display:flex;flex-direction:column;gap:3px;}
-.stat-val{
-  font-family:"Orbitron",sans-serif;font-size:18px;
-  font-weight:700;color:var(--accent);
-}
-.stat-val span{font-family:"Exo 2",sans-serif;font-size:13px;color:var(--muted);font-weight:600;margin-left:2px;}
-.stat-lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-
-/* ── NXT BUTTONS ── */
-.nxt-btn{
-  display:flex;align-items:center;gap:10px;
-  padding:clamp(10px,1.5vw,14px) clamp(12px,1.8vw,16px);
-  border-radius:var(--r-md);
-  background:var(--white);border:1px solid var(--border);
-  cursor:pointer;text-align:left;font-family:"Exo 2",sans-serif;
-  text-decoration:none;
-  transition:all .18s;
-  box-shadow:0 1px 4px rgba(10,37,64,0.05);
-}
-.nxt-btn:hover{border-color:rgba(10,37,64,0.22);background:var(--accent-soft);transform:translateX(3px);}
-.nxt-ico{
-  width:32px;height:32px;border-radius:8px;
-  background:var(--surface-2);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-}
-.nxt-body{display:flex;flex-direction:column;gap:2px;flex:1;}
-.nxt-t{font-size:15px;font-weight:700;color:var(--ink);}
-.nxt-s{font-size:13px;color:var(--muted);line-height:1.4;}
-.nxt-arr{color:var(--muted);font-size:18px;margin-left:auto;flex-shrink:0;}
-
-/* ── CTA STRIP ── */
-.cta-strip{
-  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
-  border-radius:var(--r-xl);padding:clamp(22px,3.5vw,36px) clamp(20px,3vw,36px);
-  display:flex;align-items:center;justify-content:space-between;gap:24px;
-  flex-wrap:wrap;
-  box-shadow:0 8px 32px rgba(10,37,64,0.22);
-  position:relative;overflow:hidden;
-}
-.cta-strip::before{
-  content:'';position:absolute;right:-40px;top:-40px;
-  width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle,rgba(232,208,96,0.12) 0%,transparent 70%);
-  pointer-events:none;
-}
-.cta-text h3{
-  font-family:"Exo 2",sans-serif;font-size:18px;
-  font-weight:700;color:#fff;margin-bottom:5px;
-}
-.cta-text h3 em{color:#E8D060;font-style:normal;}
-.cta-text p{font-size:15px;color:rgba(255,255,255,0.7);}
-
-/* ── BUTTONS ── */
-.btn-gold{
-  font-family:"Exo 2",sans-serif;font-size:15px;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;
-  background:#E8D060;color:#0A2540;
-  border:none;border-radius:99px;
-  padding:.65rem 1.6rem;cursor:pointer;
-  text-decoration:none;display:inline-flex;align-items:center;
-  transition:all .2s var(--ease);white-space:nowrap;flex-shrink:0;
-  box-shadow:0 4px 16px rgba(232,208,96,0.35);
-}
-.btn-gold:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,208,96,0.40);}
-.btn-outline{
-  font-family:"Exo 2",sans-serif;font-size:15px;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;
-  background:transparent;color:var(--accent);
-  border:1.5px solid var(--accent-line);border-radius:99px;
-  padding:.55rem 1.4rem;cursor:pointer;
-  text-decoration:none;display:inline-flex;align-items:center;
-  transition:all .18s;
-}
-.btn-outline:hover{background:var(--accent-soft);}
-
-/* ── FOOTER ── */
-.site-footer{
-  background:var(--accent);
-  border-top:1px solid rgba(255,255,255,0.06);
-  padding:clamp(24px,4vw,40px) clamp(16px,3vw,32px);
-  position:relative;z-index:1;
-}
-.footer-inner{
-  max-width:1120px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:16px;
-}
-.footer-logo{
-  font-family:"Orbitron",sans-serif;font-size:18px;font-weight:900;
-  display:flex;align-items:baseline;gap:1px;
-}
-.fl-kam{color:#E8D060;}
-.fl-sep{color:rgba(232,208,96,0.3);margin:0 2px;}
-.fl-say{font-size:13px;color:rgba(255,255,255,0.5);letter-spacing:.15em;text-transform:uppercase;}
-.footer-tagline{font-size:13px;color:rgba(255,255,255,0.35);letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
-.footer-links{display:flex;gap:4px;flex-wrap:wrap;}
-.footer-link{
-  font-family:"Exo 2",sans-serif;font-size:15px;font-weight:600;
-  letter-spacing:.06em;text-transform:uppercase;
-  color:rgba(255,255,255,0.55);text-decoration:none;
-  padding:.22rem .65rem;border-radius:99px;
-  transition:all .15s;
-}
-.footer-link:hover{color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.07);}
-.footer-copy{font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:.05em;width:100%;text-align:center;margin-top:4px;}
-
-/* ── ANIMATIONS ── */
-.anim{
-  opacity:0;transform:translateY(18px);
-  animation:pageIn .55s var(--ease) forwards;
-}
-.anim:nth-child(1){animation-delay:.05s;}
-.anim:nth-child(2){animation-delay:.12s;}
-.anim:nth-child(3){animation-delay:.18s;}
-.anim:nth-child(4){animation-delay:.24s;}
-.anim:nth-child(5){animation-delay:.30s;}
-.anim:nth-child(6){animation-delay:.36s;}
-@keyframes pageIn{to{opacity:1;transform:none;}}
-
-/* ── CONTACT FORM INNER ── */
-.contact-form-inner{display:flex;flex-direction:column;gap:0;flex:1;}
-
-/* ── ARABIC WORD STYLING ── */
-.aw{color:var(--gold);font-weight:600;}
-
-/* ══════════════════════════════════════
-   CONTACT PAGE SPECIFICS
-══════════════════════════════════════ */
-.form-grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px 14px;
-}
-.form-grid-2 .full{grid-column:1/-1;}
-.field-wrap{display:flex;flex-direction:column;gap:5px;}
-.field-wrap label{
-  font-family:"Exo 2",sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
-}
-.field-wrap input,
-.field-wrap select,
-.field-wrap textarea{
-  background:var(--surface-2);
-  border:1.5px solid var(--border);
-  border-radius:var(--r-md);
-  padding:.5rem .75rem;
-  font-family:"Exo 2",sans-serif;
-  font-size:15px;font-weight:500;
-  color:var(--ink);
-  outline:none;width:100%;
-  transition:border-color .18s,box-shadow .18s;
-  -webkit-appearance:none;appearance:none;
-}
-.field-wrap input::placeholder,
-.field-wrap textarea::placeholder{color:var(--muted);}
-.field-wrap input:focus,
-.field-wrap select:focus,
-.field-wrap textarea:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px var(--accent-glow2);
-  background:var(--white);
-}
-.field-wrap select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234B5E75'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right .75rem center;
-  padding-right:2.2rem;cursor:pointer;
-}
-.field-wrap textarea{resize:none;}
-.form-note{font-size:13px;color:var(--muted);line-height:1.6;text-align:center;}
-
-.success-wrap{
-  display:none;flex-direction:column;align-items:center;text-align:center;
-  padding:24px 16px;gap:10px;flex:1;
-}
-.success-wrap.on{display:flex;}
-.success-ico{
-  width:50px;height:50px;border-radius:50%;
-  background:var(--good-bg);border:2px solid var(--good-line);
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;color:var(--good);
-}
-.success-wrap h3{font-family:"Exo 2",sans-serif;font-size:18px;font-weight:700;color:var(--ink);}
-.success-wrap p{font-size:15px;color:var(--ink-soft);line-height:1.65;max-width:320px;}
-
-@media(max-width:520px){
-  .form-grid-2{grid-template-columns:1fr;}
-}
-
-/* ── RESPONSIVE ── */
-@media(max-width:700px){
-  .hero-hl{align-items:center;text-align:center;}
-  .hero-tag{text-align:center;}
-  .hero-sub{text-align:center;}
-  .hero-trust{justify-content:center;}
-  .feat-grid{grid-template-columns:1fr 1fr;}
-  .footer-inner{justify-content:center;text-align:center;}
-  .footer-links{justify-content:center;}
-  .cta-strip{flex-direction:column;text-align:center;}
-}
-@media(max-width:480px){
-  .hnav-links{flex-wrap:wrap;justify-content:flex-end;}
-  .hnav-link{font-size:13px!important;padding:.22rem .5rem!important;}
-  .feat-grid{grid-template-columns:1fr;}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
-}
-
-  </style>
+  <link rel="stylesheet" href="ks-pages.css"/>
 </head>
 <body>
 
@@ -527,10 +26,13 @@ body::before{
   <div class="hero-inner">
     <nav class="hnav">
       <a href="https://www.kamsayara.com/" class="wm">
-        <div class="wm-name">
-          <span class="wm-kam">Kam</span><span class="wm-sep">·</span><span class="wm-say">Sayara</span>
+        <img src="data:image/webp;base64,UklGRrQEAABXRUJQVlA4IKgEAADQFwCdASpmAEQAPj0cjESiIaETO2yQIAPEsYBpMggWncDs6eo/8q7x7zF/rd/qv8B78HoY/03mgdYB6AHlk+xp+1n7S+zdWDuPXywoBdXf6XyP/uXgD6dPI9/Wddz4pXyv+uflhqQ3GDRc/6r7Sfh5/ufKn8lf7D3B/4//Lf8x/aP3Y/vX//5Vj9ZiHo5+SRG8t82QlsWuiYsxGInrd1QSXqniT/dOYNRGQYeL8W/Oj7IzhUFDtsstjIwH/ZFK6r7/kk4Pq9dAAP7+J5L/+rQ//Vof/q0PtI+9E8QiWU2YhCdT14C2ghMPn1eQ0U+GmGcxLNhEnxlLUFBxbfv30il+gTE1DeWas6qlrKUfB07VcunL9xI+dYjVJ5pJHF8zfsbjxOPZ72F/D4FyQn+SeXX7Jfr/G5m9+n38YGENOO3u85Eq1neAmandMrqJh5BgkIZ8BH5RPVZ6X/pJAztDDFLaK4CRW3uGugoTzzu3gc0DtfOxc+y9agXkfT8pOHXKcPWD1O8G4LLxil9im9gZOLbRiZLoQPUOMPAUxIVong/F2LjkvcBp/6qKQs5Z/qBcxV80qKj6+wmH5ovKIKQFc9rTniMyssk7miTAGfGQafQS/ZusDF4gJmkZz4oPNHP2YX/hgBAq9MO26g8jNt2KPKWtxnwe5znsc3PdjnIJelswPOI0xeTDpgj7tb2qT5aEP0w01eicHPjt5l15b+aqk8MC7FTGGjb62o2QzOQcYY9h+NDjlEIBlAF8XpjxTdJ7ooBeqFeynOOQoA4rsbGwMfkF0CtMmVkqNdH5yixiBHxe12yU/blus4fp8H4DFtslBkAHeQX5vPF/Ff9i/m4o5khqairQZ7zdlXfCyxB/UfqVsMTl/Mqo/h/mgKBnvVoCmjvOGQayJzL/vHgE1OM0lfhC6GStEa+3KTL9Vqi3tZHKIaJy+bfzz4tVjASNU1rHQfJz0RX/7kJIjG6B8ed0Mn+kifeRu2LjAy1QxYQ2BuRq2ZRE6xRcjVeZlV0uqZ/HyKMvDWXLfTj9U6x2V0UoqZm5Q4KpZ/jcWP9TGZ6pZiVap5I3xtAp//OCNqe9z4WFN/2s5jp3WiydubJ3iaJPzPhdeeq25mwr/Ecq4UE7uUz0EboKIYWEgqj9cYLYb5zW9fk2UL63Q8mZ+9qijuiqW+/4yF96dQ2qWdEyYXE8hKexjjYf9cvA1AW4sDDLyfb3bN9zMbIHOZ3ePnnZGeVMpDOaiRV/zPvsz0Nque//TVZ8eSuXYsf10sOdavnEEOgNjMrMdXvwSnP/yPY7OKaqA5P9NhTVik2vWy0zaVjosC+nEs7NaRz+9mir6YCryivb4z72WnEYUsng3//DWeW25LKEj+AbjQqChZY5fyvANVGLv8z85bI3qw86+G3hBnlRyRIKRDqVzykY64M6ao81oi38S3yO+N8dIK5MHNjmkwYF/CRf7dxMi+br8E/8K7Zbp8EIAu8+QlYm4+haSh6WGlx/sl/dmpT7yG0oh/MMkJyjPuvF+eO07YQkEnroB5ujyTaiPjH8RitR44W1552gftCLVIfzdNgACU9fVA8It5hC8MPCs76a4SAA" alt="KamSayara — UAE Car Price Intelligence" class="wm-logo-img"/>
+        <div class="wm-text">
+          <div class="wm-name">
+            <span class="wm-kam">Kam</span><span class="wm-sep">·</span><span class="wm-say">Sayara</span>
+          </div>
+          <span class="wm-sub">UAE Car Price Intelligence</span>
         </div>
-        <span class="wm-sub">UAE Car Price Intelligence</span>
       </a>
       <div class="hnav-links">
         <a href="https://www.kamsayara.com/" class="hnav-link">Home</a>
@@ -543,7 +45,7 @@ body::before{
     <div class="hero-hl">
       <div class="hero-eyebrow"><span class="dot"></span>Get in Touch<span class="dot"></span></div>
       <h1 class="hero-tag">We read every <em>message</em></h1>
-      <p class="hero-sub">If something in the valuation feels unclear, or if you would like to share feedback — use the form below to reach us. All communication is through this form to keep things simple and organised. Your input helps make KamSayara better, <em style="color:#E8D060;font-style:normal;">shwaya shwaya</em>.</p>
+      <p class="hero-sub">If something in the valuation feels unclear, or if you would like to share feedback — use the form below to reach us. Your input helps make KamSayara better, <em style="color:#E8D060;font-style:normal;">shwaya shwaya</em>.</p>
       <div class="hero-trust">
         <span class="ht"><span class="htd"></span>Every message reviewed by a real person</span>
         <span class="ht"><span class="htd"></span>Response within 1–2 days, <span class="aw">inshaAllah</span></span>
@@ -557,7 +59,6 @@ body::before{
 
   <div class="two-col" style="align-items:stretch;">
 
-    <!-- FORM CARD -->
     <div class="ks-card anim" style="overflow:hidden;display:flex;flex-direction:column;height:100%;">
       <div class="card-hdr">
         <span class="card-hdr-title">Send a Message</span>
@@ -595,7 +96,7 @@ body::before{
 
             <div class="field-wrap full" style="flex:1;display:flex;flex-direction:column;">
               <label for="fmsg">Your Message</label>
-              <textarea id="fmsg" name="message" placeholder="Share whatever is on your mind — we read every word…" style="height:300px;min-height:300px;resize:vertical;" required minlength="10"></textarea>
+              <textarea id="fmsg" name="message" placeholder="Share whatever is on your mind — we read every word…" style="height:280px;min-height:200px;resize:vertical;" required minlength="10"></textarea>
             </div>
 
           </div>
@@ -613,7 +114,6 @@ body::before{
 
         </form>
 
-        <!-- Success state -->
         <div class="success-wrap" id="successMsg">
           <div class="success-ico">✓</div>
           <h3>Message received.</h3>
@@ -632,10 +132,8 @@ body::before{
       </div>
     </div>
 
-    <!-- RIGHT COLUMN -->
     <div style="display:flex;flex-direction:column;gap:14px;">
 
-      <!-- How We Handle Messages -->
       <div class="ks-card anim" style="overflow:hidden;">
         <div class="card-hdr">
           <span class="card-hdr-title">How We Handle Messages</span>
@@ -665,7 +163,6 @@ body::before{
         </div>
       </div>
 
-      <!-- Good Topics -->
       <div class="info-box anim">
         <div class="sec-label" style="font-size:13px;margin-bottom:12px;">Good Topics to Send</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
@@ -700,10 +197,9 @@ body::before{
         </div>
       </div>
 
-    </div><!-- /right column -->
-  </div><!-- /two-col -->
+    </div>
+  </div>
 
-  <!-- CTA -->
   <div class="cta-strip anim">
     <div class="cta-text">
       <h3>Want to check a car's market price?</h3>
@@ -712,14 +208,12 @@ body::before{
     <a href="https://www.kamsayara.com/" class="btn-gold">Check Car Price Now ›</a>
   </div>
 
-</div><!-- /page-body -->
+</div>
 
 <footer class="site-footer">
   <div class="footer-inner">
     <div>
-      <div class="footer-logo">
-        <span class="fl-kam">Kam</span><span class="fl-sep">·</span><span class="fl-say">Sayara</span>
-      </div>
+      <img src="data:image/webp;base64,UklGRrQEAABXRUJQVlA4IKgEAADQFwCdASpmAEQAPj0cjESiIaETO2yQIAPEsYBpMggWncDs6eo/8q7x7zF/rd/qv8B78HoY/03mgdYB6AHlk+xp+1n7S+zdWDuPXywoBdXf6XyP/uXgD6dPI9/Wddz4pXyv+uflhqQ3GDRc/6r7Sfh5/ufKn8lf7D3B/4//Lf8x/aP3Y/vX//5Vj9ZiHo5+SRG8t82QlsWuiYsxGInrd1QSXqniT/dOYNRGQYeL8W/Oj7IzhUFDtsstjIwH/ZFK6r7/kk4Pq9dAAP7+J5L/+rQ//Vof/q0PtI+9E8QiWU2YhCdT14C2ghMPn1eQ0U+GmGcxLNhEnxlLUFBxbfv30il+gTE1DeWas6qlrKUfB07VcunL9xI+dYjVJ5pJHF8zfsbjxOPZ72F/D4FyQn+SeXX7Jfr/G5m9+n38YGENOO3u85Eq1neAmandMrqJh5BgkIZ8BH5RPVZ6X/pJAztDDFLaK4CRW3uGugoTzzu3gc0DtfOxc+y9agXkfT8pOHXKcPWD1O8G4LLxil9im9gZOLbRiZLoQPUOMPAUxIVong/F2LjkvcBp/6qKQs5Z/qBcxV80qKj6+wmH5ovKIKQFc9rTniMyssk7miTAGfGQafQS/ZusDF4gJmkZz4oPNHP2YX/hgBAq9MO26g8jNt2KPKWtxnwe5znsc3PdjnIJelswPOI0xeTDpgj7tb2qT5aEP0w01eicHPjt5l15b+aqk8MC7FTGGjb62o2QzOQcYY9h+NDjlEIBlAF8XpjxTdJ7ooBeqFeynOOQoA4rsbGwMfkF0CtMmVkqNdH5yixiBHxe12yU/blus4fp8H4DFtslBkAHeQX5vPF/Ff9i/m4o5khqairQZ7zdlXfCyxB/UfqVsMTl/Mqo/h/mgKBnvVoCmjvOGQayJzL/vHgE1OM0lfhC6GStEa+3KTL9Vqi3tZHKIaJy+bfzz4tVjASNU1rHQfJz0RX/7kJIjG6B8ed0Mn+kifeRu2LjAy1QxYQ2BuRq2ZRE6xRcjVeZlV0uqZ/HyKMvDWXLfTj9U6x2V0UoqZm5Q4KpZ/jcWP9TGZ6pZiVap5I3xtAp//OCNqe9z4WFN/2s5jp3WiydubJ3iaJPzPhdeeq25mwr/Ecq4UE7uUz0EboKIYWEgqj9cYLYb5zW9fk2UL63Q8mZ+9qijuiqW+/4yF96dQ2qWdEyYXE8hKexjjYf9cvA1AW4sDDLyfb3bN9zMbIHOZ3ePnnZGeVMpDOaiRV/zPvsz0Nque//TVZ8eSuXYsf10sOdavnEEOgNjMrMdXvwSnP/yPY7OKaqA5P9NhTVik2vWy0zaVjosC+nEs7NaRz+9mir6YCryivb4z72WnEYUsng3//DWeW25LKEj+AbjQqChZY5fyvANVGLv8z85bI3qw86+G3hBnlRyRIKRDqVzykY64M6ao81oi38S3yO+N8dIK5MHNjmkwYF/CRf7dxMi+br8E/8K7Zbp8EIAu8+QlYm4+haSh6WGlx/sl/dmpT7yG0oh/MMkJyjPuvF+eO07YQkEnroB5ujyTaiPjH8RitR44W1552gftCLVIfzdNgACU9fVA8It5hC8MPCs76a4SAA" alt="KamSayara" class="footer-logo-img"/>
       <div class="footer-tagline">UAE Car Price Intelligence</div>
     </div>
     <nav class="footer-links">
@@ -731,23 +225,18 @@ body::before{
     <p class="footer-copy">© <span id="yr"></span> KamSayara · UAE Car Valuation · All rights reserved</p>
   </div>
 </footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 
 <script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
-
   document.getElementById('contactForm').addEventListener('submit', async function(e){
     e.preventDefault();
     var btn = document.getElementById('submitBtn');
     btn.textContent = 'Sending…';
     btn.disabled = true;
     btn.style.opacity = '.6';
-
     const formData = new FormData(this);
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
+      const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body:formData });
       const data = await res.json();
       if (data.success) {
         document.getElementById('contactForm').style.display = 'none';
