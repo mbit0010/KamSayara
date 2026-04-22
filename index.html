@@ -8922,13 +8922,13 @@ function buildDeprTable(handshake, carYear, brand, km, dc, model) {
   const currentYear = new Date().getFullYear();
   const age = Math.max(0, currentYear - (parseInt(carYear, 10) || currentYear));
 
-  // Fix 5: brand-class-aware rates — matches worker DEPR_RATES exactly (Y1/Y2/Y3)
+  // 2.6 — D class Y1 corrected from 23% to 20% (matches worker DEPR_RATES)
   const DC_RATES = {
     S: [8,  6,  5],   // Icons: LC/Patrol — hold value, flatten after Y1
     A: [12, 10,  8],  // Strong: Camry/Corolla/Honda
     B: [15, 12, 10],  // Good: X-Trail/Pajero
     C: [19, 15, 12],  // Average: Hyundai/Kia — steep Y1
-    D: [23, 17, 13],  // Fast: BMW/Audi/Merc — service fear
+    D: [20, 17, 13],  // Fast: BMW/Audi/Merc — Y1 was 23, corrected per UAE data
     E: [30, 22, 16],  // High: MG/Haval/BYD — market flooding
   };
 
@@ -8941,6 +8941,8 @@ function buildDeprTable(handshake, carYear, brand, km, dc, model) {
     'mercedes':'D','volvo':'D','land rover':'D','jaguar':'D','cadillac':'D',
     'lincoln':'D','porsche':'D','infiniti':'B','mg':'E','haval':'E',
     'gac':'E','chery':'E','byd':'E','omoda':'E','jetour':'E','geely':'E',
+    // 2.4 — Tesla Model 3/Y hold value; class C not E
+    'tesla':'C',
   };
   // Iconic model override — matches worker PRICE_MODEL_SYSTEM dc:S definition
   // Applied only when dc is not already provided by the API response
@@ -8961,17 +8963,18 @@ function buildDeprTable(handshake, carYear, brand, km, dc, model) {
   const rates = [Math.min(base[0] + mDelta, 38), base[1], base[2]];
 
   const rows = [];
-  let prev = Math.max(handshake, 0);
+  let prevExact = Math.max(handshake, 0);  // 2.3 — carry exact value, not rounded, to avoid compounding error
   for (let i = 0; i < 3; i++) {
-    const rate   = rates[i];
-    const endVal = Math.round(prev * (1 - rate / 100) / 500) * 500;
+    const rate    = rates[i];
+    const endExact = prevExact * (1 - rate / 100);
+    const endVal  = Math.round(endExact / 500) * 500;  // round only at display
     rows.push({
       year    : currentYear + i + 1,
       rate,
       endVal,
       cumLoss : handshake - endVal,
     });
-    prev = endVal;
+    prevExact = endExact;  // 2.3 — forward the unrounded value
   }
   return rows;
 }
@@ -10174,54 +10177,71 @@ function generateRef(serverRef){
 /* ── HELPERS ─────────────────────────────────────────────── */
 
 function buildConditionAdjustments(specVal,mileageNum,conditionVal,carYear,avgPrice){
+  // 10 — All percentages now match worker computeVc exactly
   const adj=[];
   const cy=new Date().getFullYear();
   const age=Math.max(1,cy-carYear);
-  const expected=age*18000;
-  const acc=qs.accident===true?'minor':qs.accident===false?'none':'none';
-  const own=qs.singleOwner===true?'1':qs.singleOwner===false?'2':'';
-  const war=qs.warranty===true?'active':qs.warranty===false?'expired':'';
-  const svc='';
+  const expected=age*18000;  // 1.3 — UAE 18,000 km/yr
   const r=n=>Math.round(n/500)*500;
-  // Stage 5 spec: GCC=0% baseline, non-GCC=-5%
-  if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec') adj.push({name:'Non-GCC Specification',amount:r(avgPrice*.05),positive:false});
+
+  // 1.1/1.6 — Non-GCC: –13% (matches worker 0.870 multiplier)
+  if(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec')
+    adj.push({name:'Non-GCC Specification',amount:r(avgPrice*0.13),positive:false});
+
   if(mileageNum>0){
-    // Stage 5: below bracket mid +2%, above bracket mid -2%
-    if(mileageNum>expected*1.3){const p=Math.min(r(avgPrice*.02),r(((mileageNum-expected)/10000)*400));if(p>0)adj.push({name:'Above-Average Mileage',amount:p,positive:false});}
-    else if(mileageNum<expected*.7) adj.push({name:'Low Mileage for Year',amount:r(avgPrice*.02),positive:true});
-    else adj.push({name:'Average Mileage for Age',amount:0,positive:true});
+    const kmRatio=mileageNum/expected;
+    if     (kmRatio>2.0)  adj.push({name:'Very High Mileage (2× expected)',  amount:r(avgPrice*0.16),positive:false});
+    else if(kmRatio>1.5)  adj.push({name:'High Mileage (1.5× expected)',     amount:r(avgPrice*0.10),positive:false});
+    else if(kmRatio>1.2)  adj.push({name:'Above-Average Mileage',            amount:r(avgPrice*0.05),positive:false});
+    else if(kmRatio<0.35) adj.push({name:'Exceptionally Low Mileage',        amount:r(avgPrice*0.04),positive:true});
+    else if(kmRatio<0.65) adj.push({name:'Moderately Low Mileage',           amount:r(avgPrice*0.02),positive:true});
+    else                  adj.push({name:'Average Mileage for Age',           amount:0,               positive:true});
   }
-  // Stage 5: excellent +5%, very good +3%, good 0%, fair -5%, poor -12%
-  if(conditionVal==='Excellent')      adj.push({name:'Excellent Condition',amount:r(avgPrice*.05),positive:true});
-  else if(conditionVal==='Very Good') adj.push({name:'Very Good Condition',amount:r(avgPrice*.03),positive:true});
-  else if(conditionVal==='Fair')      adj.push({name:'Fair Condition',amount:r(avgPrice*.05),positive:false});
-  else if(conditionVal==='Poor')      adj.push({name:'Poor Condition',amount:r(avgPrice*.12),positive:false});
-  // Stage 5: fsh yes=0%, fsh no=-2%
-  if(qs.fsh===false||svc==='Non-Agency') adj.push({name:'No Service History',amount:r(avgPrice*.02),positive:false});
-  // Stage 5: accident yes=-8% (no minor/major distinction in model)
-  if(acc==='minor'||acc==='major'||qs.accident===true) adj.push({name:'Accident History',amount:r(avgPrice*.08),positive:false});
-  // Stage 5: single_owner yes=+2%, no=-2.5%
-  if(own==='1'||qs.singleOwner===true)  adj.push({name:'Single Owner',amount:r(avgPrice*.02),positive:true});
-  if(own==='3'||own==='4+'||qs.singleOwner===false) adj.push({name:'Multiple Owner',amount:r(avgPrice*.025),positive:false});
-  // Stage 5: warranty active=+2%
-  if(war==='active'||qs.warranty===true) adj.push({name:'Active Warranty',amount:r(avgPrice*.02),positive:true});
-  if(war==='extended') adj.push({name:'Extended Warranty',amount:r(avgPrice*.02),positive:true});
+
+  // Condition — matches worker conditionMap
+  if     (conditionVal==='Excellent')  adj.push({name:'Excellent Condition',  amount:r(avgPrice*0.05),positive:true});
+  else if(conditionVal==='Very Good')  adj.push({name:'Very Good Condition',  amount:r(avgPrice*0.03),positive:true});
+  else if(conditionVal==='Fair')       adj.push({name:'Fair Condition',       amount:r(avgPrice*0.05),positive:false});
+  else if(conditionVal==='Poor')       adj.push({name:'Poor Condition',       amount:r(avgPrice*0.12),positive:false});
+
+  // 1.7 — FSH: +3.5% / –4.0%
+  if(qs.fsh===true)  adj.push({name:'Full Service History', amount:r(avgPrice*0.035),positive:true});
+  if(qs.fsh===false) adj.push({name:'No Service History',   amount:r(avgPrice*0.040),positive:false});
+
+  // 1.5 — Accident: minor –5%, moderate –10%, major –27%
+  if(qs.accident===true){
+    const sev=qs.accidentSeverity||'moderate';
+    const pct={minor:0.050,moderate:0.100,major:0.270}[sev]??0.100;
+    const lbl={minor:'Minor Accident (cosmetic)',moderate:'Accident History',major:'Major Accident (structural)'}[sev]||'Accident History';
+    adj.push({name:lbl,amount:r(avgPrice*pct),positive:false});
+  }
+
+  // 1.9 — Single owner: +2.5% / –2.0%
+  if(qs.singleOwner===true)  adj.push({name:'Single Owner',    amount:r(avgPrice*0.025),positive:true});
+  if(qs.singleOwner===false) adj.push({name:'Multiple Owners', amount:r(avgPrice*0.020),positive:false});
+
+  // 1.8 — Warranty: +2.5% / –1.5%
+  if(qs.warranty===true)  adj.push({name:'Active Warranty', amount:r(avgPrice*0.025),positive:true});
+  if(qs.warranty===false) adj.push({name:'No Warranty',     amount:r(avgPrice*0.015),positive:false});
+
   adj.sort((a,b)=>b.amount-a.amount);
   return adj.slice(0,6);
 }
 
 function getDealBadgeInfo(askN,fmv){
-  // v67: use adjusted FMV (handshake) not raw market avg — fixes confidence-factor bypass bug
+  // 7 — Unified verdict scale: matches worker computeVc and adaptToLegacy exactly
   if(!fmv)return null;
   if(!askN)return{cls:'neutral',label:'Market Rate'};
   const d=(askN-fmv)/fmv;
-  if(d<-.05)return{cls:'good',label:'Good Deal'};
-  if(d<=.05) return{cls:'good',label:'Fair Price'};
-  if(d<=.10) return{cls:'warn',label:'Slightly High'};
-  return{cls:'bad',label:'Overpriced'};
+  if(d<=-0.08) return{cls:'good', label:'Buy Now'};
+  if(d<=-0.05) return{cls:'good', label:'Good Deal'};
+  if(d<= 0.05) return{cls:'good', label:'Fair Price'};
+  if(d<= 0.10) return{cls:'warn', label:'Slightly High'};
+  if(d<= 0.18) return{cls:'bad',  label:'Overpriced'};
+  return{cls:'bad', label:'Walk Away'};
 }
 
-function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,carYear,brand,model,specVal,colourVal,serviceVal,ai){
+function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,carYear,brand,model,specVal,colourVal,serviceVal,ai,nego){
   const price=askN||avg;
   const diff=avg>0?(price-avg)/avg:0;
   const saving=avg>0?Math.round(avg-price):0;
@@ -10237,15 +10257,19 @@ function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,
   const goodColour=false;
   let vk,vl;
   if(purpose==='selling'){
-    if(diff>.06)      {vk='negotiate';vl='↕ Price Down';}
-    else if(diff<-.06){vk='caution';  vl='⚠ Priced Low';}
-    else              {vk='buy';      vl='✓ Well Priced';}
+    // Gap-O fix: selling thresholds aligned to worker 5%/10% bands
+    if     (diff> 0.10){vk='negotiate';vl='↕ Price Down';}
+    else if(diff> 0.05){vk='negotiate';vl='↕ Slightly High';}
+    else if(diff<-0.05){vk='caution';  vl='⚠ Priced Low';}
+    else               {vk='buy';      vl='✓ Well Priced';}
   } else {
-    if(diff<-.08&&!hasAccident&&conditionVal!=='Poor'){vk='strong-buy';vl='⭐ Strong Buy';}
-    else if(diff<0&&!hasAccident)                     {vk='buy';       vl='✓ Good Buy';}
-    else if(diff<=.08&&!hasAccident)                  {vk='negotiate'; vl='↕ Negotiate';}
-    else if(hasAccident||(diff>.08&&diff<.20))         {vk='caution';   vl='⚠ Caution';}
-    else                                               {vk='pass';      vl='✗ Pass';}
+    // Gap-O fix: thresholds now match worker 7-level verdict scale exactly
+    if     (diff<=-0.08&&!hasAccident&&conditionVal!=='Poor'){vk='strong-buy';vl='⭐ Buy Now';}
+    else if(diff<=-0.05&&!hasAccident)                       {vk='buy';       vl='✓ Good Deal';}
+    else if(diff<= 0.05&&!hasAccident)                       {vk='negotiate'; vl='↕ Fair Price';}
+    else if(diff<= 0.10)                                     {vk='negotiate'; vl='↕ Slightly High';}
+    else if(diff<= 0.18||(hasAccident&&diff<=0.10))          {vk='caution';   vl='⚠ Overpriced';}
+    else                                                      {vk='pass';      vl='✗ Walk Away';}
   }
   const cn=`${carYear} ${brand}${model?' '+model:''}`;
   let pc=askN
@@ -10275,7 +10299,12 @@ function getBuddyVerdict(askN,avg,conditionVal,accidentVal,ownersVal,mileageNum,
   if(cons.length) para+=`Watch out: ${cons.join('; ')}. `;
   const aiA=ai?.advice||'';
   if(aiA&&aiA.length>20) para+=aiA;
-  else if(purpose!=='selling'&&askN&&saving>0) para+=`My honest take: offer AED ${Math.round(askN*.96/500)*500} and close at AED ${Math.round(askN*.98/500)*500} — there's room.`;
+  // Gap-J fix: use worker nego anchors when available, not hardcoded ask*0.96/0.98
+  else if(purpose!=='selling'&&askN&&saving>0){
+    const _hintOffer = (nego&&nego.offer) ? nego.offer : Math.round(askN*.96/500)*500;
+    const _hintClose = (nego&&nego.close) ? nego.close : Math.round(askN*.98/500)*500;
+    para+=`My honest take: offer AED ${_hintOffer.toLocaleString()} and close at AED ${_hintClose.toLocaleString()} — there's room.`;
+  }
   else if(purpose==='selling'&&diff>.05) para+=`To sell faster, try AED ${Math.round(avg*1.02/500)*500} — you'll attract more serious buyers.`;
   else para+=`A solid market deal — worth pursuing if the inspection checks out.`;
   return{vk,vl,para};
@@ -10314,54 +10343,75 @@ function buildFlags(specVal,mileageNum,conditionVal,carYear,colourVal,serviceVal
    Chinese brands (Haval/GAC/MG) lose 45-55% (uncertain track record)
    Modifiers: mileage, spec, FSH, accident, age, owners
 ────────────────────────────────────────────────────────────── */
-function buildNegoGuide(askN,avg,conditionVal,accidentVal){
+function buildNegoGuide(askN,avg,conditionVal,accidentVal,_vcOverride){
+  // Fix 11: buildNegoGuide now delegates to the worker's _vc anchors when
+  // available, so offer/close/walk are always consistent with bestMove and
+  // negoScript. Independent discount arithmetic is only used as a last-resort
+  // fallback (no worker response at all).
   if(!avg) return null;
+
+  // Prefer worker-computed anchors passed in via _vcOverride (= r._vc || {})
+  const _vc = _vcOverride || {};
+  if(_vc.handshake) {
+    const handshake = _vc.handshake;
+    const openOffer = _vc.openOffer || Math.round(handshake * 0.93 / 500) * 500;
+    const offer     = openOffer;
+    const close     = handshake;
+    const walk      = Math.round(handshake * 1.03 / 500) * 500;
+    const room      = askN > 0 ? Math.max(0, Math.round((1 - offer / askN) * 100)) : 0;
+    const tactic    = (_vc.bestMove && _vc.bestMove.note) || '';
+    return { offer, close, walk, room, tactic };
+  }
+
+  // ── Fallback: worker result absent — derive from handshake (avg) ──────────
+  // Uses the same formula as the main nego object: offer = handshake × 0.93,
+  // close = handshake, walk = handshake × 1.03. No independent discount logic.
   const hasAsk = !!(askN && askN > 0);
+  const offer  = Math.round(avg * 0.93 / 500) * 500;
+  const close  = avg;
+  const walk   = Math.round(avg * 1.03 / 500) * 500;
+  const room   = hasAsk ? Math.max(0, Math.round((1 - offer / askN) * 100)) : 0;
 
-  // Discount factors based on vehicle weaknesses
-  const cf     = conditionVal==='Fair'?.03:conditionVal==='Poor'?.06:0;
-  const af     = accidentVal==='major'?.10:accidentVal==='minor'?.05:0;
-  const fshDisc= qs.fsh===false?.01:0;
-  const warDisc= qs.warranty===false?.01:0;
-  const ownDisc= qs.singleOwner===false?.01:0;
-  const mktDisc= hasAsk ? Math.max(0,(askN-avg)/avg*.5) : 0; // over-ask discount
-  const disc   = Math.min(cf+af+fshDisc+warDisc+ownDisc+mktDisc, 0.18);
-
-  // Offer and close MUST be anchored to avg (fair market), never above it
-  // Buyer's opening offer: avg × (1 - total discount), min 85% of avg
-  const offerRaw  = hasAsk
-    ? Math.min(avg, askN * (1 - disc))   // come down from ask, cap at fair value
-    : avg * (1 - Math.max(0.04, disc));  // when no ask, open ~4–10% below avg
-  const closeRaw  = hasAsk
-    ? Math.min(avg, askN * (1 - disc * 0.4))  // settle closer to ask but cap at avg
-    : avg;                                      // when no ask, target is avg itself
-  const offer = Math.round(offerRaw / 500) * 500;
-  const close = Math.round(Math.min(closeRaw, avg) / 500) * 500;
-  const walk  = Math.round(avg * (hasAsk && askN < avg * 1.05 ? 1.02 : 1.04) / 500) * 500;
-  const room  = hasAsk ? Math.max(0, Math.round((1 - offer / askN) * 100)) : 0;
-
+  // Tactic derived from visible weaknesses (used only when worker unavailable)
+  const af      = conditionVal==='Poor'||accidentVal==='major';
+  const noFsh   = qs.fsh===false;
+  const noWar   = qs.warranty===false;
+  const mktDisc = hasAsk && avg > 0 ? Math.max(0,(askN-avg)/avg) : 0;
   let tactic = '';
-  if(af > 0)            tactic = 'The accident history is the primary leverage point — use it to justify a firm reduction.';
-  else if(qs.fsh===false && qs.warranty===false) tactic = 'No service history and no warranty — use both gaps to push for a lower price.';
-  else if(qs.fsh===false)  tactic = 'Missing service history is a legitimate negotiation point.';
-  else if(mktDisc > 0.08)  tactic = `Listed ${Math.round(mktDisc*200)}% above market. Reference the AED ${avg.toLocaleString()} fair value and negotiate from there.`;
-  else if(disc > 0.02)     tactic = 'Use mileage and condition as grounds for a counter-offer.';
-  else                     tactic = 'Already close to market — a 2–3% counter is reasonable without risking the deal.';
+  if(af)              tactic = 'The accident history is the primary leverage point — use it to justify a firm reduction.';
+  else if(noFsh&&noWar) tactic = 'No service history and no warranty — use both gaps to push for a lower price.';
+  else if(noFsh)      tactic = 'Missing service history is a legitimate negotiation point.';
+  else if(mktDisc>0.08) tactic = `Listed ${Math.round(mktDisc*100)}% above market. Reference the AED ${avg.toLocaleString()} fair value and negotiate from there.`;
+  else                tactic = 'Already close to market — a 2–3% counter is reasonable without risking the deal.';
 
   return { offer, close, walk, room, tactic };
 }
 
-function buildOwnerhipCost(price,deprAmt,carYear,rtaFees){
-  // Use API-computed insurance when available; fall back to local formula
+function buildOwnerhipCost(price,deprAmt,carYear,rtaFees,marketMid,depreciationClass){
+  // Fix 12: Fallback insurance uses marketMid (UAE insurer practice) at class-
+  // specific rates, mirroring the identical logic in buildResult's _insCalc.
+  // Never use price * 0.025 — insurers base premiums on market value, not
+  // transaction price, and rates vary by depreciation class.
+  const _EV_BRANDS_OC = new Set(['Tesla','BYD','Rivian','Lucid','XPENG','NIO','Zeekr']);
+  const _EV_MODEL_RE_OC = /\bev\d*\b|ioniq\s*[56]|ariya|leaf|e[-\s]?tron|eq[abcse]|id\.[34567]|niro\s*ev|kona\s*elec|mach[-\s]?e|lightning|lyriq|blazer\s*ev|solterra|zs\s*ev|mg5\s*ev|marvel|polar|atto|dolphin|seal\b|cybertruck/i;
+  const _brandHint  = (typeof brand !== 'undefined') ? brand : '';
+  const _modelHint  = (typeof model !== 'undefined') ? model : '';
+  const _isEV_OC    = _EV_BRANDS_OC.has(_brandHint) || _EV_MODEL_RE_OC.test(_modelHint || '');
+  const _insPctMapOC= { S:0.028, A:0.030, B:0.032, C:0.034, D:0.042, E:0.045 };
+  const _insRate_OC = _isEV_OC ? 0.050 : (_insPctMapOC[depreciationClass || 'C'] || 0.034);
+  const _base_OC    = marketMid && marketMid > 0 ? marketMid : price;
   const ins = rtaFees?.insurance != null
     ? rtaFees.insurance
-    : Math.round(price * 0.025 / 500) * 500;
-  // Maintenance shown separately — NOT in the first-year ownership cost total
-  const maint=Math.round(price*.015/500)*500;
+    : Math.round(_base_OC * _insRate_OC / 500) * 500;
+  // Fix 12 (v79): maint uses class-specific base matching worker + buildResult logic.
+  const _svcBaseMapOC = { S:4200, A:3600, B:3200, C:2800, D:5500, E:3500 };
+  const _svcBaseOC    = _isEV_OC ? 2800 : (_svcBaseMapOC[depreciationClass||'C'] || 3000);
+  const maint = Math.round(_svcBaseOC / 500) * 500;
   // First-year cost = RTA fees + insurance ONLY (no car value, no depreciation)
   const rtaOnly = 170 + 420 + 350 + ins;
-  // Fuel: sedan default (9.5 L/100km), 1,500 km/month, AED 3.3/L — matches unified formula
-  const fuelEst=Math.round((9.5/100)*1500*3.3/10)*10;
+  // Fix 12 (v79): fuel price corrected to AED 2.89/L (Special 95, 2026 avg) matching worker v70 §5.
+  // 9.5 L/100km sedan default, 18,000 km/yr (was 1,500 km/month x AED 3.3 — both stale).
+  const fuelEst=Math.round((9.5/100)*(18000/12)*2.89/10)*10;
   return{ins,maint,rtaOnly,deprAmt,fuelEst};
 }
 
@@ -10983,8 +11033,9 @@ function buildResult(r,brand,model,year,mileage,asking){
   const _dataSource = r.dataSource || (r.isEstimate ? 'estimate' : 'live');
   const _tier       = r.tier ?? (r.isEstimate ? 4 : 1);
   const _isLive     = _dataSource === 'live';
-  const _tierLabel  = r.cached ? 'Cached Data' : _tier===1?'Live Search':_tier===2?'Gemini Backup':_tier===3?'Haiku Offline':'AI Formula';
-  const _tierCls    = r.cached ? 'ks-tier-cache' : _tier===1?'ks-tier-serper':_tier===2?'ks-tier-gemini':_tier===3?'ks-tier-haiku':'ks-tier-formula';
+  // Gap-C fix: tier===0 is a cache hit (worker sends both cached:true AND tier:0)
+  const _tierLabel  = (r.cached||_tier===0)?'Cached Data':_tier===1?'Live Search':_tier===2?'Gemini Backup':_tier===3?'Haiku Offline':'AI Formula';
+  const _tierCls    = (r.cached||_tier===0)?'ks-tier-cache':_tier===1?'ks-tier-serper':_tier===2?'ks-tier-gemini':_tier===3?'ks-tier-haiku':'ks-tier-formula';
   const _sourceBadge= '<span class="ks-source-badge ks-source-'+(_isLive?'live':'estimate')+'"><span class="ks-source-dot"></span>'+(_isLive?'Live':'AI Assisted')+'</span>';
   const _tierBadge  = '<span class="ks-tier-chip '+_tierCls+'">'+_tierLabel+'</span>';
 
@@ -11058,40 +11109,76 @@ function buildResult(r,brand,model,year,mileage,asking){
   const rangeMin      = r.lowPrice || 0;
   const rangeMax      = r.highPrice || 0;
   const sweetSpot     = 0; // removed per v43 design
-  // v67 fix: dealInfo now uses handshake (confidence-adjusted FMV), not raw avg
-  const dealInfo = getDealBadgeInfo(askN, handshake);
-  // v67 fix: getBuddyVerdict uses handshake (confidence-adjusted FMV) not raw avg
-  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai);
-
+  // Fix 11 (v79): nego must be declared BEFORE getBuddyVerdict so the call site
+  // receives the correct worker-anchored offer/close values, not undefined.
   // Negotiation anchors from engine
+  // 8 — openOffer now comes from _vc.openOffer (handshake × 0.93), not marketMid-derived fallback
+  const _openOffer = _vc.openOffer || Math.round((_vc.handshake||0)*0.93/500)*500;
   const nego = {
-    offer:  (_vc.bestMove && _vc.bestMove.openOffer ? _vc.bestMove.openOffer : Math.round((_vc.handshake||0)*0.95/500)*500),
+    offer:  _openOffer,
     close:  (_vc.handshake||0),
     walk:   Math.round((_vc.handshake||0)*1.03/500)*500,
-    room:   askN ? Math.max(0, Math.round((1 - (_vc.bestMove && _vc.bestMove.openOffer ? _vc.bestMove.openOffer : Math.round((_vc.handshake||0)*0.95/500)*500) / askN) * 100)) : 0,
+    room:   askN ? Math.max(0, Math.round((1 - _openOffer / askN) * 100)) : 0,
     tactic: (_vc.bestMove&&_vc.bestMove.note||""),
     script: (_vc.negoScript||r.hagglingScript||""),
   };
+
+  // Gap-F: dealInfo removed — getDealBadgeInfo result was computed but never rendered.
+  // v67 fix: getBuddyVerdict uses handshake (confidence-adjusted FMV) not raw avg
+  // Gap-J fix: pass nego so offer/close hints use worker anchors (nego now defined above)
+  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai,nego);
 
   // Running costs + depreciation from engine (properly separated)
   const _rc = _vc.runningCosts || {};
   const _dp = _vc.depreciation  || {};
 
   // ── Guaranteed fallback estimates (never show AED 0) ──────────────────────
-  // Insurance: 2.5% of fair market value (UAE market average for used cars)
-  const _insCalc  = (_rc.insurance  && _rc.insurance  > 0) ? _rc.insurance  : Math.round(handshake * 0.025 / 500) * 500;
-  // Maintenance: 1.5% of value — covers annual service + minor consumables
-  const _maintCalc= (_rc.service    && _rc.service    > 0) ? _rc.service    : Math.round(handshake * 0.015 / 500) * 500;
-  // Fuel: body-aware L/100km x 1,500 km/month x AED 3.30/L x 12 months
-  const _bodyLc   = (guessBody(brand, model)||'Sedan').toLowerCase();
-  const _lp100    = _bodyLc.includes('suv')||_bodyLc.includes('pickup') ? 13.5 : _bodyLc.includes('van') ? 14.5 : 9.5;
-  const _fuelAnn  = Math.round(_lp100 / 100 * 1500 * 3.30 * 12 / 100) * 100;
-  const _fuelCalc = (()=>{
-    const fromApi = Math.max(0,((_rc.total||0)-(_rc.insurance||0)-(_rc.service||0)-940));
-    return fromApi > 0 ? fromApi : _fuelAnn;
-  })();
-  // RTA registration + transfer (fixed UAE fees)
-  const _rtaCalc  = 940;
+  // 3.1/3.2 — Insurance: use marketMid as base (UAE insurer practice); EV 5.0%, else 2.5–4.5% by class
+  const _dc = r?.depreciation_class || r?.dc || 'C';
+  const _EV_BRANDS_FB = new Set(['Tesla', 'BYD', 'Rivian', 'Lucid', 'XPENG', 'NIO', 'Zeekr']);
+  const _EV_MODEL_RE_FB = /\bev\d*\b|ioniq\s*[56]|ariya|leaf|e[-\s]?tron|eq[abcse]|id\.[34567]|niro\s*ev|kona\s*elec|mach[-\s]?e|lightning|lyriq|blazer\s*ev|solterra|zs\s*ev|mg5\s*ev|marvel|polar|atto|dolphin|seal\b|cybertruck/i;
+  const _isEV_FB = _EV_BRANDS_FB.has(brand) || _EV_MODEL_RE_FB.test(model || '');
+  const _insPctMap = { S: 0.028, A: 0.030, B: 0.032, C: 0.034, D: 0.042, E: 0.045 };
+  const _insRate_FB = _isEV_FB ? 0.050 : (_insPctMap[_dc] || 0.034);
+  const _marketMidFB = r?.averagePrice || r?.market_mid || handshake;
+  const _insCalc  = (_rc.insurance  && _rc.insurance  > 0) ? _rc.insurance  : Math.round(_marketMidFB * _insRate_FB / 500) * 500;
+  // 4.1/4.2 — Maintenance: age-tiered base by class; EV base lower (no oil/filters)
+  const _svcBaseMap = { S: 4200, A: 3600, B: 3200, C: 2800, D: 5500, E: 3500 };
+  const _svcBase_FB = _isEV_FB ? 2800 : (_svcBaseMap[_dc] || 3000);
+  const _carAge_FB  = Math.max(0, new Date().getFullYear() - (parseInt(carYear, 10) || new Date().getFullYear()));
+  const _ageMult_FB = _carAge_FB >= 11 ? 2.2 : _carAge_FB >= 8 ? 1.7 : _carAge_FB >= 5 ? 1.3 : 1.0;
+  const _maintCalc= (_rc.service    && _rc.service    > 0) ? _rc.service    : Math.round(_svcBase_FB * _ageMult_FB / 500) * 500;
+  // 5 — Fuel cost: full rewrite
+  //   Petrol base by body type → hybrid ×0.45, diesel ×0.78, EV = electricity proxy
+  //   UAE AC correction +15%, age >8yr engine runs richer +10%
+  //   Annual km 18,000 (UAE avg), fuel AED 2.89/L (Special 95, 2026 avg)
+  const FUEL_AED_PER_L_FB = 2.89;
+  const ANNUAL_KM_FB      = 18000;
+  const _bodyTypeFB = (guessBody(brand, model) || 'Sedan').toLowerCase();
+  let _baseLp100;
+  if     (_bodyTypeFB === 'pickup' || _bodyTypeFB.includes('van'))  _baseLp100 = 14.5;
+  else if(_bodyTypeFB.includes('suv'))                              _baseLp100 = 13.0;
+  else if(_bodyTypeFB.includes('coupe') || _bodyTypeFB.includes('sport')) _baseLp100 = 11.5;
+  else                                                              _baseLp100 = 9.5;
+  const _modelLcFB = (model || '').toLowerCase();
+  let _fuelMultFB = 1.0;
+  if(_isEV_FB) {
+    _fuelMultFB = 0; // petrol zero; electricity below
+  } else if(/hybrid|hev|phev/.test(_modelLcFB)) {
+    _fuelMultFB = 0.45;
+  } else if(/diesel|dci|tdi|cdti|d4d|jtd/.test(_modelLcFB)) {
+    _fuelMultFB = 0.78;
+  }
+  const _acCorrFB   = 1.15;
+  const _ageYrsFB2  = _carAge_FB;  // already computed above
+  const _ageCorFB   = _ageYrsFB2 >= 8 ? 1.10 : 1.0;
+  const _lp100FB    = _baseLp100 * _fuelMultFB * _acCorrFB * _ageCorFB;
+  const _fuelAnn    = _isEV_FB
+    ? Math.round(_marketMidFB * 0.015 / 500) * 500   // EV electricity proxy ~1.5% of value/yr
+    : Math.round(_lp100FB / 100 * ANNUAL_KM_FB * FUEL_AED_PER_L_FB / 100) * 100;
+  const _fuelCalc = (_fuelAnn > 0) ? _fuelAnn : Math.round(_baseLp100 / 100 * ANNUAL_KM_FB * FUEL_AED_PER_L_FB / 100) * 100;
+  // Gap-D fix: use rtaFees.registration from worker when available; 940 is the default UAE fixed fee
+  const _rtaCalc  = (r.rtaFees && typeof r.rtaFees === 'object' && r.rtaFees.registration) ? r.rtaFees.registration : 940;
   // Total = sum of all four line items (not API _rc.total which may be 0)
   const _totalCalc= _rtaCalc + _insCalc + _maintCalc + _fuelCalc;
 
@@ -11175,17 +11262,47 @@ function buildResult(r,brand,model,year,mileage,asking){
     _qcBadge(qs.singleOwner,'Single Owner','Multi Owner'),
   ];
 
-  // Market position text — replaced raw percentile with Data Quality Score
-  // Score degrades for: Non-GCC, No FSH, multiple owners, accident history, poor/fair condition
-  const _tsBase = 8.5;
-  const _tsPenalties = [
-    (specVal && specVal!=='GCC' && specVal!=='GCC Spec') ? 1.5 : 0,
-    (qs.fsh===false) ? 1.2 : 0,
-    (qs.singleOwner===false) ? 0.8 : 0,
-    (qs.accident===true) ? 1.2 : 0,
-    (condVal==='Fair') ? 0.4 : (condVal==='Poor') ? 0.9 : 0,
-  ];
-  const _tsScore = Math.max(1.0, Math.round((_tsBase - _tsPenalties.reduce((a,b)=>a+b,0)) * 10) / 10);
+  // Fix 13 (v79): _tsScore now incorporates tier AND confidence_flag so a live
+  // Tier 1 result with cs=80 but no explicit 'HIGH CONFIDENCE' flag is not
+  // under-scored. Mapping: cs 0–100 → 1–10; flag + tier clamps applied after.
+  //   Tier 1 (Serper + Haiku live)  → floor 7.0
+  //   Tier 2 (Gemini live search)   → floor 6.0
+  //   Tier 3 (Haiku offline)        → cap   5.5
+  //   Tier 4 (formula)              → cap   4.0  (also set by cf=LOW)
+  //   confidence_flag LOW           → cap   4.0  (overrides tier floor)
+  //   confidence_flag HIGH/LIVE     → floor 7.5  (overrides tier cap)
+  const _rawConf   = r.confidence_score || 0;
+  const _confFlag  = (r.confidence_flag || '').toUpperCase();
+  let _tsScore;
+  if (_rawConf > 0) {
+    let _tsFromConf = Math.max(1.0, Math.min(10.0, Math.round((_rawConf / 10) * 10) / 10));
+    // Apply tier-based floor/cap (before flag overrides)
+    if      (_tier === 1) _tsFromConf = Math.max(_tsFromConf, 7.0);
+    else if (_tier === 2) _tsFromConf = Math.max(_tsFromConf, 6.0);
+    else if (_tier === 3) _tsFromConf = Math.min(_tsFromConf, 5.5);
+    else if (_tier >= 4)  _tsFromConf = Math.min(_tsFromConf, 4.0);
+    // confidence_flag overrides (highest priority)
+    if (_confFlag.includes('LOW'))  _tsFromConf = Math.min(_tsFromConf, 4.0);
+    if (_confFlag.includes('HIGH') || _confFlag.includes('LIVE')) _tsFromConf = Math.max(_tsFromConf, 7.5);
+    _tsScore = _tsFromConf;
+  } else {
+    // Fallback: no confidence_score from worker — use tier as primary signal
+    // then apply visible-condition penalties (scaled to match worker magnitudes)
+    //   Non-GCC –1.3 (≈ worker –13%)   FSH missing  –1.2
+    //   Accident –1.2                   Multi-owner  –0.8
+    //   Fair cond –0.4 / Poor cond –0.9
+    const _tsBase = _tier === 1 ? 8.5 : _tier === 2 ? 7.5 : _tier === 3 ? 5.5 : 3.5;
+    const _tsPenalties = [
+      (specVal && specVal!=='GCC' && specVal!=='GCC Spec') ? 1.3 : 0,
+      (qs.fsh===false) ? 1.2 : 0,
+      (qs.singleOwner===false) ? 0.8 : 0,
+      (qs.accident===true) ? 1.2 : 0,
+      (condVal==='Fair') ? 0.4 : (condVal==='Poor') ? 0.9 : 0,
+    ];
+    _tsScore = Math.max(1.0, Math.round((_tsBase - _tsPenalties.reduce((a,b)=>a+b,0)) * 10) / 10);
+    if (_confFlag.includes('LOW'))  _tsScore = Math.min(_tsScore, 4.0);
+    if (_confFlag.includes('HIGH') || _confFlag.includes('LIVE')) _tsScore = Math.max(_tsScore, 7.5);
+  }
   const _tsLabel = _tsScore >= 7.5 ? 'High Transparency' : _tsScore >= 5.5 ? 'Moderate Transparency' : 'Value Grade — Lower Transparency';
   const mktPositionText = `Data Quality Score: ${_tsScore}/10 — ${_tsLabel}`;
 
@@ -11291,18 +11408,31 @@ function buildResult(r,brand,model,year,mileage,asking){
   <div class="ks-section ks-section-deal">
 
     <!-- Verdict pill -->
+    <!-- Gap-B fix: full verdict scale now matches worker (BUY NOW / GOOD DEAL / FAIRLY PRICED /
+         SLIGHTLY HIGH / OVERPRICED / WALK AWAY). Gap-A fix: .diff>0 replaced with .pct>0. -->
     <div class="ks-deal-verdict ${
+      (_vc.verdict==='BUY NOW')?'ks-verdict-buy':
       (_vc.verdict==='GOOD DEAL'||_vc.verdict==='UNDERPRICED')?'ks-verdict-buy':
+      (_vc.verdict==='WALK AWAY')?'ks-verdict-nego':
       (_vc.verdict==='OVERPRICED'||_vc.verdict==='SLIGHTLY HIGH')?'ks-verdict-nego':
-      (_vc.verdict==='FAIRLY PRICED'&&r.comparisonToAsking&&r.comparisonToAsking.diff>0)?'ks-verdict-nego':
+      (_vc.verdict==='FAIRLY PRICED'&&r.comparisonToAsking&&r.comparisonToAsking.pct>0)?'ks-verdict-nego':
       'ks-verdict-fair'}">
-      <span class="ks-verdict-emoji">${(_vc.verdict==="GOOD DEAL"?"✅":_vc.verdict==="FAIRLY PRICED"?"📊":_vc.verdict==="SLIGHTLY HIGH"?"⚠️":_vc.verdict==="OVERPRICED"?"🔴":"📊")||'📊'}</span>
+      <span class="ks-verdict-emoji">${
+        _vc.verdict==='BUY NOW'?'⭐':
+        _vc.verdict==='GOOD DEAL'?'✅':
+        _vc.verdict==='FAIRLY PRICED'?'📊':
+        _vc.verdict==='SLIGHTLY HIGH'?'⚠️':
+        _vc.verdict==='OVERPRICED'?'🔴':
+        _vc.verdict==='WALK AWAY'?'🚫':'📊'
+      }</span>
       <span class="ks-verdict-label">${
+        _vc.verdict==='BUY NOW'?'Strong Buy — Well Below Market':
         (_vc.verdict==='GOOD DEAL'||_vc.verdict==='UNDERPRICED')?'Good Deal — Below Market':
+        _vc.verdict==='WALK AWAY'?'Walk Away — Significantly Overpriced':
         _vc.verdict==='OVERPRICED'?'High-End — Negotiate Down':
         _vc.verdict==='SLIGHTLY HIGH'?'Slightly High — Negotiate':
         _vc.verdict==='NO STICKER'?'No Asking Price':
-        (r.comparisonToAsking&&r.comparisonToAsking.diff>0)?'Consider — Negotiation Zone':
+        (r.comparisonToAsking&&r.comparisonToAsking.pct>0)?'Consider — Negotiation Zone':
         'Fairly Priced — Good Value'
       }</span>
     </div>
@@ -11469,19 +11599,25 @@ function buildResult(r,brand,model,year,mileage,asking){
         if(reasons.length===1&&comp>0&&_tsScore>=7) reasons.push('Good data coverage — the price range shown reflects real asking prices from live UAE classified ads.');
         return reasons.slice(0,3).join(' ');
       })()}</div>
-      <!-- Fix 3: Score breakdown — shows the math behind every deduction -->
+      <!-- Gap-K fix: breakdown table is suppressed when score comes from worker
+           (worker confidence_score already incorporates all adjustments internally;
+           showing our local penalty rows would be misleading) -->
       <div class="ks-ts-breakdown">
         <div class="ks-ts-breakdown-title">Score breakdown</div>
         <div class="ks-ts-row">
-          <span class="ks-ts-row-label">Base score (full information, GCC spec, clean history)</span>
-          <span class="ks-ts-row-val base">+8.5</span>
+          <span class="ks-ts-row-label">${r.confidence_score>0?'Worker confidence score (0–100 → 0–10)':'Base score (full information, GCC spec, clean history)'}</span>
+          <span class="ks-ts-row-val base">${r.confidence_score>0?'+'+(r.confidence_score/10).toFixed(1):'+8.5'}</span>
         </div>
-        ${(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Non-GCC specification — fewer local comparables</span><span class="ks-ts-row-val deduct">−1.5</span></div>`:''}
+        ${r.confidence_score>0
+          ? `<div class="ks-ts-row"><span class="ks-ts-row-label" style="color:var(--muted);font-style:italic;">Score derived from live market data quality — all listing, spec, and condition factors are baked in.</span><span class="ks-ts-row-val"></span></div>`
+          : `
+        ${(specVal&&specVal!=='GCC'&&specVal!=='GCC Spec')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Non-GCC specification — fewer local comparables</span><span class="ks-ts-row-val deduct">−1.3</span></div>`:''}
         ${(qs.fsh===false)?`<div class="ks-ts-row"><span class="ks-ts-row-label">No full service history — maintenance harder to verify</span><span class="ks-ts-row-val deduct">−1.2</span></div>`:''}
         ${(qs.accident===true)?`<div class="ks-ts-row"><span class="ks-ts-row-label">Accident history — creates pricing uncertainty</span><span class="ks-ts-row-val deduct">−1.2</span></div>`:''}
         ${(qs.singleOwner===false)?`<div class="ks-ts-row"><span class="ks-ts-row-label">Multiple owners — reduces buyer confidence</span><span class="ks-ts-row-val deduct">−0.8</span></div>`:''}
         ${(condVal==='Fair')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Fair condition — below average market standard</span><span class="ks-ts-row-val deduct">−0.4</span></div>`:''}
         ${(condVal==='Poor')?`<div class="ks-ts-row"><span class="ks-ts-row-label">Poor condition — significantly below market standard</span><span class="ks-ts-row-val deduct">−0.9</span></div>`:''}
+          `}
         <div class="ks-ts-row total-row">
           <span class="ks-ts-row-label" style="font-weight:700;color:var(--ink);">Final Transparency Score</span>
           <span class="ks-ts-row-val total">${_tsScore} / 10</span>
@@ -12133,6 +12269,10 @@ function displayValuationResult(data){
     listings_snapshot:    data.listings_snapshot     || [],
     _model:               data._model                || '',
     _diag:                data._diag                 || {},
+    // Gap-L fix: depreciation_class was missing from r-mapping — _dc fell through to 'C' always
+    depreciation_class:   data.depreciation_class    || data._vc?.depreciation?.class || '',
+    // Gap-P CRITICAL fix: _vc was never mapped into r — all worker engine data was silently dropped
+    _vc:                  data._vc                   || null,
   };
 
   const brand   = data.brand   || g('brand')?.value   || '';
@@ -12165,15 +12305,17 @@ function displayValuationResult(data){
     const _fmvVal  = _ld.handshake || _ld.avg || r.averagePrice || 0;
     const _priceStr = _fmvVal ? 'AED\u00A0' + (Math.round(_fmvVal/500)*500).toLocaleString() : '';
     // Verdict from engine
+    // Gap-A fix: comparisonToAsking.diff is AED absolute; use .pct (integer %) for ratio comparison
     const _vRaw = _ld.verdict || (data.comparisonToAsking
-      ? (data.comparisonToAsking.diff > 0.05 ? 'OVERPRICED'
-        : data.comparisonToAsking.diff < -0.05 ? 'GOOD DEAL'
+      ? (data.comparisonToAsking.pct > 5  ? 'OVERPRICED'
+        : data.comparisonToAsking.pct < -5 ? 'GOOD DEAL'
         : 'FAIRLY PRICED')
       : '');
     const _vLabel = _vRaw || 'PRICE CHECK';
-    const _vCls = (_vLabel==='GOOD DEAL'||_vLabel==='UNDERPRICED') ? 'good'
-      : (_vLabel==='OVERPRICED'||_vLabel==='SLIGHTLY HIGH') ? 'bad'
-      : (_vLabel==='FAIRLY PRICED') ? 'neu' : 'neu';
+    // Gap-N fix: sticky band _vCls aligned to full worker verdict scale
+    const _vCls = (_vLabel==='BUY NOW'||_vLabel==='GOOD DEAL') ? 'good'
+      : (_vLabel==='WALK AWAY'||_vLabel==='OVERPRICED'||_vLabel==='SLIGHTLY HIGH') ? 'bad'
+      : 'neu';
     window._ksStickyReady = true;
     if(window._ksStickyUpdate) window._ksStickyUpdate(_carName, _priceStr, _vLabel.replace(/_/g,' '), _vCls);
   })();
@@ -12887,8 +13029,10 @@ function buildShareMsg(platform){
   const gap     = sticker && hs ? sticker - hs : 0;
   const gapAbs  = Math.abs(gap);
   // Use engine verdict if available (more accurate)
-  const verdict = d.verdict ? d.verdict + (d.verdict==='OVERPRICED'?' 🔴':d.verdict==='UNDERPRICED'?' 🟢':' 🟡')
-    : (!sticker ? '' : gap > hs*0.05 ? 'OVERPRICED 🔴' : gap < -(hs*0.05) ? 'UNDERPRICED 🟢' : 'FAIRLY PRICED 🟡');
+  // Gap-M fix: share text verdict — full scale + correct emoji per worker verdict values
+  const _verdEmoji = d.verdict==='BUY NOW'?'⭐':d.verdict==='GOOD DEAL'?'🟢':d.verdict==='FAIRLY PRICED'?'🟡':d.verdict==='SLIGHTLY HIGH'?'🟠':d.verdict==='OVERPRICED'?'🔴':d.verdict==='WALK AWAY'?'🚫':'🟡';
+  const verdict = d.verdict ? d.verdict + ' ' + _verdEmoji
+    : (!sticker ? '' : gap > hs*0.10 ? 'WALK AWAY 🚫' : gap > hs*0.05 ? 'OVERPRICED 🔴' : gap < -(hs*0.08) ? 'BUY NOW ⭐' : gap < -(hs*0.05) ? 'GOOD DEAL 🟢' : 'FAIRLY PRICED 🟡');
   const gapLine = gap > 0
     ? `That's AED ${gapAbs.toLocaleString()} overpriced.`
     : gap < 0
