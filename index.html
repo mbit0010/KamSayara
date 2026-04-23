@@ -167,19 +167,51 @@
       transition:all .18s;white-space:nowrap;
     }
     .hnav-link:hover{color:rgba(255,255,255,0.88);border-color:rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);}
-    @media(max-width:480px){
-      /* Show nav links on mobile — smaller, stacked horizontally, wrap if needed */
-      .hnav-links {
-        display: flex !important;
-        gap: 0 !important;
-        flex-wrap: wrap !important;
-        justify-content: flex-end !important;
-      }
-      .hnav-link {
-        font-size: 0.60rem !important;
-        padding: .22rem .5rem !important;
-        letter-spacing: .03em !important;
-      }
+
+    /* ── HAMBURGER MENU (v79) — replaces flex-wrap fallback below 768px ── */
+    .ks-burger{
+      display:none;flex-direction:column;justify-content:center;align-items:center;
+      gap:5px;width:38px;height:38px;background:none;border:1px solid rgba(232,208,96,0.35);
+      border-radius:8px;cursor:pointer;flex-shrink:0;padding:0;
+      transition:border-color .18s,background .18s;
+      margin-left:auto;
+    }
+    .ks-burger:hover{background:rgba(232,208,96,0.08);border-color:rgba(232,208,96,0.6);}
+    .ks-burger span{
+      display:block;width:18px;height:2px;background:#E8D060;border-radius:2px;
+      transition:transform .25s,opacity .2s;
+    }
+    /* Animated X state */
+    .ks-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .ks-burger.open span:nth-child(2){opacity:0;}
+    .ks-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+    /* Mobile dropdown panel */
+    .ks-mob-menu{
+      display:none;position:absolute;top:100%;left:0;right:0;
+      background:rgba(6,24,40,0.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      border-top:1px solid rgba(232,208,96,0.15);
+      flex-direction:column;z-index:300;
+    }
+    .ks-mob-menu.open{display:flex;}
+    .ks-mob-menu a{
+      font-family:"Exo 2",sans-serif;font-size:.82rem;font-weight:700;
+      letter-spacing:.1em;text-transform:uppercase;
+      color:rgba(255,255,255,0.82);text-decoration:none;
+      padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);
+      transition:color .15s,background .15s;
+    }
+    .ks-mob-menu a:hover{color:#E8D060;background:rgba(232,208,96,0.06);}
+    .ks-mob-menu a:last-child{border-bottom:none;}
+
+    @media(max-width:768px){
+      .hnav-links,.snav-links,.snav-cta{ display:none !important; }
+      .ks-burger{ display:flex; }
+      /* Hero nav needs position:relative so the dropdown can anchor to it */
+      .hnav{ position:relative; flex-wrap:nowrap; }
+    }
+    @media(min-width:769px){
+      .ks-burger,.ks-mob-menu{ display:none !important; }
     }
 
     /* hero headline — fully centred, no button */
@@ -6404,17 +6436,18 @@ body.ks-result-active .form-card:hover {
      Axis: #D9D9D9 | Markers: ● FMV (green)  ▲ Asking (red)
   ══════════════════════════════════════════════════════════════ */
 
+  /* ── v79 PRICE SCALE — vertical label separation, sharp zone dividers ── */
   .ks-hscale {
     margin: 14px 0 0;
     user-select: none;
   }
 
-  /* ── Outer label row (Lowest / Highest) ── */
+  /* Outer edge labels — Lowest / Highest always flush to edges */
   .ks-hscale-labels {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     padding: 0 2px;
   }
   .ks-hscale-lbl-left,
@@ -6429,100 +6462,113 @@ body.ks-result-active .form-card:hover {
     margin-top: 1px;
   }
 
-  /* ── Floating marker labels (FMV + Asking) ── */
-  .ks-hscale-float-labels {
+  /* ── ABOVE-BAR row: FMV label always here (never below) ── */
+  .ks-hscale-above {
     position: relative;
-    height: 52px;          /* room for two label rows if stacked */
-    margin-bottom: 2px;
+    height: 44px;        /* fixed height above the bar */
+    margin-bottom: 0;
   }
-  .ks-hscale-float {
+  .ks-hscale-above-pin {
     position: absolute;
     transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center;
-    gap: 1px; pointer-events: none; bottom: 0;
-    will-change: left; /* GPU compositing for crisp pixel alignment */
+    gap: 1px; pointer-events: none;
+    bottom: 0;           /* grows upward from bar edge */
   }
-  /* stacked = asking label is pushed up when too close to FMV */
-  .ks-hscale-float-stacked { bottom: 26px; }
-
-  .ks-hscale-float-name {
+  .ks-hscale-above-name {
     font-size: .56rem; font-weight: 800; letter-spacing: .06em;
-    text-transform: uppercase; color: #1DB954; white-space: nowrap;
-    background: rgba(29,185,84,.08); border-radius: 4px;
-    padding: 1px 5px;
+    text-transform: uppercase; color: #16803C; white-space: nowrap;
+    background: rgba(22,163,74,.10); border-radius: 4px;
+    padding: 2px 6px; border: 1px solid rgba(22,163,74,.18);
   }
-  .ks-hscale-float-name-ask { color: #EB5757; background: rgba(235,87,87,.08); }
-
-  .ks-hscale-float-amt {
-    font-size: .64rem; font-weight: 800; color: #1DB954; white-space: nowrap;
+  .ks-hscale-above-amt {
+    font-size: .64rem; font-weight: 800; color: #16803C; white-space: nowrap;
   }
-  .ks-hscale-float-amt-ask { color: #EB5757; }
-
-  .ks-hscale-float-stem {
-    width: 1.5px; height: 8px;
-    background: #1DB954; border-radius: 1px;
+  .ks-hscale-above-stem {
+    width: 1.5px; height: 6px;
+    background: #16803C; border-radius: 1px;
   }
-  .ks-hscale-float-stem-ask { background: #EB5757; }
 
   /* ── BAR ── */
   .ks-hscale-bar {
     position: relative;
-    height: 12px;
+    height: 14px;                  /* slightly taller for premium feel */
     background: #D9D9D9;
-    border-radius: 6px;
-    overflow: visible;
+    border-radius: 7px;
+    overflow: hidden;              /* clip zones flush to rounded ends */
   }
-
-  /* Zone segments */
+  /* Zone segments — sharp borders between zones via box-shadow divider */
   .ks-hscale-zone {
     position: absolute; top: 0; bottom: 0;
     min-width: 2px;
   }
-  .ks-hscale-zone:first-child { border-radius: 6px 0 0 6px; }
-  .ks-hscale-zone:last-child  { border-radius: 0 6px 6px 0; }
-  .ks-hscale-zone-green  { background: #1DB954; }
-  .ks-hscale-zone-yellow { background: #F2C94C; }
-  .ks-hscale-zone-red    { background: #EB5757; }
-
-  /* Axis ticks */
-  .ks-hscale-tick {
-    position: absolute; top: -3px; bottom: -3px;
-    width: 2px; background: #94A3B8;
-    transform: translateX(-50%);
-    border-radius: 1px;
+  .ks-hscale-zone-green  { background: #16A34A; }
+  .ks-hscale-zone-yellow { background: #D97706; }
+  .ks-hscale-zone-red    { background: #DC2626; }
+  /* 1px white hairline dividers between segments */
+  .ks-hscale-zone-yellow::before,
+  .ks-hscale-zone-red::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0;
+    width: 2px; background: rgba(255,255,255,0.55);
   }
-
-  /* Markers */
+  /* Markers sit on top of bar (overflow:visible on outer container) */
+  .ks-hscale-bar { overflow: visible; }
   .ks-hscale-marker {
     position: absolute; top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1rem; line-height: 1;
+    font-size: 1.05rem; line-height: 1;
     cursor: default; z-index: 5;
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,.30));
   }
-  .ks-hscale-marker-fmv { color: #1DB954; }
-  .ks-hscale-marker-ask { color: #EB5757; }
+  .ks-hscale-marker-fmv { color: #16A34A; }
+  .ks-hscale-marker-ask { color: #DC2626; }
 
-  /* ── Zone labels below bar ── */
+  /* ── BELOW-BAR row: Asking price label always here ── */
+  .ks-hscale-below {
+    position: relative;
+    height: 46px;
+    margin-top: 0;
+  }
+  .ks-hscale-below-pin {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 1px; pointer-events: none;
+    top: 0;              /* grows downward from bar edge */
+  }
+  .ks-hscale-below-stem {
+    width: 1.5px; height: 6px;
+    background: #DC2626; border-radius: 1px;
+  }
+  .ks-hscale-below-name {
+    font-size: .56rem; font-weight: 800; letter-spacing: .06em;
+    text-transform: uppercase; color: #DC2626; white-space: nowrap;
+    background: rgba(220,38,38,.08); border-radius: 4px;
+    padding: 2px 6px; border: 1px solid rgba(220,38,38,.18);
+  }
+  .ks-hscale-below-amt {
+    font-size: .64rem; font-weight: 800; color: #DC2626; white-space: nowrap;
+  }
+
+  /* ── Zone labels under the below-row ── */
   .ks-hscale-zones {
     position: relative;
     height: 18px;
-    margin-top: 4px;
+    margin-top: 6px;
   }
   .ks-hscale-zone-lbl {
     position: absolute; text-align: center;
-    font-size: .48rem; font-weight: 700; letter-spacing: .07em;
+    font-size: .52rem; font-weight: 700; letter-spacing: .07em;
     text-transform: uppercase; line-height: 1;
     top: 0; white-space: nowrap; overflow: hidden;
-    transform: translateX(0);
   }
-  .ks-hscale-zone-lbl-green  { color: #1DB954; }
-  .ks-hscale-zone-lbl-yellow { color: #D4A017; }
-  .ks-hscale-zone-lbl-red    { color: #EB5757; }
+  .ks-hscale-zone-lbl-green  { color: #16A34A; }
+  .ks-hscale-zone-lbl-yellow { color: #B45309; }
+  .ks-hscale-zone-lbl-red    { color: #DC2626; }
 
-  /* ── Interpretation paragraph ── */
+  /* Interpretation paragraph */
   .ks-scale-interp {
-    margin-top: 14px;
+    margin-top: 12px;
     font-size: .78rem; color: #334155; line-height: 1.7;
     padding: 11px 13px;
     background: #F8FAFC;
@@ -6531,14 +6577,17 @@ body.ks-result-active .form-card:hover {
   }
   .ks-scale-interp strong { color: #0A2540; font-weight: 700; }
 
-  /* Mobile: shrink marker font */
+  /* Mobile */
   @media (max-width: 600px) {
-    .ks-hscale-float-name,
-    .ks-hscale-zone-lbl { font-size: .44rem; }
-    .ks-hscale-float-amt { font-size: .58rem; }
-    .ks-hscale-marker { font-size: .9rem; }
-    .ks-hscale-bar { height: 10px; }
-    .ks-hscale-float-labels { height: 48px; }
+    .ks-hscale-above-name,
+    .ks-hscale-below-name,
+    .ks-hscale-zone-lbl  { font-size: .46rem; }
+    .ks-hscale-above-amt,
+    .ks-hscale-below-amt { font-size: .58rem; }
+    .ks-hscale-marker    { font-size: .9rem; }
+    .ks-hscale-bar       { height: 11px; }
+    .ks-hscale-above     { height: 38px; }
+    .ks-hscale-below     { height: 40px; }
   }
 
 /* */
@@ -6859,7 +6908,7 @@ body.ks-result-active .form-card:hover {
 .ks-s7-col {
   border-radius: 12px !important; overflow: hidden !important;
   border: 1px solid #E5E9EF !important; background: #fff !important;
-  box-shadow: 0 2px 8px rgba(10,37,64,.06) !important;
+  box-shadow: 0 4px 16px rgba(10,37,64,.10), 0 1px 3px rgba(10,37,64,.06) !important;
 }
 .ks-s7-head {
   font-size: var(--fs-caption) !important; font-weight: 800 !important;
@@ -6878,7 +6927,7 @@ body.ks-result-active .form-card:hover {
 }
 .ks-s7-body {
   font-size: var(--fs-body) !important; color: #2D3D50 !important;
-  line-height: 1.65 !important; padding: 12px 14px !important;
+  line-height: 1.6 !important; padding: 20px !important;
 }
 @media(max-width:520px) {
   .ks-s7-grid { grid-template-columns: 1fr !important; }
@@ -8182,7 +8231,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
   border: 1px solid var(--rpt-border) !important;
   overflow: hidden !important;
   background: #fff !important;
-  box-shadow: 0 2px 8px rgba(10,37,64,0.06) !important;
+  box-shadow: 0 4px 16px rgba(10,37,64,0.10), 0 1px 3px rgba(10,37,64,0.06) !important;
   display: flex !important;
   flex-direction: column !important;
 }
@@ -8194,7 +8243,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
   letter-spacing: 0.10em !important;
   text-transform: uppercase !important;
   color: #fff !important;
-  padding: 11px 16px !important;
+  padding: 13px 20px !important;
   flex-shrink: 0 !important;
 }
 .ks-s7-col-head-buyer {
@@ -8205,10 +8254,10 @@ body.ks-result-active #backToInputs { display: flex !important; }
 }
 /* Content padding inside each column */
 .ks-s7-col-wrap .ks-s7-situation {
-  margin: 14px 14px 0 !important;
+  margin: 20px 20px 0 !important;
 }
 .ks-s7-col-wrap .ks-s7-checklist {
-  margin: 12px 14px 14px !important;
+  margin: 14px 20px 20px !important;
 }
 /* Kill the old tab buttons entirely */
 .ks-s7-tabs,
@@ -8324,6 +8373,16 @@ body.ks-result-active #backToInputs { display: flex !important; }
         <a href="https://www.kamsayara.com/how-it-works.html" class="hnav-link">How It Works</a>
         <a href="https://www.kamsayara.com/who-we-are.html" class="hnav-link">Who We Are</a>
         <a href="https://www.kamsayara.com/contact.html" class="hnav-link">Contact</a>
+      </div>
+      <!-- v79 Hamburger — visible only below 768px -->
+      <button class="ks-burger" id="ksBurger" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <!-- Mobile dropdown panel anchored to .hnav (position:relative) -->
+      <div class="ks-mob-menu" id="ksMobMenu" role="navigation" aria-label="Mobile navigation">
+        <a href="https://www.kamsayara.com/how-it-works.html">How It Works</a>
+        <a href="https://www.kamsayara.com/who-we-are.html">Who We Are</a>
+        <a href="https://www.kamsayara.com/contact.html">Contact</a>
       </div>
     </nav>
     <div class="hero-hl">
@@ -10403,15 +10462,12 @@ function buildOwnerhipCost(price,deprAmt,carYear,rtaFees,marketMid,depreciationC
   const ins = rtaFees?.insurance != null
     ? rtaFees.insurance
     : Math.round(_base_OC * _insRate_OC / 500) * 500;
-  // Fix 12 (v79): maint uses class-specific base matching worker + buildResult logic.
-  const _svcBaseMapOC = { S:4200, A:3600, B:3200, C:2800, D:5500, E:3500 };
-  const _svcBaseOC    = _isEV_OC ? 2800 : (_svcBaseMapOC[depreciationClass||'C'] || 3000);
-  const maint = Math.round(_svcBaseOC / 500) * 500;
+  // Maintenance shown separately — NOT in the first-year ownership cost total
+  const maint=Math.round(price*.015/500)*500;
   // First-year cost = RTA fees + insurance ONLY (no car value, no depreciation)
   const rtaOnly = 170 + 420 + 350 + ins;
-  // Fix 12 (v79): fuel price corrected to AED 2.89/L (Special 95, 2026 avg) matching worker v70 §5.
-  // 9.5 L/100km sedan default, 18,000 km/yr (was 1,500 km/month x AED 3.3 — both stale).
-  const fuelEst=Math.round((9.5/100)*(18000/12)*2.89/10)*10;
+  // Fuel: sedan default (9.5 L/100km), 1,500 km/month, AED 3.3/L — matches unified formula
+  const fuelEst=Math.round((9.5/100)*1500*3.3/10)*10;
   return{ins,maint,rtaOnly,deprAmt,fuelEst};
 }
 
@@ -11109,8 +11165,11 @@ function buildResult(r,brand,model,year,mileage,asking){
   const rangeMin      = r.lowPrice || 0;
   const rangeMax      = r.highPrice || 0;
   const sweetSpot     = 0; // removed per v43 design
-  // Fix 11 (v79): nego must be declared BEFORE getBuddyVerdict so the call site
-  // receives the correct worker-anchored offer/close values, not undefined.
+  // Gap-F: dealInfo removed — getDealBadgeInfo result was computed but never rendered.
+  // v67 fix: getBuddyVerdict uses handshake (confidence-adjusted FMV) not raw avg
+  // Gap-J fix: pass nego so offer/close hints use worker anchors
+  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai,nego);
+
   // Negotiation anchors from engine
   // 8 — openOffer now comes from _vc.openOffer (handshake × 0.93), not marketMid-derived fallback
   const _openOffer = _vc.openOffer || Math.round((_vc.handshake||0)*0.93/500)*500;
@@ -11122,11 +11181,6 @@ function buildResult(r,brand,model,year,mileage,asking){
     tactic: (_vc.bestMove&&_vc.bestMove.note||""),
     script: (_vc.negoScript||r.hagglingScript||""),
   };
-
-  // Gap-F: dealInfo removed — getDealBadgeInfo result was computed but never rendered.
-  // v67 fix: getBuddyVerdict uses handshake (confidence-adjusted FMV) not raw avg
-  // Gap-J fix: pass nego so offer/close hints use worker anchors (nego now defined above)
-  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai,nego);
 
   // Running costs + depreciation from engine (properly separated)
   const _rc = _vc.runningCosts || {};
@@ -11262,36 +11316,31 @@ function buildResult(r,brand,model,year,mileage,asking){
     _qcBadge(qs.singleOwner,'Single Owner','Multi Owner'),
   ];
 
-  // Fix 13 (v79): _tsScore now incorporates tier AND confidence_flag so a live
-  // Tier 1 result with cs=80 but no explicit 'HIGH CONFIDENCE' flag is not
-  // under-scored. Mapping: cs 0–100 → 1–10; flag + tier clamps applied after.
-  //   Tier 1 (Serper + Haiku live)  → floor 7.0
-  //   Tier 2 (Gemini live search)   → floor 6.0
-  //   Tier 3 (Haiku offline)        → cap   5.5
-  //   Tier 4 (formula)              → cap   4.0  (also set by cf=LOW)
-  //   confidence_flag LOW           → cap   4.0  (overrides tier floor)
-  //   confidence_flag HIGH/LIVE     → floor 7.5  (overrides tier cap)
-  const _rawConf   = r.confidence_score || 0;
+  // Fix 13: _tsScore is now derived from the worker's confidence_score and
+  // confidence_flag so the displayed number is always consistent with the
+  // adjustments the worker actually applied (e.g. Non-GCC = –13%, not –1.5 pts).
+  //
+  // Mapping: confidence_score is 0–100; we normalise to 0–10 and clamp 1–10.
+  // confidence_flag overrides the label for known quality states:
+  //   'LOW CONFIDENCE' → cap at 4.0
+  //   'HIGH CONFIDENCE' / 'LIVE DATA' → floor at 7.5
+  // When confidence_score is absent we fall back to visible-signal penalties
+  // expressed on the same 0–10 scale (scaled to match worker magnitudes):
+  //   Non-GCC  –1.3 (≈ worker –13%)   FSH missing  –1.2
+  //   Accident –1.2                    Multi-owner  –0.8
+  //   Fair cond –0.4 / Poor cond –0.9
+  const _rawConf   = r.confidence_score || 0;      // worker 0–100
   const _confFlag  = (r.confidence_flag || '').toUpperCase();
   let _tsScore;
   if (_rawConf > 0) {
+    // Derive from worker score: scale 0–100 → 1–10, then apply flag clamps
     let _tsFromConf = Math.max(1.0, Math.min(10.0, Math.round((_rawConf / 10) * 10) / 10));
-    // Apply tier-based floor/cap (before flag overrides)
-    if      (_tier === 1) _tsFromConf = Math.max(_tsFromConf, 7.0);
-    else if (_tier === 2) _tsFromConf = Math.max(_tsFromConf, 6.0);
-    else if (_tier === 3) _tsFromConf = Math.min(_tsFromConf, 5.5);
-    else if (_tier >= 4)  _tsFromConf = Math.min(_tsFromConf, 4.0);
-    // confidence_flag overrides (highest priority)
     if (_confFlag.includes('LOW'))  _tsFromConf = Math.min(_tsFromConf, 4.0);
     if (_confFlag.includes('HIGH') || _confFlag.includes('LIVE')) _tsFromConf = Math.max(_tsFromConf, 7.5);
     _tsScore = _tsFromConf;
   } else {
-    // Fallback: no confidence_score from worker — use tier as primary signal
-    // then apply visible-condition penalties (scaled to match worker magnitudes)
-    //   Non-GCC –1.3 (≈ worker –13%)   FSH missing  –1.2
-    //   Accident –1.2                   Multi-owner  –0.8
-    //   Fair cond –0.4 / Poor cond –0.9
-    const _tsBase = _tier === 1 ? 8.5 : _tier === 2 ? 7.5 : _tier === 3 ? 5.5 : 3.5;
+    // Fallback (no worker confidence_score available)
+    const _tsBase = 8.5;
     const _tsPenalties = [
       (specVal && specVal!=='GCC' && specVal!=='GCC Spec') ? 1.3 : 0,
       (qs.fsh===false) ? 1.2 : 0,
@@ -11300,8 +11349,6 @@ function buildResult(r,brand,model,year,mileage,asking){
       (condVal==='Fair') ? 0.4 : (condVal==='Poor') ? 0.9 : 0,
     ];
     _tsScore = Math.max(1.0, Math.round((_tsBase - _tsPenalties.reduce((a,b)=>a+b,0)) * 10) / 10);
-    if (_confFlag.includes('LOW'))  _tsScore = Math.min(_tsScore, 4.0);
-    if (_confFlag.includes('HIGH') || _confFlag.includes('LIVE')) _tsScore = Math.max(_tsScore, 7.5);
   }
   const _tsLabel = _tsScore >= 7.5 ? 'High Transparency' : _tsScore >= 5.5 ? 'Moderate Transparency' : 'Value Grade — Lower Transparency';
   const mktPositionText = `Data Quality Score: ${_tsScore}/10 — ${_tsLabel}`;
@@ -11445,46 +11492,51 @@ function buildResult(r,brand,model,year,mileage,asking){
     ═══════════════════════════════════════════════════════ -->
     <div class="ks-hscale">
 
-      <!-- Outer labels — Lowest/Highest always at edges -->
+      <!-- Outer edge labels — Lowest / Highest flush to bar edges -->
       <div class="ks-hscale-labels">
         <div class="ks-hscale-lbl-left">
-          <div class="ks-hscale-lbl-name">Lowest Live Listing</div>
-          <div class="ks-hscale-lbl-amt">AED ${_scLow.toLocaleString()}</div>
+          <div class="ks-hscale-lbl-name">Lowest Listing</div>
+          <div class="ks-hscale-lbl-amt">AED \${_scLow.toLocaleString()}</div>
         </div>
         <div class="ks-hscale-lbl-right">
-          <div class="ks-hscale-lbl-name">Highest Live Listing</div>
-          <div class="ks-hscale-lbl-amt">AED ${_scHigh.toLocaleString()}</div>
+          <div class="ks-hscale-lbl-name">Highest Listing</div>
+          <div class="ks-hscale-lbl-amt">AED \${_scHigh.toLocaleString()}</div>
         </div>
       </div>
 
-      <!-- Floating marker labels — always above bar -->
-      <div class="ks-hscale-float-labels">
-        <!-- FMV label above ● -->
-        <div class="ks-hscale-float ks-hscale-float-fmv" style="left:${_scFmvPct}%">
-          <div class="ks-hscale-float-name">Fair Market Price</div>
-          <div class="ks-hscale-float-amt">AED ${_scFmv.toLocaleString()}</div>
-          <div class="ks-hscale-float-stem"></div>
+      <!-- v79: ABOVE-BAR — Fair Market Price label always here, no collision risk -->
+      <div class="ks-hscale-above">
+        <div class="ks-hscale-above-pin" style="left:\${_scFmvPct}%">
+          <div class="ks-hscale-above-name">Fair Market Price</div>
+          <div class="ks-hscale-above-amt">AED \${_scFmv.toLocaleString()}</div>
+          <div class="ks-hscale-above-stem"></div>
         </div>
-        ${_scAskPct!==null ? '<div class="ks-hscale-float ks-hscale-float-ask'+(_scLabelsClose?' ks-hscale-float-stacked':'')+'" style="left:'+_scAskPct+'%"><div class="ks-hscale-float-name ks-hscale-float-name-ask">Asking Price</div><div class="ks-hscale-float-amt ks-hscale-float-amt-ask">AED '+_scAsk.toLocaleString()+'</div><div class="ks-hscale-float-stem ks-hscale-float-stem-ask"></div></div>' : ''}
       </div>
 
-      <!-- BAR — three colour zones + markers -->
+      <!-- BAR — three sharp colour zones + markers -->
       <div class="ks-hscale-bar">
-        <div class="ks-hscale-zone ks-hscale-zone-green"  style="left:0%;width:${_scFmvPct}%"></div>
-        <div class="ks-hscale-zone ks-hscale-zone-yellow" style="left:${_scFmvPct}%;width:${_scOverPct-_scFmvPct}%"></div>
-        <div class="ks-hscale-zone ks-hscale-zone-red"    style="left:${_scOverPct}%;width:${100-_scOverPct}%"></div>
-        <div class="ks-hscale-tick" style="left:0%"></div>
-        <div class="ks-hscale-tick" style="left:100%"></div>
-        <!-- FMV marker ● green -->
-        <div class="ks-hscale-marker ks-hscale-marker-fmv" style="left:${_scFmvPct}%">●</div>
-        ${_scAskPct!==null ? '<div class="ks-hscale-marker ks-hscale-marker-ask" style="left:'+_scAskPct+'%">▲</div>' : ''}
+        <div class="ks-hscale-zone ks-hscale-zone-green"  style="left:0%;width:\${_scFmvPct}%"></div>
+        <div class="ks-hscale-zone ks-hscale-zone-yellow" style="left:\${_scFmvPct}%;width:\${_scOverPct-_scFmvPct}%"></div>
+        <div class="ks-hscale-zone ks-hscale-zone-red"    style="left:\${_scOverPct}%;width:\${100-_scOverPct}%"></div>
+        <!-- FMV dot marker -->
+        <div class="ks-hscale-marker ks-hscale-marker-fmv" style="left:\${_scFmvPct}%">●</div>
+        \${_scAskPct!==null ? '<div class="ks-hscale-marker ks-hscale-marker-ask" style="left:'+_scAskPct+'%">▲</div>' : ''}
       </div>
 
-      <!-- Zone labels below bar -->
+      <!-- v79: BELOW-BAR — Asking Price label always here, structurally separated from FMV -->
+      \${_scAskPct!==null ? \`<div class="ks-hscale-below">
+        <div class="ks-hscale-below-pin" style="left:\${_scAskPct}%">
+          <div class="ks-hscale-below-stem"></div>
+          <div class="ks-hscale-below-name">Asking Price</div>
+          <div class="ks-hscale-below-amt">AED \${_scAsk.toLocaleString()}</div>
+        </div>
+      </div>\` : '<div class="ks-hscale-below" style="height:8px"></div>'}
+
+      <!-- Zone labels -->
       <div class="ks-hscale-zones">
-        <div class="ks-hscale-zone-lbl ks-hscale-zone-lbl-green"  style="left:0%;width:${_scFmvPct}%">Fair Price Zone</div>
-        <div class="ks-hscale-zone-lbl ks-hscale-zone-lbl-yellow" style="left:${_scFmvPct}%;width:${_scOverPct-_scFmvPct}%">Consideration Zone</div>
-        <div class="ks-hscale-zone-lbl ks-hscale-zone-lbl-red"    style="left:${_scOverPct}%;width:${100-_scOverPct}%">Overpriced Zone</div>
+        <div class="ks-hscale-zone-lbl ks-hscale-zone-lbl-green"  style="left:0%;width:\${_scFmvPct}%">Fair Price Zone</div>
+        <div class="ks-hscale-zone-lbl ks-hscale-zone-lbl-yellow" style="left:\${_scFmvPct}%;width:\${_scOverPct-_scFmvPct}%">Negotiation Zone</div>
+        <div class="ks-hscale-zone-lbl ks-hscale-zone-lbl-red"    style="left:\${_scOverPct}%;width:\${100-_scOverPct}%">Overpriced Zone</div>
       </div>
 
     </div><!-- /ks-hscale -->
@@ -13803,5 +13855,33 @@ window.addEventListener('resize',setMobCardTops);
 })();
 </script>
 <!-- html2canvas removed — share uses navigator.share text-only -->
+<!-- v79: Hamburger menu toggle -->
+<script>
+(function(){
+  var btn = document.getElementById('ksBurger');
+  var menu = document.getElementById('ksMobMenu');
+  if(!btn||!menu) return;
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e){
+    if(!menu.contains(e.target) && e.target !== btn){
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+    }
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+</script>
 </body>
 </html>
