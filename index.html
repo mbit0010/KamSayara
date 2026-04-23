@@ -11254,11 +11254,6 @@ function buildResult(r,brand,model,year,mileage,asking){
   const sweetSpot     = 0; // removed per v43 design
   // Gap-F: dealInfo removed — getDealBadgeInfo result was computed but never rendered.
   // v67 fix: getBuddyVerdict uses handshake (confidence-adjusted FMV) not raw avg
-  // Gap-J fix: pass nego so offer/close hints use worker anchors
-  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai,nego);
-
-  // Negotiation anchors from engine
-  // 8 — openOffer now comes from _vc.openOffer (handshake × 0.93), not marketMid-derived fallback
   const _openOffer = _vc.openOffer || Math.round((_vc.handshake||0)*0.93/500)*500;
   const nego = {
     offer:  _openOffer,
@@ -11269,6 +11264,11 @@ function buildResult(r,brand,model,year,mileage,asking){
     script: (_vc.negoScript||r.hagglingScript||""),
   };
 
+  // Gap-J fix: pass nego so offer/close hints use worker anchors
+  const {vk,vl,para}=getBuddyVerdict(askN,handshake,condVal,accVal,ownVal,km,carYear,brand,model,specVal,'',ai,nego);
+
+  // Negotiation anchors from engine
+  // 8 — openOffer now comes from _vc.openOffer (handshake × 0.93), not marketMid-derived fallback
   // Running costs + depreciation from engine (properly separated)
   const _rc = _vc.runningCosts || {};
   const _dp = _vc.depreciation  || {};
