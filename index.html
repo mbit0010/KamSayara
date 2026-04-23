@@ -23,10 +23,10 @@
       --gold:#C49A2A; --gold-light:#E8D060;
       --ink:#1A2738; --ink-soft:#2D3F55; --muted:#4B5E75;
       --border:#DEE3EB; --surface:#F8F9FB; --surface-2:#F2F4F8; --white:#fff;
-      --good:#1A8C6B; --good-bg:rgba(26,140,107,0.08); --good-line:rgba(26,140,107,0.20);
-      --bad:#C0392B;  --bad-bg:rgba(192,57,43,0.08);   --bad-line:rgba(192,57,43,0.20);
-      --warn:#B8780A; --warn-bg:rgba(184,120,10,0.08); --warn-line:rgba(184,120,10,0.20);
-      --err:#C0392B;  --err-bg:rgba(192,57,43,0.06);
+      --good:#5F7B6A; --good-bg:rgba(95,123,106,0.08); --good-line:rgba(95,123,106,0.20);
+      --bad:#8C4A3C;  --bad-bg:rgba(140,74,60,0.08);   --bad-line:rgba(140,74,60,0.20);
+      --warn:#8C4A3C; --warn-bg:rgba(140,74,60,0.08); --warn-line:rgba(140,74,60,0.20);
+      --err:#8C4A3C;  --err-bg:rgba(140,74,60,0.06);
       --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
       --ease:cubic-bezier(0.16,1,0.3,1);
       --spring:cubic-bezier(0.34,1.56,0.64,1);
@@ -375,8 +375,8 @@
     }
     select:hover:not(:focus),input:hover:not(:focus){border-color:rgba(10,37,64,0.22);}
     select.filled,input.filled{background:rgba(10,37,64,0.04);border-color:rgba(10,37,64,0.16);}
-    select.err,input.err{border-color:var(--err)!important;background:var(--err-bg)!important;box-shadow:0 0 0 3px rgba(192,57,43,0.1);}
-    select.warn-field,input.warn-field{border-color:var(--warn)!important;background:var(--warn-bg)!important;box-shadow:0 0 0 3px rgba(184,120,10,0.1);}
+    select.err,input.err{border-color:var(--err)!important;background:var(--err-bg)!important;box-shadow:0 0 0 3px rgba(140,74,60,0.08);}
+    select.warn-field,input.warn-field{border-color:var(--warn)!important;background:var(--warn-bg)!important;box-shadow:0 0 0 3px rgba(140,74,60,0.08);}
     .errmsg{
       font-size:.62rem;color:var(--err);
       font-family:"Exo 2",sans-serif;font-weight:600;
@@ -427,14 +427,14 @@
       cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;
     }
     .qb:hover{background:rgba(255,255,255,0.14);color:rgba(255,255,255,.75);}
-    .qb.tick.on{background:rgba(74,222,128,0.16);border-color:rgba(74,222,128,0.35);color:#4ADE80;}
-    .qb.cross.on{background:rgba(252,165,165,0.16);border-color:rgba(252,165,165,0.35);color:#FCA5A5;}
+    .qb.tick.on{background:rgba(196,154,42,0.10);border-color:rgba(196,154,42,0.10);color:#C49A2A;}
+    .qb.cross.on{background:rgba(140,74,60,0.16);border-color:rgba(140,74,60,0.35);color:rgba(140,74,60,0.35);}
     /* Accident "No" = good news — show green not red */
-    [data-field="accident"] .qb.cross.on{background:rgba(74,222,128,0.16)!important;border-color:rgba(74,222,128,0.35)!important;color:#4ADE80!important;}
+    [data-field="accident"] .qb.cross.on{background:rgba(196,154,42,0.10)!important;border-color:rgba(196,154,42,0.10)!important;color:#C49A2A!important;}
     /* FSH/Warranty/SingleOwner "No" = neutral grey */
     [data-field="fsh"] .qb.cross.on,[data-field="warranty"] .qb.cross.on,[data-field="singleOwner"] .qb.cross.on{background:rgba(100,116,139,0.10)!important;border-color:rgba(100,116,139,0.28)!important;color:#64748B!important;}
     /* Accident-no = good signal: cross turns green, not red */
-    .qcbar-item--accident-clean .qb.cross.on{background:rgba(74,222,128,0.16);border-color:rgba(74,222,128,0.35);color:#4ADE80;}
+    .qcbar-item--accident-clean .qb.cross.on{background:rgba(196,154,42,0.10);border-color:rgba(196,154,42,0.10);color:#C49A2A;}
 
     /* ── FORM FOOTER: always single row, no wrap ── */
     .ffoot {
@@ -554,7 +554,7 @@
     .cbar-wrap{margin-top:8px;padding:0 2px;}
     .cbar-top{display:flex;justify-content:space-between;font-size:.53rem;color:var(--muted);margin-bottom:3px;}
     .cbar{height:3px;background:var(--border);border-radius:99px;overflow:hidden;}
-    .cbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#e67e22,#f1c40f,#2ecc71);transition:width .8s var(--ease);}
+    .cbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7A3828,#9C5535,#5F7A6A);transition:width .8s var(--ease);}
 
     .algo-box{background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:10px;border-left:3px solid var(--accent-line);}
     .algo-box h4{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
@@ -798,7 +798,7 @@
     /* ── PRICE POSITION BAR ──────────────────────────────────── */
     .ppos{margin:10px 2px 6px;}
     .ppos-labels{display:flex;justify-content:space-between;font-size:.55rem;color:var(--muted);margin-bottom:5px;font-weight:600;}
-    .ppos-track{position:relative;height:7px;background:linear-gradient(90deg,#2ecc71,#f1c40f,#e74c3c);border-radius:99px;overflow:visible;}
+    .ppos-track{position:relative;height:7px;background:linear-gradient(90deg,#5F7A6A,#9C5535,#7A3828);border-radius:99px;overflow:visible;}
     /* Market avg dot — teal */
     .ppos-dot{
       position:absolute;top:50%;transform:translate(-50%,-50%);
@@ -944,7 +944,7 @@
     .ks-s7-section-title { color: var(--gold-a11y) !important; }
     .ks-report-eyebrow { color: #C49A2A !important; } /* stays gold on dark navy — passes */
     /* Any inline gold text on white surface */
-    .ks-price-diff-lbl { color: #5E6E85 !important; }
+    .ks-price-diff-lbl { color: #000080 !important; }
     /* Loader percentage — gold on white */
     .ks-loader-pct { color: var(--gold-a11y) !important; }
 
@@ -1014,9 +1014,9 @@
       letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;
       border-radius:99px;border:1.5px solid;
     }
-    .ai-block.good .ai-rating-badge{color:var(--good);border-color:var(--good-line);background:rgba(26,140,107,0.1);}
-    .ai-block.warn .ai-rating-badge{color:var(--warn);border-color:var(--warn-line);background:rgba(184,120,10,0.1);}
-    .ai-block.bad  .ai-rating-badge{color:var(--bad); border-color:var(--bad-line); background:rgba(192,57,43,0.1);}
+    .ai-block.good .ai-rating-badge{color:var(--good);border-color:var(--good-line);background:rgba(95,123,106,0.09);}
+    .ai-block.warn .ai-rating-badge{color:var(--warn);border-color:var(--warn-line);background:rgba(140,74,60,0.08);}
+    .ai-block.bad  .ai-rating-badge{color:var(--bad); border-color:var(--bad-line); background:rgba(140,74,60,0.08);}
     .ai-block.neu  .ai-rating-badge{color:var(--muted);border-color:var(--border);  background:var(--white);}
 
     .ai-conf-badge{
@@ -1087,7 +1087,7 @@
     }
     .ks-wrap.open .ks-trigger::after{transform:translateY(-50%) rotate(180deg);}
     .ks-trigger.ks-filled{color:var(--ink);background:rgba(10,37,64,0.03);border-color:rgba(10,37,64,0.28);}
-    .ks-trigger.ks-err{border-color:var(--err)!important;background:var(--err-bg)!important;box-shadow:0 0 0 3px rgba(192,57,43,0.1)!important;}
+    .ks-trigger.ks-err{border-color:var(--err)!important;background:var(--err-bg)!important;box-shadow:0 0 0 3px rgba(140,74,60,0.08)!important;}
     .ks-wrap.open .ks-trigger{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow2),var(--sh-field);background:var(--white);color:var(--ink);}
     .ks-trigger:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow2),var(--sh-field);}
     .ks-trigger:hover:not(.ks-filled){border-color:rgba(10,37,64,0.22);}
@@ -1299,10 +1299,10 @@
       --accent-glow: rgba(10,37,64,0.22); --accent-glow2:rgba(10,37,64,0.10);
       --ink:         #1A2738; --ink-soft:#2D3F55; --muted:#4B5E75;
       --border:      #DEE3EB; --surface:#FFFFFF; --surface-2:#F2F4F8; --white:#fff;
-      --good:#1A8C6B; --good-bg:rgba(26,140,107,0.08); --good-line:rgba(26,140,107,0.20);
-      --bad:#C0392B;  --bad-bg:rgba(192,57,43,0.08);   --bad-line:rgba(192,57,43,0.20);
-      --warn:#B8780A; --warn-bg:rgba(184,120,10,0.08); --warn-line:rgba(184,120,10,0.20);
-      --err:#C0392B;  --err-bg:rgba(192,57,43,0.06);
+      --good:#5F7B6A; --good-bg:rgba(95,123,106,0.08); --good-line:rgba(95,123,106,0.20);
+      --bad:#8C4A3C;  --bad-bg:rgba(140,74,60,0.08);   --bad-line:rgba(140,74,60,0.20);
+      --warn:#8C4A3C; --warn-bg:rgba(140,74,60,0.08); --warn-line:rgba(140,74,60,0.20);
+      --err:#8C4A3C;  --err-bg:rgba(140,74,60,0.06);
       --sh-card: var(--card-shadow);
       --sh-field: 0 1px 2px rgba(10,37,64,0.06);
     }
@@ -1444,8 +1444,8 @@
 
     /* Confidence bar */
     .cbar-legend { display: flex; justify-content: space-between; font-size: 0.56rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.04em; }
-    .cbar-legend span:first-child { color: #e67e22; }
-    .cbar-legend span:last-child  { color: #2ecc71; }
+    .cbar-legend span:first-child { color: #7A3828; }
+    .cbar-legend span:last-child  { color: #5F7A6A; }
 
     /* Share row */
     .share-row-centered { display: flex; align-items: center; justify-content: center; gap: 7px; margin-bottom: 8px; padding: 6px 0; }
@@ -1455,11 +1455,11 @@
 
     /* Marketability */
     .mkt-block { border: 1.5px solid var(--border); }
-    .mkt-block.hot      { border-color: rgba(26,140,107,0.35); }
+    .mkt-block.hot      { border-color: rgba(95,123,106,0.09); }
     .mkt-block.good     { border-color: rgba(10,37,64,0.22); }
-    .mkt-block.moderate { border-color: rgba(184,120,10,0.30); }
-    .mkt-block.slow     { border-color: rgba(192,57,43,0.25); }
-    .mkt-bar-fill { background: linear-gradient(90deg, #e74c3c, #f1c40f, #1a8c6b); }
+    .mkt-block.moderate { border-color: rgba(140,74,60,0.08); }
+    .mkt-block.slow     { border-color: rgba(140,74,60,0.08); }
+    .mkt-bar-fill { background: linear-gradient(90deg, #7A3828, #9C5535, #C49A2A); }
 
     /* Result panel size overrides — readable sizes */
     .result-panel .p-main { font-size: clamp(1.5rem,3vw,2.2rem); }
@@ -1637,8 +1637,8 @@
     #resultPanel.panel-state-ready .result-panel-header {
       background: linear-gradient(135deg,#0A2540 0%,#0E3460 100%) !important;
     }
-    #resultPanel.panel-state-ready .rph-status-dot { background: #4ADE80 !important; }
-    #resultPanel.panel-state-ready .rph-status-text { color: rgba(74,222,128,1.0) !important; }
+    #resultPanel.panel-state-ready .rph-status-dot { background: #C49A2A !important; }
+    #resultPanel.panel-state-ready .rph-status-text { color: rgba(196,154,42,1.0) !important; }
     #resultPanel.panel-state-ready .rph-ref-stamp { color: rgba(255,255,255,0.55) !important; }
 
     @keyframes statusDotPulse {
@@ -1673,17 +1673,22 @@
         grid-template-columns: 1fr 1fr !important;
         overflow-x: visible !important;
         flex-wrap: unset !important;
+        padding: 6px 0 !important;
+        gap: 0 !important;
       }
       .ks-spec-chip {
         border-right: none !important;
         border-bottom: 1px solid rgba(255,255,255,0.07) !important;
         min-width: unset !important;
         width: 100% !important;
-        padding: 7px 10px !important;
+        padding: 7px 12px !important;
+        align-items: flex-start !important;
       }
-      .ks-spec-chip:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.07) !important; }
+      .ks-spec-chip:nth-child(even) { border-left: 1px solid rgba(255,255,255,0.07) !important; }
       .ks-spec-chip:nth-last-child(1),
       .ks-spec-chip:nth-last-child(2) { border-bottom: none !important; }
+      .ks-spec-chip-lbl { font-size: .5rem !important; }
+      .ks-spec-chip-val { font-size: .78rem !important; }
     }
 
     /* Change 9: mob-fixed-header suppressed on all viewports — normal hero serves all devices */
@@ -1794,7 +1799,7 @@
       line-height: 1.2 !important;
     }
     .ig:focus-within label { color: #1A2B4C !important; }
-    .rq { color: #C0392B !important; }
+    .rq { color: #7A3828 !important; }
 
     /* ── Inputs — slightly darker than white card ── */
     select, input[type="number"], input[type="text"] {
@@ -1821,8 +1826,8 @@
       border-color: #B0BAD0 !important;
     }
     select.err, input.err {
-      border-color: #C0392B !important;
-      background: #FEF2F2 !important;
+      border-color: #7A3828 !important;
+      background: rgba(140,74,60,0.08) !important;
     }
 
     /* ── Custom dropdowns match inputs ── */
@@ -1854,7 +1859,7 @@
     .asking-field-wrap input { border-color: #B0BAD0 !important; background: #EEF1F6 !important; }
 
     /* ── Error messages ── */
-    .errmsg { color: #C0392B !important; }
+    .errmsg { color: #7A3828 !important; }
 
     /* ── 4-col field grid — responsive (overridden per breakpoint) ── */
     .fg { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 8px 10px !important; margin-bottom: 6px !important; align-items: end !important; }
@@ -1888,7 +1893,7 @@
       text-overflow: unset !important;
     }
     .ffoot-hint strong { color: #1A2B4C !important; }
-    .ffoot-hint.ready-hint strong { color: #1A8C6B !important; }
+    .ffoot-hint.ready-hint strong { color: #C49A2A !important; }
 
     /* Button row: Reset (1/3) + Valuation (2/3) same height */
     .ffoot-btns {
@@ -2032,7 +2037,7 @@
     .r-price-main    { color: #1A2B4C !important; font-size: clamp(1.7rem,2.8vw,2.2rem) !important; }
     .r-price-range   { color: #5C6E88 !important; font-size: 0.62rem !important; }
     .r-badge         { background: #EEF1F6 !important; border-color: #D0D5E0 !important; color: #334155 !important; }
-    .r-badge.live    { background: rgba(26,140,107,0.08) !important; border-color: rgba(26,140,107,0.2) !important; color: #1A8C6B !important; }
+    .r-badge.live    { background: rgba(95,123,106,0.09) !important; border-color: rgba(95,123,106,0.09) !important; color: #C49A2A !important; }
     .r-vs-section    { background: #F7F8FC !important; padding: 10px 22px !important; border-bottom: 1px solid #EAECF2 !important; }
     .r-bar-section   { padding: 14px 22px 12px !important; border-bottom: 1px solid #EAECF2 !important; }
     .r-metrics-section { padding: 14px 22px !important; border-bottom: 1px solid #EAECF2 !important; }
@@ -2184,10 +2189,10 @@
       background: var(--surface-2);
       animation: fIn 0.4s var(--ease) both;
     }
-    .mkt-block.hot      { border-color: rgba(26,140,107,0.35); background: rgba(26,140,107,0.05); }
+    .mkt-block.hot      { border-color: rgba(95,123,106,0.09); background: rgba(95,123,106,0.09); }
     .mkt-block.good     { border-color: rgba(10,37,64,0.22);   background: rgba(10,37,64,0.03); }
-    .mkt-block.moderate { border-color: rgba(184,120,10,0.3);  background: rgba(184,120,10,0.05); }
-    .mkt-block.slow     { border-color: rgba(192,57,43,0.25);  background: rgba(192,57,43,0.05); }
+    .mkt-block.moderate { border-color: rgba(140,74,60,0.08);  background: rgba(140,74,60,0.08); }
+    .mkt-block.slow     { border-color: rgba(140,74,60,0.08);  background: rgba(140,74,60,0.08); }
 
     .mkt-top {
       display: flex;
@@ -2260,7 +2265,7 @@
       height: 100%;
       border-radius: 99px;
       transition: width 0.9s var(--ease);
-      background: linear-gradient(90deg, #e74c3c, #f1c40f, #1a8c6b);
+      background: linear-gradient(90deg, #7A3828, #9C5535, #C49A2A);
     }
 
     /* Days rows */
@@ -2300,8 +2305,8 @@
       gap: 6px;
       padding: 5px 9px;
       border-radius: 8px;
-      background: rgba(26,140,107,0.08);
-      border: 1px solid rgba(26,140,107,0.2);
+      background: rgba(95,123,106,0.09);
+      border: 1px solid rgba(95,123,106,0.09);
       margin-bottom: 5px;
     }
     .mkt-rec-ico { font-size: 0.7rem; }
@@ -2376,19 +2381,45 @@
       font-size: .7rem; font-weight: 700; color: #E8EDF5;
       white-space: nowrap; font-family: "Exo 2", sans-serif;
     }
-    .ks-spec-chip-val.good { color: #4ADE80; }
-    .ks-spec-chip-val.warn { color: #FCD34D; }
-    .ks-spec-chip-val.bad  { color: #FCA5A5; }
+    .ks-spec-chip-val.good { color: #C49A2A; }
+    .ks-spec-chip-val.warn { color: rgba(196,154,42,0.40); }
+    .ks-spec-chip-val.bad  { color: rgba(140,74,60,0.35); }
 
     /* ── SCENE MOBILE RESPONSIVE ─── */
     @media(max-width:600px){
       .ks-dubai-scene { min-height: 160px; }
       .ks-scene-car-wrap { width: 54%; bottom: 30%; }
       .ks-scene-car-shadow { width: 44%; bottom: 29%; }
-      .ks-spec-road-row { padding: 6px 8px; }
-      .ks-spec-chip { min-width: 52px; padding: 4px 7px; }
-      .ks-spec-chip-lbl { font-size: .4rem; }
-      .ks-spec-chip-val { font-size: .64rem; }
+
+      /* ── SPEC BAR: 2-column grid on mobile (WCAG 2.2 legibility fix) ── */
+      .ks-spec-road-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        overflow-x: visible !important;
+        flex-wrap: unset !important;
+        padding: 6px 0 !important;
+        gap: 0 !important;
+      }
+      .ks-spec-chip {
+        min-width: 0 !important;
+        padding: 7px 12px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+        align-items: flex-start !important;
+        flex-shrink: unset !important;
+      }
+      /* Right column chips get a left separator line */
+      .ks-spec-chip:nth-child(even) {
+        border-left: 1px solid rgba(255,255,255,0.07) !important;
+      }
+      /* Remove bottom border from the last two chips (bottom row) */
+      .ks-spec-chip:nth-last-child(1),
+      .ks-spec-chip:nth-last-child(2) {
+        border-bottom: none !important;
+      }
+      /* Legible font sizes — "Senior Professional" target */
+      .ks-spec-chip-lbl { font-size: .5rem !important; }
+      .ks-spec-chip-val { font-size: .78rem !important; }
     }
     @media(min-width:1100px){
       .ks-dubai-scene { min-height: 240px; }
@@ -2485,8 +2516,8 @@
     }
     .rpt-verdict-badge.strong-buy { background: #D1FAE5; color: #065F46; border: 1.5px solid #6EE7B7; }
     .rpt-verdict-badge.buy        { background: #DBEAFE; color: #1E40AF; border: 1.5px solid #93C5FD; }
-    .rpt-verdict-badge.negotiate  { background: #FEF3C7; color: #92400E; border: 1.5px solid #FCD34D; }
-    .rpt-verdict-badge.caution    { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; }
+    .rpt-verdict-badge.negotiate  { background: rgba(196,154,42,0.10); color: #7A5010; border: 1.5px solid rgba(196,154,42,0.40); }
+    .rpt-verdict-badge.caution    { background: rgba(140,74,60,0.08); color: #5A2A1E; border: 1.5px solid rgba(140,74,60,0.35); }
     .rpt-verdict-badge.pass       { background: #F3F4F6; color: #374151; border: 1.5px solid #D1D5DB; }
     .rpt-buddy-para {
       font-size: 0.84rem; color: #334155; line-height: 1.75;
@@ -2502,11 +2533,11 @@
       font-size: 0.78rem; line-height: 1.55; color: #334155;
       padding: 6px 8px; border-radius: 7px;
     }
-    .rpt-flag.green { background: #F0FDF4; border: 1px solid #BBF7D0; }
+    .rpt-flag.green { background: rgba(196,154,42,0.10); border: 1px solid #BBF7D0; }
     .rpt-flag.red   { background: #FFF1F2; border: 1px solid #FECDD3; }
     .rpt-flag-dot   { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-    .rpt-flag.green .rpt-flag-dot { background: #22C55E; }
-    .rpt-flag.red   .rpt-flag-dot { background: #EF4444; }
+    .rpt-flag.green .rpt-flag-dot { background: #C49A2A; }
+    .rpt-flag.red   .rpt-flag-dot { background: #7A3828; }
 
     /* Negotiation section */
     .rpt-nego-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
@@ -2515,7 +2546,7 @@
       background: #F8FAFC; border: 1px solid #E2E8F0;
       border-radius: 10px; padding: 10px 12px; text-align: center;
     }
-    .rpt-nego-card.highlight { background: #FFF8E1; border-color: #FCD34D; }
+    .rpt-nego-card.highlight { background: #FFF8E1; border-color: rgba(196,154,42,0.40); }
     .rpt-nego-lbl { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748B; margin-bottom: 4px; }
     .rpt-nego-val { font-family: "Orbitron", sans-serif; font-size: 0.92rem; font-weight: 700; color: #1A2B4C; }
     .rpt-nego-val.good { color: #16A34A; }
@@ -2529,14 +2560,14 @@
     .rpt-cost-table td { padding: 6px 0; font-size: 0.80rem; color: #2D3D50; }
     .rpt-cost-table td:last-child { text-align: right; font-weight: 700; color: #1A2B4C; }
     .rpt-cost-table tr.total td { font-size: 0.84rem; color: #1A2B4C; padding-top: 8px; }
-    .rpt-cost-note { font-size: 0.72rem; color: #4B5E75; margin-top: 6px; line-height: 1.5; }
+    .rpt-cost-note { font-size: 0.72rem; color: #000080; margin-top: 6px; line-height: 1.5; }
 
     /* Depreciation projection table */
     .rpt-depr-table { width: 100%; border-collapse: collapse; }
     .rpt-depr-table th { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #64748B; padding: 0 0 7px; text-align: left; border-bottom: 1px solid #E2E8F0; }
     .rpt-depr-table th:last-child { text-align: right; }
     .rpt-depr-table td { padding: 7px 0; font-size: 0.80rem; border-bottom: 1px solid #F1F5F9; color: #2D3D50; }
-    .rpt-depr-table td:last-child { text-align: right; font-weight: 700; color: #C0392B; }
+    .rpt-depr-table td:last-child { text-align: right; font-weight: 700; color: #7A3828; }
     .rpt-depr-table tr:last-child td { border-bottom: none; }
     .rpt-depr-bar-wrap { height: 5px; background: #E2E8F0; border-radius: 99px; overflow: hidden; margin-top: 3px; }
     .rpt-depr-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#1A2B4C,#D4AF37); }
@@ -2623,7 +2654,7 @@
     .rpt-conf-pct-badge { background: #1A2B4C; color: #fff; font-size: .6rem; font-weight: 700; padding: 1px 7px; border-radius: 4px; }
     .rpt-conf-bar {
       height: 7px;
-      background: linear-gradient(90deg, #e74c3c 0%, #f1c40f 50%, #2ecc71 100%);
+      background: linear-gradient(90deg, #7A3828 0%, #9C5535 50%, #5F7A6A 100%);
       border-radius: 99px;
       position: relative;
     }
@@ -2726,8 +2757,8 @@
     .rpt-cond-table td { padding: 5px 0; font-size: .76rem; }
     .rpt-cond-name { color: #2D3D50; }
     .rpt-cond-amt { text-align: right; font-weight: 700; font-size: .74rem; white-space: nowrap; }
-    .rpt-cond-amt.pos { color: #1A8C6B; }
-    .rpt-cond-amt.neg { color: #C0392B; }
+    .rpt-cond-amt.pos { color: #C49A2A; }
+    .rpt-cond-amt.neg { color: #7A3828; }
 
     /* ── Right: FMV ── */
     .rpt-fmv-lbl { font-size: .6rem; font-weight: 600; color: #4B5E75; margin-bottom: 3px; }
@@ -2742,10 +2773,10 @@
     }
     .rpt-deal-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: .6rem; font-weight: 700; letter-spacing: .04em; }
     .rpt-deal-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .7; }
-    .rpt-deal-badge.good   { background: #e8f5f0; color: #1A8C6B; border: 1px solid #b8ddd2; }
-    .rpt-deal-badge.fair   { background: #fef6e8; color: #B8780A; border: 1px solid #f0d89a; }
-    .rpt-deal-badge.warn   { background: #fef6e8; color: #B8780A; border: 1px solid #f0d89a; }
-    .rpt-deal-badge.bad    { background: #fdecea; color: #C0392B; border: 1px solid #f5c0ba; }
+    .rpt-deal-badge.good   { background: rgba(95,123,106,0.09); color: #C49A2A; border: 1px solid rgba(95,123,106,.25); }
+    .rpt-deal-badge.fair   { background: rgba(196,154,42,0.10); color: #9C5535; border: 1px solid rgba(196,154,42,0.40); }
+    .rpt-deal-badge.warn   { background: rgba(196,154,42,0.10); color: #9C5535; border: 1px solid rgba(196,154,42,0.40); }
+    .rpt-deal-badge.bad    { background: rgba(140,74,60,0.08); color: #7A3828; border: 1px solid rgba(140,74,60,0.24); }
     .rpt-deal-badge.neutral{ background: #f5f3ee; color: #4A4030; border: 1px solid #e4d9c6; }
 
     /* ── Right: Bar chart ── */
@@ -2784,9 +2815,9 @@
     .rpt-mkt-row.highlight { background: rgba(212,175,55,0.06); padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.2); margin-top: 5px; }
     .rpt-mkt-rlbl { font-size: .76rem; color: #2D3D50; }
     .rpt-mkt-rval { font-size: .76rem; font-weight: 700; color: #1A2B4C; white-space: nowrap; }
-    .rpt-mkt-rval.fast   { color: #1A8C6B; }
-    .rpt-mkt-rval.medium { color: #B8780A; }
-    .rpt-mkt-rval.slow   { color: #C0392B; }
+    .rpt-mkt-rval.fast   { color: #C49A2A; }
+    .rpt-mkt-rval.medium { color: #9C5535; }
+    .rpt-mkt-rval.slow   { color: #7A3828; }
     .rpt-mkt-insight { font-size: .68rem; color: #4B5E75; margin-top: 7px; line-height: 1.5; font-style: italic; }
 
     /* AI insight box */
@@ -2855,19 +2886,19 @@
   .ig{display:flex!important;flex-direction:column!important;min-width:0!important;}
   .ig label{font-family:"Exo 2",sans-serif!important;font-size:.65rem!important;font-weight:700!important;letter-spacing:.05em!important;text-transform:uppercase!important;color:#243448!important;margin-bottom:4px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;line-height:1.2!important;}
   .ig:focus-within label{color:#0A2540!important;}
-  .rq{color:#C0392B!important;}
+  .rq{color:#7A3828!important;}
 
   /* Inputs — darker than card */
   .ig select,.ig input[type="text"],.ig input[type="number"]{height:36px!important;font-family:"Exo 2",sans-serif!important;font-size:.78rem!important;font-weight:500!important;color:#1E2D3D!important;background:#EEF1F7!important;border:1.5px solid #CDD2DE!important;border-radius:8px!important;padding:0 .6rem!important;width:100%!important;outline:none!important;transition:border-color .15s,box-shadow .15s,background .15s!important;-webkit-appearance:none!important;appearance:none!important;}
   .ig select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right .65rem center!important;padding-right:1.8rem!important;cursor:pointer!important;}
   .ig input:focus,.ig select:focus{border-color:#1A2B4C!important;box-shadow:0 0 0 3px rgba(26,43,76,.10)!important;background:#fff!important;}
   .ig input.filled,.ig select.filled{background:#E6EAF3!important;border-color:#B0BACE!important;}
-  .ig input.err,.ig select.err{border-color:#C0392B!important;background:#FEF2F2!important;}
+  .ig input.err,.ig select.err{border-color:#7A3828!important;background:rgba(140,74,60,0.08)!important;}
   .ig .prefix-wrap{position:relative!important;display:flex!important;align-items:center!important;}
   .ig .prefix-wrap .prefix-lbl{position:absolute!important;left:.55rem!important;font-family:"Exo 2",sans-serif!important;font-size:.68rem!important;font-weight:700!important;color:#7A8FA8!important;pointer-events:none!important;z-index:1!important;}
   .ig .prefix-wrap input{padding-left:2.4rem!important;width:100%!important;}
   .asking-field-wrap .prefix-lbl{color:#1A2B4C!important;}
-  .errmsg{font-size:.60rem!important;color:#C0392B!important;margin-top:2px!important;display:none!important;font-family:"Exo 2",sans-serif!important;}
+  .errmsg{font-size:.60rem!important;color:#7A3828!important;margin-top:2px!important;display:none!important;font-family:"Exo 2",sans-serif!important;}
   .errmsg.on{display:block!important;}
 
   /* Field grid: 4 cols desktop, 3 tablet, 2 mobile */
@@ -2978,7 +3009,7 @@
   .ks-trigger{height:36px!important;font-family:"Exo 2",sans-serif!important;font-size:.78rem!important;font-weight:500!important;color:#1E2D3D!important;background:#EEF1F7!important;border:1.5px solid #CDD2DE!important;border-radius:8px!important;}
   .ks-trigger.ks-filled{background:#E6EAF3!important;border-color:#B0BACE!important;}
   .ks-wrap.open .ks-trigger,.ks-trigger:focus{border-color:#1A2B4C!important;box-shadow:0 0 0 3px rgba(26,43,76,.10)!important;background:#fff!important;outline:none!important;}
-  .ks-trigger.ks-err{border-color:#C0392B!important;background:#FEF2F2!important;}
+  .ks-trigger.ks-err{border-color:#7A3828!important;background:rgba(140,74,60,0.08)!important;}
   .ks-trigger::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A2B4C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;}
   .ks-wrap{position:relative!important;overflow:visible!important;}
   .ks-panel{background:#fff!important;border:1.5px solid #CDD2DE!important;box-shadow:0 8px 24px rgba(10,37,64,.14)!important;border-radius:10px!important;z-index:999999!important;overflow:hidden!important;position:absolute!important;left:0!important;bottom:auto!important;/* width set by JS to exact trigger px — no width or right here */}
@@ -3047,7 +3078,7 @@
   .r-price-main{color:#1A2B4C!important;font-size:clamp(1.7rem,2.8vw,2.2rem)!important;}
   .r-price-range{color:#5C6E88!important;font-size:.62rem!important;}
   .r-badge{background:#EEF1F7!important;border-color:#CDD2DE!important;color:#334155!important;}
-  .r-badge.live{background:rgba(22,163,74,.09)!important;border-color:rgba(22,163,74,.22)!important;color:#16A34A!important;}
+  .r-badge.live{background:rgba(95,123,106,0.09)!important;border-color:rgba(95,123,106,0.09)!important;color:#16A34A!important;}
   .r-vs-section{background:#F8FAFC!important;padding:10px 20px!important;border-bottom:1px solid #F8F9FB!important;}
   .r-bar-section{padding:12px 20px 10px!important;border-bottom:1px solid #F8F9FB!important;}
   .r-metrics-section{padding:12px 20px!important;border-bottom:1px solid #F8F9FB!important;}
@@ -3346,7 +3377,7 @@
     animation: ksStepPing 1.2s ease-in-out infinite;
   }
   .ks-ldr-step.done .ks-ldr-dot {
-    background: #22C55E; border-color: #22C55E;
+    background: #C49A2A; border-color: #C49A2A;
   }
   @keyframes ksStepPing {
     0%,100% { box-shadow: 0 0 0 3px rgba(196,154,42,0.2); }
@@ -3385,7 +3416,7 @@
 
   /* Checkmark */
   .ks-ldr-check {
-    font-size: .75rem; color: #22C55E; font-weight: 900;
+    font-size: .75rem; color: #C49A2A; font-weight: 900;
     flex-shrink: 0; padding-top: 1px;
     opacity: 0; transition: opacity .3s ease;
   }
@@ -3614,8 +3645,8 @@
   
   
   /* delta vs asking */
-  .pir-delta-pos { display: flex; align-items: baseline; gap: 5px; font-size: .65rem; font-weight: 700; color: #15803D; }
-  .pir-delta-neg { display: flex; align-items: baseline; gap: 5px; font-size: .65rem; font-weight: 700; color: #991B1B; }
+  .pir-delta-pos { display: flex; align-items: baseline; gap: 5px; font-size: .65rem; font-weight: 700; color: #5F7A6A; }
+  .pir-delta-neg { display: flex; align-items: baseline; gap: 5px; font-size: .65rem; font-weight: 700; color: #5A2A1E; }
   .pir-delta-pct { font-size: .55rem; font-weight: 600; opacity: .72; }
 
   /* Market position bar */
@@ -3672,11 +3703,11 @@
     transition: transform .12s;
   }
   .pir-flag:hover { transform: translateY(-1px); }
-  .pir-flag-green { background: #F0FDF4; border: 1px solid #86EFAC; }
-  .pir-flag-red   { background: #FEF2F2; border: 1px solid #FCA5A5; }
+  .pir-flag-green { background: rgba(196,154,42,0.10); border: 1px solid rgba(196,154,42,0.40); }
+  .pir-flag-red   { background: rgba(140,74,60,0.08); border: 1px solid rgba(140,74,60,0.35); }
   .pir-flag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-  .pir-flag-dot-green { background: #22C55E; }
-  .pir-flag-dot-red   { background: #EF4444; }
+  .pir-flag-dot-green { background: #C49A2A; }
+  .pir-flag-dot-red   { background: #7A3828; }
 
   /* ── NEGOTIATION GUIDE ── */
   
@@ -3755,11 +3786,11 @@
     padding: 8px 11px; border-radius: 9px;
     font-size: .73rem; color: #2D3F5C; line-height: 1.45;
   }
-  .pir-flag-green { background: #F0FDF4; border: 1px solid #86EFAC; }
-  .pir-flag-red   { background: #FEF2F2; border: 1px solid #FCA5A5; }
+  .pir-flag-green { background: rgba(196,154,42,0.10); border: 1px solid rgba(196,154,42,0.40); }
+  .pir-flag-red   { background: rgba(140,74,60,0.08); border: 1px solid rgba(140,74,60,0.35); }
   .pir-flag-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-  .pir-flag-dot-green { background: #22C55E; }
-  .pir-flag-dot-red   { background: #EF4444; }
+  .pir-flag-dot-green { background: #C49A2A; }
+  .pir-flag-dot-red   { background: #7A3828; }
 
   /* ── NEGOTIATION GUIDE ── */
   
@@ -3917,7 +3948,7 @@
   /* Copy button */
   
   
-  .pir-haggle-copy.copied { color: #15803D; border-color: #86EFAC; background: #F0FDF4; }
+  .pir-haggle-copy.copied { color: #5F7A6A; border-color: rgba(196,154,42,0.40); background: rgba(196,154,42,0.10); }
 
   /* ── AVR: Expert Analysis ── */
   
@@ -4145,26 +4176,26 @@
     position: relative; overflow: hidden; cursor: default;
   }
   .ks-source-live {
-    background: rgba(34,197,94,0.22); color: #4ADE80;
-    border-color: rgba(74,222,128,0.55);
+    background: rgba(196,154,42,0.10); color: #C49A2A;
+    border-color: rgba(196,154,42,0.10);
   }
   .ks-source-estimate {
-    background: rgba(234,179,8,0.13); color: #EAB308;
+    background: rgba(234,179,8,0.13); color: #9C5535;
     border-color: rgba(234,179,8,0.32);
   }
   .ks-source-dot {
     width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
   }
   .ks-source-live .ks-source-dot {
-    background: #22C55E;
+    background: #C49A2A;
     animation: livePulse 1.5s ease-in-out infinite;
   }
   @keyframes livePulse {
-    0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
-    70%  { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
-    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(196,154,42,0.10); }
+    70%  { box-shadow: 0 0 0 5px rgba(196,154,42,0.10); }
+    100% { box-shadow: 0 0 0 0 rgba(196,154,42,0.10); }
   }
-  .ks-source-estimate .ks-source-dot { background: #EAB308; }
+  .ks-source-estimate .ks-source-dot { background: #9C5535; }
 
   /* tier chips inside dark header */
   .ks-tier-chip {
@@ -4175,7 +4206,7 @@
   .ks-tier-serper  { background: rgba(10,37,64,0.13); color: #C49A2A; border: 1px solid rgba(10,37,64,0.25); }
   .ks-tier-gemini  { background: rgba(66,133,244,0.18); color: #93C5FD; border: 1px solid rgba(66,133,244,0.3); }
   .ks-tier-haiku   { background: rgba(167,139,250,0.18); color: #C4B5FD; border: 1px solid rgba(167,139,250,0.3); }
-  .ks-tier-cache   { background: rgba(34,197,94,0.14); color: #86EFAC; border: 1px solid rgba(34,197,94,0.25); }
+  .ks-tier-cache   { background: rgba(196,154,42,0.10); color: rgba(196,154,42,0.40); border: 1px solid rgba(196,154,42,0.10); }
   .ks-tier-formula { background: rgba(234,179,8,0.14); color: #FDE68A; border: 1px solid rgba(234,179,8,0.25); }
 
   /* ── ESTIMATE NOTICE BANNER ────────────────────────────────── */
@@ -4451,9 +4482,9 @@
     
     
     
-    .sig-high  { background: rgba(22,163,74,0.1); color: #15803D; border: 1px solid rgba(22,163,74,0.2); }
-    .sig-mid   { background: rgba(217,119,6,0.1);  color: #92400E; border: 1px solid rgba(217,119,6,0.2); }
-    .sig-low   { background: rgba(220,38,38,0.1);  color: #991B1B; border: 1px solid rgba(220,38,38,0.2); }
+    .sig-high  { background: rgba(95,123,106,0.09); color: #5F7A6A; border: 1px solid rgba(95,123,106,0.09); }
+    .sig-mid   { background: rgba(140,74,60,0.08);  color: #7A5010; border: 1px solid rgba(140,74,60,0.08); }
+    .sig-low   { background: rgba(140,74,60,0.08);  color: #5A2A1E; border: 1px solid rgba(140,74,60,0.08); }
     
     
     .pir-signal-thumb-v28 {
@@ -4528,15 +4559,15 @@
     
     
     
-    .pir-nt-pin-open  .pir-nt-pin-dot   { background: #22C55E; }
-    .pir-nt-pin-open  .pir-nt-pin-price { color: #4ADE80; }
-    .pir-nt-pin-open  .pir-nt-pin-label { color: rgba(74,222,128,0.6); }
+    .pir-nt-pin-open  .pir-nt-pin-dot   { background: #C49A2A; }
+    .pir-nt-pin-open  .pir-nt-pin-price { color: #C49A2A; }
+    .pir-nt-pin-open  .pir-nt-pin-label { color: rgba(196,154,42,0.10); }
     .pir-nt-pin-target .pir-nt-pin-dot  { background: #E8D060; }
     .pir-nt-pin-target .pir-nt-pin-price{ color: #E8D060; }
     .pir-nt-pin-target .pir-nt-pin-label{ color: rgba(232,208,96,0.6); }
-    .pir-nt-pin-walk  .pir-nt-pin-dot   { background: #EF4444; }
-    .pir-nt-pin-walk  .pir-nt-pin-price { color: #FCA5A5; }
-    .pir-nt-pin-walk  .pir-nt-pin-label { color: rgba(252,165,165,0.6); }
+    .pir-nt-pin-walk  .pir-nt-pin-dot   { background: #7A3828; }
+    .pir-nt-pin-walk  .pir-nt-pin-price { color: rgba(140,74,60,0.35); }
+    .pir-nt-pin-walk  .pir-nt-pin-label { color: rgba(140,74,60,0.6); }
     
     
     
@@ -4545,7 +4576,7 @@
     
     
     
-    .pir-nt-copy-btn.copied { color: #4ADE80; border-color: rgba(74,222,128,0.3); }
+    .pir-nt-copy-btn.copied { color: #C49A2A; border-color: rgba(196,154,42,0.10); }
 
     /* ── TAB 1 FOOTER LINKS ── */
     
@@ -4741,7 +4772,7 @@
     }
     @keyframes qcPulse {
       0%,100% { background: transparent; }
-      50%      { background: rgba(192,57,43,0.1); border-radius: 6px; }
+      50%      { background: rgba(140,74,60,0.08); border-radius: 6px; }
     }
 
     /* ── v29 BTN GO — improved ready state glow ─────────────── */
@@ -4811,11 +4842,11 @@
 
 /* ── E20 FIX: Unified gradient palette ─────────────────────────────────────
    Positive / confidence bars: Deep Navy #0F1E38 → Dark Teal #0A2540
-   Range / position bars:      #EF4444 (low) → #EAB308 (mid) → #22C55E (high)
+   Range / position bars:      #7A3828 (low) → #9C5535 (mid) → #C49A2A (high)
    Both replace the previous mix of bright/muted stop inconsistencies.        */
 :root {
   --grad-positive: linear-gradient(90deg, #0A2540 0%, #C49A2A 100%);
-  --grad-range:    linear-gradient(90deg, #EF4444 0%, #EAB308 50%, #22C55E 100%);
+  --grad-range:    linear-gradient(90deg, #7A3828 0%, #9C5535 50%, #C49A2A 100%);
 }
 /* Confidence / demand / meter fills */
 
@@ -5053,12 +5084,12 @@
 /* FMV box — teal */
 
 /* Asking — overpriced */
-.ks-ask-over  { background:rgba(220,38,38,0.06);  border-color:rgba(220,38,38,0.22); }
-.ks-ask-over  .ks-price-box-label { color:#991B1B; }
+.ks-ask-over  { background:rgba(140,74,60,0.08);  border-color:rgba(140,74,60,0.08); }
+.ks-ask-over  .ks-price-box-label { color:#5A2A1E; }
 .ks-ask-over  .ks-price-box-val   { color:#B91C1C; }
 /* Asking — underpriced/good deal */
-.ks-ask-under { background:rgba(22,163,74,0.07);  border-color:rgba(22,163,74,0.25); }
-.ks-ask-under .ks-price-box-label { color:#15803D; }
+.ks-ask-under { background:rgba(95,123,106,0.09);  border-color:rgba(95,123,106,0.09); }
+.ks-ask-under .ks-price-box-label { color:#5F7A6A; }
 .ks-ask-under .ks-price-box-val   { color:#166534; }
 /* Asking — fair */
 .ks-ask-fair  { background:rgba(29,126,216,0.07); border-color:rgba(29,126,216,0.22); }
@@ -5099,13 +5130,13 @@
 
 @keyframes ksMfPulse {
   0%,100% { box-shadow:0 0 0 2px var(--mf2-ring,#16A34A),0 2px 8px rgba(0,0,0,0.22); }
-  50%      { box-shadow:0 0 0 6px rgba(22,163,74,0.25),0 0 0 2px var(--mf2-ring,#16A34A),0 2px 8px rgba(0,0,0,0.22); }
+  50%      { box-shadow:0 0 0 6px rgba(95,123,106,0.09),0 0 0 2px var(--mf2-ring,#16A34A),0 2px 8px rgba(0,0,0,0.22); }
 }
 
 /* ── Interactive price grid ── */
 
 .ks-mf2-row.ks-mf2-active {
-  background:var(--mf2-bg,rgba(22,163,74,0.07));
+  background:var(--mf2-bg,rgba(95,123,106,0.09));
   border-color:var(--mf2-ring,#16A34A);
 }
 
@@ -5165,7 +5196,7 @@
 .ks-community-note {
   font-size:.65rem; color:var(--muted); font-style:italic; line-height:1.5;
   margin:4px 0 8px; padding:6px 10px;
-  background:rgba(184,120,10,0.05); border-left:3px solid var(--warn-line);
+  background:rgba(140,74,60,0.08); border-left:3px solid var(--warn-line);
   border-radius:0 var(--r-sm) var(--r-sm) 0;
 }
 .ks-community-grid { display:flex; flex-direction:column; gap:0; }
@@ -5244,8 +5275,8 @@
   display:flex; align-items:center; justify-content:space-between;
   flex-wrap:nowrap; gap:8px;
   padding:8px 12px;
-  background:rgba(192,57,43,0.05);
-  border:1px solid rgba(192,57,43,0.15);
+  background:rgba(140,74,60,0.08);
+  border:1px solid rgba(140,74,60,0.08);
   border-radius:var(--r-sm);
 }
 .ks-depr-label { font-size:.72rem; font-weight:700; color:var(--bad); white-space:nowrap; flex-shrink:0; }
@@ -5322,11 +5353,11 @@
 /* ── ESTIMATE BANNER (reused) ── */
 .ks-estimate-banner {
   display:flex; gap:12px; align-items:flex-start;
-  padding:14px 18px; background:#FFFBEB;
+  padding:14px 18px; background:rgba(196,154,42,0.10);
   border-bottom:1px solid #FEF08A; font-family:"Exo 2",sans-serif;
 }
 
-.ks-estimate-banner-title { font-size:.78rem; font-weight:800; color:#92400E; margin-bottom:3px; }
+.ks-estimate-banner-title { font-size:.78rem; font-weight:800; color:#7A5010; margin-bottom:3px; }
 .ks-estimate-banner-text { font-size:.72rem; color:#78350F; line-height:1.5; }
 
 /* ── RESPONSIVE ── */
@@ -5692,9 +5723,9 @@ body.ks-result-active .form-card:hover {
   color: #FFFFFF !important;
   font-weight: 700 !important;
 }
-.ks-spec-chip-val.good { color: #4ADE80 !important; }
-.ks-spec-chip-val.warn { color: #FCD34D !important; }
-.ks-spec-chip-val.bad  { color: #FCA5A5 !important; }
+.ks-spec-chip-val.good { color: #C49A2A !important; }
+.ks-spec-chip-val.warn { color: rgba(196,154,42,0.40) !important; }
+.ks-spec-chip-val.bad  { color: rgba(140,74,60,0.35) !important; }
 
 /* ── Body text → readable at .78rem min ── */
 
@@ -5834,7 +5865,7 @@ body.ks-result-active .form-card:hover {
 /* Range strip */
 .ks-sk-strip {
   height: 38px;
-  background: linear-gradient(90deg, rgba(21,128,61,.06) 0%, rgba(21,128,61,.04) 50%, rgba(220,38,38,.05) 100%);
+  background: linear-gradient(90deg, rgba(21,128,61,.06) 0%, rgba(21,128,61,.04) 50%, rgba(140,74,60,0.08) 100%);
   border-bottom: 1px solid #E8EBF0;
   flex-shrink: 0;
 }
@@ -5983,9 +6014,9 @@ body.ks-result-active .form-card:hover {
 .ks-spec-chip { border-right-color: rgba(255,255,255,0.10) !important; }
 .ks-spec-chip-lbl { color: rgba(196,154,42,0.9) !important; }
 .ks-spec-chip-val { color: #FFFFFF !important; font-weight: 700 !important; }
-.ks-spec-chip-val.good { color: #4ADE80 !important; }
-.ks-spec-chip-val.warn { color: #FCD34D !important; }
-.ks-spec-chip-val.bad  { color: #FCA5A5 !important; }
+.ks-spec-chip-val.good { color: #C49A2A !important; }
+.ks-spec-chip-val.warn { color: rgba(196,154,42,0.40) !important; }
+.ks-spec-chip-val.bad  { color: rgba(140,74,60,0.35) !important; }
 
 /* Meter track: light */
 
@@ -6231,8 +6262,8 @@ body.ks-result-active .form-card:hover {
   .ks-price-hl-main { font-family: "Orbitron",sans-serif; font-size: clamp(1.7rem,5vw,2.4rem); font-weight: 900; color: #0A2540; letter-spacing: -.02em; line-height: 1; margin-bottom: 6px; }
   .ks-price-hl-range { font-size: .74rem; color: #3D5166; margin-bottom: 10px; }
   .ks-price-hl-ask { display: inline-flex; align-items: center; gap: 8px; font-size: .75rem; font-weight: 700; padding: 6px 14px; border-radius: 99px; margin-bottom: 10px; flex-wrap: wrap; justify-content: center; }
-  .ks-ask-over  { background: rgba(192,57,43,.08); color: #C0392B; border: 1px solid rgba(192,57,43,.2); }
-  .ks-ask-under { background: rgba(26,140,107,.08); color: #1A8C6B; border: 1px solid rgba(26,140,107,.2); }
+  .ks-ask-over  { background: rgba(140,74,60,0.08); color: #7A3828; border: 1px solid rgba(140,74,60,0.08); }
+  .ks-ask-under { background: rgba(95,123,106,0.09); color: #C49A2A; border: 1px solid rgba(95,123,106,0.09); }
   .ks-ask-fair  { background: rgba(10,37,64,.06); color: #0A2540; border: 1px solid rgba(10,37,64,.15); }
   .ks-ask-delta { font-weight: 600; opacity: .85; }
   .ks-price-meta { display: flex; justify-content: center; gap: 6px; font-size: .64rem; color: #4B5E75; }
@@ -6241,7 +6272,7 @@ body.ks-result-active .form-card:hover {
   /* ── 4. DEAL ANALYSIS ── */
   .ks-deal-verdict { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 99px; font-size: .78rem; font-weight: 800; letter-spacing: .04em; margin-bottom: 12px; }
   .ks-verdict-buy  { background: #D1FAE5; color: #065F46; border: 1.5px solid #6EE7B7; }
-  .ks-verdict-nego { background: #FEF3C7; color: #92400E; border: 1.5px solid #FCD34D; }
+  .ks-verdict-nego { background: rgba(196,154,42,0.10); color: #7A5010; border: 1.5px solid rgba(196,154,42,0.40); }
   
   .ks-verdict-fair { background: #EFF6FF; color: #1E40AF; border: 1.5px solid #93C5FD; }
   .ks-verdict-emoji { font-size: .95rem; }
@@ -6275,9 +6306,9 @@ body.ks-result-active .form-card:hover {
   .ks-conf-title { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #94A3B8; margin-bottom: 2px; }
   .ks-conf-score { font-family: "Orbitron",sans-serif; font-size: 1.5rem; font-weight: 900; color: #0A2540; line-height: 1; }
   .ks-conf-denom { font-size: .7rem; font-weight: 600; color: #94A3B8; }
-  .ks-conf-label { font-size: .6rem; color: #4B5E75; margin-top: 2px; white-space: nowrap; }
+  .ks-conf-label { font-size: .6rem; color: #000080; margin-top: 2px; white-space: nowrap; }
   .ks-conf-bar-wrap { flex: 1; }
-  .ks-conf-bar-track { height: 7px; background: linear-gradient(90deg,#EF4444,#F59E0B 40%,#22C55E 80%); border-radius: 99px; margin-bottom: 8px; position: relative; }
+  .ks-conf-bar-track { height: 7px; background: linear-gradient(90deg,#7A3828,#8C4A3C 40%,#C49A2A 80%); border-radius: 99px; margin-bottom: 8px; position: relative; }
   .ks-conf-bar-fill { position: absolute; top: 0; right: 0; bottom: 0; background: rgba(255,255,255,.5); border-radius: 0 99px 99px 0; transition: width .8s ease; }
   .ks-conf-caption { font-size: .72rem; color: #3D5166; line-height: 1.55; }
 
@@ -6309,10 +6340,10 @@ body.ks-result-active .form-card:hover {
   .ks-s7-situation em { font-style: normal; font-weight: 600; }
   .ks-s7-sit-title { font-size: .72rem; font-weight: 800; letter-spacing: .02em; margin-bottom: 2px; }
 
-  .ks-s7-sit-warn  { background: rgba(192,57,43,.05); border-color: rgba(192,57,43,.22); color: #7A1F1F; }
-  .ks-s7-sit-warn  .ks-s7-sit-title { color: #C0392B; }
-  .ks-s7-sit-good  { background: rgba(26,140,107,.05); border-color: rgba(26,140,107,.22); color: #0F4A36; }
-  .ks-s7-sit-good  .ks-s7-sit-title { color: #1A8C6B; }
+  .ks-s7-sit-warn  { background: rgba(140,74,60,0.08); border-color: rgba(140,74,60,0.08); color: #5A2A1E; }
+  .ks-s7-sit-warn  .ks-s7-sit-title { color: #7A3828; }
+  .ks-s7-sit-good  { background: rgba(95,123,106,0.09); border-color: rgba(95,123,106,0.09); color: #3D5A50; }
+  .ks-s7-sit-good  .ks-s7-sit-title { color: #C49A2A; }
   .ks-s7-sit-fair  { background: rgba(10,37,64,.04); border-color: rgba(10,37,64,.15); color: #1A2738; }
   .ks-s7-sit-fair  .ks-s7-sit-title { color: #0A2540; }
   .ks-s7-sit-neutral{ background: #F8FAFC; border-color: #DDE4EE; color: #2D3D50; }
@@ -6343,7 +6374,7 @@ body.ks-result-active .form-card:hover {
   
   
   
-  .ks-outlook-note { font-size: .74rem; color: #2D3D50; line-height: 1.6; background: #F8FAFC; border-radius: 8px; padding: 10px 12px; border: 1px solid #E5E9EF; }
+  .ks-outlook-note { font-size: .74rem; color: #000080; line-height: 1.6; background: #F8FAFC; border-radius: 8px; padding: 10px 12px; border: 1px solid #E5E9EF; }
   
 
   /* Costs */
@@ -6351,10 +6382,10 @@ body.ks-result-active .form-card:hover {
   .ks-cost-table td { padding: 7px 0; font-size: .80rem; color: #2D3D50; border-bottom: 1px solid #F1F5F9; }
   .ks-cost-table td:last-child { text-align: right; font-weight: 700; color: #0A2540; }
   .ks-cost-total td { font-size: .84rem; font-weight: 800; color: #0A2540; border-bottom: 2px solid #0A2540; padding-top: 10px; }
-  .ks-cost-depr-note { display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 8px; background: rgba(192,57,43,.06); border: 1px solid rgba(192,57,43,.18); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; }
-  .ks-depr-label { font-size: .72rem; font-weight: 700; color: #C0392B; white-space: nowrap; flex-shrink: 0; }
-  .ks-depr-val   { font-size: .78rem; font-weight: 800; color: #C0392B; white-space: nowrap; flex-shrink: 0; text-align: right; }
-  .ks-cost-note  { font-size: .68rem; color: #4B5E75; line-height: 1.55; }
+  .ks-cost-depr-note { display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 8px; background: rgba(140,74,60,0.08); border: 1px solid rgba(140,74,60,0.08); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; }
+  .ks-depr-label { font-size: .72rem; font-weight: 700; color: #7A3828; white-space: nowrap; flex-shrink: 0; }
+  .ks-depr-val   { font-size: .78rem; font-weight: 800; color: #7A3828; white-space: nowrap; flex-shrink: 0; text-align: right; }
+  .ks-cost-note  { font-size: .68rem; color: #000080; line-height: 1.55; }
 
   /* Negotiation */
   
@@ -6396,7 +6427,7 @@ body.ks-result-active .form-card:hover {
   /* Price Difference label */
   .ks-price-diff-lbl {
     font-size: .58rem; font-weight: 800; letter-spacing: .14em;
-    text-transform: uppercase; color: #94A3B8; margin-bottom: 4px;
+    text-transform: uppercase; color: #000080; margin-bottom: 4px;
   }
 
   /* Flags sub-heads */
@@ -6478,8 +6509,8 @@ body.ks-result-active .form-card:hover {
   .ks-hscale-above-name {
     font-size: .56rem; font-weight: 800; letter-spacing: .06em;
     text-transform: uppercase; color: #16803C; white-space: nowrap;
-    background: rgba(22,163,74,.10); border-radius: 4px;
-    padding: 2px 6px; border: 1px solid rgba(22,163,74,.18);
+    background: rgba(95,123,106,0.09); border-radius: 4px;
+    padding: 2px 6px; border: 1px solid rgba(95,123,106,0.09);
   }
   .ks-hscale-above-amt {
     font-size: .64rem; font-weight: 800; color: #16803C; white-space: nowrap;
@@ -6543,8 +6574,8 @@ body.ks-result-active .form-card:hover {
   .ks-hscale-below-name {
     font-size: .56rem; font-weight: 800; letter-spacing: .06em;
     text-transform: uppercase; color: #DC2626; white-space: nowrap;
-    background: rgba(220,38,38,.08); border-radius: 4px;
-    padding: 2px 6px; border: 1px solid rgba(220,38,38,.18);
+    background: rgba(140,74,60,0.08); border-radius: 4px;
+    padding: 2px 6px; border: 1px solid rgba(140,74,60,0.08);
   }
   .ks-hscale-below-amt {
     font-size: .64rem; font-weight: 800; color: #DC2626; white-space: nowrap;
@@ -6596,7 +6627,7 @@ body.ks-result-active .form-card:hover {
 .ks-depr3-now { background:linear-gradient(135deg,rgba(10,37,64,.07),rgba(10,37,64,.02)); border-color:rgba(10,37,64,.22); }
 .ks-depr3-y1  { background:linear-gradient(135deg,rgba(196,154,42,.08),rgba(196,154,42,.02)); border-color:rgba(196,154,42,.32); }
 .ks-depr3-y2  { background:linear-gradient(135deg,rgba(234,88,12,.07),rgba(234,88,12,.02)); border-color:rgba(234,88,12,.28); }
-.ks-depr3-y3  { background:linear-gradient(135deg,rgba(220,38,38,.07),rgba(220,38,38,.02)); border-color:rgba(220,38,38,.25); }
+.ks-depr3-y3  { background:linear-gradient(135deg,rgba(140,74,60,0.08),rgba(140,74,60,0.08)); border-color:rgba(140,74,60,0.08); }
 
 .ks-depr3-yr { font-family:"Exo 2",sans-serif; font-size:.56rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:6px; display:block; }
 .ks-depr3-now .ks-depr3-yr { color:#0A2540; } .ks-depr3-y1 .ks-depr3-yr { color:#92660A; }
@@ -6615,7 +6646,7 @@ body.ks-result-active .form-card:hover {
 .ks-depr3-now .ks-depr3-ret { background:rgba(10,37,64,.09);   color:#0A2540; }
 .ks-depr3-y1  .ks-depr3-ret { background:rgba(196,154,42,.14); color:#92660A; }
 .ks-depr3-y2  .ks-depr3-ret { background:rgba(234,88,12,.11);  color:#C2440C; }
-.ks-depr3-y3  .ks-depr3-ret { background:rgba(220,38,38,.11);  color:#B91C1C; }
+.ks-depr3-y3  .ks-depr3-ret { background:rgba(140,74,60,0.08);  color:#B91C1C; }
 
 .ks-depr3-loss { font-family:"Exo 2",sans-serif; font-size:.56rem; color:#64748B; border-top:1px solid rgba(0,0,0,.07); padding-top:5px; margin-top:2px; }
 .ks-depr3-loss-amt { display:block; font-weight:800; font-size:.60rem; color:#B91C1C; margin-top:1px; }
@@ -6638,10 +6669,10 @@ body.ks-result-active .form-card:hover {
 .ks-depr3-insight { display:flex; gap:10px; align-items:flex-start; padding:10px 13px; border-radius:10px; border:1px solid; font-family:"Exo 2",sans-serif; font-size:.78rem; line-height:1.6; color:var(--ink-soft); }
 .ks-depr3-buy    { background:rgba(21,128,61,.05);  border-color:rgba(21,128,61,.20); }
 .ks-depr3-sell   { background:rgba(10,37,64,.04);   border-color:rgba(10,37,64,.16); }
-.ks-depr3-broker { background:rgba(184,120,10,.05); border-color:rgba(184,120,10,.20); }
+.ks-depr3-broker { background:rgba(140,74,60,0.08); border-color:rgba(140,74,60,0.08); }
 .ks-depr3-ico { font-size:.9rem; flex-shrink:0; margin-top:2px; }
 .ks-depr3-lbl { display:block; font-size:.54rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; margin-bottom:2px; }
-.ks-depr3-buy    .ks-depr3-lbl { color:#15803D; }
+.ks-depr3-buy    .ks-depr3-lbl { color:#5F7A6A; }
 .ks-depr3-sell   .ks-depr3-lbl { color:#0A2540; }
 .ks-depr3-broker .ks-depr3-lbl { color:#B45309; }
 .ks-depr3-cls-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:8px; margin-bottom:12px; font-family:"Exo 2",sans-serif; font-size:.68rem; font-weight:700; background:rgba(10,37,64,.05); border:1px solid rgba(10,37,64,.15); color:#0A2540; }
@@ -6792,7 +6823,7 @@ body.ks-result-active .form-card:hover {
 .ks-price-diff-lbl {
   font-size: var(--fs-eyebrow) !important;
   font-weight: 700 !important; letter-spacing: .12em !important;
-  text-transform: uppercase !important; color: #94A3B8 !important;
+  text-transform: uppercase !important; color: #000080 !important;
   margin-bottom: 6px !important; display: block !important;
 }
 .ks-price-hl-ask {
@@ -6835,7 +6866,7 @@ body.ks-result-active .form-card:hover {
 .ks-conf-bar-track {
   height: 10px !important;
   border-radius: 99px !important; margin-bottom: 10px !important;
-  background: linear-gradient(90deg,#EF4444 0%,#F59E0B 45%,#22C55E 85%) !important;
+  background: linear-gradient(90deg,#7A3828 0%,#8C4A3C 45%,#C49A2A 85%) !important;
   position: relative !important;
 }
 .ks-conf-bar-fill {
@@ -6867,13 +6898,13 @@ body.ks-result-active .form-card:hover {
 .ks-flag-plain:last-child { border-bottom: none !important; }
 /* Green flag card */
 .ks-flag-plain:has(.ks-flag-icon-green) {
-  border-left: 4px solid #22C55E !important;
-  background: rgba(34,197,94,.04) !important;
+  border-left: 4px solid #C49A2A !important;
+  background: rgba(196,154,42,0.10) !important;
 }
 /* Warn flag card */
 .ks-flag-plain:has(.ks-flag-icon-warn) {
-  border-left: 4px solid #F59E0B !important;
-  background: rgba(245,158,11,.04) !important;
+  border-left: 4px solid #8C4A3C !important;
+  background: rgba(140,74,60,.04) !important;
 }
 .ks-flag-icon { font-size: 1rem !important; flex-shrink: 0 !important; margin-top: 1px !important; }
 
@@ -6886,9 +6917,9 @@ body.ks-result-active .form-card:hover {
   line-height: 1.55 !important; margin-bottom: 6px !important;
   border-bottom: none !important;
 }
-.ks-comm-pos { background: rgba(34,197,94,.04) !important; border-left: 4px solid #22C55E !important; }
+.ks-comm-pos { background: rgba(196,154,42,0.10) !important; border-left: 4px solid #C49A2A !important; }
 .ks-comm-neu { background: rgba(59,130,246,.04) !important; border-left: 4px solid #93C5FD !important; }
-.ks-comm-cau { background: rgba(245,158,11,.04) !important; border-left: 4px solid #F59E0B !important; }
+.ks-comm-cau { background: rgba(140,74,60,.04) !important; border-left: 4px solid #8C4A3C !important; }
 
 /* Fuel row card */
 .ks-fuel-row {
@@ -6922,7 +6953,7 @@ body.ks-result-active .form-card:hover {
 }
 /* Seller card — gold header */
 .ks-s7-col:last-child .ks-s7-head {
-  background: linear-gradient(135deg,#B8780A,#C49A2A) !important;
+  background: linear-gradient(135deg,#9C5535,#C49A2A) !important;
   color: #fff !important;
 }
 .ks-s7-body {
@@ -7329,7 +7360,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
   --ks-c-body:   #2D3F55;
   --ks-c-gold:   #C49A2A;
   --ks-c-loss:   #DC2626;
-  --ks-c-retain: #15803D;
+  --ks-c-retain: #5F7A6A;
   --ks-sp-section: 18px 16px 16px; /* section padding */
   --ks-sp-cell:    9px 10px;        /* table/card cell padding */
   --ks-gap:        10px;            /* gap between cards/boxes */
@@ -7577,8 +7608,8 @@ body.ks-result-active #backToInputs { display: flex !important; }
   --gold:#C49A2A; --gold-light:#E8D060;
   --ink:#1A2738; --ink-soft:#2D3F55; --muted:#4B5E75;
   --border:#DEE3EB; --surface:#F8F9FB; --surface-2:#F2F4F8; --white:#fff;
-  --good:#1A8C6B; --good-bg:rgba(26,140,107,0.08); --good-line:rgba(26,140,107,0.20);
-  --bad:#C0392B;  --bad-bg:rgba(192,57,43,0.08);   --bad-line:rgba(192,57,43,0.20);
+  --good:#5F7B6A; --good-bg:rgba(95,123,106,0.08); --good-line:rgba(95,123,106,0.20);
+  --bad:#8C4A3C;  --bad-bg:rgba(140,74,60,0.08);   --bad-line:rgba(140,74,60,0.20);
   --ease:cubic-bezier(0.16,1,0.3,1);
 }
 
@@ -7908,9 +7939,9 @@ body.ks-result-active #backToInputs { display: flex !important; }
   --rpt-divider:    2px solid #EAECF2;
   --rpt-navy:       #0A2540;
   --rpt-gold:       #C49A2A;
-  --rpt-ink:        #1A2738;
-  --rpt-soft:       #2D3F55;
-  --rpt-muted:      #64748B;
+  --rpt-ink:        #000080;
+  --rpt-soft:       #000080;
+  --rpt-muted:      #000080;
   --rpt-border:     #EAECF2;
   /* Type scale */
   --rpt-price:      clamp(2.2rem, 7vw, 3.2rem);
@@ -8068,6 +8099,11 @@ body.ks-result-active #backToInputs { display: flex !important; }
   color: #fff !important;
   background: var(--rpt-navy) !important;
 }
+/* Right-align the total investment row value */
+.ks-cost-total td:last-child,
+.ks-cost-table tr:last-child td:last-child {
+  text-align: right !important;
+}
 .ks-listings-table th {
   font-size: var(--rpt-label) !important;
   font-weight: 800 !important;
@@ -8076,6 +8112,11 @@ body.ks-result-active #backToInputs { display: flex !important; }
   color: var(--rpt-muted) !important;
   white-space: nowrap !important;
 }
+/* Right-align Asking Price and vs FMV columns (4th and 5th) */
+.ks-listings-table th:nth-child(5),
+.ks-listings-table th:nth-child(6) {
+  text-align: right !important;
+}
 .ks-lt-brand { font-weight: 700 !important; color: var(--rpt-navy) !important; }
 .ks-lt-price {
   font-family: "Orbitron", sans-serif !important;
@@ -8083,6 +8124,21 @@ body.ks-result-active #backToInputs { display: flex !important; }
   font-weight: 800 !important;
   color: var(--rpt-navy) !important;
   white-space: nowrap !important;
+  text-align: right !important;
+}
+.ks-lt-diff {
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+/* rpt-cost and rpt-depr tables (paid page) — right-align values */
+.rpt-cost-table td:last-child {
+  text-align: right !important;
+  font-weight: 700 !important;
+  color: #000080 !important;
+}
+.rpt-depr-table td:last-child,
+.rpt-depr-table th:last-child {
+  text-align: right !important;
 }
 
 /* ─── SPEC CHIP STRIP (dark navy bar) ───────────────────────── */
@@ -8101,9 +8157,9 @@ body.ks-result-active #backToInputs { display: flex !important; }
   display: block !important;
   margin-top: 1px !important;
 }
-.ks-spec-chip-val.good { color: #4ADE80 !important; }
-.ks-spec-chip-val.warn { color: #FCD34D !important; }
-.ks-spec-chip-val.bad  { color: #FCA5A5 !important; }
+.ks-spec-chip-val.good { color: #C49A2A !important; }
+.ks-spec-chip-val.warn { color: rgba(196,154,42,0.40) !important; }
+.ks-spec-chip-val.bad  { color: rgba(140,74,60,0.35) !important; }
 
 /* ─── REPORT HEADER (dark navy letterhead) ───────────────────── */
 .ks-report-header {
@@ -8156,7 +8212,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
 .ks-price-hl-range {
   font-family: "Exo 2", sans-serif !important;
   font-size: var(--rpt-sm) !important;
-  color: #3D5166 !important;
+  color: #000080 !important;
   font-weight: 600 !important;
   margin-bottom: 14px !important;
 }
@@ -8176,12 +8232,12 @@ body.ks-result-active #backToInputs { display: flex !important; }
   line-height: 1.55 !important;
 }
 .ks-flag-plain:has(.ks-flag-icon-green) {
-  border-left: 4px solid #22C55E !important;
-  background: rgba(34,197,94,.04) !important;
+  border-left: 4px solid #C49A2A !important;
+  background: rgba(196,154,42,0.10) !important;
 }
 .ks-flag-plain:has(.ks-flag-icon-warn) {
-  border-left: 4px solid #F59E0B !important;
-  background: rgba(245,158,11,.04) !important;
+  border-left: 4px solid #8C4A3C !important;
+  background: rgba(140,74,60,.04) !important;
 }
 .ks-comm-item {
   display: flex !important;
@@ -8305,6 +8361,37 @@ body.ks-result-active #backToInputs { display: flex !important; }
   line-height: 1.6 !important;
   margin-bottom: 14px !important;
 }
+
+/* ─── UNIFIED ICON SYSTEM — stroke-based, 14×14, currentColor ── */
+.ks-flag-icon,
+.ks-s7-check-icon,
+.ks-comm-icon,
+.ks-fuel-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 0 !important;
+}
+.ks-flag-icon svg,.ks-s7-check-icon svg,.ks-comm-icon svg,.ks-fuel-icon svg {
+  width: 14px !important; height: 14px !important;
+  display: block !important; flex-shrink: 0 !important;
+}
+.ks-flag-icon-green              { color: #C49A2A !important; }
+.ks-flag-icon-warn               { color: #9C5535 !important; }
+.ks-comm-pos .ks-comm-icon       { color: #C49A2A !important; }
+.ks-comm-neu .ks-comm-icon       { color: #0A2540 !important; }
+.ks-comm-cau .ks-comm-icon       { color: #7A3828 !important; }
+.ks-check-pos                    { color: #C49A2A !important; }
+.ks-check-warn                   { color: #9C5535 !important; }
+.ks-check-action                 { color: #0A2540 !important; }
+.ks-col-head-ico {
+  display: inline-flex !important; align-items: center !important;
+  margin-right: 7px !important; opacity: .9 !important;
+}
+.ks-col-head-ico svg { width: 15px !important; height: 15px !important; display: block !important; }
 
 /* ─── MOBILE OVERRIDES ───────────────────────────────────────── */
 @media(max-width: 600px) {
@@ -9219,7 +9306,7 @@ function _checkMileagePlausibility(){
   const maxPlausible = age * 30000;
   if(mileage > maxPlausible){
     lbl.textContent = '⚠ KM';
-    lbl.style.color = '#C0392B';
+    lbl.style.color = '#7A3828';
     lbl.title       = `Unusually high for a ${year} model — please verify`;
   } else {
     lbl.textContent = 'KM';
@@ -10481,7 +10568,7 @@ function _pirColourHex(name){
     'Dark Blue':'#1E3A8A','Light Blue':'#60A5FA','Red':'#DC2626','Maroon':'#7F1D1D',
     'Burgundy':'#6B2131','Gold':'#D4AF37','Champagne':'#C8A87A','Bronze':'#A0714F',
     'Beige':'#D4C5A9','Cream':'#FFFDD0','Sand':'#C2B280','Brown':'#6F4E37',
-    'Green':'#16A34A','Dark Green':'#14532D','Orange':'#EA580C','Yellow':'#EAB308',
+    'Green':'#16A34A','Dark Green':'#14532D','Orange':'#EA580C','Yellow':'#9C5535',
     'Purple':'#7C3AED','Other':'#9CA3AF'
   };
   return map[name]||'#9CA3AF';
@@ -11308,7 +11395,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const identLine2Parts=[`${kmFmt} km`,specDisplay].filter(s=>s&&s!=='—');
   const identLine3Parts=[`Condition: ${condDisplay}`].filter(Boolean);
   // QC checkbox state display
-  const _qcBadge=(val,yLbl,nLbl)=>val===true?`<span style="color:#15803D;font-weight:700;">✓ ${yLbl}</span>`:val===false?`<span style="color:#991B1B;font-weight:700;">✗ ${nLbl}</span>`:`<span style="color:#8A9AB8;">— ${yLbl}</span>`;
+  const _qcBadge=(val,yLbl,nLbl)=>val===true?`<span style="color:#5F7A6A;font-weight:700;">✓ ${yLbl}</span>`:val===false?`<span style="color:#5A2A1E;font-weight:700;">✗ ${nLbl}</span>`:`<span style="color:#8A9AB8;">— ${yLbl}</span>`;
   const identLine4Parts=[
     _qcBadge(qs.accident,'Accident','No Accident'),
     _qcBadge(qs.fsh,'Serviceory','No Serviceory'),
@@ -11354,7 +11441,7 @@ function buildResult(r,brand,model,year,mileage,asking){
   const mktPositionText = `Data Quality Score: ${_tsScore}/10 — ${_tsLabel}`;
 
   // Trend icon for depreciation
-  const deprIcon=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4l5 6 5-6" stroke="#C0392B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const deprIcon=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4l5 6 5-6" stroke="#7A3828" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   // FMV delta vs asking
   let deltaHtml='';
@@ -11466,11 +11553,11 @@ function buildResult(r,brand,model,year,mileage,asking){
       'ks-verdict-fair'}">
       <span class="ks-verdict-emoji">${
         _vc.verdict==='BUY NOW'?'⭐':
-        _vc.verdict==='GOOD DEAL'?'✅':
-        _vc.verdict==='FAIRLY PRICED'?'📊':
-        _vc.verdict==='SLIGHTLY HIGH'?'⚠️':
-        _vc.verdict==='OVERPRICED'?'🔴':
-        _vc.verdict==='WALK AWAY'?'🚫':'📊'
+        _vc.verdict==='GOOD DEAL'?'<span style="color:#C49A2A;display:inline-flex"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':
+        _vc.verdict==='FAIRLY PRICED'?'<span style="color:#0A2540;display:inline-flex"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="7.5" width="2.5" height="5" rx=".5" stroke="currentColor" stroke-width="1.4"/><rect x="5.5" y="4.5" width="2.5" height="8" rx=".5" stroke="currentColor" stroke-width="1.4"/><rect x="9.5" y="1.5" width="2.5" height="11" rx=".5" stroke="currentColor" stroke-width="1.4"/></svg></span>':
+        _vc.verdict==='SLIGHTLY HIGH'?'<span style="color:#9C5535;display:inline-flex"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>':
+        _vc.verdict==='OVERPRICED'?'<span style="color:#7A3828;display:inline-flex"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>':
+        _vc.verdict==='WALK AWAY'?'<span style="color:#7A3828;display:inline-flex"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/><line x1="3" y1="11" x2="11" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>':'<span style="color:#0A2540;display:inline-flex"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="7.5" width="2.5" height="5" rx=".5" stroke="currentColor" stroke-width="1.4"/><rect x="5.5" y="4.5" width="2.5" height="8" rx=".5" stroke="currentColor" stroke-width="1.4"/><rect x="9.5" y="1.5" width="2.5" height="11" rx=".5" stroke="currentColor" stroke-width="1.4"/></svg></span>'
       }</span>
       <span class="ks-verdict-label">${
         _vc.verdict==='BUY NOW'?'Strong Buy — Well Below Market':
@@ -11549,12 +11636,12 @@ function buildResult(r,brand,model,year,mileage,asking){
   <!-- ── 5. WHAT'S GOOD / WHAT TO WATCH OUT FOR ────── -->
   <div class="ks-section ks-section-flags">
     <div class="ks-flags-grid">
-      ${gF.length?`<div class="ks-flags-sub-head">✓ What's Good</div>`+gF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">✓</span><span>${f}</span></div>`).join(''):''}
-      ${rF.length?`<div class="ks-flags-sub-head" style="margin-top:${gF.length?'10px':'0'}">⚠ What to Watch Out For</div>`+rF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-warn">⚠</span><span>${f}</span></div>`).join(''):`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">—</span><span>No major concerns noted</span></div>`}
+      ${gF.length?`<div class="ks-flags-sub-head">What's Good</div>`+gF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>${f}</span></div>`).join(''):''}
+      ${rF.length?`<div class="ks-flags-sub-head" style="margin-top:${gF.length?'10px':'0'}">What to Watch Out For</div>`+rF.map(f=>`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-warn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span><span>${f}</span></div>`).join(''):`<div class="ks-flag ks-flag-plain"><span class="ks-flag-icon ks-flag-icon-green">—</span><span>No major concerns noted</span></div>`}
     </div>
     <!-- Fuel Consumption -->
     <div class="ks-fuel-row">
-      <span class="ks-fuel-icon">⛽</span>
+      <span class="ks-fuel-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3.5 12.5V3.5a1 1 0 011-1h4a1 1 0 011 1V8h1a1 1 0 011 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="12.5" x2="11" y2="12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
       <div class="ks-fuel-body">
         <span class="ks-fuel-lbl">Estimated Fuel Consumption</span>
         <span class="ks-fuel-val">${(()=>{
@@ -11572,7 +11659,7 @@ function buildResult(r,brand,model,year,mileage,asking){
       </div>
     </div>
     <!-- Community Feedback -->
-    <div class="ks-flags-sub-head" style="margin-top:14px;">💬 What People Are Saying</div>
+    <div class="ks-flags-sub-head" style="margin-top:14px;display:flex;align-items:center;gap:6px;"><span class="ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M12.5 2.5a1 1 0 00-1-1h-9a1 1 0 00-1 1v7a1 1 0 001 1h7l3 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span> What People Are Saying</div>
     <div class="ks-community-note">The following reflects opinions from UAE car communities, classifieds, and owner forums — not KamSayara's assessment. Use as a general reference only.</div>
     <div class="ks-community-grid">
       ${(()=>{
@@ -11618,7 +11705,7 @@ function buildResult(r,brand,model,year,mileage,asking){
         if(cautious.length===0) cautious.push('No major red flags consistently raised by the community for this type of vehicle in current market conditions.');
 
         const renderItems=(arr,icon,cls)=>arr.map(t=>`<div class="ks-comm-item ${cls}"><span class="ks-comm-icon">${icon}</span><span>${t}</span></div>`).join('');
-        return renderItems(positive,'👍','ks-comm-pos')+renderItems(neutral,'💡','ks-comm-neu')+renderItems(cautious,'⚠️','ks-comm-cau');
+        return renderItems(positive,'<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>','ks-comm-pos')+renderItems(neutral,'<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="6.5" x2="7" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="4.5" r=".7" fill="currentColor"/></svg>','ks-comm-neu')+renderItems(cautious,'<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg>','ks-comm-cau');
       })()}
     </div>
   </div>
@@ -11636,9 +11723,9 @@ function buildResult(r,brand,model,year,mileage,asking){
           <div class="ks-conf-bar-fill" style="width:${Math.round(_tsScore/10*100)}%"></div>
         </div>
         <div class="ks-conf-stats">
-        <span class="ks-conf-stat-item">🔍 Live Market Data: ${comp>0?comp+' listings':'Not available'}</span>
+        <span class="ks-conf-stat-item" style="display:inline-flex;align-items:center;gap:4px;"><span style="color:#0A2540;display:inline-flex;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="9.2" y1="9.2" x2="12.5" y2="12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span> Live Market Data: ${comp>0?comp+' listings':'Not available'}</span>
         <span class="ks-conf-stat-sep">·</span>
-        <span class="ks-conf-stat-item">📊 Buyer Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
+        <span class="ks-conf-stat-item" style="display:inline-flex;align-items:center;gap:4px;"><span style="color:#0A2540;display:inline-flex;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="7.5" width="2.5" height="5" rx=".5" stroke="currentColor" stroke-width="1.4"/><rect x="5.5" y="4.5" width="2.5" height="8" rx=".5" stroke="currentColor" stroke-width="1.4"/><rect x="9.5" y="1.5" width="2.5" height="11" rx=".5" stroke="currentColor" stroke-width="1.4"/></svg></span> Buyer Demand: ${mkt&&mkt.score>=70?'High':mkt&&mkt.score>=45?'Medium':'Average'}</span>
       </div>
       <div class="ks-conf-caption">${_tsScore>=7?'Price Confidence: High — Live Market Data supports this price.':_tsScore>=5?'Price Confidence: Medium — Limited Live Market Data available.':'Price Confidence: Low — No Live Market Data. AI estimate only.'}</div>
       <div class="ks-conf-reason">${(()=>{
@@ -11687,7 +11774,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
       <!-- BUYER COLUMN -->
       <div class="ks-s7-col-wrap ks-s7-col-buyer">
-        <div class="ks-s7-col-head ks-s7-col-head-buyer">🧑‍💼 For Buyers</div>
+        <div class="ks-s7-col-head ks-s7-col-head-buyer"><span class="ks-col-head-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 13c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>For Buyers</div>
         ${(()=>{
           const isOver   = askN && askN > handshake;
           const isUnder  = askN && askN <= handshake * 0.97;
@@ -11721,7 +11808,7 @@ function buildResult(r,brand,model,year,mileage,asking){
             </div>`;
           } else if (isOver) {
             situationHtml = `<div class="ks-s7-situation ks-s7-sit-warn">
-              <div class="ks-s7-sit-title">⚠ Asking Price is AED ${overAmt.toLocaleString()} Above Market</div>
+              <div class="ks-s7-sit-title" style="display:flex;align-items:center;gap:6px;"><span style="color:#9C5535;display:inline-flex;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>Asking Price is AED ${overAmt.toLocaleString()} Above Market</div>
               <p>The seller is asking <strong>AED ${askN.toLocaleString()}</strong>, which is <strong>${Math.round(overAmt/handshake*100)}% above</strong> the fair market value of AED ${handshake.toLocaleString()}. You are being asked to pay a premium that the current UAE market does not support for this vehicle's profile.</p>
               ${hasWeaknesses ? `<p>This car also has factors that reduce its fair value: <em>${weaknesses.join(', ')}</em>. These are legitimate, documentable reasons to push back on price — not just negotiation tactics.</p>` : ''}
               <p><strong>Your opening offer:</strong> AED ${openOffer.toLocaleString()} — reference the market data and the vehicle's specific factors. <strong>Target close:</strong> AED ${closeTarget.toLocaleString()} (fair market value). <strong>Walk-away point:</strong> AED ${nego.walk ? nego.walk.toLocaleString() : Math.round(handshake*1.04/500)*500 |0} — do not exceed this.</p>
@@ -11729,7 +11816,7 @@ function buildResult(r,brand,model,year,mileage,asking){
             </div>`;
           } else if (isUnder) {
             situationHtml = `<div class="ks-s7-situation ks-s7-sit-good">
-              <div class="ks-s7-sit-title">✓ Priced AED ${underAmt.toLocaleString()} Below Market</div>
+              <div class="ks-s7-sit-title" style="display:flex;align-items:center;gap:6px;"><span style="color:#C49A2A;display:inline-flex;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Priced AED ${underAmt.toLocaleString()} Below Market</div>
               <p>At <strong>AED ${askN.toLocaleString()}</strong>, this is priced <strong>${Math.round(underAmt/handshake*100)}% below</strong> fair market value. This is a genuine opportunity — but act with awareness, not haste.</p>
               ${hasWeaknesses ? `<p>The below-market price may partially reflect known issues: <em>${weaknesses.join(', ')}</em>. Make sure you factor these into your total cost of ownership before committing.</p>` : '<p>The vehicle profile does not show major red flags that would explain the lower price — which makes this a strong opportunity.</p>'}
               <p><strong>What to do:</strong> Secure a pre-purchase inspection from a certified UAE mechanic before transferring ownership. If the inspection comes back clean, move quickly — this listing will attract other buyers. You can still test the seller with a small counter of AED ${Math.round(askN*0.97/500)*500 |0}, but be prepared to pay the asking price immediately.</p>
@@ -11744,24 +11831,24 @@ function buildResult(r,brand,model,year,mileage,asking){
           }
 
           const checklistItems = [
-            { icon: '📋', text: 'Request a TAMM or Carfax UAE vehicle history report before signing' },
-            qs.fsh === false ? { icon: '🔧', text: 'Ask for workshop receipts or stamped service book to partially verify maintenance' } : null,
-            qs.accident === true ? { icon: '⚠️', text: 'Get an independent bodywork inspection — assess repair quality, not just disclosure' } : null,
-            { icon: '🔍', text: 'Insist on a pre-purchase inspection at a certified workshop — AED 200–400, worth every dirham' },
-            { icon: '📝', text: 'Confirm RTA transfer, Mulkiya, and insurance lapse date before the handover day' },
-            strengths.length ? { icon: '✓', text: `Positives to confirm at handover: ${strengths.join(', ')}` } : null,
+            { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="2.5" y="3" width="9" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 3V2.5a2 2 0 014 0V3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="4.5" y1="7" x2="9.5" y2="7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="4.5" y1="9.5" x2="7.5" y2="9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>', text: 'Request a TAMM or Carfax UAE vehicle history report before signing' },
+            qs.fsh === false ? { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M10 2a3.5 3.5 0 00-4.5 5L1.5 11a1.2 1.2 0 001.7 1.7L7 8.5A3.5 3.5 0 0012 4l-1.5 1.5-1-.5L9 3.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: 'Ask for workshop receipts or stamped service book to partially verify maintenance' } : null,
+            qs.accident === true ? { icon: '<span class="ks-s7-check-icon ks-check-warn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>', text: 'Get an independent bodywork inspection — assess repair quality, not just disclosure' } : null,
+            { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="9.2" y1="9.2" x2="12.5" y2="12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>', text: 'Insist on a pre-purchase inspection at a certified workshop — AED 200–400, worth every dirham' },
+            { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M8.5 1.5H3.5a1 1 0 00-1 1v9a1 1 0 001 1h7a1 1 0 001-1V5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 1.5V5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="4.5" y1="8" x2="9.5" y2="8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>', text: 'Confirm RTA transfer, Mulkiya, and insurance lapse date before the handover day' },
+            strengths.length ? { icon: '<span class="ks-s7-check-icon ks-check-pos"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: `Positives to confirm at handover: ${strengths.join(', ')}` } : null,
           ].filter(Boolean);
 
           return situationHtml + `<div class="ks-s7-checklist">
             <div class="ks-s7-checklist-title">Buyer Checklist</div>
-            ${checklistItems.map(i=>`<div class="ks-s7-check-item"><span class="ks-s7-check-icon">${i.icon}</span><span>${i.text}</span></div>`).join('')}
+            ${checklistItems.map(i=>`<div class="ks-s7-check-item">${i.icon}<span>${i.text}</span></div>`).join('')}
           </div>`;
         })()}
       </div><!-- /ks-s7-col-buyer -->
 
       <!-- SELLER COLUMN -->
       <div class="ks-s7-col-wrap ks-s7-col-seller">
-        <div class="ks-s7-col-head ks-s7-col-head-seller">🏷️ For Sellers</div>
+        <div class="ks-s7-col-head ks-s7-col-head-seller"><span class="ks-col-head-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5h5.5l5 5-5 5.5-5.5-5.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="4.5" cy="4.5" r="1.2" fill="currentColor"/></svg></span>For Sellers</div>
         ${(()=>{
           const listPrice = Math.min(
             Math.round(handshake * 1.07 / 500) * 500,
@@ -11776,14 +11863,14 @@ function buildResult(r,brand,model,year,mileage,asking){
           let pricingAdvice = '';
           if (askIsOver) {
             pricingAdvice = `<div class="ks-s7-situation ks-s7-sit-warn">
-              <div class="ks-s7-sit-title">⚠ Current Ask May Be Too High</div>
+              <div class="ks-s7-sit-title" style="display:flex;align-items:center;gap:6px;"><span style="color:#9C5535;display:inline-flex;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>Current Ask May Be Too High</div>
               <p>Your asking price of <strong>AED ${askN.toLocaleString()}</strong> is <strong>${Math.round((askN-handshake)/handshake*100)}% above</strong> the market FMV of AED ${handshake.toLocaleString()}. UAE buyers are price-aware — listings significantly above FMV attract fewer serious enquiries and typically sit for 60–90+ days before selling or being relisted lower.</p>
               ${hasNegatives ? '<p>This vehicle also has factors that experienced buyers will use to negotiate hard. Pricing high with these disclosures makes it harder to defend the ask.</p>' : ''}
               <p>Consider listing at <strong>AED ${listPrice.toLocaleString()}</strong> — this gives you genuine negotiation room while remaining within buyer consideration range. Your floor should be <strong>AED ${floorPrice.toLocaleString()}</strong>.</p>
             </div>`;
           } else if (askIsUnder) {
             pricingAdvice = `<div class="ks-s7-situation ks-s7-sit-good">
-              <div class="ks-s7-sit-title">⬆ You May Be Leaving Money Behind</div>
+              <div class="ks-s7-sit-title">↑ You May Be Leaving Money Behind</div>
               <p>Your asking price of <strong>AED ${askN.toLocaleString()}</strong> is below the fair market value of AED ${handshake.toLocaleString()}. ${hasNegatives ? 'While the vehicle has some factors that reduce value, you can likely list higher and still attract buyers.' : 'This vehicle has a strong profile — you can price higher without losing buyer interest.'}</p>
               <p>Try listing at <strong>AED ${listPrice.toLocaleString()}</strong>. Buyers will negotiate — but starting at FMV+5–7% lets you settle at fair value without leaving the deal.</p>
             </div>`;
@@ -11792,22 +11879,22 @@ function buildResult(r,brand,model,year,mileage,asking){
               <div class="ks-s7-sit-title">Recommended Listing Strategy</div>
               <p>The fair market value for this vehicle is <strong>AED ${handshake.toLocaleString()}</strong>. List at <strong>AED ${listPrice.toLocaleString()}</strong> — that's 5–7% above FMV, which is the standard negotiation buffer expected by UAE buyers. Expect offers starting around AED ${Math.round(handshake*0.94/500)*500 |0}; aim to settle at AED ${Math.round(handshake*1.01/500)*500 |0} or above.</p>
               <div style="margin-top:12px;padding:12px 16px;background:rgba(10,37,64,0.06);border-left:4px solid #0A2540;border-radius:8px;display:flex;align-items:center;gap:12px;">
-                <div style="flex-shrink:0;font-size:1.1rem;">🛑</div>
+                <div style="flex-shrink:0;display:flex;align-items:center;color:#7A3828;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4.5 1.5h5l3 3v5l-3 3h-5l-3-3v-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="4.5" x2="7" y2="7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".65" fill="currentColor"/></svg></div>
                 <div>
-                  <div style="font-family:'Exo 2',sans-serif;font-size:0.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#64748B;margin-bottom:3px;">Absolute Floor Price</div>
+                  <div style="font-family:'Exo 2',sans-serif;font-size:0.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#000080;margin-bottom:3px;">Absolute Floor Price</div>
                   <div style="font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:900;color:#0A2540;letter-spacing:-.02em;">AED ${floorPrice.toLocaleString()}</div>
-                  <div style="font-family:'Exo 2',sans-serif;font-size:0.72rem;color:#4B5E75;margin-top:2px;">Do not accept below this without a documentable reason (urgent sale, identified fault).</div>
+                  <div style="font-family:'Exo 2',sans-serif;font-size:0.72rem;color:#000080;margin-top:2px;">Do not accept below this without a documentable reason (urgent sale, identified fault).</div>
                 </div>
               </div>
             </div>`;
           }
 
           const sellerTips = [
-            (specVal === 'GCC' || specVal === 'GCC Spec') ? { icon: '✓', text: 'GCC spec is your strongest selling point in the UAE — state it clearly in the listing title' } : { icon: '⚠️', text: 'Non-GCC spec must be disclosed upfront — this limits your buyer pool; price accordingly' },
-            qs.fsh === true ? { icon: '✓', text: 'Full service history is your best asset — photograph every page and upload to the listing' } : { icon: '⚠️', text: 'No service history: gather any receipts, workshop stamps, or dealer records you have — partial documentation is better than none' },
-            qs.accident === true ? { icon: '⚠️', text: 'Accident history must be disclosed in the UAE. Price it in proactively — transparent sellers close faster than those who get caught hiding it' } : { icon: '✓', text: 'Clean accident history — highlight "no accidents" prominently in the listing' },
-            qs.singleOwner === true ? { icon: '✓', text: 'Single owner is a premium signal — mention it in the first line of your description' } : { icon: '💡', text: 'Multiple owners: be straightforward about ownership count — buyers will pull the vehicle history anyway' },
-            { icon: '📸', text: (()=>{
+            (specVal === 'GCC' || specVal === 'GCC Spec') ? { icon: '<span class="ks-s7-check-icon ks-check-pos"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: 'GCC spec is your strongest selling point in the UAE — state it clearly in the listing title' } : { icon: '<span class="ks-s7-check-icon ks-check-warn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>', text: 'Non-GCC spec must be disclosed upfront — this limits your buyer pool; price accordingly' },
+            qs.fsh === true ? { icon: '<span class="ks-s7-check-icon ks-check-pos"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: 'Full service history is your best asset — photograph every page and upload to the listing' } : { icon: '<span class="ks-s7-check-icon ks-check-warn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>', text: 'No service history: gather any receipts, workshop stamps, or dealer records you have — partial documentation is better than none' },
+            qs.accident === true ? { icon: '<span class="ks-s7-check-icon ks-check-warn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1.5 1 12.5h12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="7" y1="5.5" x2="7" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".65" fill="currentColor"/></svg></span>', text: 'Accident history must be disclosed in the UAE. Price it in proactively — transparent sellers close faster than those who get caught hiding it' } : { icon: '<span class="ks-s7-check-icon ks-check-pos"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: 'Clean accident history — highlight "no accidents" prominently in the listing' },
+            qs.singleOwner === true ? { icon: '<span class="ks-s7-check-icon ks-check-pos"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="1.5,7 5,10.5 12.5,3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: 'Single owner is a premium signal — mention it in the first line of your description' } : { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="6.5" x2="7" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="4.5" r=".7" fill="currentColor"/></svg></span>', text: 'Multiple owners: be straightforward about ownership count — buyers will pull the vehicle history anyway' },
+            { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="4.5" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8.5" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M5 4.5v-1l1-1h2l1 1v1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>', text: (()=>{
               // Fix 6: context-aware AI advice — not generic
               const bLc=(brand||'').toLowerCase();
               const mLc=(model||'').toLowerCase();
@@ -11820,12 +11907,12 @@ function buildResult(r,brand,model,year,mileage,asking){
               const photoUplift=isLux?'35–45%':isReliable?'28–38%':'25–35%';
               return `${carStr} listings with 20+ photos sell ${photoUplift} faster in Dubai & Sharjah — include all angles, dashboard, odometer, and any scuffs upfront`;
             })() },
-            { icon: '💡', text: 'List on Dubizzle and YallaMotor simultaneously — these are the two highest-traffic UAE car platforms' },
+            { icon: '<span class="ks-s7-check-icon ks-check-action"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="6.5" x2="7" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="4.5" r=".7" fill="currentColor"/></svg></span>', text: 'List on Dubizzle and YallaMotor simultaneously — these are the two highest-traffic UAE car platforms' },
           ];
 
           return pricingAdvice + `<div class="ks-s7-checklist">
             <div class="ks-s7-checklist-title">Seller Playbook</div>
-            ${sellerTips.map(i=>`<div class="ks-s7-check-item"><span class="ks-s7-check-icon">${i.icon}</span><span>${i.text}</span></div>`).join('')}
+            ${sellerTips.map(i=>`<div class="ks-s7-check-item">${i.icon}<span>${i.text}</span></div>`).join('')}
           </div>`;
         })()}
       </div><!-- /ks-s7-col-seller -->
@@ -11937,7 +12024,7 @@ function buildResult(r,brand,model,year,mileage,asking){
 
       <div class="ks-depr3-insights">
         <div class="ks-depr3-insight ks-depr3-buy">
-          <span class="ks-depr3-ico">🛒</span>
+          <span class="ks-depr3-ico ks-check-action" style="display:inline-flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1.5 2h1.5l2 6.5h6l1.5-4.5H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="11.5" r=".9" stroke="currentColor" stroke-width="1.4"/><circle cx="9.8" cy="11.5" r=".9" stroke="currentColor" stroke-width="1.4"/></svg></span>
           <div><span class="ks-depr3-lbl">Buyer</span>${buyerAdvice}</div>
         </div>
         <div class="ks-depr3-insight ks-depr3-sell">
@@ -11996,7 +12083,7 @@ function buildResult(r,brand,model,year,mileage,asking){
             if(slPriceNum && handshake){
               const diffPct = Math.round((slPriceNum - handshake) / handshake * 100);
               const absPct = Math.abs(diffPct);
-              const diffColor = diffPct > 5 ? '#C0392B' : diffPct < -5 ? '#1A8C6B' : '#B8780A';
+              const diffColor = diffPct > 5 ? '#7A3828' : diffPct < -5 ? '#C49A2A' : '#9C5535';
               const diffArrow = diffPct > 0 ? '▲' : diffPct < 0 ? '▼' : '●';
               diffCell = `<span style="font-size:.7rem;font-weight:800;color:${diffColor};white-space:nowrap;">${diffArrow} ${absPct}%</span>`;
             }
@@ -12039,11 +12126,11 @@ function buildResult(r,brand,model,year,mileage,asking){
         // FIX 5: Empty state — no live listings scraped, show clear message + fallback links
         const q=encodeURIComponent(`${brand} ${model||''} ${year}`);
         const qKm=km?encodeURIComponent(`${brand} ${model||''} ${year} ${Math.round(km/10000)*10000}km`):'';
-        const emptyBanner=`<div style="display:flex;align-items:flex-start;gap:10px;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-family:'Exo 2',sans-serif;">
+        const emptyBanner=`<div style="display:flex;align-items:flex-start;gap:10px;background:rgba(196,154,42,0.10);border:1px solid rgba(196,154,42,0.40);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-family:'Exo 2',sans-serif;">
           <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">⚠️</span>
           <div>
-            <div style="font-size:.74rem;font-weight:800;color:#92400E;margin-bottom:2px;">No live listings found — using historical data</div>
-            <div style="font-size:.7rem;color:#78350F;line-height:1.5;">The FMV above is derived from historical pricing models. Browse the platforms below to see current market listings and compare manually.</div>
+            <div style="font-size:.74rem;font-weight:800;color:#7A5010;margin-bottom:2px;">No live listings found — using historical data</div>
+            <div style="font-size:.7rem;color:#8C4A3C;line-height:1.5;">The FMV above is derived from historical pricing models. Browse the platforms below to see current market listings and compare manually.</div>
           </div>
         </div>`;
         const links=[
@@ -12236,7 +12323,7 @@ async function checkCarPrice(){
 
     const errHtml=`
     <div style="padding:28px 20px;text-align:center;font-family:'Exo 2',sans-serif;">
-      <div style="width:52px;height:52px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">${isTimeout?'⏱':'⚠️'}</div>
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(196,154,42,0.10);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">${isTimeout?'⏱':'⚠️'}</div>
       <div style="font-size:0.88rem;font-weight:800;color:#1A2B4C;margin-bottom:8px;letter-spacing:0.02em;">${isTimeout?'Request Timed Out':'Unable to Fetch Report'}</div>
       <p style="font-size:0.74rem;color:#64748B;line-height:1.6;max-width:320px;margin:0 auto 20px;">${msg}</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
@@ -12540,9 +12627,9 @@ function printValuation(){
   const now=new Date();
   const ts=now.toLocaleString('en-AE',{dateStyle:'long',timeStyle:'short'});
   const aiCls=d.aiCls||'neu';
-  const ratingColors={good:'#1a8c6b',warn:'#b8780a',bad:'#c0392b',neu:'#4a4030'};
-  const ratingBg={good:'#e8f5f0',warn:'#fef6e8',bad:'#fdecea',neu:'#f5f3ee'};
-  const ratingBorder={good:'#b8ddd2',warn:'#f0d89a',bad:'#f5c0ba',neu:'#e4d9c6'};
+  const ratingColors={good:'#C49A2A',warn:'#9C5535',bad:'#7A3828',neu:'#4a4030'};
+  const ratingBg={good:'rgba(95,123,106,0.09)',warn:'rgba(196,154,42,0.10)',bad:'rgba(140,74,60,0.08)',neu:'#f5f3ee'};
+  const ratingBorder={good:'rgba(95,123,106,.25)',warn:'rgba(196,154,42,0.40)',bad:'rgba(140,74,60,0.24)',neu:'#e4d9c6'};
   const rc=ratingColors[aiCls]||ratingColors.neu;
   const rb=ratingBg[aiCls]||ratingBg.neu;
   const rbd=ratingBorder[aiCls]||ratingBorder.neu;
@@ -12575,14 +12662,14 @@ function printValuation(){
     /* Position bar */
     .pdf-ppos{margin:10px 0 6px;}
     .pdf-ppos-labels{display:flex;justify-content:space-between;font-size:9px;color:#8c7d68;margin-bottom:4px;}
-    .pdf-ppos-track{position:relative;height:7px;background:linear-gradient(90deg,#2ecc71,#f1c40f,#e74c3c);border-radius:99px;}
+    .pdf-ppos-track{position:relative;height:7px;background:linear-gradient(90deg,#5F7A6A,#9C5535,#7A3828);border-radius:99px;}
     .pdf-ppos-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:#0A2540;border:2.5px solid #fff;box-shadow:0 1px 5px rgba(10,37,64,0.35);}
     .pdf-ppos-lbl{text-align:center;font-size:9px;color:#0A2540;font-weight:700;margin-top:5px;letter-spacing:.04em;}
     /* Confidence bar */
     .pdf-cbar-wrap{margin-top:8px;}
     .pdf-cbar-top{display:flex;justify-content:space-between;font-size:9px;color:#8c7d68;margin-bottom:3px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
     .pdf-cbar{height:5px;background:#e4d9c6;border-radius:99px;overflow:hidden;}
-    .pdf-cbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#e67e22,#f1c40f,#2ecc71);}
+    .pdf-cbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7A3828,#9C5535,#5F7A6A);}
     /* AI block */
     .pdf-ai{border-radius:10px;padding:12px 14px;margin-bottom:14px;border:1.5px solid ${rbd};background:${rb};}
     .pdf-ai-rating{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${rc};margin-bottom:6px;display:flex;align-items:center;gap:8px;}
@@ -12638,8 +12725,8 @@ function printValuation(){
         const askPct=d.askingPrice?Math.round(((d.askingPrice-d.low)/(d.high-d.low))*100):null;
         return `<div class="pdf-ppos">
           <div class="pdf-ppos-labels">
-            <span style="color:#2ecc71;font-weight:700;">Low · AED ${d.low.toLocaleString()}</span>
-            <span style="color:#e74c3c;font-weight:700;">High · AED ${d.high.toLocaleString()}</span>
+            <span style="color:#5F7A6A;font-weight:700;">Low · AED ${d.low.toLocaleString()}</span>
+            <span style="color:#7A3828;font-weight:700;">High · AED ${d.high.toLocaleString()}</span>
           </div>
           <div class="pdf-ppos-track">
             <div class="pdf-ppos-dot" style="left:${Math.max(5,Math.min(95,avgPct))}%;background:#0A2540;"></div>
@@ -12660,16 +12747,16 @@ function printValuation(){
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
           <div style="display:flex;align-items:center;gap:6px;">
             <span style="font-size:8px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8c7d68;">Marketability</span>
-            <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:99px;background:#e8f5f0;color:#1a8c6b;">${d.marketability.label||''}</span>
+            <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:99px;background:rgba(95,123,106,0.09);color:#C49A2A;">${d.marketability.label||''}</span>
           </div>
           <span style="font-family:Arial;font-size:18px;font-weight:800;color:#0A2540;">${d.marketability.score||0}<span style="font-size:9px;color:#8c7d68;">/100</span></span>
         </div>
         <div style="height:5px;background:#e4d9c6;border-radius:99px;overflow:hidden;margin-bottom:8px;">
-          <div style="height:100%;width:${Math.max(4,Math.min(100,d.marketability.score||0))}%;background:linear-gradient(90deg,#e74c3c,#f1c40f,#1a8c6b);border-radius:99px;"></div>
+          <div style="height:100%;width:${Math.max(4,Math.min(100,d.marketability.score||0))}%;background:linear-gradient(90deg,#7A3828,#9C5535,#C49A2A);border-radius:99px;"></div>
         </div>
         ${d.marketability.days_at_market?`<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#4a4030;">At market price (AED ${d.avg.toLocaleString()})</span><span style="font-weight:700;color:#0A2540;">~${d.marketability.days_at_market} days</span></div>`:''}
-        ${d.marketability.days_at_asking&&d.askingPrice?`<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#4a4030;">At asking price (AED ${d.askingPrice.toLocaleString()})</span><span style="font-weight:700;color:#b8780a;">~${d.marketability.days_at_asking} days</span></div>`:''}
-        ${d.marketability.recommended_price&&d.askingPrice&&d.marketability.recommended_price<d.askingPrice?`<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;background:#e8f5f0;border:1px solid rgba(26,140,107,0.2);margin-top:5px;margin-bottom:4px;"><span style="font-size:10px;color:#1a8c6b;flex:1;">⚡ Price to sell in ~14 days</span><span style="font-size:11px;font-weight:800;color:#1a8c6b;">AED ${d.marketability.recommended_price.toLocaleString()}</span></div>`:''}
+        ${d.marketability.days_at_asking&&d.askingPrice?`<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#4a4030;">At asking price (AED ${d.askingPrice.toLocaleString()})</span><span style="font-weight:700;color:#9C5535;">~${d.marketability.days_at_asking} days</span></div>`:''}
+        ${d.marketability.recommended_price&&d.askingPrice&&d.marketability.recommended_price<d.askingPrice?`<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;background:rgba(95,123,106,0.09);border:1px solid rgba(95,123,106,0.09);margin-top:5px;margin-bottom:4px;"><span style="font-size:10px;color:#C49A2A;flex:1;">⚡ Price to sell in ~14 days</span><span style="font-size:11px;font-weight:800;color:#C49A2A;">AED ${d.marketability.recommended_price.toLocaleString()}</span></div>`:''}
         ${d.marketability.insight?`<div style="font-size:10px;color:#8c7d68;font-style:italic;margin-top:4px;">${d.marketability.insight}</div>`:''}
       </div>`:''}
     </div>
@@ -13155,7 +13242,7 @@ function buildShareCard(){
     if(d.avg){
       ctx.font = 'bold 22px Arial'; ctx.fillStyle = 'rgba(255,255,255,0.55)';
       ctx.fillText('FAIR MARKET VALUE', 60, 258);
-      ctx.font = 'bold 72px "Arial Black",Arial'; ctx.fillStyle = '#4ADE80';
+      ctx.font = 'bold 72px "Arial Black",Arial'; ctx.fillStyle = '#C49A2A';
       ctx.fillText('AED '+d.avg.toLocaleString(), 60, 340);
     }
     // Range
