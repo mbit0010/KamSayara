@@ -847,7 +847,6 @@
     /* Each .ks-section gets staggered reveal */
     .ks-pir .ks-section{
       animation:ksSecIn .48s var(--ease) both;
-      opacity:0; /* start invisible; animation fills to 1 */
     }
     /* Stagger each section with a delay that increments by index */
     .ks-pir .ks-section:nth-child(1){animation-delay:.05s;}
@@ -1243,7 +1242,11 @@
       --warn:#8C4A3C; --warn-bg:rgba(140,74,60,0.08); --warn-line:rgba(140,74,60,0.20);
       --err:#8C4A3C;  --err-bg:rgba(140,74,60,0.06);
       --sh-card: var(--card-shadow);
+      --sh-btn:  0 4px 14px rgba(196,154,42,0.32), 0 2px 6px rgba(0,0,0,0.08);
       --sh-field: 0 1px 2px rgba(10,37,64,0.06);
+      --r-sm: 6px; --r-md: 12px; --r-lg: 20px;
+      --ease:   cubic-bezier(0.22,1,0.36,1);
+      --spring: cubic-bezier(0.34,1.56,0.64,1);
     }
 
     /* ── PAGE BACKGROUND ─────────────────────────────────────── */
