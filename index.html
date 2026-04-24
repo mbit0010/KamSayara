@@ -8868,7 +8868,7 @@ body.ks-result-active #backToInputs { display: flex !important; }
 </div>
 <div style="display:flex;align-items:center;gap:8px;">
 <span class="ks-sticky-price" id="ksStickyPrice"></span>
-
+<span class="ks-sticky-badge neu" id="ksStickyVerdict"></span>
 </div>
 </div>
 </div>
@@ -13141,8 +13141,7 @@ function printValuation(){
     document.getElementById('ksStickyCarName').textContent  = carName  || '—';
     document.getElementById('ksStickyPrice').textContent    = price    || '';
     const vBadge = document.getElementById('ksStickyVerdict');
-    vBadge.textContent = verdictLabel || '';
-    vBadge.className   = 'ks-sticky-badge ' + (verdictCls||'neu');
+    if(vBadge){ vBadge.textContent = verdictLabel || ''; vBadge.className = 'ks-sticky-badge ' + (verdictCls||'neu'); }
     band.setAttribute('aria-hidden', 'false');
   };
 
