@@ -538,294 +538,365 @@
 </footer>
 <script>document.getElementById("ks-hp-yr").textContent=new Date().getFullYear();</script>
 <!-- html2canvas removed — share uses navigator.share text-only -->
-<!-- ── KamSayara Car Hero  v4 — fetch-intercept detection ───────────── -->
+<!-- ── KamSayara Car Hero v5 ─────────────────────────────────────── -->
 <script>
-/* Runs BEFORE app.js so window.fetch is patched first */
-(function () {
-  'use strict';
+(function(){
+'use strict';
 
-  var WORKER  = 'https://kamsayara-valuation-api.mbit0010.workers.dev';
-  var injected = false;
-  var pendingInject = false;
+/* ── Canonical Wikipedia slugs for 80+ common UAE cars ───────────── */
+var W={
+ 'toyota camry':'Toyota_Camry',
+ 'toyota corolla':'Toyota_Corolla',
+ 'toyota land cruiser':'Toyota_Land_Cruiser',
+ 'toyota land cruiser 200':'Toyota_Land_Cruiser',
+ 'toyota land cruiser 300':'Toyota_Land_Cruiser',
+ 'toyota prado':'Toyota_Land_Cruiser_Prado',
+ 'toyota land cruiser prado':'Toyota_Land_Cruiser_Prado',
+ 'toyota fortuner':'Toyota_Fortuner',
+ 'toyota hilux':'Toyota_Hilux',
+ 'toyota rav4':'Toyota_RAV4',
+ 'toyota rav 4':'Toyota_RAV4',
+ 'toyota highlander':'Toyota_Highlander',
+ 'toyota sequoia':'Toyota_Sequoia',
+ 'toyota tundra':'Toyota_Tundra',
+ 'toyota tacoma':'Toyota_Tacoma',
+ 'toyota yaris':'Toyota_Yaris',
+ 'toyota rush':'Toyota_Rush',
+ 'toyota 4runner':'Toyota_4Runner',
+ 'toyota avalon':'Toyota_Avalon',
+ 'toyota venza':'Toyota_Venza',
+ 'toyota sienna':'Toyota_Sienna',
+ 'toyota crown':'Toyota_Crown',
+ 'lexus lx':'Lexus_LX',
+ 'lexus rx':'Lexus_RX',
+ 'lexus gx':'Lexus_GX',
+ 'lexus es':'Lexus_ES',
+ 'lexus nx':'Lexus_NX',
+ 'lexus ls':'Lexus_LS',
+ 'nissan patrol':'Nissan_Patrol',
+ 'nissan x-trail':'Nissan_X-Trail',
+ 'nissan x trail':'Nissan_X-Trail',
+ 'nissan xtrail':'Nissan_X-Trail',
+ 'nissan pathfinder':'Nissan_Pathfinder',
+ 'nissan altima':'Nissan_Altima',
+ 'nissan navara':'Nissan_Navara',
+ 'nissan qashqai':'Nissan_Qashqai',
+ 'nissan murano':'Nissan_Murano',
+ 'nissan armada':'Nissan_Armada',
+ 'infiniti qx80':'Infiniti_QX80',
+ 'infiniti qx60':'Infiniti_QX60',
+ 'honda civic':'Honda_Civic',
+ 'honda accord':'Honda_Accord',
+ 'honda cr-v':'Honda_CR-V',
+ 'honda crv':'Honda_CR-V',
+ 'honda cr v':'Honda_CR-V',
+ 'honda hr-v':'Honda_HR-V',
+ 'honda hrv':'Honda_HR-V',
+ 'honda hr v':'Honda_HR-V',
+ 'honda pilot':'Honda_Pilot',
+ 'honda city':'Honda_City',
+ 'mitsubishi pajero':'Mitsubishi_Pajero',
+ 'mitsubishi pajero sport':'Mitsubishi_Pajero_Sport',
+ 'mitsubishi outlander':'Mitsubishi_Outlander',
+ 'mitsubishi eclipse cross':'Mitsubishi_Eclipse_Cross',
+ 'mitsubishi l200':'Mitsubishi_L200',
+ 'hyundai tucson':'Hyundai_Tucson',
+ 'hyundai santa fe':'Hyundai_Santa_Fe',
+ 'hyundai palisade':'Hyundai_Palisade',
+ 'hyundai elantra':'Hyundai_Elantra',
+ 'hyundai sonata':'Hyundai_Sonata',
+ 'hyundai creta':'Hyundai_Creta',
+ 'kia sportage':'Kia_Sportage',
+ 'kia sorento':'Kia_Sorento',
+ 'kia telluride':'Kia_Telluride',
+ 'kia carnival':'Kia_Carnival',
+ 'kia ev6':'Kia_EV6',
+ 'bmw 3 series':'BMW_3_Series',
+ 'bmw 5 series':'BMW_5_Series',
+ 'bmw 7 series':'BMW_7_Series',
+ 'bmw x3':'BMW_X3',
+ 'bmw x5':'BMW_X5',
+ 'bmw x6':'BMW_X6',
+ 'bmw x7':'BMW_X7',
+ 'mercedes-benz c-class':'Mercedes-Benz_C-Class',
+ 'mercedes benz c class':'Mercedes-Benz_C-Class',
+ 'mercedes-benz e-class':'Mercedes-Benz_E-Class',
+ 'mercedes benz e class':'Mercedes-Benz_E-Class',
+ 'mercedes-benz s-class':'Mercedes-Benz_S-Class',
+ 'mercedes benz s class':'Mercedes-Benz_S-Class',
+ 'mercedes-benz gle':'Mercedes-Benz_GLE',
+ 'mercedes benz gle':'Mercedes-Benz_GLE',
+ 'mercedes-benz glc':'Mercedes-Benz_GLC',
+ 'mercedes benz glc':'Mercedes-Benz_GLC',
+ 'mercedes-benz gls':'Mercedes-Benz_GLS',
+ 'mercedes benz gls':'Mercedes-Benz_GLS',
+ 'mercedes-benz g-class':'Mercedes-Benz_G-Class',
+ 'mercedes benz g class':'Mercedes-Benz_G-Class',
+ 'mercedes-benz a-class':'Mercedes-Benz_A-Class',
+ 'audi a4':'Audi_A4',
+ 'audi a6':'Audi_A6',
+ 'audi a8':'Audi_A8',
+ 'audi q3':'Audi_Q3',
+ 'audi q5':'Audi_Q5',
+ 'audi q7':'Audi_Q7',
+ 'audi q8':'Audi_Q8',
+ 'land rover range rover':'Land_Rover_Range_Rover',
+ 'range rover':'Land_Rover_Range_Rover',
+ 'range rover sport':'Range_Rover_Sport',
+ 'land rover defender':'Land_Rover_Defender',
+ 'land rover discovery':'Land_Rover_Discovery',
+ 'jeep wrangler':'Jeep_Wrangler',
+ 'jeep grand cherokee':'Jeep_Grand_Cherokee',
+ 'jeep gladiator':'Jeep_Gladiator',
+ 'jeep compass':'Jeep_Compass',
+ 'ford f-150':'Ford_F-150',
+ 'ford f 150':'Ford_F-150',
+ 'ford explorer':'Ford_Explorer',
+ 'ford expedition':'Ford_Expedition',
+ 'ford mustang':'Ford_Mustang',
+ 'chevrolet tahoe':'Chevrolet_Tahoe',
+ 'chevrolet suburban':'Chevrolet_Suburban',
+ 'chevrolet silverado':'Chevrolet_Silverado',
+ 'chevrolet camaro':'Chevrolet_Camaro',
+ 'gmc yukon':'GMC_Yukon',
+ 'gmc sierra':'GMC_Sierra',
+ 'dodge charger':'Dodge_Charger',
+ 'dodge challenger':'Dodge_Challenger',
+ 'dodge durango':'Dodge_Durango',
+ 'mazda cx-5':'Mazda_CX-5',
+ 'mazda cx 5':'Mazda_CX-5',
+ 'mazda cx-9':'Mazda_CX-9',
+ 'mazda 3':'Mazda3',
+ 'mazda 6':'Mazda6',
+ 'subaru outback':'Subaru_Outback',
+ 'subaru forester':'Subaru_Forester',
+ 'volvo xc90':'Volvo_XC90',
+ 'volvo xc60':'Volvo_XC60',
+ 'tesla model 3':'Tesla_Model_3',
+ 'tesla model y':'Tesla_Model_Y',
+ 'tesla model s':'Tesla_Model_S',
+ 'tesla model x':'Tesla_Model_X',
+ 'porsche cayenne':'Porsche_Cayenne',
+ 'porsche macan':'Porsche_Macan',
+ 'mg hs':'MG_HS',
+ 'mg zs':'MG_ZS',
+ 'haval h6':'Haval_H6',
+ 'haval jolion':'Haval_Jolion',
+};
 
-  /* ─── form value helpers ─────────────────────────────────────────── */
-  function gv(id) { var e = document.getElementById(id); return e ? (e.value || '') : ''; }
-  function gt(id) {
-    var e = document.getElementById(id);
-    if (!e) return '';
-    return (e.options && e.selectedIndex >= 0) ? (e.options[e.selectedIndex].text || e.value) : e.value;
-  }
-  function cap(s) {
-    return (s || '').trim().replace(/\b([a-z])/g, function (c) { return c.toUpperCase(); });
-  }
+/* ── helpers ─────────────────────────────────────────────────── */
+function gv(id){var e=document.getElementById(id);return e?e.value||'':('')}
+function gt(id){
+  var e=document.getElementById(id);
+  if(!e)return'';
+  return(e.options&&e.selectedIndex>=0)?(e.options[e.selectedIndex].text||e.value):e.value;
+}
+function norm(s){
+  return(s||'').toLowerCase().replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();
+}
 
-  /* ─── shimmer (inline styles, keyframe injected on demand) ──────── */
-  function shimmer() {
-    if (!document.getElementById('ksShimKF')) {
-      var st = document.createElement('style');
-      st.id  = 'ksShimKF';
-      st.textContent = '@keyframes ksSh{0%{background-position:200% 0}to{background-position:-200% 0}}';
-      document.head.appendChild(st);
-    }
-    var d = document.createElement('div');
-    d.id = 'ksCarHero';
-    d.style.cssText = 'width:100%;height:clamp(185px,27vw,270px);display:flex;align-items:center;' +
-      'justify-content:center;flex-shrink:0;overflow:hidden;' +
-      'background:linear-gradient(90deg,#dde3ec 0%,#edf0f6 45%,#dde3ec 100%);' +
-      'background-size:200% 100%;animation:ksSh 1.5s ease-in-out infinite;';
-    var sp = document.createElement('span');
-    sp.textContent = 'Loading vehicle image…';
-    sp.style.cssText = 'font-family:"Exo 2",sans-serif;font-size:.58rem;font-weight:600;' +
-      'letter-spacing:.12em;text-transform:uppercase;color:rgba(10,37,64,.22);';
-    d.appendChild(sp);
-    return d;
-  }
+/* ── Wikipedia thumbnail fetch ────────────────────────────────── */
+async function wikiThumb(slug){
+  try{
+    var r=await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(slug));
+    if(!r.ok)return null;
+    var d=await r.json();
+    if(d.type==='disambiguation')return null;
+    return(d.originalimage&&d.originalimage.source)||(d.thumbnail&&d.thumbnail.source)||null;
+  }catch(_){return null;}
+}
 
-  /* ─── hero image element (all inline) ───────────────────────────── */
-  function hero(src, label) {
-    var w = document.createElement('div');
-    w.id = 'ksCarHero';
-    w.style.cssText = 'width:100%;height:clamp(185px,27vw,270px);position:relative;' +
-      'overflow:hidden;flex-shrink:0;display:block;margin:0;';
+/* ── Wikipedia search fallback ────────────────────────────────── */
+async function wikiSearch(q){
+  try{
+    var base='https://en.wikipedia.org/w/api.php?format=json&origin=*';
+    var r1=await fetch(base+'&action=query&list=search&srlimit=1&srsearch='+encodeURIComponent(q+' automobile'));
+    var d1=await r1.json();
+    var hit=d1.query&&d1.query.search&&d1.query.search[0];
+    if(!hit)return null;
+    var r2=await fetch(base+'&action=query&prop=pageimages&pithumbsize=1200&pageids='+hit.pageid);
+    var d2=await r2.json();
+    var pg=Object.values((d2.query&&d2.query.pages)||{})[0];
+    return(pg&&pg.thumbnail&&pg.thumbnail.source)||null;
+  }catch(_){return null;}
+}
 
-    var img = document.createElement('img');
-    img.src     = src;
-    img.alt     = label;
-    img.loading = 'eager';
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center 55%;display:block;';
-    img.onerror = function () { w.remove(); };
+/* ── master image getter ──────────────────────────────────────── */
+async function getImg(brandDisplay,modelDisplay,make,model){
+  /* build lookup keys from display text and raw value */
+  var keys=[
+    norm(brandDisplay+' '+modelDisplay),
+    norm(make+' '+model),
+    norm(brandDisplay+' '+norm(model)),
+    norm(make+' '+modelDisplay),
+  ];
+  /* deduplicate */
+  var seen={};
+  keys=keys.filter(function(k){return k&&!seen[k]&&(seen[k]=1);});
 
-    var ov = document.createElement('div');
-    ov.style.cssText = 'position:absolute;inset:0;pointer-events:none;' +
-      'background:linear-gradient(to bottom,rgba(10,37,64,.38) 0%,transparent 32%,rgba(10,37,64,.55) 100%);';
-
-    var nm = document.createElement('div');
-    nm.textContent = label;
-    nm.style.cssText = 'position:absolute;bottom:10px;left:14px;pointer-events:none;' +
-      'font-family:"Exo 2",sans-serif;font-size:.65rem;font-weight:800;' +
-      'letter-spacing:.06em;color:#E8D060;text-shadow:0 1px 6px rgba(0,0,0,.55);' +
-      'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%;';
-
-    var di = document.createElement('div');
-    di.textContent = 'Illustrative · Visual may vary';
-    di.style.cssText = 'position:absolute;bottom:10px;right:12px;pointer-events:none;' +
-      'font-family:"Exo 2",sans-serif;font-size:.46rem;font-weight:600;' +
-      'letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.6);' +
-      'background:rgba(0,0,0,.28);padding:2px 8px;border-radius:99px;' +
-      'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);';
-
-    w.appendChild(img); w.appendChild(ov); w.appendChild(nm); w.appendChild(di);
-    return w;
-  }
-
-  /* ─── insert before specs section ───────────────────────────────── */
-  function insertHero(el) {
-    var rc = document.getElementById('rcontent');
-    if (!rc) return;
-    var sec = rc.querySelector('.rpt-section');
-    var hdr = rc.querySelector('.rpt-header');
-    if      (sec)                    rc.insertBefore(el, sec);
-    else if (hdr && hdr.nextSibling) rc.insertBefore(el, hdr.nextSibling);
-    else if (hdr)                    rc.appendChild(el);
-    else if (rc.children.length > 1) rc.insertBefore(el, rc.children[1]);
-    else                             rc.appendChild(el);
-  }
-
-  /* ─── Wikipedia REST v1 ─────────────────────────────────────────── */
-  async function wikiImg(slug) {
-    try {
-      var r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' +
-                          encodeURIComponent(slug.replace(/\s+/g, '_')));
-      if (!r.ok) return null;
-      var d = await r.json();
-      if (d.type === 'disambiguation') return null;
-      return (d.originalimage && d.originalimage.source) ||
-             (d.thumbnail     && d.thumbnail.source)     || null;
-    } catch (_) { return null; }
-  }
-
-  /* ─── Wikipedia search → page image ─────────────────────────────── */
-  async function wikiSearch(q) {
-    try {
-      var b  = 'https://en.wikipedia.org/w/api.php?format=json&origin=*';
-      var r1 = await fetch(b + '&action=query&list=search&srlimit=1&srsearch=' + encodeURIComponent(q));
-      var d1 = await r1.json();
-      var hit = d1.query && d1.query.search && d1.query.search[0];
-      if (!hit) return null;
-      var r2 = await fetch(b + '&action=query&prop=pageimages&pithumbsize=1200&pageids=' + hit.pageid);
-      var d2 = await r2.json();
-      var pg = Object.values((d2.query && d2.query.pages) || {})[0];
-      return (pg && pg.thumbnail && pg.thumbnail.source) || null;
-    } catch (_) { return null; }
-  }
-
-  /* ─── Wikimedia Commons file search ─────────────────────────────── */
-  async function commonsImg(q) {
-    try {
-      var url = 'https://commons.wikimedia.org/w/api.php?format=json&origin=*' +
-                '&action=query&list=search&srnamespace=6&srlimit=3&srsearch=' +
-                encodeURIComponent(q + ' automobile exterior');
-      var r1  = await fetch(url);
-      var d1  = await r1.json();
-      var hits = (d1.query && d1.query.search) || [];
-      for (var i = 0; i < hits.length; i++) {
-        var title = hits[i].title; /* e.g. "File:2022 Toyota Camry.jpg" */
-        var r2 = await fetch('https://commons.wikimedia.org/w/api.php?format=json&origin=*' +
-                             '&action=query&titles=' + encodeURIComponent(title) +
-                             '&prop=imageinfo&iiprop=url&iiurlwidth=1200');
-        var d2 = await r2.json();
-        var pg = Object.values((d2.query && d2.query.pages) || {})[0];
-        var ii = pg && pg.imageinfo && pg.imageinfo[0];
-        if (ii && ii.thumburl) return ii.thumburl;
-      }
-    } catch (_) {}
-    return null;
-  }
-
-  /* ─── Worker fallback ────────────────────────────────────────────── */
-  async function workerImg(make, model, year, trim) {
-    try {
-      var p = new URLSearchParams({ make: make, model: model, year: year, trim: trim || '' });
-      var r = await fetch(WORKER + '/car-image?' + p);
-      if (!r.ok) return null;
-      return (await r.json()).imageUrl || null;
-    } catch (_) { return null; }
-  }
-
-  /* ─── orchestrate image fetch ────────────────────────────────────── */
-  async function getImg(make, model, year, trim) {
-    var M = cap(make), Md = cap(model);
-
-    /* 1. Direct Wikipedia article slugs */
-    var slugs = [M + ' ' + Md, M + ' ' + Md.split(' ')[0], Md];
-    for (var s of slugs) {
-      var u = await wikiImg(s);
-      if (u) return u;
-    }
-
-    /* 2. Wikipedia keyword search */
-    var qs = [M + ' ' + Md + ' automobile', year + ' ' + M + ' ' + Md, M + ' ' + Md];
-    for (var q of qs) {
-      var u2 = await wikiSearch(q);
-      if (u2) return u2;
-    }
-
-    /* 3. Wikimedia Commons */
-    var u3 = await commonsImg(year + ' ' + M + ' ' + Md);
-    if (u3) return u3;
-
-    /* 4. Worker */
-    return await workerImg(make, model, year, trim);
-  }
-
-  /* ─── main inject ────────────────────────────────────────────────── */
-  async function doInject() {
-    if (injected) return;
-    injected = true;
-
-    var make  = gv('brand');
-    var model = gv('model');
-    if (!make || !model) { injected = false; return; }
-
-    var year  = gv('year');
-    var trim  = gv('trim');
-    var label = [year, gt('brand') || cap(make), gt('model') || cap(model)]
-                  .filter(function (s) { return s && s !== 'Select…' && s !== '—'; })
-                  .join(' ');
-
-    /* place shimmer */
-    if (!document.getElementById('ksCarHero')) {
-      insertHero(shimmer());
-    }
-
-    var src = await getImg(make, model, year, trim);
-
-    var existing = document.getElementById('ksCarHero');
-    if (!existing) return; /* user submitted new search meanwhile */
-    if (src) {
-      existing.replaceWith(hero(src, label));
-    } else {
-      existing.remove();
+  /* 1. canonical slug lookup */
+  for(var i=0;i<keys.length;i++){
+    var slug=W[keys[i]];
+    if(slug){
+      var u=await wikiThumb(slug);
+      if(u)return u;
     }
   }
 
-  /* ─── trigger after content renders ─────────────────────────────── */
-  function scheduleInject(delayMs) {
-    if (injected || pendingInject) return;
-    pendingInject = true;
-    setTimeout(function () {
-      pendingInject = false;
-      var rc = document.getElementById('rcontent');
-      if (rc && rc.children.length > 0) {
-        doInject();
-      } else {
-        /* rcontent not ready — wait a bit more */
-        var tries = 0;
-        var t = setInterval(function () {
-          var r = document.getElementById('rcontent');
-          if ((r && r.children.length > 0) || ++tries > 20) {
-            clearInterval(t);
-            if (r && r.children.length > 0) doInject();
-          }
-        }, 200);
-      }
-    }, delayMs || 600);
+  /* 2. dynamic Wikipedia REST lookup using display text */
+  var dynSlug=(brandDisplay+' '+modelDisplay).replace(/\s+/g,'_');
+  var u2=await wikiThumb(dynSlug);
+  if(u2)return u2;
+
+  /* 3. Wikipedia search */
+  var u3=await wikiSearch(brandDisplay+' '+modelDisplay);
+  if(u3)return u3;
+
+  /* 4. Worker fallback */
+  try{
+    var p=new URLSearchParams({make:make,model:model,year:gv('year'),trim:gv('trim')});
+    var r=await fetch('https://kamsayara-valuation-api.mbit0010.workers.dev/car-image?'+p);
+    if(r.ok){var d=await r.json();if(d.imageUrl)return d.imageUrl;}
+  }catch(_){}
+  return null;
+}
+
+/* ── build shimmer (inline, visible immediately) ──────────────── */
+function mkShimmer(){
+  if(!document.getElementById('_ksSh')){
+    var s=document.createElement('style');
+    s.id='_ksSh';
+    s.textContent='@keyframes _ksSh{0%{background-position:200% 0}to{background-position:-200% 0}}';
+    document.head.appendChild(s);
   }
+  var d=document.createElement('div');
+  d.id='ksHeroWrap';
+  d.style.cssText='width:100%;height:clamp(185px,27vw,270px);display:flex;align-items:center;'+
+    'justify-content:center;flex-shrink:0;overflow:hidden;background:linear-gradient(90deg,'+
+    '#dde3ec 0%,#edf0f6 48%,#dde3ec 100%);background-size:200% 100%;'+
+    'animation:_ksSh 1.5s ease-in-out infinite;';
+  var sp=document.createElement('span');
+  sp.textContent='Loading vehicle image\u2026';
+  sp.style.cssText='font-family:"Exo 2",sans-serif;font-size:.58rem;font-weight:600;'+
+    'letter-spacing:.12em;text-transform:uppercase;color:rgba(10,37,64,.22);';
+  d.appendChild(sp);
+  return d;
+}
 
-  /* ─── Method 1: intercept window.fetch ───────────────────────────── */
-  /* Patch BEFORE app.js loads so we catch its API calls */
-  var _origFetch = window.fetch;
-  window.fetch = function () {
-    var args = arguments;
-    var pr   = _origFetch.apply(this, args);
-    try {
-      var url = (typeof args[0] === 'string') ? args[0] : (args[0] && args[0].url) || '';
-      /* KamSayara valuation endpoint */
-      if (url.indexOf('/api/valuation') !== -1 || url.indexOf('valuation') !== -1) {
-        pr.then(function () { scheduleInject(700); }).catch(function () {});
-      }
-    } catch (_) {}
-    return pr;
-  };
+/* ── build hero image (inline) ────────────────────────────────── */
+function mkHero(src,label){
+  var w=document.createElement('div');
+  w.id='ksHeroWrap';
+  w.style.cssText='width:100%;height:clamp(185px,27vw,270px);position:relative;'+
+    'overflow:hidden;flex-shrink:0;display:block;margin:0;';
+  var img=document.createElement('img');
+  img.src=src;img.alt=label;img.loading='eager';
+  img.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center 55%;display:block;';
+  img.onerror=function(){w.remove();};
+  var ov=document.createElement('div');
+  ov.style.cssText='position:absolute;inset:0;pointer-events:none;background:'+
+    'linear-gradient(to bottom,rgba(10,37,64,.38) 0%,transparent 32%,rgba(10,37,64,.55) 100%);';
+  var nm=document.createElement('div');
+  nm.textContent=label;
+  nm.style.cssText='position:absolute;bottom:10px;left:14px;pointer-events:none;'+
+    'font-family:"Exo 2",sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.06em;'+
+    'color:#E8D060;text-shadow:0 1px 6px rgba(0,0,0,.55);white-space:nowrap;'+
+    'overflow:hidden;text-overflow:ellipsis;max-width:62%;';
+  var di=document.createElement('div');
+  di.textContent='Illustrative \xb7 Visual may vary';
+  di.style.cssText='position:absolute;bottom:10px;right:12px;pointer-events:none;'+
+    'font-family:"Exo 2",sans-serif;font-size:.46rem;font-weight:600;letter-spacing:.09em;'+
+    'text-transform:uppercase;color:rgba(255,255,255,.6);background:rgba(0,0,0,.28);'+
+    'padding:2px 8px;border-radius:99px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);';
+  w.appendChild(img);w.appendChild(ov);w.appendChild(nm);w.appendChild(di);
+  return w;
+}
 
-  /* ─── Method 2: polling fallback (every 350 ms) ──────────────────── */
-  var _lastVis = '';
-  setInterval(function () {
-    var rc  = document.getElementById('rcontent');
-    if (!rc) return;
-    var vis = window.getComputedStyle(rc).display;
+/* ── insert before .rpt-section ──────────────────────────────── */
+function placeEl(el){
+  var rc=document.getElementById('rcontent');
+  if(!rc)return;
+  var sec=rc.querySelector('.rpt-section');
+  var hdr=rc.querySelector('.rpt-header');
+  if(sec)rc.insertBefore(el,sec);
+  else if(hdr&&hdr.nextSibling)rc.insertBefore(el,hdr.nextSibling);
+  else if(hdr)rc.appendChild(el);
+  else if(rc.children.length>1)rc.insertBefore(el,rc.children[1]);
+  else rc.appendChild(el);
+}
 
-    if (vis === 'none' && _lastVis !== 'none') {
-      /* panel just hid — reset so next result gets a fresh hero */
-      injected     = false;
-      pendingInject = false;
-      var old = document.getElementById('ksCarHero');
-      if (old) old.remove();
-    }
+/* ── state ───────────────────────────────────────────────────── */
+var injected=false,running=false;
 
-    if (vis !== 'none' && rc.children.length > 0 && !injected) {
-      scheduleInject(400);
-    }
+async function run(){
+  if(injected||running)return;
+  var rc=document.getElementById('rcontent');
+  if(!rc||!rc.children.length)return;
+  if(window.getComputedStyle(rc).display==='none')return;
 
-    _lastVis = vis;
-  }, 350);
+  running=true;
+  await new Promise(function(r){setTimeout(r,300);});
 
-  /* ─── Method 3: MutationObserver on rcontent class+style+children ── */
-  document.addEventListener('DOMContentLoaded', function () {
-    var rc = document.getElementById('rcontent');
-    if (!rc) return;
-    var mo = new MutationObserver(function () {
-      var vis = window.getComputedStyle(rc).display;
-      if (vis !== 'none' && rc.children.length > 0 && !injected) {
-        scheduleInject(400);
-      }
-    });
-    mo.observe(rc, {
-      attributes: true,
-      attributeFilter: ['style', 'class'],
-      childList: true,
-    });
-  });
+  var rc2=document.getElementById('rcontent');
+  if(!rc2||!rc2.children.length||window.getComputedStyle(rc2).display==='none'){running=false;return;}
+
+  injected=true;running=false;
+
+  /* use DISPLAY TEXT (gt) — already properly formatted by app.js */
+  var brandD=gt('brand'),modelD=gt('model');
+  var brandV=gv('brand'),modelV=gv('model');
+  var year=gv('year'),trim=gt('trim')||'';
+
+  if(!brandV&&!brandD){injected=false;return;}
+
+  var label=[year,brandD||brandV,modelD||modelV]
+    .filter(function(s){return s&&s!=='Select\u2026'&&s!=='\u2014';}).join(' ');
+
+  /* show shimmer */
+  if(!document.getElementById('ksHeroWrap'))placeEl(mkShimmer());
+
+  var src=await getImg(brandD||brandV,modelD||modelV,brandV||brandD,modelV||modelD);
+
+  var hero=document.getElementById('ksHeroWrap');
+  if(!hero)return;
+  if(src)hero.replaceWith(mkHero(src,label));
+  else hero.remove();
+}
+
+function reset(){
+  injected=false;running=false;
+  var old=document.getElementById('ksHeroWrap');
+  if(old)old.remove();
+}
+
+/* ── Detection 1: patch fetch BEFORE app.js loads ────────────── */
+var _f=window.fetch;
+window.fetch=function(){
+  var pr=_f.apply(this,arguments);
+  try{
+    var u=typeof arguments[0]==='string'?arguments[0]:(arguments[0]&&arguments[0].url)||'';
+    if(u.indexOf('valuation')!==-1)pr.then(function(){setTimeout(run,700);}).catch(function(){});
+  }catch(_){}
+  return pr;
+};
+
+/* ── Detection 2: polling ─────────────────────────────────────── */
+var _lv='';
+setInterval(function(){
+  var rc=document.getElementById('rcontent');if(!rc)return;
+  var v=window.getComputedStyle(rc).display;
+  if(v==='none'&&_lv!=='none')reset();
+  if(v!=='none'&&rc.children.length&&!injected)run();
+  _lv=v;
+},400);
+
+/* ── Detection 3: MutationObserver ───────────────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+  var rc=document.getElementById('rcontent');if(!rc)return;
+  new MutationObserver(function(){
+    if(window.getComputedStyle(rc).display!=='none'&&rc.children.length&&!injected)run();
+  }).observe(rc,{attributes:true,attributeFilter:['style','class'],childList:true});
+});
 })();
 </script>
 <!-- v79: Hamburger menu toggle -->
