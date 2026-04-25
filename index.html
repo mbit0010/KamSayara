@@ -538,63 +538,52 @@
 </footer>
 <script>document.getElementById("ks-hp-yr").textContent=new Date().getFullYear();</script>
 <!-- html2canvas removed — share uses navigator.share text-only -->
-<!-- ── CAR HERO IMAGE — injected between rpt-header and specs ── -->
+<!-- ── CAR HERO IMAGE — fixed v2 ───────────────────────────────────────── -->
 <script>
 (function () {
   'use strict';
 
   var WORKER_BASE = 'https://kamsayara-valuation-api.mbit0010.workers.dev';
   var heroInjected = false;
+  var pollTimer    = null;
 
-  /* ── helpers ─────────────────────────────────────────── */
-  function getFormVal(id) {
+  /* ── read option text (display label) from a <select> ──────────────── */
+  function selText(id) {
     var el = document.getElementById(id);
-    return el ? (el.options ? (el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : el.value) : el.value) : '';
+    if (!el) return '';
+    return (el.options && el.selectedIndex >= 0)
+      ? (el.options[el.selectedIndex].text || el.value)
+      : el.value;
+  }
+  function selVal(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : '';
   }
 
-  /* fetch image URL via Cloudflare Worker /car-image endpoint */
-  async function fetchImageUrl(make, model, year, trim) {
-    try {
-      var params = new URLSearchParams({ make: make, model: model, year: year, trim: trim || '' });
-      var res = await fetch(WORKER_BASE + '/car-image?' + params.toString(), {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' }
-      });
-      if (!res.ok) return null;
-      var data = await res.json();
-      return data.imageUrl || null;
-    } catch (e) {
-      console.warn('[KS CarHero] fetch failed:', e);
-      return null;
-    }
-  }
-
-  /* build shimmer placeholder */
+  /* ── shimmer placeholder ────────────────────────────────────────────── */
   function makeShimmer() {
-    var div = document.createElement('div');
-    div.id = 'ksCarHero';
-    div.className = 'ks-car-hero ks-car-hero-shimmer';
-    return div;
+    var d = document.createElement('div');
+    d.id        = 'ksCarHero';
+    d.className = 'ks-car-hero ks-car-hero-shimmer';
+    return d;
   }
 
-  /* replace shimmer with real image */
+  /* ── replace shimmer with real image ───────────────────────────────── */
   function applyImage(imgUrl, make, model, year, trim) {
     var hero = document.getElementById('ksCarHero');
     if (!hero) return;
 
     var label = [year, make, model, trim].filter(Boolean).join(' ');
 
-    var wrapper = document.createElement('div');
-    wrapper.id = 'ksCarHero';
-    wrapper.className = 'ks-car-hero';
+    var wrap = document.createElement('div');
+    wrap.id        = 'ksCarHero';
+    wrap.className = 'ks-car-hero';
 
     var img = document.createElement('img');
-    img.src = imgUrl;
-    img.alt = label;
+    img.src     = imgUrl;
+    img.alt     = label;
     img.loading = 'eager';
-    img.decoding = 'async';
     img.onerror = function () {
-      /* silent remove on broken URL */
       var h = document.getElementById('ksCarHero');
       if (h) h.remove();
     };
@@ -602,79 +591,125 @@
     var overlay = document.createElement('div');
     overlay.className = 'ks-car-hero-overlay';
 
-    var nameTag = document.createElement('div');
-    nameTag.className = 'ks-car-hero-name';
-    nameTag.textContent = label;
+    var nameBadge = document.createElement('div');
+    nameBadge.className   = 'ks-car-hero-name';
+    nameBadge.textContent = label;
 
-    var disclaimer = document.createElement('div');
-    disclaimer.className = 'ks-car-hero-tag';
-    disclaimer.textContent = 'Illustrative · Visual may vary';
+    var disc = document.createElement('div');
+    disc.className   = 'ks-car-hero-tag';
+    disc.textContent = 'Illustrative · Visual may vary';
 
-    wrapper.appendChild(img);
-    wrapper.appendChild(overlay);
-    wrapper.appendChild(nameTag);
-    wrapper.appendChild(disclaimer);
-
-    hero.replaceWith(wrapper);
+    wrap.appendChild(img);
+    wrap.appendChild(overlay);
+    wrap.appendChild(nameBadge);
+    wrap.appendChild(disc);
+    hero.replaceWith(wrap);
   }
 
-  /* remove shimmer silently if no image found */
   function removeShimmer() {
     var h = document.getElementById('ksCarHero');
     if (h) h.remove();
   }
 
-  /* main injection logic */
+  /* ── 1. Wikipedia page-image API (no key, CORS-enabled) ────────────── */
+  async function fetchFromWikipedia(make, model) {
+    var candidates = [
+      make + ' ' + model,          // e.g. "Toyota Camry"
+      model + ' ' + make,          // fallback order
+      make + '_' + model,
+    ];
+    for (var i = 0; i < candidates.length; i++) {
+      try {
+        var q   = encodeURIComponent(candidates[i]);
+        var url = 'https://en.wikipedia.org/w/api.php?action=query&titles=' + q +
+                  '&prop=pageimages&format=json&pithumbsize=1200&origin=*';
+        var res  = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        if (!res.ok) continue;
+        var data = await res.json();
+        var pages = data && data.query && data.query.pages;
+        if (!pages) continue;
+        var page = Object.values(pages)[0];
+        if (page && page.thumbnail && page.thumbnail.source) {
+          /* bump to 1200px wide */
+          return page.thumbnail.source.replace(/\/\d+px-/, '/1200px-');
+        }
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  /* ── 2. Cloudflare Worker + Claude web_search fallback ─────────────── */
+  async function fetchFromWorker(make, model, year, trim) {
+    try {
+      var params = new URLSearchParams({ make: make, model: model, year: year, trim: trim || '' });
+      var res    = await fetch(WORKER_BASE + '/car-image?' + params.toString(), {
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!res.ok) return null;
+      var data = await res.json();
+      return data.imageUrl || null;
+    } catch (_) { return null; }
+  }
+
+  /* ── main: try Wikipedia first, worker second ───────────────────────── */
+  async function fetchCarImageUrl(make, model, year, trim) {
+    var url = await fetchFromWikipedia(make, model);
+    if (url) return url;
+    return await fetchFromWorker(make, model, year, trim);
+  }
+
+  /* ── inject shimmer + kick off fetch ───────────────────────────────── */
   async function injectHero() {
     if (heroInjected) return;
 
     var rcontent = document.getElementById('rcontent');
-    if (!rcontent || rcontent.style.display === 'none') return;
-    if (!rcontent.children.length) return;
+    if (!rcontent) return;
 
-    /* find insertion point: after .rpt-header, before first .rpt-section */
-    var header      = rcontent.querySelector('.rpt-header');
-    var firstSection = rcontent.querySelector('.rpt-section');
-    if (!header && !firstSection) return; /* report structure not ready yet */
+    /* use getComputedStyle — catches class-based visibility too */
+    var cs = window.getComputedStyle(rcontent);
+    if (cs.display === 'none' || !rcontent.children.length) return;
+
+    /* small debounce — let app.js finish painting all sections */
+    await new Promise(function (r) { setTimeout(r, 150); });
+
+    /* re-check after debounce */
+    if (window.getComputedStyle(rcontent).display === 'none') return;
+    if (!rcontent.children.length) return;
 
     heroInjected = true;
 
-    /* read raw option values for API; use text labels for display */
-    var makeEl  = document.getElementById('brand');
-    var modelEl = document.getElementById('model');
-    var yearEl  = document.getElementById('year');
-    var trimEl  = document.getElementById('trim');
+    /* read form values */
+    var make  = selVal('brand');
+    var model = selVal('model');
+    var year  = selVal('year');
+    var trim  = selVal('trim');
 
-    var make  = makeEl  ? makeEl.value  : '';
-    var model = modelEl ? modelEl.value : '';
-    var year  = yearEl  ? yearEl.value  : '';
-    var trim  = trimEl  ? trimEl.value  : '';
-
-    /* readable labels for display */
-    function optionText(el) {
-      if (!el) return '';
-      return el.options && el.selectedIndex >= 0
-        ? el.options[el.selectedIndex].text
-        : el.value;
-    }
-    var makeLabel  = optionText(makeEl)  || make;
-    var modelLabel = optionText(modelEl) || model;
-    var trimLabel  = optionText(trimEl)  || trim;
+    var makeLabel  = selText('brand') || make;
+    var modelLabel = selText('model') || model;
+    var trimLabel  = selText('trim')  || trim;
 
     if (!make || !model) { heroInjected = false; return; }
 
-    /* insert shimmer immediately */
-    var shimmer = makeShimmer();
+    /* --- find insertion point (before first .rpt-section, after header) --- */
+    var shimmer      = makeShimmer();
+    var firstSection = rcontent.querySelector('.rpt-section');
+    var header       = rcontent.querySelector('.rpt-header');
+
     if (firstSection) {
       rcontent.insertBefore(shimmer, firstSection);
     } else if (header && header.nextSibling) {
       rcontent.insertBefore(shimmer, header.nextSibling);
-    } else {
+    } else if (header) {
       rcontent.appendChild(shimmer);
+    } else if (rcontent.children.length > 1) {
+      /* fallback: after the first child */
+      rcontent.insertBefore(shimmer, rcontent.children[1]);
+    } else {
+      rcontent.insertBefore(shimmer, rcontent.firstChild);
     }
 
     /* fetch real image */
-    var imgUrl = await fetchImageUrl(make, model, year, trim);
+    var imgUrl = await fetchCarImageUrl(make, model, year, trimLabel);
 
     if (imgUrl) {
       applyImage(imgUrl, makeLabel, modelLabel, year, trimLabel);
@@ -683,38 +718,41 @@
     }
   }
 
-  /* ── observer setup ───────────────────────────────────── */
-  function setupObserver() {
+  /* ── reset when rcontent is hidden again (new search) ──────────────── */
+  function resetHero() {
+    heroInjected = false;
+    removeShimmer();
+  }
+
+  /* ── polling: runs every 400 ms, fires once per result, then idles ─── */
+  var lastDisplay = '';
+  function poll() {
     var rcontent = document.getElementById('rcontent');
     if (!rcontent) return;
 
-    var obs = new MutationObserver(function () {
-      if (rcontent.style.display !== 'none' && rcontent.children.length > 0) {
-        injectHero();
-      }
-    });
+    var cs  = window.getComputedStyle(rcontent);
+    var cur = cs.display;
 
-    obs.observe(rcontent, {
-      attributes: true,
-      attributeFilter: ['style'],
-      childList: true
-    });
-
-    /* also reset heroInjected when rcontent is hidden again (new search) */
-    var styleObs = new MutationObserver(function () {
-      if (rcontent.style.display === 'none') {
-        heroInjected = false;
-        removeShimmer();
-      }
-    });
-    styleObs.observe(rcontent, { attributes: true, attributeFilter: ['style'] });
+    if (cur === 'none' && lastDisplay !== 'none') {
+      /* panel just disappeared → reset so next result can inject */
+      resetHero();
+    }
+    if (cur !== 'none' && rcontent.children.length > 0) {
+      injectHero(); /* guarded by heroInjected flag */
+    }
+    lastDisplay = cur;
   }
 
-  /* wait for DOM */
+  /* start polling as soon as DOM is ready */
+  function startPolling() {
+    if (pollTimer) return;
+    pollTimer = setInterval(poll, 400);
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupObserver);
+    document.addEventListener('DOMContentLoaded', startPolling);
   } else {
-    setupObserver();
+    startPolling();
   }
 })();
 </script>
