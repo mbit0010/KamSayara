@@ -538,222 +538,253 @@
 </footer>
 <script>document.getElementById("ks-hp-yr").textContent=new Date().getFullYear();</script>
 <!-- html2canvas removed — share uses navigator.share text-only -->
-<!-- ── CAR HERO IMAGE — fixed v2 ───────────────────────────────────────── -->
+<!-- ── KamSayara Car Hero Image — v3 (inline styles, Wikipedia primary) ── -->
 <script>
 (function () {
   'use strict';
 
-  var WORKER_BASE = 'https://kamsayara-valuation-api.mbit0010.workers.dev';
-  var heroInjected = false;
-  var pollTimer    = null;
+  var WORKER = 'https://kamsayara-valuation-api.mbit0010.workers.dev';
+  var done   = false;
+  var lastVis = '';
 
-  /* ── read option text (display label) from a <select> ──────────────── */
-  function selText(id) {
-    var el = document.getElementById(id);
-    if (!el) return '';
-    return (el.options && el.selectedIndex >= 0)
-      ? (el.options[el.selectedIndex].text || el.value)
-      : el.value;
+  /* ── helpers ─────────────────────────────────────────────────────── */
+  function gv(id) { var e = document.getElementById(id); return e ? e.value || '' : ''; }
+  function gt(id) {
+    var e = document.getElementById(id);
+    if (!e) return '';
+    return (e.options && e.selectedIndex >= 0) ? (e.options[e.selectedIndex].text || e.value) : e.value;
   }
-  function selVal(id) {
-    var el = document.getElementById(id);
-    return el ? el.value : '';
+  function cap(s) {
+    return s.trim().replace(/\b([a-z])/g, function (c) { return c.toUpperCase(); });
   }
 
-  /* ── shimmer placeholder ────────────────────────────────────────────── */
-  function makeShimmer() {
-    var d = document.createElement('div');
-    d.id        = 'ksCarHero';
-    d.className = 'ks-car-hero ks-car-hero-shimmer';
-    return d;
-  }
-
-  /* ── replace shimmer with real image ───────────────────────────────── */
-  function applyImage(imgUrl, make, model, year, trim) {
-    var hero = document.getElementById('ksCarHero');
-    if (!hero) return;
-
-    var label = [year, make, model, trim].filter(Boolean).join(' ');
-
-    var wrap = document.createElement('div');
-    wrap.id        = 'ksCarHero';
-    wrap.className = 'ks-car-hero';
-
-    var img = document.createElement('img');
-    img.src     = imgUrl;
-    img.alt     = label;
-    img.loading = 'eager';
-    img.onerror = function () {
-      var h = document.getElementById('ksCarHero');
-      if (h) h.remove();
-    };
-
-    var overlay = document.createElement('div');
-    overlay.className = 'ks-car-hero-overlay';
-
-    var nameBadge = document.createElement('div');
-    nameBadge.className   = 'ks-car-hero-name';
-    nameBadge.textContent = label;
-
-    var disc = document.createElement('div');
-    disc.className   = 'ks-car-hero-tag';
-    disc.textContent = 'Illustrative · Visual may vary';
-
-    wrap.appendChild(img);
-    wrap.appendChild(overlay);
-    wrap.appendChild(nameBadge);
-    wrap.appendChild(disc);
-    hero.replaceWith(wrap);
-  }
-
-  function removeShimmer() {
-    var h = document.getElementById('ksCarHero');
-    if (h) h.remove();
-  }
-
-  /* ── 1. Wikipedia page-image API (no key, CORS-enabled) ────────────── */
-  async function fetchFromWikipedia(make, model) {
-    var candidates = [
-      make + ' ' + model,          // e.g. "Toyota Camry"
-      model + ' ' + make,          // fallback order
-      make + '_' + model,
-    ];
-    for (var i = 0; i < candidates.length; i++) {
-      try {
-        var q   = encodeURIComponent(candidates[i]);
-        var url = 'https://en.wikipedia.org/w/api.php?action=query&titles=' + q +
-                  '&prop=pageimages&format=json&pithumbsize=1200&origin=*';
-        var res  = await fetch(url, { signal: AbortSignal.timeout(5000) });
-        if (!res.ok) continue;
-        var data = await res.json();
-        var pages = data && data.query && data.query.pages;
-        if (!pages) continue;
-        var page = Object.values(pages)[0];
-        if (page && page.thumbnail && page.thumbnail.source) {
-          /* bump to 1200px wide */
-          return page.thumbnail.source.replace(/\/\d+px-/, '/1200px-');
-        }
-      } catch (_) {}
-    }
-    return null;
-  }
-
-  /* ── 2. Cloudflare Worker + Claude web_search fallback ─────────────── */
-  async function fetchFromWorker(make, model, year, trim) {
+  /* ── Wikipedia REST v1 (CORS-open, no key) ───────────────────────── */
+  async function wikiSummary(slug) {
     try {
-      var params = new URLSearchParams({ make: make, model: model, year: year, trim: trim || '' });
-      var res    = await fetch(WORKER_BASE + '/car-image?' + params.toString(), {
-        signal: AbortSignal.timeout(10000),
-      });
-      if (!res.ok) return null;
-      var data = await res.json();
-      return data.imageUrl || null;
+      var r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(slug));
+      if (!r.ok) return null;
+      var d = await r.json();
+      if (d.type === 'disambiguation') return null;
+      return (d.originalimage && d.originalimage.source) || (d.thumbnail && d.thumbnail.source) || null;
     } catch (_) { return null; }
   }
 
-  /* ── main: try Wikipedia first, worker second ───────────────────────── */
-  async function fetchCarImageUrl(make, model, year, trim) {
-    var url = await fetchFromWikipedia(make, model);
-    if (url) return url;
-    return await fetchFromWorker(make, model, year, trim);
+  /* ── Wikipedia MediaWiki API — search then get page image ────────── */
+  async function wikiSearch(query) {
+    try {
+      var base = 'https://en.wikipedia.org/w/api.php?format=json&origin=*';
+      /* step 1: find page */
+      var r1 = await fetch(base + '&action=query&list=search&srsearch=' + encodeURIComponent(query) + '&srlimit=1');
+      var d1 = await r1.json();
+      var hit = d1 && d1.query && d1.query.search && d1.query.search[0];
+      if (!hit) return null;
+      /* step 2: get image for that page */
+      var r2 = await fetch(base + '&action=query&pageids=' + hit.pageid + '&prop=pageimages&pithumbsize=1200');
+      var d2 = await r2.json();
+      var page = Object.values((d2 && d2.query && d2.query.pages) || {})[0];
+      return (page && page.thumbnail && page.thumbnail.source) || null;
+    } catch (_) { return null; }
   }
 
-  /* ── inject shimmer + kick off fetch ───────────────────────────────── */
-  async function injectHero() {
-    if (heroInjected) return;
+  /* ── orchestrate image fetch ─────────────────────────────────────── */
+  async function fetchImg(make, model, year, trim) {
+    var m1 = cap(make), m2 = cap(model);
 
-    var rcontent = document.getElementById('rcontent');
-    if (!rcontent) return;
+    /* Try direct Wikipedia page titles */
+    var slugs = [
+      m1 + '_' + m2,
+      m2 + '_' + '(' + m1 + '_automobile)',
+      m1 + '_' + m2.split(' ')[0],   /* e.g. "BMW 3" for "3 Series" */
+    ];
+    for (var i = 0; i < slugs.length; i++) {
+      var u = await wikiSummary(slugs[i]);
+      if (u) return u;
+    }
 
-    /* use getComputedStyle — catches class-based visibility too */
-    var cs = window.getComputedStyle(rcontent);
-    if (cs.display === 'none' || !rcontent.children.length) return;
+    /* Try Wikipedia search */
+    var queries = [
+      m1 + ' ' + m2 + ' automobile',
+      m1 + ' ' + m2,
+      year + ' ' + m1 + ' ' + m2,
+    ];
+    for (var j = 0; j < queries.length; j++) {
+      var v = await wikiSearch(queries[j]);
+      if (v) return v;
+    }
 
-    /* small debounce — let app.js finish painting all sections */
-    await new Promise(function (r) { setTimeout(r, 150); });
+    /* Try Cloudflare Worker (Claude web search) */
+    try {
+      var p   = new URLSearchParams({ make: make, model: model, year: year, trim: trim || '' });
+      var res = await fetch(WORKER + '/car-image?' + p);
+      if (res.ok) {
+        var dat = await res.json();
+        if (dat.imageUrl) return dat.imageUrl;
+      }
+    } catch (_) {}
 
-    /* re-check after debounce */
-    if (window.getComputedStyle(rcontent).display === 'none') return;
-    if (!rcontent.children.length) return;
+    return null;
+  }
 
-    heroInjected = true;
+  /* ── build hero element with 100% inline styles ──────────────────── */
+  function buildHero(src, label) {
+    var wrap = document.createElement('div');
+    wrap.id   = 'ksCarHero';
+    Object.assign(wrap.style, {
+      width: '100%',
+      height: 'clamp(190px, 28vw, 280px)',
+      position: 'relative',
+      overflow: 'hidden',
+      flexShrink: '0',
+      display: 'block',
+      margin: '0',
+    });
 
-    /* read form values */
-    var make  = selVal('brand');
-    var model = selVal('model');
-    var year  = selVal('year');
-    var trim  = selVal('trim');
+    var img = document.createElement('img');
+    img.src     = src;
+    img.alt     = label;
+    img.loading = 'eager';
+    Object.assign(img.style, {
+      width: '100%', height: '100%',
+      objectFit: 'cover', objectPosition: 'center 55%', display: 'block',
+    });
+    img.onerror = function () { wrap.remove(); };
 
-    var makeLabel  = selText('brand') || make;
-    var modelLabel = selText('model') || model;
-    var trimLabel  = selText('trim')  || trim;
+    var overlay = document.createElement('div');
+    Object.assign(overlay.style, {
+      position: 'absolute', inset: '0', pointerEvents: 'none',
+      background: 'linear-gradient(to bottom,rgba(10,37,64,.38) 0%,transparent 32%,rgba(10,37,64,.55) 100%)',
+    });
 
-    if (!make || !model) { heroInjected = false; return; }
+    var nameEl = document.createElement('div');
+    nameEl.textContent = label;
+    Object.assign(nameEl.style, {
+      position: 'absolute', bottom: '10px', left: '14px',
+      fontFamily: '"Exo 2",sans-serif', fontSize: '.65rem', fontWeight: '800',
+      letterSpacing: '.06em', color: '#E8D060',
+      textShadow: '0 1px 6px rgba(0,0,0,.55)',
+      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+      maxWidth: '62%', pointerEvents: 'none',
+    });
 
-    /* --- find insertion point (before first .rpt-section, after header) --- */
-    var shimmer      = makeShimmer();
-    var firstSection = rcontent.querySelector('.rpt-section');
-    var header       = rcontent.querySelector('.rpt-header');
+    var disc = document.createElement('div');
+    disc.textContent = 'Illustrative · Visual may vary';
+    Object.assign(disc.style, {
+      position: 'absolute', bottom: '10px', right: '12px',
+      fontFamily: '"Exo 2",sans-serif', fontSize: '.46rem', fontWeight: '600',
+      letterSpacing: '.09em', textTransform: 'uppercase',
+      color: 'rgba(255,255,255,.6)', background: 'rgba(0,0,0,.28)',
+      padding: '2px 8px', borderRadius: '99px', pointerEvents: 'none',
+      backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+    });
 
-    if (firstSection) {
-      rcontent.insertBefore(shimmer, firstSection);
-    } else if (header && header.nextSibling) {
-      rcontent.insertBefore(shimmer, header.nextSibling);
-    } else if (header) {
-      rcontent.appendChild(shimmer);
-    } else if (rcontent.children.length > 1) {
-      /* fallback: after the first child */
-      rcontent.insertBefore(shimmer, rcontent.children[1]);
-    } else {
-      rcontent.insertBefore(shimmer, rcontent.firstChild);
+    wrap.appendChild(img);
+    wrap.appendChild(overlay);
+    wrap.appendChild(nameEl);
+    wrap.appendChild(disc);
+    return wrap;
+  }
+
+  /* ── shimmer placeholder (inline styles, visible immediately) ─────── */
+  function buildShimmer() {
+    var d = document.createElement('div');
+    d.id = 'ksCarHero';
+    Object.assign(d.style, {
+      width: '100%',
+      height: 'clamp(190px, 28vw, 280px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'linear-gradient(90deg,#dde3ec 0%,#edf0f5 45%,#dde3ec 100%)',
+      backgroundSize: '200% 100%',
+      animation: 'ksHeroShim 1.4s ease-in-out infinite',
+      flexShrink: '0',
+    });
+    /* inject keyframes once */
+    if (!document.getElementById('ksHeroShimKF')) {
+      var s = document.createElement('style');
+      s.id = 'ksHeroShimKF';
+      s.textContent = '@keyframes ksHeroShim{0%{background-position:200% 0}100%{background-position:-200% 0}}';
+      document.head.appendChild(s);
+    }
+    var txt = document.createElement('span');
+    txt.textContent = 'Loading vehicle image…';
+    Object.assign(txt.style, {
+      fontFamily: '"Exo 2",sans-serif', fontSize: '.6rem', fontWeight: '600',
+      letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(10,37,64,.25)',
+    });
+    d.appendChild(txt);
+    return d;
+  }
+
+  /* ── find best insertion point in rcontent ───────────────────────── */
+  function insert(rc, el) {
+    /* target: before first .rpt-section (specs bar) */
+    var sec = rc.querySelector('.rpt-section');
+    var hdr = rc.querySelector('.rpt-header');
+    if      (sec)                          rc.insertBefore(el, sec);
+    else if (hdr && hdr.nextSibling)       rc.insertBefore(el, hdr.nextSibling);
+    else if (rc.children.length > 1)       rc.insertBefore(el, rc.children[1]);
+    else                                   rc.appendChild(el);
+  }
+
+  /* ── main inject ─────────────────────────────────────────────────── */
+  async function inject() {
+    if (done) return;
+
+    var rc = document.getElementById('rcontent');
+    if (!rc || window.getComputedStyle(rc).display === 'none') return;
+    if (!rc.children.length) return;
+
+    /* debounce: let app.js finish painting */
+    await new Promise(function (r) { setTimeout(r, 250); });
+    if (done) return;
+    if (!rc || window.getComputedStyle(rc).display === 'none') return;
+    if (!rc.children.length) return;
+
+    done = true;
+
+    var make  = gv('brand');
+    var model = gv('model');
+    var year  = gv('year');
+    var trim  = gv('trim');
+    if (!make || !model) { done = false; return; }
+
+    var label = [year, gt('brand') || cap(make), gt('model') || cap(model), gt('trim')]
+                  .filter(Boolean).filter(function (s) { return s !== 'Select…' && s !== '—'; })
+                  .join(' ');
+
+    /* show shimmer immediately */
+    if (!document.getElementById('ksCarHero')) {
+      insert(rc, buildShimmer());
     }
 
     /* fetch real image */
-    var imgUrl = await fetchCarImageUrl(make, model, year, trimLabel);
+    var src = await fetchImg(make, model, year, trim);
 
-    if (imgUrl) {
-      applyImage(imgUrl, makeLabel, modelLabel, year, trimLabel);
+    var hero = document.getElementById('ksCarHero');
+    if (!hero) return; /* user started new search */
+
+    if (src) {
+      hero.replaceWith(buildHero(src, label));
     } else {
-      removeShimmer();
+      hero.remove(); /* no image found — remove shimmer silently */
     }
   }
 
-  /* ── reset when rcontent is hidden again (new search) ──────────────── */
-  function resetHero() {
-    heroInjected = false;
-    removeShimmer();
-  }
+  /* ── polling every 400 ms ────────────────────────────────────────── */
+  setInterval(function () {
+    var rc  = document.getElementById('rcontent');
+    if (!rc) return;
+    var vis = window.getComputedStyle(rc).display;
 
-  /* ── polling: runs every 400 ms, fires once per result, then idles ─── */
-  var lastDisplay = '';
-  function poll() {
-    var rcontent = document.getElementById('rcontent');
-    if (!rcontent) return;
-
-    var cs  = window.getComputedStyle(rcontent);
-    var cur = cs.display;
-
-    if (cur === 'none' && lastDisplay !== 'none') {
-      /* panel just disappeared → reset so next result can inject */
-      resetHero();
+    if (vis === 'none' && lastVis !== 'none') {
+      /* panel hidden → reset for next result */
+      done = false;
+      var old = document.getElementById('ksCarHero');
+      if (old) old.remove();
     }
-    if (cur !== 'none' && rcontent.children.length > 0) {
-      injectHero(); /* guarded by heroInjected flag */
-    }
-    lastDisplay = cur;
-  }
 
-  /* start polling as soon as DOM is ready */
-  function startPolling() {
-    if (pollTimer) return;
-    pollTimer = setInterval(poll, 400);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startPolling);
-  } else {
-    startPolling();
-  }
+    if (vis !== 'none' && rc.children.length) inject();
+    lastVis = vis;
+  }, 400);
 })();
 </script>
 <!-- v79: Hamburger menu toggle -->
